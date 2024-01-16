@@ -1,0 +1,18 @@
+.sale_order_view_inherit_form_crosify_order .o_form_renderer {
+    flex-direction: column;
+}
+
+.sale_order_view_inherit_form_crosify_order .o_form_renderer.h-100 {
+    height: auto !important;
+}
+
+.sale_order_view_inherit_form_crosify_order .o_form_sheet_bg {
+    max-width: none !important;
+    flex: 0 !important;
+}
+
+.sale_order_view_inherit_form_crosify_order .o-mail-Form-chatter.o-aside {
+    width: 100% !important;
+}
+
+.sale_order_view_inherit_form_crosify_order

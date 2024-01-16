@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="sale_order_view_inherit_form" model="ir.ui.view">
+        <field name="name">sale_order_view_inherit_form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">sale_order_view_inherit_form_crosify_order</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
