@@ -76,12 +76,10 @@
                 </group>
 
                 <group name="amount">
-                    <field name="tip"/>
-                    <field name="discount"/>
                 </group>
             </xpath>
 
-            <xpath expr="//page[@name='other_information']" position="after">
+            <xpath expr="//page[@name='other_information']" position="before">
                 <page name="order-payment" string="Payment">
                     <group>
                         <group name="other">
@@ -89,6 +87,8 @@
                             <field name="payment_at"/>
                             <field name="payment_status"/>
                             <field name="payment_method_id"/>
+                            <field name="tip"/>
+                            <field name="discount"/>
                         </group>
 
                         <group name="amount">
