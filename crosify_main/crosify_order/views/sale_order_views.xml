@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="sale_order_form_quote_inherit_form" model="ir.ui.view">
+        <field name="name">sale_order_form_quote_inherit_form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='optional_products']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
     <record id="sale_order_view_inherit_form" model="ir.ui.view">
         <field name="name">sale_order_view_inherit_form</field>
         <field name="model">sale.order</field>
@@ -9,6 +20,92 @@
             <xpath expr="//form" position="attributes">
                 <attribute name="class">sale_order_view_inherit_form_crosify_order</attribute>
             </xpath>
+
+            <xpath expr="//page[@name='order_lines']" position="attributes">
+                <attribute name="string">Items</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='other_information']" position="before">
+                <page string="Shipping" name="shipping_information">
+                    <group name="shipping-info">
+                        <group name="shipping-info-customer">
+                            <field name="customer_name"/>
+                            <field name="shipping_firstname"/>
+                            <field name="shipping_lastname"/>
+                            <field name="shipping_state_id"/>
+                            <field name="shipping_phone_number"/>
+                        </group>
+
+                        <group name="shipping-info-other">
+                            <field name="shipping_address"/>
+                            <field name="shipping_city"/>
+                            <field name="shipping_zipcode"/>
+                            <field name="shipping_country_id"/>
+                            <field name="shipping_cost"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+            <xpath expr="//page[@name='customer_signature']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='other_information']//group[@name='sales_person']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='other_information']//group[@name='sale_info']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='other_information']//group[@name='sale_shipping']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='other_information']//group[@name='sale_reporting']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='other_information']//group[@name='sale_reporting']" position="after">
+                <group name="other">
+                    <field name="client_secret"/>
+                    <field name="utm_source_id"/>
+                    <field name="domain"/>
+                    <field name="rating"/>
+                    <field name="review"/>
+                </group>
+
+                <group name="amount">
+                    <field name="tip"/>
+                    <field name="subtotal"/>
+                    <field name="discount"/>
+                    <field name="total_tax"/>
+                    <field name="total_price"/>
+                </group>
+            </xpath>
+
+            <xpath expr="//field[@name='date_order']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='sale_order_template_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='date_order']" position="after">
+                <field name="order_id"/>
+                <field name="order_id_fix"/>
+            </xpath>
+
+            <xpath expr="//field[@name='note']" position="attributes">
+                <attribute name="placeholder">Customer Note</attribute>
+            </xpath>
+
         </field>
     </record>
 </odoo>
