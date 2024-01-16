@@ -7,7 +7,6 @@ class SaleOrder(models.Model):
 
     order_id = fields.Integer(string='Order ID')
     order_id_fix = fields.Integer(string='Order ID Fix')
-    customer_name = fields.Char(string='Customer Name')
     shipping_firstname = fields.Char(string='Shipping First Name')
     shipping_lastname = fields.Char(string='Shipping Last Name')
     shipping_address = fields.Char(string='Shipping Address')
@@ -35,10 +34,7 @@ class SaleOrder(models.Model):
     utm_source_id = fields.Many2one('utm.source', string='UTM Source')
     domain = fields.Char(string='Domain')
     tip = fields.Float(string='Tip')
-    subtotal = fields.Float(string='Subtotal')
     discount = fields.Float(string='Discount')
-    total_tax = fields.Float(string='Total Tax')
-    total_price = fields.Float(string='Total Price')
     rating = fields.Char(string='Rating')
     review = fields.Text(string='Review')
 

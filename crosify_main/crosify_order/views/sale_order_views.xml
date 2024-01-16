@@ -29,18 +29,17 @@
                 <page string="Shipping" name="shipping_information">
                     <group name="shipping-info">
                         <group name="shipping-info-customer">
-                            <field name="customer_name"/>
                             <field name="shipping_firstname"/>
                             <field name="shipping_lastname"/>
+                            <field name="shipping_address"/>
+                            <field name="shipping_city"/>
                             <field name="shipping_state_id"/>
-                            <field name="shipping_phone_number"/>
+                            <field name="shipping_zipcode"/>
+                            <field name="shipping_country_id"/>
                         </group>
 
                         <group name="shipping-info-other">
-                            <field name="shipping_address"/>
-                            <field name="shipping_city"/>
-                            <field name="shipping_zipcode"/>
-                            <field name="shipping_country_id"/>
+                            <field name="shipping_phone_number"/>
                             <field name="shipping_cost"/>
                         </group>
                     </group>
@@ -78,11 +77,30 @@
 
                 <group name="amount">
                     <field name="tip"/>
-                    <field name="subtotal"/>
                     <field name="discount"/>
-                    <field name="total_tax"/>
-                    <field name="total_price"/>
                 </group>
+            </xpath>
+
+            <xpath expr="//page[@name='other_information']" position="after">
+                <page name="order-payment" string="Payment">
+                    <group>
+                        <group name="other">
+                            <field name="currency_id" readonly="0"/>
+                            <field name="payment_at"/>
+                            <field name="payment_status"/>
+                            <field name="payment_method_id"/>
+                        </group>
+
+                        <group name="amount">
+                            <field name="transaction_id"/>
+                            <field name="discount_code"/>
+                            <field name="logistic_cost"/>
+                            <field name="contact_email"/>
+                            <field name="country_code"/>
+                            <field name="state_code"/>
+                        </group>
+                    </group>
+                </page>
             </xpath>
 
             <xpath expr="//field[@name='date_order']" position="attributes">
