@@ -39,6 +39,7 @@
                         </group>
 
                         <group name="shipping-info-other">
+                            <field name="shipping_apartment"/>
                             <field name="shipping_phone_number"/>
                             <field name="shipping_cost"/>
                         </group>
@@ -127,6 +128,7 @@
                 <field name="order_id"/>
                 <field name="order_id_fix"/>
                 <field name="channel_ref_id"/>
+                <field name="crosify_create_date"/>
             </xpath>
 
             <xpath expr="//field[@name='note']" position="attributes">

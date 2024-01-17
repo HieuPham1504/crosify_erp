@@ -7,6 +7,7 @@ class SaleOrder(models.Model):
 
     order_id = fields.Integer(string='Order ID')
     order_id_fix = fields.Integer(string='Order ID Fix')
+    crosify_create_date = fields.Datetime(string='Create Date')
     shipping_firstname = fields.Char(string='Shipping First Name')
     shipping_lastname = fields.Char(string='Shipping Last Name')
     shipping_address = fields.Char(string='Shipping Address')
