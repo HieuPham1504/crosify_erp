@@ -27,7 +27,7 @@ class SaleOrder(models.Model):
     channel_ref_id = fields.Char(string='Channel Reference ID')
     logistic_cost = fields.Float(string='Logistic Cost')
     contact_email = fields.Char(string='Contact Email')
-    country_code = fields.Char(string='Country Code', readonly=False)
+    crosify_country_code = fields.Char(string='Country Code', readonly=False)
     state_code = fields.Char(string='State Code')
     #other
     client_secret = fields.Char(string='Client Secret')

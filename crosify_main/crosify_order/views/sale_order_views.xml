@@ -96,7 +96,7 @@
                             <field name="discount_code"/>
                             <field name="logistic_cost"/>
                             <field name="contact_email"/>
-                            <field name="country_code"/>
+                            <field name="crosify_country_code"/>
                             <field name="state_code"/>
                         </group>
                     </group>
