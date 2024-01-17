@@ -19,6 +19,7 @@ Key Features
     'depends': ['sale_management', 'sale'],
     'data': [
         'views/sale_order_views.xml',
+        'views/sale_order_line_views.xml',
     ],
     'demo': [],
     'installable': True,

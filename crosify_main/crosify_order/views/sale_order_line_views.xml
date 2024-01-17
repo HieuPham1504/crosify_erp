@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_line_tree_view_inherit" model="ir.ui.view">
+            <field name="name">sale_order_line_tree_view_inherit</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_order_line_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                <attribute name="create">1</attribute>
+            </xpath>
+            </field>
+        </record>
+
+        <record id="crosify_menu_sale_order_line_action" model="ir.actions.act_window">
+            <field name="name">Items</field>
+            <field name="res_model">sale.order.line</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="crosify_menu_sale_order_line"
+                  name="Items"
+                  action="crosify_menu_sale_order_line_action"
+                  parent="sale.sale_order_menu"
+                  sequence="21"/>
+    </data>
+</odoo>
