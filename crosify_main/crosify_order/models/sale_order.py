@@ -38,6 +38,7 @@ class SaleOrder(models.Model):
     discount = fields.Float(string='Discount')
     rating = fields.Char(string='Rating')
     review = fields.Text(string='Review')
+    extra_info = fields.Text(string='Extra Info')
 
 
 
