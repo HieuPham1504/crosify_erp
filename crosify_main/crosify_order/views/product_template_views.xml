@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+        <record id="product_template_form_view_inherit" model="ir.ui.view">
+            <field name="name">product_template_form_view_inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='detailed_type']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='detailed_type']" position="before">
+                    <field name="product_type"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="sale.menu_product_categories" model="ir.ui.menu">
+            <field name="parent_id" ref="sale.product_menu_catalog"/>
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="sale.menu_products" model="ir.ui.menu">
+            <field name="name">SKU</field>
+        </record>
+    </data>
+</odoo>

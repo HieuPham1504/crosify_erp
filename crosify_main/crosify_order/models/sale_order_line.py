@@ -53,7 +53,7 @@ class SaleOrderLine(models.Model):
     packaging_location = fields.Char(string='Packaging Location')
     package_status = fields.Char(string='Package Status')
     shipping_method = fields.Char(string='Shipping Method')
-    shipping_vendor = fields.Char(string='Shipping Vendor')
+    shipping_vendor_id = fields.Many2one('res.partner', string='Shipping Vendor')
     production_date = fields.Date(string='Production Date')
     production_status = fields.Char(string='Production Status')
     production_estimate_time = fields.Datetime(string='Production Estimate Time')

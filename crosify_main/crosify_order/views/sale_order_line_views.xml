@@ -111,8 +111,7 @@
                                         <field name="packaging_location"/>
                                         <field name="package_status"/>
                                         <field name="shipping_method"/>
-                                        <field name="shipping_vendor"/>
-                                        <field name="shipping_vendor"/>
+                                        <field name="shipping_vendor_id"/>
                                         <field name="production_date"/>
                                         <field name="production_status"/>
                                         <field name="production_estimate_time"/>
