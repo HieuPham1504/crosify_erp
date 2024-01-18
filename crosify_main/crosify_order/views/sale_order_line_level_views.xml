@@ -16,33 +16,15 @@
             </field>
         </record>
 
-        <record id="crosify_menu_sale_order_line_parent_level_action" model="ir.actions.act_window">
+        <record id="crosify_menu_sale_order_line_level_action" model="ir.actions.act_window">
             <field name="name">Level</field>
             <field name="res_model">sale.order.line.level</field>
-            <field name="domain">[('is_parent', '=', True)]</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-
-        <record id="crosify_menu_sale_order_line_sub_level_action" model="ir.actions.act_window">
-            <field name="name">SubLevel</field>
-            <field name="res_model">sale.order.line.level</field>
-            <field name="domain">[('is_parent', '=', False)]</field>
             <field name="view_mode">tree,form</field>
         </record>
 
         <menuitem id="crosify_menu_sale_order_line_level"
                   name="Item Level"
-                  parent="sale.menu_sale_config"
+                  parent="sale.menu_sale_config" action="crosify_menu_sale_order_line_level_action"
                   sequence="21"/>
-        <menuitem id="crosify_menu_sale_order_line_parent_level"
-                  name="Level"
-                  action="crosify_menu_sale_order_line_parent_level_action"
-                  parent="crosify_order.crosify_menu_sale_order_line_level"
-                  sequence="1"/>
-        <menuitem id="crosify_menu_sale_order_line_sub_level"
-                  name="SubLevel"
-                  action="crosify_menu_sale_order_line_sub_level_action"
-                  parent="crosify_order.crosify_menu_sale_order_line_level"
-                  sequence="2"/>
     </data>
 </odoo>
