@@ -11,7 +11,7 @@
                     <field name="name"/>
                     <field name="next_level_ids" widget="many2many_tags"/>
                     <field name="is_parent"/>
-                    <field name="parent_id"/>
+                    <field name="parent_id" domain="[('is_parent', '=', True)]"/>
                 </tree>
             </field>
         </record>
