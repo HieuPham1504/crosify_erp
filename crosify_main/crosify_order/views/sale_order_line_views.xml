@@ -8,17 +8,17 @@
             <field name="arch" type="xml">
                 <xpath expr="//tree" position="replace">
                     <tree string="Items" create="1">
-                        <field name="produce_vendor_id"/>
-                        <field name="order_id_fix"/>
-                        <field name="crosify_created_date"/>
-                        <field name="status"/>
-                        <field name="product_type"/>
-                        <field name="product_sku"/>
-                        <field name="color_set_name"/>
-                        <field name="item_size"/>
-                        <field name="personalize"/>
-                        <field name="accessory_name"/>
-                        <field name="write_date" string="Last Update"/>
+                        <field name="produce_vendor_id" optional="hide"/>
+                        <field name="order_id_fix" optional="show"/>
+                        <field name="crosify_created_date" optional="show"/>
+                        <field name="status" optional="hide"/>
+                        <field name="product_type" optional="show"/>
+                        <field name="product_sku" optional="show"/>
+                        <field name="color_set_name" optional="show"/>
+                        <field name="item_size" optional="show"/>
+                        <field name="personalize" optional="show"/>
+                        <field name="accessory_name" optional="hide"/>
+                        <field name="write_date" string="Last Update" optional="hide"/>
                     </tree>
                 </xpath>
             </field>
@@ -108,7 +108,8 @@
                                         <field name="production_note"/>
                                     </group>
                                 </page>
-                                <page id="shipping_and_pickup_tab" string="Shipping $amp; Pickup" name="shipping_and_pickup_tab">
+                                <page id="shipping_and_pickup_tab" string="Shipping &amp; Pickup"
+                                      name="shipping_and_pickup_tab">
                                     <group>
                                         <field name="address_sheft"/>
                                         <field name="shipping_date"/>
@@ -129,6 +130,35 @@
                                         <field name="dispute_status"/>
                                         <field name="dispute_note"/>
                                         <field name="approve_by"/>
+                                    </group>
+                                </page>
+
+                                <page id="image_tab" string="Images" name="image_tab">
+                                    <group>
+                                        <field name="image_ids" widget="many2many_kanban">
+                                            <kanban quick_create="false" create="true" delete="true">
+                                                <field name="name"/>
+                                                <templates>
+                                                    <t t-name="kanban-box">
+                                                        <div class="oe_kanban_global_click" style="position: relative">
+                                                            <a t-if="! read_only_mode" type="delete"
+                                                               style="position: absolute; right: 0; padding: 4px; diplay: inline-block">
+                                                                X
+                                                            </a>
+                                                            <div class="oe_module_vignette">
+                                                                <img t-att-src="kanban_image('ir.attachment', 'image_small', record.id.value)"
+                                                                     class="oe_avatar oe_kanban_avatar_smallbox"/>
+<!--                                                                <img t-attf-src="/web/image/#{record.id.raw_value}/datas"-->
+<!--                                                                     class="oe_avatar oe_kanban_avatar_smallbox"/>-->
+                                                                <div class="oe_module_desc">
+                                                                    <field name="name"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </templates>
+                                            </kanban>
+                                        </field>
                                     </group>
                                 </page>
                             </notebook>

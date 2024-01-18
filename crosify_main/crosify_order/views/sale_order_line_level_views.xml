@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sale_order_line_level_tree_view" model="ir.ui.view">
+            <field name="name">sale_order_line_level_tree_view</field>
+            <field name="model">sale.order.line.level</field>
+            <field name="arch" type="xml">
+                <tree string="Level" editable="bottom">
+                    <field name="level"/>
+                    <field name="name"/>
+                    <field name="next_level_ids" widget="many2many_tags"/>
+                    <field name="is_parent"/>
+                    <field name="parent_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="crosify_menu_sale_order_line_parent_level_action" model="ir.actions.act_window">
+            <field name="name">Level</field>
+            <field name="res_model">sale.order.line.level</field>
+            <field name="domain">[('is_parent', '=', True)]</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="crosify_menu_sale_order_line_sub_level_action" model="ir.actions.act_window">
+            <field name="name">SubLevel</field>
+            <field name="res_model">sale.order.line.level</field>
+            <field name="domain">[('is_parent', '=', False)]</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="crosify_menu_sale_order_line_level"
+                  name="Item Level"
+                  parent="sale.menu_sale_config"
+                  sequence="21"/>
+        <menuitem id="crosify_menu_sale_order_line_parent_level"
+                  name="Level"
+                  action="crosify_menu_sale_order_line_parent_level_action"
+                  parent="crosify_order.crosify_menu_sale_order_line_level"
+                  sequence="1"/>
+        <menuitem id="crosify_menu_sale_order_line_sub_level"
+                  name="SubLevel"
+                  action="crosify_menu_sale_order_line_sub_level_action"
+                  parent="crosify_order.crosify_menu_sale_order_line_level"
+                  sequence="2"/>
+    </data>
+</odoo>

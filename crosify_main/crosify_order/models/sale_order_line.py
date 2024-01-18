@@ -5,9 +5,10 @@ from odoo import api, fields, models
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    image_ids = fields.Many2many('ir.attachment', string='Images')
     crosify_created_date = fields.Date(string='Create Date')
     product_sku = fields.Char(string='SKU', related='product_id.default_code', store=True, index=True)
-    order_id_fix = fields.Integer(string='Order ID Fix', related='order_id.order_id_fix', store=True, index=True)
+    order_id_fix = fields.Char(string='Order ID Fix', related='order_id.order_id_fix', store=True, index=True)
     product_name = fields.Char(string='Product Name', related='product_id.name', store=1)
     product_vendor_id = fields.Many2one('res.partner', string='Product Vendor')
     item_size = fields.Char(string='Item Size')

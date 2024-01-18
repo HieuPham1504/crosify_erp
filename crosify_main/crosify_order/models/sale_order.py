@@ -5,8 +5,8 @@ from odoo import api, fields, models
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    order_id = fields.Integer(string='Order ID')
-    order_id_fix = fields.Integer(string='Order ID Fix')
+    order_id = fields.Char(string='Order ID')
+    order_id_fix = fields.Char(string='Order ID Fix')
     crosify_create_date = fields.Datetime(string='Create Date')
     shipping_firstname = fields.Char(string='Shipping First Name')
     shipping_lastname = fields.Char(string='Shipping Last Name')
