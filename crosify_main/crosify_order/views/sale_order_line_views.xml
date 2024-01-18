@@ -6,9 +6,136 @@
             <field name="model">sale.order.line</field>
             <field name="inherit_id" ref="sale.view_order_line_tree"/>
             <field name="arch" type="xml">
-                <xpath expr="//tree" position="attributes">
-                <attribute name="create">1</attribute>
-            </xpath>
+                <xpath expr="//tree" position="replace">
+                    <tree string="Items" create="1">
+                        <field name="produce_vendor_id"/>
+                        <field name="order_id_fix"/>
+                        <field name="crosify_created_date"/>
+                        <field name="status"/>
+                        <field name="product_type"/>
+                        <field name="product_sku"/>
+                        <field name="color_set_name"/>
+                        <field name="item_size"/>
+                        <field name="personalize"/>
+                        <field name="accessory_name"/>
+                        <field name="write_date" string="Last Update"/>
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="sale_order_line_form_view_inherit" model="ir.ui.view">
+            <field name="name">sale_order_line_form_view_inherit</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.sale_order_line_view_form_readonly"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="replace">
+                    <form string="Item" class="sale_order_view_inherit_form_crosify_order">
+                        <sheet>
+                            <div class="oe_title">
+                                <h1>
+                                    <field name="display_name"/>
+                                </h1>
+                            </div>
+                            <group name="main">
+                                <group>
+                                    <field name="order_id" string="Order ID"/>
+                                    <field name="product_name"/>
+                                    <field name="item_size"/>
+                                    <field name="description_item_size"/>
+                                    <field name="color_item"/>
+                                    <field name="box_size"/>
+                                    <field name="personalize"/>
+                                    <field name="package_size"/>
+                                    <field name="product_code"/>
+                                    <field name="product_type"/>
+                                    <field name="color_set_name"/>
+                                    <field name="design_serial_number"/>
+                                    <field name="accessory_name"/>
+                                    <field name="customer_note"/>
+                                    <field name="priority"/>
+                                    <field name="element_message"/>
+                                </group>
+                                <group>
+                                    <field name="base_cost"/>
+                                    <field name="shipping_cost"/>
+                                    <field name="logistic_cost"/>
+                                    <field name="logistic_cost"/>
+                                    <field name="product_uom_qty" string="Quantity"/>
+                                    <field name="price_unit" string="Price Item"/>
+                                    <field name="tips"/>
+                                    <field name="discount"/>
+                                    <field name="tax_id" widget="many2many_tags"/>
+                                    <field name="price_total"/>
+                                    <field name="extra_info"/>
+                                    <field name="extra_service"/>
+                                    <field name="status"/>
+                                </group>
+                            </group>
+                            <notebook>
+                                <page id="fulfillment_tab" string="Fulfillment" name="fulfillment_tab">
+                                    <group>
+                                        <field name="operator_id"/>
+                                        <field name="produce_vendor_id"/>
+                                        <field name="hs_code"/>
+                                        <field name="tkn_code"/>
+                                        <field name="tkn_url"/>
+                                        <field name="label_file"/>
+                                        <field name="update_tkn_date"/>
+                                        <field name="update_tkn_by"/>
+                                        <field name="fulfill_date"/>
+                                        <field name="note_fulfill"/>
+                                    </group>
+                                </page>
+                                <page id="design_tab" string="Design" name="design_tab">
+                                    <group>
+                                        <field name="designer_id"/>
+                                        <field name="design_file"/>
+                                        <field name="design_date"/>
+                                    </group>
+                                </page>
+                                <page id="production_tab" string="Production" name="production_tab">
+                                    <group>
+                                        <field name="production_id"/>
+                                        <field name="packaging_location"/>
+                                        <field name="package_status"/>
+                                        <field name="shipping_method"/>
+                                        <field name="shipping_vendor"/>
+                                        <field name="shipping_vendor"/>
+                                        <field name="production_date"/>
+                                        <field name="production_status"/>
+                                        <field name="production_estimate_time"/>
+                                        <field name="production_note"/>
+                                    </group>
+                                </page>
+                                <page id="shipping_and_pickup_tab" string="Shipping $amp; Pickup" name="shipping_and_pickup_tab">
+                                    <group>
+                                        <field name="address_sheft"/>
+                                        <field name="shipping_date"/>
+                                        <field name="shipping_confirm_date"/>
+                                        <field name="packed_date"/>
+                                        <field name="pickup_date"/>
+                                        <field name="deliver_date"/>
+                                        <field name="deliver_status"/>
+                                        <field name="customer_received"/>
+                                    </group>
+                                </page>
+                                <page id="other_info_tab" string="Other Info" name="other_info_tab">
+                                    <group>
+                                        <field name="note_change_request"/>
+                                        <field name="cancel_date"/>
+                                        <field name="cancel_reason"/>
+                                        <field name="cancel_status"/>
+                                        <field name="dispute_status"/>
+                                        <field name="dispute_note"/>
+                                        <field name="approve_by"/>
+                                    </group>
+                                </page>
+                            </notebook>
+                        </sheet>
+
+                    </form>
+                </xpath>
             </field>
         </record>
 

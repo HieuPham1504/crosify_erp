@@ -5,8 +5,14 @@ from odoo import api, fields, models
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    crosify_created_date = fields.Date(string='Create Date')
+    product_sku = fields.Char(string='SKU', related='product_id.default_code', store=True, index=True)
+    order_id_fix = fields.Integer(string='Order ID Fix', related='order_id.order_id_fix', store=True, index=True)
+    product_name = fields.Char(string='Product Name', related='product_id.name', store=1)
     product_vendor_id = fields.Many2one('res.partner', string='Product Vendor')
     item_size = fields.Char(string='Item Size')
+    description_item_size = fields.Char(string='Description Item Size')
+    color_item = fields.Char(string='Color Item')
     box_size = fields.Char(string='Box Size')
     personalize = fields.Char(string='Personalize')
     package_size = fields.Char(string='Package Size')
@@ -23,7 +29,9 @@ class SaleOrderLine(models.Model):
     element_message = fields.Text(string='Element Message')
     extra_info = fields.Text(string='Extra Info')
     extra_service = fields.Char(string='Extra Service')
+    status = fields.Char(string='Status')
     tips = fields.Float(string='Tips')
+    #Fulfillment
     operator_id = fields.Many2one('hr.employee', string='Operator')
     produce_vendor_id = fields.Many2one('res.partner', string='Produce Vendor')
     hs_code = fields.Char(string='HS Code')
@@ -34,6 +42,8 @@ class SaleOrderLine(models.Model):
     update_tkn_by = fields.Many2one('hr.employee', string='Update TKN By')
     fulfill_date = fields.Date(string='Fulfill Date')
     note_fulfill = fields.Text(string='Note Fulfill')
+
+    #Design
     designer_id = fields.Many2one('hr.employee', string='Designer')
     design_file = fields.Binary(string='Design File')
     design_date = fields.Date(string='Design Date')
@@ -45,7 +55,7 @@ class SaleOrderLine(models.Model):
     shipping_vendor = fields.Char(string='Shipping Vendor')
     production_date = fields.Date(string='Production Date')
     production_status = fields.Char(string='Production Status')
-    production_estimate_time = fields.Date(string='Production Estimate Time')
+    production_estimate_time = fields.Datetime(string='Production Estimate Time')
     production_note = fields.Text(string='Production Note')
     #Tab Shipping & Pickup
     address_sheft = fields.Char(string='Address Sheft')
@@ -63,7 +73,7 @@ class SaleOrderLine(models.Model):
     cancel_status = fields.Char(string='Cancel Status')
     dispute_status = fields.Char(string='Dispute Status')
     dispute_note = fields.Text(string='Dispute Note')
-    approve_by = fields.Many2one('he.employee', string='Approve By')
+    approve_by = fields.Many2one('hr.employee', string='Approve By')
 
 
 
