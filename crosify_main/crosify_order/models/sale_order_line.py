@@ -76,6 +76,10 @@ class SaleOrderLine(models.Model):
     dispute_note = fields.Text(string='Dispute Note')
     approve_by = fields.Many2one('hr.employee', string='Approve By')
 
+    level = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', True)])
+    sublevel = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', False)])
+
+
 
 
 

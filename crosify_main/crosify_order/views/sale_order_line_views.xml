@@ -31,11 +31,21 @@
             <field name="arch" type="xml">
                 <xpath expr="//form" position="replace">
                     <form string="Item" class="sale_order_view_inherit_form_crosify_order">
+                        <header>
+                            <field name="level" widget="statusbar" options="{'clickable': '1'}"/>
+                        </header>
                         <sheet>
                             <div class="oe_title">
                                 <h1>
                                     <field name="display_name"/>
                                 </h1>
+                                <div class="oe_title ps-0 pe-2">
+                                    <h2>
+                                        <label for="sublevel">SubLevel </label>
+                                        <span> </span>
+                                        <field name="sublevel" domain="[('parent_id', '=', level)]"/>
+                                    </h2>
+                                </div>
                             </div>
                             <group name="main">
                                 <group>
@@ -54,7 +64,7 @@
                                     <field name="accessory_name"/>
                                     <field name="customer_note"/>
                                     <field name="priority"/>
-                                    <field name="element_message"/>
+
                                 </group>
                                 <group>
                                     <field name="base_cost"/>
@@ -68,6 +78,7 @@
                                     <field name="tax_id" widget="many2many_tags"/>
                                     <field name="price_total"/>
                                     <field name="extra_info"/>
+                                    <field name="element_message"/>
                                     <field name="extra_service"/>
                                     <field name="status"/>
                                 </group>
@@ -148,8 +159,8 @@
                                                             <div class="oe_module_vignette">
                                                                 <img t-att-src="kanban_image('ir.attachment', 'image_small', record.id.value)"
                                                                      class="oe_avatar oe_kanban_avatar_smallbox"/>
-<!--                                                                <img t-attf-src="/web/image/#{record.id.raw_value}/datas"-->
-<!--                                                                     class="oe_avatar oe_kanban_avatar_smallbox"/>-->
+                                                                <!--                                                                <img t-attf-src="/web/image/#{record.id.raw_value}/datas"-->
+                                                                <!--                                                                     class="oe_avatar oe_kanban_avatar_smallbox"/>-->
                                                                 <div class="oe_module_desc">
                                                                     <field name="name"/>
                                                                 </div>
