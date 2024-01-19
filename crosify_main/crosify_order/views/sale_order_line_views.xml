@@ -8,8 +8,10 @@
             <field name="arch" type="xml">
                 <xpath expr="//tree" position="replace">
                     <tree string="Items" create="1">
-                        <field name="produce_vendor_id" optional="hide"/>
+                        <field name="production_id" optional="show"/>
                         <field name="order_id_fix" optional="show"/>
+                        <field name="production_id" optional="show"/>
+                        <field name="produce_vendor_id" optional="hide"/>
                         <field name="crosify_created_date" optional="show"/>
                         <field name="status" optional="hide"/>
                         <field name="product_type" optional="show"/>

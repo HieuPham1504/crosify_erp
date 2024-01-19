@@ -8,5 +8,5 @@ class ProductTemplate(models.Model):
     product_type = fields.Char(string="Product Type")
     default_code = fields.Char(string='Product Code')
 
-    def _create_variant_ids(self):
-        return
+    # def _create_variant_ids(self):
+    #     return
