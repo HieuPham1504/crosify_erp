@@ -10,3 +10,8 @@ class ProductTemplate(models.Model):
 
     # def _create_variant_ids(self):
     #     return
+
+    def _prepare_variant_values(self, combination):
+        variant_dict = super()._prepare_variant_values(combination)
+        variant_dict['default_code'] = f'{self.product_type}{self.default_code}'
+        return variant_dict
