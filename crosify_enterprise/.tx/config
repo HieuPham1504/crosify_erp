@@ -1,0 +1,2477 @@
+[main]
+host = https://www.transifex.com
+
+[o:odoo:p:odoo-17:r:account_3way_match]
+file_filter            = account_3way_match/i18n/<lang>.po
+source_file            = account_3way_match/i18n/account_3way_match.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_3way_match
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_accountant]
+file_filter            = account_accountant/i18n/<lang>.po
+source_file            = account_accountant/i18n/account_accountant.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_accountant
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_accountant_batch_payment]
+file_filter            = account_accountant_batch_payment/i18n/<lang>.po
+source_file            = account_accountant_batch_payment/i18n/account_accountant_batch_payment.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_accountant_batch_payment
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_accountant_fleet]
+file_filter            = account_accountant_fleet/i18n/<lang>.po
+source_file            = account_accountant_fleet/i18n/account_accountant_fleet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_accountant_fleet
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_asset]
+file_filter            = account_asset/i18n/<lang>.po
+source_file            = account_asset/i18n/account_asset.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_asset
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_asset_fleet]
+file_filter            = account_asset_fleet/i18n/<lang>.po
+source_file            = account_asset_fleet/i18n/account_asset_fleet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_asset_fleet
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_auto_transfer]
+file_filter            = account_auto_transfer/i18n/<lang>.po
+source_file            = account_auto_transfer/i18n/account_auto_transfer.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_auto_transfer
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_avatax]
+file_filter            = account_avatax/i18n/<lang>.po
+source_file            = account_avatax/i18n/account_avatax.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_avatax
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_avatax_geolocalize]
+file_filter            = account_avatax_geolocalize/i18n/<lang>.po
+source_file            = account_avatax_geolocalize/i18n/account_avatax_geolocalize.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_avatax_geolocalize
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_avatax_sale]
+file_filter            = account_avatax_sale/i18n/<lang>.po
+source_file            = account_avatax_sale/i18n/account_avatax_sale.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_avatax_sale
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_avatax_stock]
+file_filter            = account_avatax_stock/i18n/<lang>.po
+source_file            = account_avatax_stock/i18n/account_avatax_stock.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_avatax_stock
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_bacs]
+file_filter            = account_bacs/i18n/<lang>.po
+source_file            = account_bacs/i18n/account_bacs.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_bacs
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_bank_statement_import]
+file_filter            = account_bank_statement_import/i18n/<lang>.po
+source_file            = account_bank_statement_import/i18n/account_bank_statement_import.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_bank_statement_import
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_bank_statement_import_camt]
+file_filter            = account_bank_statement_import_camt/i18n/<lang>.po
+source_file            = account_bank_statement_import_camt/i18n/account_bank_statement_import_camt.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_bank_statement_import_camt
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_bank_statement_import_csv]
+file_filter            = account_bank_statement_import_csv/i18n/<lang>.po
+source_file            = account_bank_statement_import_csv/i18n/account_bank_statement_import_csv.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_bank_statement_import_csv
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_bank_statement_import_qif]
+file_filter            = account_bank_statement_import_qif/i18n/<lang>.po
+source_file            = account_bank_statement_import_qif/i18n/account_bank_statement_import_qif.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_bank_statement_import_qif
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_base_import]
+file_filter            = account_base_import/i18n/<lang>.po
+source_file            = account_base_import/i18n/account_base_import.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_base_import
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_batch_payment]
+file_filter            = account_batch_payment/i18n/<lang>.po
+source_file            = account_batch_payment/i18n/account_batch_payment.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_batch_payment
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_budget]
+file_filter            = account_budget/i18n/<lang>.po
+source_file            = account_budget/i18n/account_budget.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_budget
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_consolidation]
+file_filter            = account_consolidation/i18n/<lang>.po
+source_file            = account_consolidation/i18n/account_consolidation.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_consolidation
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_disallowed_expenses]
+file_filter            = account_disallowed_expenses/i18n/<lang>.po
+source_file            = account_disallowed_expenses/i18n/account_disallowed_expenses.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_disallowed_expenses
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_disallowed_expenses_fleet]
+file_filter            = account_disallowed_expenses_fleet/i18n/<lang>.po
+source_file            = account_disallowed_expenses_fleet/i18n/account_disallowed_expenses_fleet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_disallowed_expenses_fleet
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_external_tax]
+file_filter            = account_external_tax/i18n/<lang>.po
+source_file            = account_external_tax/i18n/account_external_tax.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_external_tax
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_followup]
+file_filter            = account_followup/i18n/<lang>.po
+source_file            = account_followup/i18n/account_followup.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_followup
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_inter_company_rules]
+file_filter            = account_inter_company_rules/i18n/<lang>.po
+source_file            = account_inter_company_rules/i18n/account_inter_company_rules.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_inter_company_rules
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_intrastat]
+file_filter            = account_intrastat/i18n/<lang>.po
+source_file            = account_intrastat/i18n/account_intrastat.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_intrastat
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_invoice_extract]
+file_filter            = account_invoice_extract/i18n/<lang>.po
+source_file            = account_invoice_extract/i18n/account_invoice_extract.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_invoice_extract
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_online_synchronization]
+file_filter            = account_online_synchronization/i18n/<lang>.po
+source_file            = account_online_synchronization/i18n/account_online_synchronization.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_online_synchronization
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_reports]
+file_filter            = account_reports/i18n/<lang>.po
+source_file            = account_reports/i18n/account_reports.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_reports
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_reports_cash_basis]
+file_filter            = account_reports_cash_basis/i18n/<lang>.po
+source_file            = account_reports_cash_basis/i18n/account_reports_cash_basis.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_reports_cash_basis
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_reports_tax_reminder]
+file_filter            = account_reports_tax_reminder/i18n/<lang>.po
+source_file            = account_reports_tax_reminder/i18n/account_reports_tax_reminder.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_reports_tax_reminder
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_saft]
+file_filter            = account_saft/i18n/<lang>.po
+source_file            = account_saft/i18n/account_saft.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_saft
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_sepa]
+file_filter            = account_sepa/i18n/<lang>.po
+source_file            = account_sepa/i18n/account_sepa.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_sepa
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_sepa_direct_debit]
+file_filter            = account_sepa_direct_debit/i18n/<lang>.po
+source_file            = account_sepa_direct_debit/i18n/account_sepa_direct_debit.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_sepa_direct_debit
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_taxcloud]
+file_filter            = account_taxcloud/i18n/<lang>.po
+source_file            = account_taxcloud/i18n/account_taxcloud.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_taxcloud
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:account_winbooks_import]
+file_filter            = account_winbooks_import/i18n/<lang>.po
+source_file            = account_winbooks_import/i18n/account_winbooks_import.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = account_winbooks_import
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:analytic_enterprise]
+file_filter            = analytic_enterprise/i18n/<lang>.po
+source_file            = analytic_enterprise/i18n/analytic_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = analytic_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:appointment]
+file_filter            = appointment/i18n/<lang>.po
+source_file            = appointment/i18n/appointment.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = appointment
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:appointment_account_payment]
+file_filter            = appointment_account_payment/i18n/<lang>.po
+source_file            = appointment_account_payment/i18n/appointment_account_payment.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = appointment_account_payment
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:appointment_crm]
+file_filter            = appointment_crm/i18n/<lang>.po
+source_file            = appointment_crm/i18n/appointment_crm.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = appointment_crm
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:appointment_google_calendar]
+file_filter            = appointment_google_calendar/i18n/<lang>.po
+source_file            = appointment_google_calendar/i18n/appointment_google_calendar.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = appointment_google_calendar
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:appointment_hr]
+file_filter            = appointment_hr/i18n/<lang>.po
+source_file            = appointment_hr/i18n/appointment_hr.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = appointment_hr
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:appointment_hr_recruitment]
+file_filter            = appointment_hr_recruitment/i18n/<lang>.po
+source_file            = appointment_hr_recruitment/i18n/appointment_hr_recruitment.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = appointment_hr_recruitment
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:approvals]
+file_filter            = approvals/i18n/<lang>.po
+source_file            = approvals/i18n/approvals.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = approvals
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:approvals_purchase]
+file_filter            = approvals_purchase/i18n/<lang>.po
+source_file            = approvals_purchase/i18n/approvals_purchase.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = approvals_purchase
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:approvals_purchase_stock]
+file_filter            = approvals_purchase_stock/i18n/<lang>.po
+source_file            = approvals_purchase_stock/i18n/approvals_purchase_stock.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = approvals_purchase_stock
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:base_automation_hr_contract]
+file_filter            = base_automation_hr_contract/i18n/<lang>.po
+source_file            = base_automation_hr_contract/i18n/base_automation_hr_contract.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = base_automation_hr_contract
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:crm_enterprise]
+file_filter            = crm_enterprise/i18n/<lang>.po
+source_file            = crm_enterprise/i18n/crm_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = crm_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:crm_helpdesk]
+file_filter            = crm_helpdesk/i18n/<lang>.po
+source_file            = crm_helpdesk/i18n/crm_helpdesk.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = crm_helpdesk
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:currency_rate_live]
+file_filter            = currency_rate_live/i18n/<lang>.po
+source_file            = currency_rate_live/i18n/currency_rate_live.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = currency_rate_live
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:data_cleaning]
+file_filter            = data_cleaning/i18n/<lang>.po
+source_file            = data_cleaning/i18n/data_cleaning.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = data_cleaning
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:data_merge]
+file_filter            = data_merge/i18n/<lang>.po
+source_file            = data_merge/i18n/data_merge.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = data_merge
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:data_merge_stock_account]
+file_filter            = data_merge_stock_account/i18n/<lang>.po
+source_file            = data_merge_stock_account/i18n/data_merge_stock_account.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = data_merge_stock_account
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:delivery_bpost]
+file_filter            = delivery_bpost/i18n/<lang>.po
+source_file            = delivery_bpost/i18n/delivery_bpost.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = delivery_bpost
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:delivery_dhl]
+file_filter            = delivery_dhl/i18n/<lang>.po
+source_file            = delivery_dhl/i18n/delivery_dhl.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = delivery_dhl
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:delivery_easypost]
+file_filter            = delivery_easypost/i18n/<lang>.po
+source_file            = delivery_easypost/i18n/delivery_easypost.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = delivery_easypost
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:delivery_fedex]
+file_filter            = delivery_fedex/i18n/<lang>.po
+source_file            = delivery_fedex/i18n/delivery_fedex.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = delivery_fedex
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:delivery_iot]
+file_filter            = delivery_iot/i18n/<lang>.po
+source_file            = delivery_iot/i18n/delivery_iot.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = delivery_iot
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:delivery_sendcloud]
+file_filter            = delivery_sendcloud/i18n/<lang>.po
+source_file            = delivery_sendcloud/i18n/delivery_sendcloud.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = delivery_sendcloud
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:delivery_shiprocket]
+file_filter            = delivery_shiprocket/i18n/<lang>.po
+source_file            = delivery_shiprocket/i18n/delivery_shiprocket.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = delivery_shiprocket
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:delivery_ups]
+file_filter            = delivery_ups/i18n/<lang>.po
+source_file            = delivery_ups/i18n/delivery_ups.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = delivery_ups
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:delivery_usps]
+file_filter            = delivery_usps/i18n/<lang>.po
+source_file            = delivery_usps/i18n/delivery_usps.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = delivery_usps
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:digest_enterprise]
+file_filter            = digest_enterprise/i18n/<lang>.po
+source_file            = digest_enterprise/i18n/digest_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = digest_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents]
+file_filter            = documents/i18n/<lang>.po
+source_file            = documents/i18n/documents.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_account]
+file_filter            = documents_account/i18n/<lang>.po
+source_file            = documents_account/i18n/documents_account.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_account
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_approvals]
+file_filter            = documents_approvals/i18n/<lang>.po
+source_file            = documents_approvals/i18n/documents_approvals.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_approvals
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_fleet]
+file_filter            = documents_fleet/i18n/<lang>.po
+source_file            = documents_fleet/i18n/documents_fleet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_fleet
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_hr]
+file_filter            = documents_hr/i18n/<lang>.po
+source_file            = documents_hr/i18n/documents_hr.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_hr
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_hr_contract]
+file_filter            = documents_hr_contract/i18n/<lang>.po
+source_file            = documents_hr_contract/i18n/documents_hr_contract.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_hr_contract
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_hr_expense]
+file_filter            = documents_hr_expense/i18n/<lang>.po
+source_file            = documents_hr_expense/i18n/documents_hr_expense.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_hr_expense
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_hr_payroll]
+file_filter            = documents_hr_payroll/i18n/<lang>.po
+source_file            = documents_hr_payroll/i18n/documents_hr_payroll.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_hr_payroll
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_hr_recruitment]
+file_filter            = documents_hr_recruitment/i18n/<lang>.po
+source_file            = documents_hr_recruitment/i18n/documents_hr_recruitment.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_hr_recruitment
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_product]
+file_filter            = documents_product/i18n/<lang>.po
+source_file            = documents_product/i18n/documents_product.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_product
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_project]
+file_filter            = documents_project/i18n/<lang>.po
+source_file            = documents_project/i18n/documents_project.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_project
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_project_sale]
+file_filter            = documents_project_sale/i18n/<lang>.po
+source_file            = documents_project_sale/i18n/documents_project_sale.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_project_sale
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_sign]
+file_filter            = documents_sign/i18n/<lang>.po
+source_file            = documents_sign/i18n/documents_sign.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_sign
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_spreadsheet]
+file_filter            = documents_spreadsheet/i18n/<lang>.po
+source_file            = documents_spreadsheet/i18n/documents_spreadsheet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_spreadsheet
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_spreadsheet_account]
+file_filter            = documents_spreadsheet_account/i18n/<lang>.po
+source_file            = documents_spreadsheet_account/i18n/documents_spreadsheet_account.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_spreadsheet_account
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:documents_spreadsheet_crm]
+file_filter            = documents_spreadsheet_crm/i18n/<lang>.po
+source_file            = documents_spreadsheet_crm/i18n/documents_spreadsheet_crm.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = documents_spreadsheet_crm
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:event_enterprise]
+file_filter            = event_enterprise/i18n/<lang>.po
+source_file            = event_enterprise/i18n/event_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = event_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:event_social]
+file_filter            = event_social/i18n/<lang>.po
+source_file            = event_social/i18n/event_social.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = event_social
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:frontdesk]
+file_filter            = frontdesk/i18n/<lang>.po
+source_file            = frontdesk/i18n/frontdesk.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = frontdesk
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk]
+file_filter            = helpdesk/i18n/<lang>.po
+source_file            = helpdesk/i18n/helpdesk.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_account]
+file_filter            = helpdesk_account/i18n/<lang>.po
+source_file            = helpdesk_account/i18n/helpdesk_account.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_account
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_fsm]
+file_filter            = helpdesk_fsm/i18n/<lang>.po
+source_file            = helpdesk_fsm/i18n/helpdesk_fsm.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_fsm
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_fsm_report]
+file_filter            = helpdesk_fsm_report/i18n/<lang>.po
+source_file            = helpdesk_fsm_report/i18n/helpdesk_fsm_report.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_fsm_report
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_mail_plugin]
+file_filter            = helpdesk_mail_plugin/i18n/<lang>.po
+source_file            = helpdesk_mail_plugin/i18n/helpdesk_mail_plugin.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_mail_plugin
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_repair]
+file_filter            = helpdesk_repair/i18n/<lang>.po
+source_file            = helpdesk_repair/i18n/helpdesk_repair.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_repair
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_sale]
+file_filter            = helpdesk_sale/i18n/<lang>.po
+source_file            = helpdesk_sale/i18n/helpdesk_sale.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_sale
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_sale_loyalty]
+file_filter            = helpdesk_sale_loyalty/i18n/<lang>.po
+source_file            = helpdesk_sale_loyalty/i18n/helpdesk_sale_loyalty.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_sale_loyalty
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_sale_timesheet]
+file_filter            = helpdesk_sale_timesheet/i18n/<lang>.po
+source_file            = helpdesk_sale_timesheet/i18n/helpdesk_sale_timesheet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_sale_timesheet
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_sms]
+file_filter            = helpdesk_sms/i18n/<lang>.po
+source_file            = helpdesk_sms/i18n/helpdesk_sms.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_sms
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_stock]
+file_filter            = helpdesk_stock/i18n/<lang>.po
+source_file            = helpdesk_stock/i18n/helpdesk_stock.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_stock
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_stock_account]
+file_filter            = helpdesk_stock_account/i18n/<lang>.po
+source_file            = helpdesk_stock_account/i18n/helpdesk_stock_account.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_stock_account
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:helpdesk_timesheet]
+file_filter            = helpdesk_timesheet/i18n/<lang>.po
+source_file            = helpdesk_timesheet/i18n/helpdesk_timesheet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = helpdesk_timesheet
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_appraisal]
+file_filter            = hr_appraisal/i18n/<lang>.po
+source_file            = hr_appraisal/i18n/hr_appraisal.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_appraisal
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_appraisal_skills]
+file_filter            = hr_appraisal_skills/i18n/<lang>.po
+source_file            = hr_appraisal_skills/i18n/hr_appraisal_skills.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_appraisal_skills
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_appraisal_survey]
+file_filter            = hr_appraisal_survey/i18n/<lang>.po
+source_file            = hr_appraisal_survey/i18n/hr_appraisal_survey.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_appraisal_survey
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_attendance_gantt]
+file_filter            = hr_attendance_gantt/i18n/<lang>.po
+source_file            = hr_attendance_gantt/i18n/hr_attendance_gantt.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_attendance_gantt
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_contract_reports]
+file_filter            = hr_contract_reports/i18n/<lang>.po
+source_file            = hr_contract_reports/i18n/hr_contract_reports.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_contract_reports
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_contract_salary]
+file_filter            = hr_contract_salary/i18n/<lang>.po
+source_file            = hr_contract_salary/i18n/hr_contract_salary.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_contract_salary
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_contract_salary_holidays]
+file_filter            = hr_contract_salary_holidays/i18n/<lang>.po
+source_file            = hr_contract_salary_holidays/i18n/hr_contract_salary_holidays.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_contract_salary_holidays
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_contract_salary_payroll]
+file_filter            = hr_contract_salary_payroll/i18n/<lang>.po
+source_file            = hr_contract_salary_payroll/i18n/hr_contract_salary_payroll.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_contract_salary_payroll
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_contract_sign]
+file_filter            = hr_contract_sign/i18n/<lang>.po
+source_file            = hr_contract_sign/i18n/hr_contract_sign.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_contract_sign
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_expense_extract]
+file_filter            = hr_expense_extract/i18n/<lang>.po
+source_file            = hr_expense_extract/i18n/hr_expense_extract.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_expense_extract
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_expense_predict_product]
+file_filter            = hr_expense_predict_product/i18n/<lang>.po
+source_file            = hr_expense_predict_product/i18n/hr_expense_predict_product.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_expense_predict_product
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_holidays_gantt]
+file_filter            = hr_holidays_gantt/i18n/<lang>.po
+source_file            = hr_holidays_gantt/i18n/hr_holidays_gantt.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_holidays_gantt
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_payroll]
+file_filter            = hr_payroll/i18n/<lang>.po
+source_file            = hr_payroll/i18n/hr_payroll.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_payroll
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_payroll_account]
+file_filter            = hr_payroll_account/i18n/<lang>.po
+source_file            = hr_payroll_account/i18n/hr_payroll_account.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_payroll_account
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_payroll_account_sepa]
+file_filter            = hr_payroll_account_sepa/i18n/<lang>.po
+source_file            = hr_payroll_account_sepa/i18n/hr_payroll_account_sepa.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_payroll_account_sepa
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_payroll_attendance]
+file_filter            = hr_payroll_attendance/i18n/<lang>.po
+source_file            = hr_payroll_attendance/i18n/hr_payroll_attendance.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_payroll_attendance
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_payroll_expense]
+file_filter            = hr_payroll_expense/i18n/<lang>.po
+source_file            = hr_payroll_expense/i18n/hr_payroll_expense.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_payroll_expense
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_payroll_fleet]
+file_filter            = hr_payroll_fleet/i18n/<lang>.po
+source_file            = hr_payroll_fleet/i18n/hr_payroll_fleet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_payroll_fleet
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_payroll_holidays]
+file_filter            = hr_payroll_holidays/i18n/<lang>.po
+source_file            = hr_payroll_holidays/i18n/hr_payroll_holidays.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_payroll_holidays
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_payroll_planning]
+file_filter            = hr_payroll_planning/i18n/<lang>.po
+source_file            = hr_payroll_planning/i18n/hr_payroll_planning.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_payroll_planning
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_recruitment_extract]
+file_filter            = hr_recruitment_extract/i18n/<lang>.po
+source_file            = hr_recruitment_extract/i18n/hr_recruitment_extract.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_recruitment_extract
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_recruitment_reports]
+file_filter            = hr_recruitment_reports/i18n/<lang>.po
+source_file            = hr_recruitment_reports/i18n/hr_recruitment_reports.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_recruitment_reports
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_recruitment_sign]
+file_filter            = hr_recruitment_sign/i18n/<lang>.po
+source_file            = hr_recruitment_sign/i18n/hr_recruitment_sign.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_recruitment_sign
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_referral]
+file_filter            = hr_referral/i18n/<lang>.po
+source_file            = hr_referral/i18n/hr_referral.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_referral
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_work_entry_contract_attendance]
+file_filter            = hr_work_entry_contract_attendance/i18n/<lang>.po
+source_file            = hr_work_entry_contract_attendance/i18n/hr_work_entry_contract_attendance.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_work_entry_contract_attendance
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_work_entry_contract_enterprise]
+file_filter            = hr_work_entry_contract_enterprise/i18n/<lang>.po
+source_file            = hr_work_entry_contract_enterprise/i18n/hr_work_entry_contract_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_work_entry_contract_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_work_entry_contract_planning]
+file_filter            = hr_work_entry_contract_planning/i18n/<lang>.po
+source_file            = hr_work_entry_contract_planning/i18n/hr_work_entry_contract_planning.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_work_entry_contract_planning
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:hr_work_entry_holidays_enterprise]
+file_filter            = hr_work_entry_holidays_enterprise/i18n/<lang>.po
+source_file            = hr_work_entry_holidays_enterprise/i18n/hr_work_entry_holidays_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = hr_work_entry_holidays_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:iap_extract]
+file_filter            = iap_extract/i18n/<lang>.po
+source_file            = iap_extract/i18n/iap_extract.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = iap_extract
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:industry_fsm]
+file_filter            = industry_fsm/i18n/<lang>.po
+source_file            = industry_fsm/i18n/industry_fsm.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = industry_fsm
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:industry_fsm_report]
+file_filter            = industry_fsm_report/i18n/<lang>.po
+source_file            = industry_fsm_report/i18n/industry_fsm_report.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = industry_fsm_report
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:industry_fsm_sale]
+file_filter            = industry_fsm_sale/i18n/<lang>.po
+source_file            = industry_fsm_sale/i18n/industry_fsm_sale.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = industry_fsm_sale
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:industry_fsm_sale_report]
+file_filter            = industry_fsm_sale_report/i18n/<lang>.po
+source_file            = industry_fsm_sale_report/i18n/industry_fsm_sale_report.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = industry_fsm_sale_report
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:industry_fsm_sms]
+file_filter            = industry_fsm_sms/i18n/<lang>.po
+source_file            = industry_fsm_sms/i18n/industry_fsm_sms.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = industry_fsm_sms
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:industry_fsm_stock]
+file_filter            = industry_fsm_stock/i18n/<lang>.po
+source_file            = industry_fsm_stock/i18n/industry_fsm_stock.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = industry_fsm_stock
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:iot]
+file_filter            = iot/i18n/<lang>.po
+source_file            = iot/i18n/iot.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = iot
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:knowledge]
+file_filter            = knowledge/i18n/<lang>.po
+source_file            = knowledge/i18n/knowledge.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = knowledge
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:mail_mobile]
+file_filter            = mail_mobile/i18n/<lang>.po
+source_file            = mail_mobile/i18n/mail_mobile.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = mail_mobile
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:maintenance_worksheet]
+file_filter            = maintenance_worksheet/i18n/<lang>.po
+source_file            = maintenance_worksheet/i18n/maintenance_worksheet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = maintenance_worksheet
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:marketing_automation]
+file_filter            = marketing_automation/i18n/<lang>.po
+source_file            = marketing_automation/i18n/marketing_automation.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = marketing_automation
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:marketing_automation_crm]
+file_filter            = marketing_automation_crm/i18n/<lang>.po
+source_file            = marketing_automation_crm/i18n/marketing_automation_crm.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = marketing_automation_crm
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:marketing_automation_sms]
+file_filter            = marketing_automation_sms/i18n/<lang>.po
+source_file            = marketing_automation_sms/i18n/marketing_automation_sms.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = marketing_automation_sms
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:mrp_account_enterprise]
+file_filter            = mrp_account_enterprise/i18n/<lang>.po
+source_file            = mrp_account_enterprise/i18n/mrp_account_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = mrp_account_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:mrp_maintenance]
+file_filter            = mrp_maintenance/i18n/<lang>.po
+source_file            = mrp_maintenance/i18n/mrp_maintenance.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = mrp_maintenance
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:mrp_mps]
+file_filter            = mrp_mps/i18n/<lang>.po
+source_file            = mrp_mps/i18n/mrp_mps.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = mrp_mps
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:mrp_plm]
+file_filter            = mrp_plm/i18n/<lang>.po
+source_file            = mrp_plm/i18n/mrp_plm.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = mrp_plm
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:mrp_subcontracting_account_enterprise]
+file_filter            = mrp_subcontracting_account_enterprise/i18n/<lang>.po
+source_file            = mrp_subcontracting_account_enterprise/i18n/mrp_subcontracting_account_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = mrp_subcontracting_account_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:mrp_workorder]
+file_filter            = mrp_workorder/i18n/<lang>.po
+source_file            = mrp_workorder/i18n/mrp_workorder.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = mrp_workorder
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:mrp_workorder_expiry]
+file_filter            = mrp_workorder_expiry/i18n/<lang>.po
+source_file            = mrp_workorder_expiry/i18n/mrp_workorder_expiry.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = mrp_workorder_expiry
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:mrp_workorder_hr_account]
+file_filter            = mrp_workorder_hr_account/i18n/<lang>.po
+source_file            = mrp_workorder_hr_account/i18n/mrp_workorder_hr_account.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = mrp_workorder_hr_account
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:mrp_workorder_iot]
+file_filter            = mrp_workorder_iot/i18n/<lang>.po
+source_file            = mrp_workorder_iot/i18n/mrp_workorder_iot.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = mrp_workorder_iot
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:mrp_workorder_plm]
+file_filter            = mrp_workorder_plm/i18n/<lang>.po
+source_file            = mrp_workorder_plm/i18n/mrp_workorder_plm.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = mrp_workorder_plm
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:partner_commission]
+file_filter            = partner_commission/i18n/<lang>.po
+source_file            = partner_commission/i18n/partner_commission.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = partner_commission
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:payment_sepa_direct_debit]
+file_filter            = payment_sepa_direct_debit/i18n/<lang>.po
+source_file            = payment_sepa_direct_debit/i18n/payment_sepa_direct_debit.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = payment_sepa_direct_debit
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:planning]
+file_filter            = planning/i18n/<lang>.po
+source_file            = planning/i18n/planning.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = planning
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:planning_holidays]
+file_filter            = planning_holidays/i18n/<lang>.po
+source_file            = planning_holidays/i18n/planning_holidays.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = planning_holidays
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:planning_hr_skills]
+file_filter            = planning_hr_skills/i18n/<lang>.po
+source_file            = planning_hr_skills/i18n/planning_hr_skills.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = planning_hr_skills
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:pos_enterprise]
+file_filter            = pos_enterprise/i18n/<lang>.po
+source_file            = pos_enterprise/i18n/pos_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = pos_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:pos_hr_mobile]
+file_filter            = pos_hr_mobile/i18n/<lang>.po
+source_file            = pos_hr_mobile/i18n/pos_hr_mobile.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = pos_hr_mobile
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:pos_iot]
+file_filter            = pos_iot/i18n/<lang>.po
+source_file            = pos_iot/i18n/pos_iot.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = pos_iot
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:pos_order_tracking_display]
+file_filter            = pos_order_tracking_display/i18n/<lang>.po
+source_file            = pos_order_tracking_display/i18n/pos_order_tracking_display.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = pos_order_tracking_display
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:pos_preparation_display]
+file_filter            = pos_preparation_display/i18n/<lang>.po
+source_file            = pos_preparation_display/i18n/pos_preparation_display.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = pos_preparation_display
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:pos_restaurant_appointment]
+file_filter            = pos_restaurant_appointment/i18n/<lang>.po
+source_file            = pos_restaurant_appointment/i18n/pos_restaurant_appointment.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = pos_restaurant_appointment
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:pos_restaurant_preparation_display]
+file_filter            = pos_restaurant_preparation_display/i18n/<lang>.po
+source_file            = pos_restaurant_preparation_display/i18n/pos_restaurant_preparation_display.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = pos_restaurant_preparation_display
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:pos_self_order_preparation_display]
+file_filter            = pos_self_order_preparation_display/i18n/<lang>.po
+source_file            = pos_self_order_preparation_display/i18n/pos_self_order_preparation_display.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = pos_self_order_preparation_display
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:pos_settle_due]
+file_filter            = pos_settle_due/i18n/<lang>.po
+source_file            = pos_settle_due/i18n/pos_settle_due.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = pos_settle_due
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:product_unspsc]
+file_filter            = product_unspsc/i18n/<lang>.po
+source_file            = product_unspsc/i18n/product_unspsc.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = product_unspsc
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:project_account_asset]
+file_filter            = project_account_asset/i18n/<lang>.po
+source_file            = project_account_asset/i18n/project_account_asset.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = project_account_asset
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:project_account_budget]
+file_filter            = project_account_budget/i18n/<lang>.po
+source_file            = project_account_budget/i18n/project_account_budget.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = project_account_budget
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:project_enterprise]
+file_filter            = project_enterprise/i18n/<lang>.po
+source_file            = project_enterprise/i18n/project_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = project_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:project_forecast]
+file_filter            = project_forecast/i18n/<lang>.po
+source_file            = project_forecast/i18n/project_forecast.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = project_forecast
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:project_helpdesk]
+file_filter            = project_helpdesk/i18n/<lang>.po
+source_file            = project_helpdesk/i18n/project_helpdesk.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = project_helpdesk
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:project_holidays]
+file_filter            = project_holidays/i18n/<lang>.po
+source_file            = project_holidays/i18n/project_holidays.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = project_holidays
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:project_hr_payroll_account]
+file_filter            = project_hr_payroll_account/i18n/<lang>.po
+source_file            = project_hr_payroll_account/i18n/project_hr_payroll_account.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = project_hr_payroll_account
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:project_sale_subscription]
+file_filter            = project_sale_subscription/i18n/<lang>.po
+source_file            = project_sale_subscription/i18n/project_sale_subscription.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = project_sale_subscription
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:project_timesheet_forecast]
+file_filter            = project_timesheet_forecast/i18n/<lang>.po
+source_file            = project_timesheet_forecast/i18n/project_timesheet_forecast.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = project_timesheet_forecast
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:project_timesheet_forecast_sale]
+file_filter            = project_timesheet_forecast_sale/i18n/<lang>.po
+source_file            = project_timesheet_forecast_sale/i18n/project_timesheet_forecast_sale.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = project_timesheet_forecast_sale
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:quality]
+file_filter            = quality/i18n/<lang>.po
+source_file            = quality/i18n/quality.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = quality
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:quality_control]
+file_filter            = quality_control/i18n/<lang>.po
+source_file            = quality_control/i18n/quality_control.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = quality_control
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:quality_control_iot]
+file_filter            = quality_control_iot/i18n/<lang>.po
+source_file            = quality_control_iot/i18n/quality_control_iot.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = quality_control_iot
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:quality_control_picking_batch]
+file_filter            = quality_control_picking_batch/i18n/<lang>.po
+source_file            = quality_control_picking_batch/i18n/quality_control_picking_batch.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = quality_control_picking_batch
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:quality_control_worksheet]
+file_filter            = quality_control_worksheet/i18n/<lang>.po
+source_file            = quality_control_worksheet/i18n/quality_control_worksheet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = quality_control_worksheet
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:quality_iot]
+file_filter            = quality_iot/i18n/<lang>.po
+source_file            = quality_iot/i18n/quality_iot.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = quality_iot
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:quality_mrp]
+file_filter            = quality_mrp/i18n/<lang>.po
+source_file            = quality_mrp/i18n/quality_mrp.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = quality_mrp
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:quality_mrp_workorder]
+file_filter            = quality_mrp_workorder/i18n/<lang>.po
+source_file            = quality_mrp_workorder/i18n/quality_mrp_workorder.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = quality_mrp_workorder
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:quality_mrp_workorder_iot]
+file_filter            = quality_mrp_workorder_iot/i18n/<lang>.po
+source_file            = quality_mrp_workorder_iot/i18n/quality_mrp_workorder_iot.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = quality_mrp_workorder_iot
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:quality_mrp_workorder_worksheet]
+file_filter            = quality_mrp_workorder_worksheet/i18n/<lang>.po
+source_file            = quality_mrp_workorder_worksheet/i18n/quality_mrp_workorder_worksheet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = quality_mrp_workorder_worksheet
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:room]
+file_filter            = room/i18n/<lang>.po
+source_file            = room/i18n/room.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = room
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_account_accountant]
+file_filter            = sale_account_accountant/i18n/<lang>.po
+source_file            = sale_account_accountant/i18n/sale_account_accountant.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_account_accountant
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_account_taxcloud]
+file_filter            = sale_account_taxcloud/i18n/<lang>.po
+source_file            = sale_account_taxcloud/i18n/sale_account_taxcloud.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_account_taxcloud
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_amazon]
+file_filter            = sale_amazon/i18n/<lang>.po
+source_file            = sale_amazon/i18n/sale_amazon.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_amazon
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_ebay]
+file_filter            = sale_ebay/i18n/<lang>.po
+source_file            = sale_ebay/i18n/sale_ebay.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_ebay
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_external_tax]
+file_filter            = sale_external_tax/i18n/<lang>.po
+source_file            = sale_external_tax/i18n/sale_external_tax.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_external_tax
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_loyalty_taxcloud]
+file_filter            = sale_loyalty_taxcloud/i18n/<lang>.po
+source_file            = sale_loyalty_taxcloud/i18n/sale_loyalty_taxcloud.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_loyalty_taxcloud
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_loyalty_taxcloud_delivery]
+file_filter            = sale_loyalty_taxcloud_delivery/i18n/<lang>.po
+source_file            = sale_loyalty_taxcloud_delivery/i18n/sale_loyalty_taxcloud_delivery.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_loyalty_taxcloud_delivery
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_management_renting]
+file_filter            = sale_management_renting/i18n/<lang>.po
+source_file            = sale_management_renting/i18n/sale_management_renting.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_management_renting
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_planning]
+file_filter            = sale_planning/i18n/<lang>.po
+source_file            = sale_planning/i18n/sale_planning.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_planning
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_project_forecast]
+file_filter            = sale_project_forecast/i18n/<lang>.po
+source_file            = sale_project_forecast/i18n/sale_project_forecast.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_project_forecast
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_purchase_inter_company_rules]
+file_filter            = sale_purchase_inter_company_rules/i18n/<lang>.po
+source_file            = sale_purchase_inter_company_rules/i18n/sale_purchase_inter_company_rules.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_purchase_inter_company_rules
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_renting]
+file_filter            = sale_renting/i18n/<lang>.po
+source_file            = sale_renting/i18n/sale_renting.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_renting
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_renting_crm]
+file_filter            = sale_renting_crm/i18n/<lang>.po
+source_file            = sale_renting_crm/i18n/sale_renting_crm.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_renting_crm
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_renting_sign]
+file_filter            = sale_renting_sign/i18n/<lang>.po
+source_file            = sale_renting_sign/i18n/sale_renting_sign.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_renting_sign
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_stock_renting]
+file_filter            = sale_stock_renting/i18n/<lang>.po
+source_file            = sale_stock_renting/i18n/sale_stock_renting.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_stock_renting
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_subscription]
+file_filter            = sale_subscription/i18n/<lang>.po
+source_file            = sale_subscription/i18n/sale_subscription.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_subscription
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_subscription_stock]
+file_filter            = sale_subscription_stock/i18n/<lang>.po
+source_file            = sale_subscription_stock/i18n/sale_subscription_stock.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_subscription_stock
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sale_timesheet_enterprise]
+file_filter            = sale_timesheet_enterprise/i18n/<lang>.po
+source_file            = sale_timesheet_enterprise/i18n/sale_timesheet_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sale_timesheet_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sign]
+file_filter            = sign/i18n/<lang>.po
+source_file            = sign/i18n/sign.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sign
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:sign_itsme]
+file_filter            = sign_itsme/i18n/<lang>.po
+source_file            = sign_itsme/i18n/sign_itsme.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = sign_itsme
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:snailmail_account_followup]
+file_filter            = snailmail_account_followup/i18n/<lang>.po
+source_file            = snailmail_account_followup/i18n/snailmail_account_followup.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = snailmail_account_followup
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:social]
+file_filter            = social/i18n/<lang>.po
+source_file            = social/i18n/social.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = social
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:social_crm]
+file_filter            = social_crm/i18n/<lang>.po
+source_file            = social_crm/i18n/social_crm.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = social_crm
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:social_demo]
+file_filter            = social_demo/i18n/<lang>.po
+source_file            = social_demo/i18n/social_demo.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = social_demo
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:social_facebook]
+file_filter            = social_facebook/i18n/<lang>.po
+source_file            = social_facebook/i18n/social_facebook.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = social_facebook
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:social_instagram]
+file_filter            = social_instagram/i18n/<lang>.po
+source_file            = social_instagram/i18n/social_instagram.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = social_instagram
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:social_linkedin]
+file_filter            = social_linkedin/i18n/<lang>.po
+source_file            = social_linkedin/i18n/social_linkedin.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = social_linkedin
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:social_push_notifications]
+file_filter            = social_push_notifications/i18n/<lang>.po
+source_file            = social_push_notifications/i18n/social_push_notifications.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = social_push_notifications
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:social_sale]
+file_filter            = social_sale/i18n/<lang>.po
+source_file            = social_sale/i18n/social_sale.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = social_sale
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:social_twitter]
+file_filter            = social_twitter/i18n/<lang>.po
+source_file            = social_twitter/i18n/social_twitter.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = social_twitter
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:social_youtube]
+file_filter            = social_youtube/i18n/<lang>.po
+source_file            = social_youtube/i18n/social_youtube.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = social_youtube
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_dashboard_account_accountant]
+file_filter            = spreadsheet_dashboard_account_accountant/i18n/<lang>.po
+source_file            = spreadsheet_dashboard_account_accountant/i18n/spreadsheet_dashboard_account_accountant.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_dashboard_account_accountant
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_dashboard_crm]
+file_filter            = spreadsheet_dashboard_crm/i18n/<lang>.po
+source_file            = spreadsheet_dashboard_crm/i18n/spreadsheet_dashboard_crm.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_dashboard_crm
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_dashboard_documents]
+file_filter            = spreadsheet_dashboard_documents/i18n/<lang>.po
+source_file            = spreadsheet_dashboard_documents/i18n/spreadsheet_dashboard_documents.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_dashboard_documents
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_dashboard_edition]
+file_filter            = spreadsheet_dashboard_edition/i18n/<lang>.po
+source_file            = spreadsheet_dashboard_edition/i18n/spreadsheet_dashboard_edition.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_dashboard_edition
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_dashboard_helpdesk]
+file_filter            = spreadsheet_dashboard_helpdesk/i18n/<lang>.po
+source_file            = spreadsheet_dashboard_helpdesk/i18n/spreadsheet_dashboard_helpdesk.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_dashboard_helpdesk
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_dashboard_hr_contract]
+file_filter            = spreadsheet_dashboard_hr_contract/i18n/<lang>.po
+source_file            = spreadsheet_dashboard_hr_contract/i18n/spreadsheet_dashboard_hr_contract.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_dashboard_hr_contract
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_dashboard_hr_payroll]
+file_filter            = spreadsheet_dashboard_hr_payroll/i18n/<lang>.po
+source_file            = spreadsheet_dashboard_hr_payroll/i18n/spreadsheet_dashboard_hr_payroll.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_dashboard_hr_payroll
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_dashboard_hr_referral]
+file_filter            = spreadsheet_dashboard_hr_referral/i18n/<lang>.po
+source_file            = spreadsheet_dashboard_hr_referral/i18n/spreadsheet_dashboard_hr_referral.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_dashboard_hr_referral
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_dashboard_mrp_account]
+file_filter            = spreadsheet_dashboard_mrp_account/i18n/<lang>.po
+source_file            = spreadsheet_dashboard_mrp_account/i18n/spreadsheet_dashboard_mrp_account.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_dashboard_mrp_account
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_dashboard_sale_renting]
+file_filter            = spreadsheet_dashboard_sale_renting/i18n/<lang>.po
+source_file            = spreadsheet_dashboard_sale_renting/i18n/spreadsheet_dashboard_sale_renting.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_dashboard_sale_renting
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_dashboard_stock]
+file_filter            = spreadsheet_dashboard_stock/i18n/<lang>.po
+source_file            = spreadsheet_dashboard_stock/i18n/spreadsheet_dashboard_stock.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_dashboard_stock
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:spreadsheet_edition]
+file_filter            = spreadsheet_edition/i18n/<lang>.po
+source_file            = spreadsheet_edition/i18n/spreadsheet_edition.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = spreadsheet_edition
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:stock_account_enterprise]
+file_filter            = stock_account_enterprise/i18n/<lang>.po
+source_file            = stock_account_enterprise/i18n/stock_account_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = stock_account_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:stock_accountant]
+file_filter            = stock_accountant/i18n/<lang>.po
+source_file            = stock_accountant/i18n/stock_accountant.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = stock_accountant
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:stock_barcode]
+file_filter            = stock_barcode/i18n/<lang>.po
+source_file            = stock_barcode/i18n/stock_barcode.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = stock_barcode
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:stock_barcode_mrp]
+file_filter            = stock_barcode_mrp/i18n/<lang>.po
+source_file            = stock_barcode_mrp/i18n/stock_barcode_mrp.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = stock_barcode_mrp
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:stock_barcode_mrp_subcontracting]
+file_filter            = stock_barcode_mrp_subcontracting/i18n/<lang>.po
+source_file            = stock_barcode_mrp_subcontracting/i18n/stock_barcode_mrp_subcontracting.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = stock_barcode_mrp_subcontracting
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:stock_barcode_picking_batch]
+file_filter            = stock_barcode_picking_batch/i18n/<lang>.po
+source_file            = stock_barcode_picking_batch/i18n/stock_barcode_picking_batch.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = stock_barcode_picking_batch
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:stock_barcode_product_expiry]
+file_filter            = stock_barcode_product_expiry/i18n/<lang>.po
+source_file            = stock_barcode_product_expiry/i18n/stock_barcode_product_expiry.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = stock_barcode_product_expiry
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:stock_enterprise]
+file_filter            = stock_enterprise/i18n/<lang>.po
+source_file            = stock_enterprise/i18n/stock_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = stock_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:stock_intrastat]
+file_filter            = stock_intrastat/i18n/<lang>.po
+source_file            = stock_intrastat/i18n/stock_intrastat.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = stock_intrastat
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:timer]
+file_filter            = timer/i18n/<lang>.po
+source_file            = timer/i18n/timer.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = timer
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:timesheet_grid]
+file_filter            = timesheet_grid/i18n/<lang>.po
+source_file            = timesheet_grid/i18n/timesheet_grid.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = timesheet_grid
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:timesheet_grid_holidays]
+file_filter            = timesheet_grid_holidays/i18n/<lang>.po
+source_file            = timesheet_grid_holidays/i18n/timesheet_grid_holidays.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = timesheet_grid_holidays
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:voip]
+file_filter            = voip/i18n/<lang>.po
+source_file            = voip/i18n/voip.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = voip
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:voip_onsip]
+file_filter            = voip_onsip/i18n/<lang>.po
+source_file            = voip_onsip/i18n/voip_onsip.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = voip_onsip
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:web_cohort]
+file_filter            = web_cohort/i18n/<lang>.po
+source_file            = web_cohort/i18n/web_cohort.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = web_cohort
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:web_enterprise]
+file_filter            = web_enterprise/i18n/<lang>.po
+source_file            = web_enterprise/i18n/web_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = web_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:web_gantt]
+file_filter            = web_gantt/i18n/<lang>.po
+source_file            = web_gantt/i18n/web_gantt.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = web_gantt
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:web_grid]
+file_filter            = web_grid/i18n/<lang>.po
+source_file            = web_grid/i18n/web_grid.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = web_grid
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:web_map]
+file_filter            = web_map/i18n/<lang>.po
+source_file            = web_map/i18n/web_map.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = web_map
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:web_mobile]
+file_filter            = web_mobile/i18n/<lang>.po
+source_file            = web_mobile/i18n/web_mobile.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = web_mobile
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:web_studio]
+file_filter            = web_studio/i18n/<lang>.po
+source_file            = web_studio/i18n/web_studio.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = web_studio
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_appointment]
+file_filter            = website_appointment/i18n/<lang>.po
+source_file            = website_appointment/i18n/website_appointment.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_appointment
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_appointment_sale]
+file_filter            = website_appointment_sale/i18n/<lang>.po
+source_file            = website_appointment_sale/i18n/website_appointment_sale.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_appointment_sale
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_delivery_sendcloud]
+file_filter            = website_delivery_sendcloud/i18n/<lang>.po
+source_file            = website_delivery_sendcloud/i18n/website_delivery_sendcloud.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_delivery_sendcloud
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_enterprise]
+file_filter            = website_enterprise/i18n/<lang>.po
+source_file            = website_enterprise/i18n/website_enterprise.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_enterprise
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_event_social]
+file_filter            = website_event_social/i18n/<lang>.po
+source_file            = website_event_social/i18n/website_event_social.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_event_social
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_event_track_gantt]
+file_filter            = website_event_track_gantt/i18n/<lang>.po
+source_file            = website_event_track_gantt/i18n/website_event_track_gantt.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_event_track_gantt
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_event_track_social]
+file_filter            = website_event_track_social/i18n/<lang>.po
+source_file            = website_event_track_social/i18n/website_event_track_social.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_event_track_social
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_event_twitter_wall]
+file_filter            = website_event_twitter_wall/i18n/<lang>.po
+source_file            = website_event_twitter_wall/i18n/website_event_twitter_wall.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_event_twitter_wall
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_helpdesk]
+file_filter            = website_helpdesk/i18n/<lang>.po
+source_file            = website_helpdesk/i18n/website_helpdesk.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_helpdesk
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_helpdesk_forum]
+file_filter            = website_helpdesk_forum/i18n/<lang>.po
+source_file            = website_helpdesk_forum/i18n/website_helpdesk_forum.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_helpdesk_forum
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_helpdesk_knowledge]
+file_filter            = website_helpdesk_knowledge/i18n/<lang>.po
+source_file            = website_helpdesk_knowledge/i18n/website_helpdesk_knowledge.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_helpdesk_knowledge
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_helpdesk_livechat]
+file_filter            = website_helpdesk_livechat/i18n/<lang>.po
+source_file            = website_helpdesk_livechat/i18n/website_helpdesk_livechat.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_helpdesk_livechat
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_helpdesk_slides]
+file_filter            = website_helpdesk_slides/i18n/<lang>.po
+source_file            = website_helpdesk_slides/i18n/website_helpdesk_slides.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_helpdesk_slides
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_knowledge]
+file_filter            = website_knowledge/i18n/<lang>.po
+source_file            = website_knowledge/i18n/website_knowledge.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_knowledge
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_sale_account_taxcloud]
+file_filter            = website_sale_account_taxcloud/i18n/<lang>.po
+source_file            = website_sale_account_taxcloud/i18n/website_sale_account_taxcloud.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_sale_account_taxcloud
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_sale_dashboard]
+file_filter            = website_sale_dashboard/i18n/<lang>.po
+source_file            = website_sale_dashboard/i18n/website_sale_dashboard.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_sale_dashboard
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_sale_fedex]
+file_filter            = website_sale_fedex/i18n/<lang>.po
+source_file            = website_sale_fedex/i18n/website_sale_fedex.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_sale_fedex
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_sale_renting]
+file_filter            = website_sale_renting/i18n/<lang>.po
+source_file            = website_sale_renting/i18n/website_sale_renting.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_sale_renting
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_sale_stock_renting]
+file_filter            = website_sale_stock_renting/i18n/<lang>.po
+source_file            = website_sale_stock_renting/i18n/website_sale_stock_renting.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_sale_stock_renting
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_sale_subscription]
+file_filter            = website_sale_subscription/i18n/<lang>.po
+source_file            = website_sale_subscription/i18n/website_sale_subscription.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_sale_subscription
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_sale_ups]
+file_filter            = website_sale_ups/i18n/<lang>.po
+source_file            = website_sale_ups/i18n/website_sale_ups.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_sale_ups
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_studio]
+file_filter            = website_studio/i18n/<lang>.po
+source_file            = website_studio/i18n/website_studio.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_studio
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:website_twitter_wall]
+file_filter            = website_twitter_wall/i18n/<lang>.po
+source_file            = website_twitter_wall/i18n/website_twitter_wall.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = website_twitter_wall
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:whatsapp]
+file_filter            = whatsapp/i18n/<lang>.po
+source_file            = whatsapp/i18n/whatsapp.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = whatsapp
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:whatsapp_event]
+file_filter            = whatsapp_event/i18n/<lang>.po
+source_file            = whatsapp_event/i18n/whatsapp_event.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = whatsapp_event
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:whatsapp_pos]
+file_filter            = whatsapp_pos/i18n/<lang>.po
+source_file            = whatsapp_pos/i18n/whatsapp_pos.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = whatsapp_pos
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:whatsapp_website_sale]
+file_filter            = whatsapp_website_sale/i18n/<lang>.po
+source_file            = whatsapp_website_sale/i18n/whatsapp_website_sale.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = whatsapp_website_sale
+replace_edited_strings = false
+keep_translations      = false
+
+[o:odoo:p:odoo-17:r:worksheet]
+file_filter            = worksheet/i18n/<lang>.po
+source_file            = worksheet/i18n/worksheet.pot
+type                   = PO
+minimum_perc           = 0
+resource_name          = worksheet
+replace_edited_strings = false
+keep_translations      = false
