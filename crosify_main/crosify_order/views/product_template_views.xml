@@ -85,8 +85,8 @@
 
                 <xpath expr="//field[@name='detailed_type']" position="before">
                     <field name="categ_id"/>
-                    <field name="product_type"/>
                     <field name="design_number"/>
+                    <field name="product_type"/>
                 </xpath>
 
                 <xpath expr="//page[@name='variants']" position="attributes">
