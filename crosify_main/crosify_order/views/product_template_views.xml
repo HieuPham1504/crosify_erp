@@ -1,5 +1,33 @@
 <odoo>
     <data>
+
+        <record id="sale.product_template_form_view" model="ir.ui.view">
+            <field name="active">0</field>
+        </record>
+
+        <record id="product_product_template_form_view_inherit" model="ir.ui.view">
+            <field name="name">product_product_template_form_view_inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//page[@name='general_information']//group[@name='group_standard_price']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='sales']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='purchase']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='product_tooltip']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
         <record id="account_product_template_form_view_inherit" model="ir.ui.view">
             <field name="name">account_product_template_form_view_inherit</field>
             <field name="model">product.template</field>
@@ -43,6 +71,10 @@
                     <field name="categ_id"/>
                     <field name="product_type"/>
                     <field name="design_number"/>
+                </xpath>
+
+                <xpath expr="//page[@name='variants']" position="attributes">
+                    <attribute name="string">Variants</attribute>
                 </xpath>
             </field>
         </record>

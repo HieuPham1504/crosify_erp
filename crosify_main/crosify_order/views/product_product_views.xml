@@ -18,10 +18,6 @@
                     <attribute name="invisible">1</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='invoice_policy']" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath>
-
                 <xpath expr="//field[@name='product_tooltip']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
@@ -41,7 +37,7 @@
                     </div>
                 </xpath>
 
-                <xpath expr="//field[@name='invoice_policy']" position="before">
+                <xpath expr="//field[@name='active']" position="before">
                     <field name="product_tmpl_id" readonly="1" force_save="1"/>
                     <field name="product_tmpl_product_type"/>
                     <field name="weight"/>
