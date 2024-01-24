@@ -1,5 +1,16 @@
 <odoo>
     <data>
+        <record id="account_product_template_form_view_inherit" model="ir.ui.view">
+            <field name="name">account_product_template_form_view_inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="account.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='invoicing']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
         <record id="sale_product_template_form_view_inherit" model="ir.ui.view">
             <field name="name">sale_product_template_form_view_inherit</field>
             <field name="model">product.template</field>
