@@ -37,6 +37,10 @@
                 <xpath expr="//field[@name='uom_po_id']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
+
+<!--                <xpath expr="//page[@name='general_information']//group[last()]" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </xpath>-->
             </field>
         </record>
 
