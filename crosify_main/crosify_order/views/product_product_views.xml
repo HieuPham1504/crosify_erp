@@ -49,7 +49,7 @@
                 <xpath expr="//page[@name='general_information']//group[@name='group_standard_price']"
                        position="replace">
                     <group name="group_standard_price">
-                        <field name="product_template_variant_value_ids" readonly="1" force_save="1" string="">
+                        <field name="product_template_attribute_value_ids" readonly="1" force_save="1" string="">
                             <tree>
                                 <field name="attribute_line_id" string="Attributes"/>
                                 <field name="product_attribute_value_id" string="Values"/>
