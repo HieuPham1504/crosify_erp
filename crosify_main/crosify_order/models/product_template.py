@@ -15,6 +15,9 @@ class ProductTemplate(models.Model):
     # def _create_variant_ids(self):
     #     return
 
+    def create_variants(self):
+        self._create_variant_ids()
+
     @api.constrains('product_type')
     def _check_product_type(self):
         for record in self:

@@ -5,6 +5,29 @@
             <field name="active">0</field>
         </record>
 
+        <record id="stock_product_template_form_view_procurement_button" model="ir.ui.view">
+            <field name="name">stock_product_template_form_view_procurement_button</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='%(stock.action_product_replenish)d']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='%(stock.action_product_replenish)d']" position="before">
+                    <button string="Create Variant" type="object"
+                            name="create_variants"/>
+                </xpath>
+
+                <xpath expr="//field[@name='default_code']" position="before">
+                    <field name="categ_id" optional="show"/>
+                    <field name="product_type" optional="show"/>
+                    <field name="design_number" optional="show"/>
+                    <field name="detailed_type" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
         <record id="product_product_template_tree_view_inherit" model="ir.ui.view">
             <field name="name">product_product_template_tree_view_inherit</field>
             <field name="model">product.template</field>
