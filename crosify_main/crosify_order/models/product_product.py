@@ -9,7 +9,7 @@ class ProductProduct(models.Model):
     _description = 'SKU'
 
     @api.constrains('default_code')
-    def _check_description(self):
+    def _check_default_code(self):
         for record in self:
             default_code = record.default_code
 

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
+
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
@@ -11,6 +13,17 @@ class ProductTemplate(models.Model):
 
     # def _create_variant_ids(self):
     #     return
+
+    @api.constrains('product_type')
+    def _check_product_type(self):
+        for record in self:
+            product_type = record.product_type
+
+            duplicate_code = self.sudo().search(
+                [('id', '!=', record.id), ('product_type', '=', product_type)])
+            if duplicate_code:
+                raise ValidationError(_("This Product Type already exists."))
+
 
     @api.depends('design_number', 'categ_id')
     def compute_product_type(self):
