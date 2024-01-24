@@ -1,5 +1,16 @@
 <odoo>
     <data>
+        <record id="sale_product_template_form_view_inherit" model="ir.ui.view">
+            <field name="name">sale_product_template_form_view_inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="sale.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('fst-italic')]" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
         <record id="product_template_form_view_inherit" model="ir.ui.view">
             <field name="name">product_template_form_view_inherit</field>
             <field name="model">product.template</field>
@@ -9,8 +20,18 @@
                     <attribute name="invisible">1</attribute>
                 </xpath>
 
+                <xpath expr="//field[@name='default_code']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='categ_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
                 <xpath expr="//field[@name='detailed_type']" position="before">
+                    <field name="categ_id"/>
                     <field name="product_type"/>
+                    <field name="design_number"/>
                 </xpath>
             </field>
         </record>
@@ -22,6 +43,14 @@
 
         <record id="sale.menu_products" model="ir.ui.menu">
             <field name="name">SKU</field>
+        </record>
+
+        <record id="sale.product_template_action" model="ir.actions.act_window">
+            <field name="name">Product Type</field>
+        </record>
+
+        <record id="sale.menu_product_template_action" model="ir.ui.menu">
+            <field name="name">Product Type</field>
         </record>
     </data>
 </odoo>

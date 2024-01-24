@@ -19,6 +19,7 @@ Key Features
     'depends': ['sale_management', 'sale'],
     'data': [
         'security/ir.model.access.csv',
+        'data/ir_sequence_sku.xml',
         'views/sale_order_views.xml',
         'views/sale_order_line_views.xml',
         'views/sale_order_line_level_views.xml',
