@@ -21,6 +21,12 @@
                 <attribute name="class">sale_order_view_inherit_form_crosify_order</attribute>
             </xpath>
 
+            <xpath expr="//field[@name='order_line']//tree//control" position="replace">
+                <control>
+                    <create name="add_product_control" string="Add a product"/>
+                </control>
+            </xpath>
+
             <xpath expr="//page[@name='order_lines']" position="attributes">
                 <attribute name="string">Items</attribute>
             </xpath>
@@ -146,8 +152,8 @@
     </record>
 
     <record id="sale.action_orders" model="ir.actions.act_window">
-            <field name="domain">[]</field>
-        </record>
+        <field name="domain">[]</field>
+    </record>
 
     <record id="sale.menu_sale_quotations" model="ir.ui.menu">
         <field name="groups_id" eval="[(6, 0, [ref('base.group_system')])]"/>
