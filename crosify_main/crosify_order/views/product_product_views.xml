@@ -67,7 +67,7 @@
                         <field name="product_template_attribute_value_ids" readonly="1" force_save="1" string="">
                             <tree>
                                 <field name="attribute_line_id" string="Attributes"/>
-                                <field name="product_attribute_value_id" string="Values"/>
+                                <field name="name" string="Values"/>
                             </tree>
                         </field>
                     </group>

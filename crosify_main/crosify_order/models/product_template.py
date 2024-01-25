@@ -41,5 +41,5 @@ class ProductTemplate(models.Model):
     def _prepare_variant_values(self, combination):
         variant_dict = super()._prepare_variant_values(combination)
         sku_suffix = self.env['ir.sequence'].sudo().next_by_code('product.product.sku') or '_Undefined'
-        variant_dict['default_code'] = f'{self.product_type}{self.design_number}{sku_suffix}'
+        variant_dict['default_code'] = f'{self.product_type}{sku_suffix}'
         return variant_dict
