@@ -8,7 +8,8 @@ class SaleOrderLine(models.Model):
     image_ids = fields.Many2many('ir.attachment', string='Images')
     crosify_created_date = fields.Date(string='Create Date')
     product_sku = fields.Char(string='SKU', related='product_id.default_code', store=True, index=True)
-    order_id_fix = fields.Char(string='Order ID Fix', related='order_id.order_id_fix', store=True, index=True)
+    my_admin_order_id = fields.Char(string='My Admin Order ID', store=True, index=True)
+    order_id_fix = fields.Char(string='Order ID Fix', store=True, index=True)
     product_name = fields.Char(string='Product Name', related='product_id.name', store=1)
     product_vendor_id = fields.Many2one('res.partner', string='Product Vendor')
     item_size = fields.Char(string='Item Size')
@@ -39,8 +40,9 @@ class SaleOrderLine(models.Model):
     tkn_code = fields.Char(string='TKN Code')
     tkn_url = fields.Char(string='TKN URL')
     label_file = fields.Binary(string='Label File')
-    update_tkn_date = fields.Datetime(string='Update TKN Date')
-    update_tkn_by = fields.Many2one('hr.employee', string='Update TKN By')
+    upload_tkn_date = fields.Datetime(string='Upload TKN Date')
+    upload_tkn_by = fields.Many2one('hr.employee', string='Upload TKN By')
+    is_upload_tkn = fields.Boolean(string='Is Upload TKN')
     fulfill_date = fields.Date(string='Fulfill Date')
     note_fulfill = fields.Text(string='Note Fulfill')
 
@@ -48,8 +50,11 @@ class SaleOrderLine(models.Model):
     designer_id = fields.Many2one('hr.employee', string='Designer')
     design_file = fields.Binary(string='Design File')
     design_date = fields.Date(string='Design Date')
+    variant = fields.Text(string='Variant')
     #tab production
     production_id = fields.Char(string='Production Id')
+    production_vendor_code = fields.Char(string='Production Vendor Code')
+    production_vendor_id = fields.Many2one('res.partner', string='Production Vendor')
     packaging_location = fields.Char(string='Packaging Location')
     package_status = fields.Char(string='Package Status')
     shipping_method = fields.Char(string='Shipping Method')
@@ -60,9 +65,9 @@ class SaleOrderLine(models.Model):
     production_note = fields.Text(string='Production Note')
     #Tab Shipping & Pickup
     address_sheft = fields.Char(string='Address Sheft')
-    shipping_date = fields.Date(string='Shipping Date')
-    shipping_confirm_date = fields.Date(string='Shipping Confirm Date')
-    packed_date = fields.Date(string='Packed Date')
+    shipping_date = fields.Datetime(string='Shipping Date')
+    shipping_confirm_date = fields.Datetime(string='Shipping Confirm Date')
+    packed_date = fields.Datetime(string='Packed Date')
     pickup_date = fields.Date(string='Pickup Date')
     deliver_date = fields.Date(string='Deliver Date')
     deliver_status = fields.Char(string='Deliver Status')
@@ -78,7 +83,9 @@ class SaleOrderLine(models.Model):
 
     level = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', True)])
     sublevel = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', False)])
-
+    meta_field = fields.Text(string='Meta Field')
+    crosify_discount_amount = fields.Float(string='Discount Amount')
+    total_tax = fields.Float(string='Total Tax')
 
 
 

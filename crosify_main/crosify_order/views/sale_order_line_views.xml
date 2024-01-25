@@ -9,6 +9,7 @@
                 <xpath expr="//tree" position="replace">
                     <tree string="Items" create="1">
                         <field name="production_id" optional="show"/>
+                        <field name="my_admin_order_id" optional="show"/>
                         <field name="order_id_fix" optional="show"/>
                         <field name="production_id" optional="show"/>
                         <field name="produce_vendor_id" optional="hide"/>
@@ -44,8 +45,8 @@
                                 </h1>
                                 <div class="oe_title ps-0 pe-2">
                                     <h2>
-                                        <label for="sublevel">SubLevel </label>
-                                        <span> </span>
+                                        <label for="sublevel">SubLevel</label>
+                                        <span></span>
                                         <field name="sublevel" domain="[('parent_id', '=', level)]"/>
                                     </h2>
                                 </div>
@@ -95,8 +96,9 @@
                                         <field name="tkn_code"/>
                                         <field name="tkn_url"/>
                                         <field name="label_file"/>
-                                        <field name="update_tkn_date"/>
-                                        <field name="update_tkn_by"/>
+                                        <field name="upload_tkn_date"/>
+                                        <field name="upload_tkn_by"/>
+                                        <field name="is_upload_tkn"/>
                                         <field name="fulfill_date"/>
                                         <field name="note_fulfill"/>
                                     </group>
@@ -106,11 +108,13 @@
                                         <field name="designer_id"/>
                                         <field name="design_file"/>
                                         <field name="design_date"/>
+                                        <field name="variant"/>
                                     </group>
                                 </page>
                                 <page id="production_tab" string="Production" name="production_tab">
                                     <group>
                                         <field name="production_id"/>
+                                        <field name="production_vendor_id"/>
                                         <field name="packaging_location"/>
                                         <field name="package_status"/>
                                         <field name="shipping_method"/>
@@ -136,13 +140,20 @@
                                 </page>
                                 <page id="other_info_tab" string="Other Info" name="other_info_tab">
                                     <group>
-                                        <field name="note_change_request"/>
-                                        <field name="cancel_date"/>
-                                        <field name="cancel_reason"/>
-                                        <field name="cancel_status"/>
-                                        <field name="dispute_status"/>
-                                        <field name="dispute_note"/>
-                                        <field name="approve_by"/>
+                                        <group>
+                                            <field name="note_change_request"/>
+                                            <field name="cancel_date"/>
+                                            <field name="cancel_reason"/>
+                                            <field name="cancel_status"/>
+                                            <field name="dispute_status"/>
+                                            <field name="dispute_note"/>
+                                            <field name="approve_by"/>
+                                        </group>
+                                        <group>
+                                            <field name="meta_field"/>
+                                            <field name="crosify_discount_amount"/>
+                                            <field name="total_tax"/>
+                                        </group>
                                     </group>
                                 </page>
 

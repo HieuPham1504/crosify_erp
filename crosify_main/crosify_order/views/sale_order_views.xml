@@ -33,15 +33,17 @@
                             <field name="shipping_lastname"/>
                             <field name="shipping_address"/>
                             <field name="shipping_city"/>
-                            <field name="shipping_state_id"/>
+                            <field name="shipping_state"/>
                             <field name="shipping_zipcode"/>
-                            <field name="shipping_country_id"/>
+                            <field name="shipping_country"/>
                         </group>
 
                         <group name="shipping-info-other">
                             <field name="shipping_apartment"/>
                             <field name="shipping_phone_number"/>
                             <field name="shipping_cost"/>
+                            <field name="tkn"/>
+                            <field name="tkn_url"/>
                         </group>
                     </group>
                 </page>
@@ -78,6 +80,9 @@
 
                 <group name="amount">
                     <field name="extra_info"/>
+                    <field name="base_cost"/>
+                    <field name="cancel_date"/>
+                    <field name="cancel_reason"/>
                 </group>
             </xpath>
 
@@ -89,6 +94,7 @@
                             <field name="payment_at"/>
                             <field name="payment_status"/>
                             <field name="payment_method_id"/>
+                            <field name="payment_note"/>
                             <field name="tip"/>
                             <field name="discount"/>
                         </group>
@@ -98,8 +104,8 @@
                             <field name="discount_code"/>
                             <field name="logistic_cost"/>
                             <field name="contact_email"/>
-                            <field name="crosify_country_code"/>
-                            <field name="state_code"/>
+                            <field name="crosify_country_code_id"/>
+                            <field name="state_code_id"/>
                         </group>
                     </group>
                 </page>
@@ -126,7 +132,7 @@
             </xpath>
 
             <xpath expr="//field[@name='validity_date']" position="after">
-                <field name="order_id"/>
+                <field name="myadmin_order_id"/>
                 <field name="order_id_fix"/>
                 <field name="channel_ref_id"/>
                 <field name="crosify_create_date"/>
