@@ -16,7 +16,7 @@ Key Features
 * Manage your Events and Registrations
 * Use emails to automatically confirm and send acknowledgments for any event registration
 """,
-    'depends': ['sale_management', 'sale', 'account'],
+    'depends': ['sale_management', 'sale', 'account', 'stock'],
     'data': [
         'security/ir.model.access.csv',
         'security/sale_operator_security.xml',

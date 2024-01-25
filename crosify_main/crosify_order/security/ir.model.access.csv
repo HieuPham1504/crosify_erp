@@ -4,3 +4,16 @@
 "access_select_product_template_wizard","access_select_product_template_wizard","model_select_product_template_wizard",,1,1,1,1
 
 "access_product_vendor_production_price","access_product_vendor_production_price","model_product_vendor_production_price",,1,1,1,1
+
+"access_crosify_stock_move","access_crosify_stock_move","stock.model_stock_move",crosify_order.group_sale_team_operator,1,1,1,0
+"access_crosify_stock_move_line","access_crosify_stock_move_line","stock.model_stock_move_line",crosify_order.group_sale_team_operator,1,1,1,0
+
+"access_product_category_operator","access_product_category_operator","model_product_category",crosify_order.group_sale_team_operator,1,1,1,1
+
+"access_product_template_operator","access_product_template_operator","model_product_template",crosify_order.group_sale_team_operator,1,1,1,1
+
+"access_product_product_operator","access_product_product_operator","model_product_product",crosify_order.group_sale_team_operator,1,1,1,1
+
+"access_product_template_attribute_line_operator","access_product_template_attribute_line_operator","product.model_product_template_attribute_line",crosify_order.group_sale_team_operator,1,1,1,1
+
+"access_product_template_attribute_value_operator","access_product_template_attribute_value_operator","product.model_product_template_attribute_value",crosify_order.group_sale_team_operator,1,1,1,1
