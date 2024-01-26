@@ -12,8 +12,8 @@ class ProductTemplate(models.Model):
     design_number = fields.Char(string='Design Number', require=True, trim=True)
     detailed_type = fields.Selection(string="Detailed Type")
 
-    # def _create_variant_ids(self):
-    #     return
+    def _create_variant_ids(self):
+        return
 
     def create_variants(self):
         self._create_variant_ids()
@@ -39,4 +39,7 @@ class ProductTemplate(models.Model):
             else:
                 rec.product_type = False
     def _prepare_variant_values(self, combination):
-        return
+        variant_dict = super()._prepare_variant_values(combination)
+        sku_suffix = self.env['ir.sequence'].sudo().next_by_code('product.product.sku') or '_Undefined'
+        variant_dict['default_code'] = f'{self.product_type}{sku_suffix}'
+        return variant_dict
