@@ -18,15 +18,15 @@ class ProductTemplate(models.Model):
     def create_variants(self):
         self._create_variant_ids()
 
-    @api.constrains('product_type')
-    def _check_product_type(self):
-        for record in self:
-            product_type = record.product_type
-
-            duplicate_code = self.sudo().search(
-                [('id', '!=', record.id), ('product_type', '=', product_type)])
-            if duplicate_code:
-                raise ValidationError(_("This Product Type already exists."))
+    # @api.constrains('product_type')
+    # def _check_product_type(self):
+    #     for record in self:
+    #         product_type = record.product_type
+    #
+    #         duplicate_code = self.sudo().search(
+    #             [('id', '!=', record.id), ('product_type', '=', product_type)])
+    #         if duplicate_code:
+    #             raise ValidationError(_("This Product Type already exists."))
 
 
     @api.depends('design_number', 'categ_id')
