@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="sale_order_tree_view_crosify" model="ir.ui.view">
+        <field name="name">sale_order_tree_view_crosify</field>
+        <field name="model">sale.order</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="myadmin_order_id"/>
+                <field name="order_id_fix"/>
+                <field name="crosify_create_date"/>
+                <field name="partner_id"/>
+                <field name="amount_total"/>
+                <field name="payment_status"/>
+            </tree>
+        </field>
+    </record>
+
     <record id="sale_order_form_quote_inherit_form" model="ir.ui.view">
         <field name="name">sale_order_form_quote_inherit_form</field>
         <field name="model">sale.order</field>
@@ -34,22 +50,27 @@
             <xpath expr="//page[@name='other_information']" position="before">
                 <page string="Shipping" name="shipping_information">
                     <group name="shipping-info">
-                        <group name="shipping-info-customer">
+                        <group name="shipping-info-customer" string="SHIPPING INFO">
                             <field name="shipping_firstname"/>
                             <field name="shipping_lastname"/>
                             <field name="shipping_address"/>
+                            <field name="shipping_apartment"/>
                             <field name="shipping_city"/>
                             <field name="shipping_state"/>
                             <field name="shipping_zipcode"/>
                             <field name="shipping_country"/>
-                        </group>
-
-                        <group name="shipping-info-other">
-                            <field name="shipping_apartment"/>
                             <field name="shipping_phone_number"/>
                             <field name="shipping_cost"/>
+                        </group>
+
+                        <group name="shipping-info-other" string="LABEL &amp; TRACKING NUMBER">
+                            <field name="label_file_store_name" invisible="1"/>
+                            <field name="label_file_attachment" filename="label_file_store_name"/>
                             <field name="tkn"/>
                             <field name="tkn_url"/>
+                            <field name="update_tkn_date"/>
+                            <field name="update_tkn_employee_id"/>
+                            <field name="tracking_note"/>
                         </group>
                     </group>
                 </page>
@@ -75,46 +96,33 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
 
-            <xpath expr="//page[@name='other_information']//group[@name='sale_reporting']" position="after">
-                <group name="other">
-                    <field name="client_secret"/>
-                    <field name="utm_source_id"/>
-                    <field name="domain"/>
-                    <field name="rating"/>
-                    <field name="review"/>
-                </group>
+            <!--            <xpath expr="//page[@name='other_information']//group[@name='sale_reporting']" position="after">-->
+            <!--            </xpath>-->
 
-                <group name="amount">
-                    <field name="extra_info"/>
-                    <field name="base_cost"/>
+            <xpath expr="//page[@name='other_information']" position="inside">
+                <group name="other-info">
+                    <group name="payment-info" string="PAYMENT INFO">
+                        <field name="transaction_id"/>
+                        <field name="discount_code"/>
+                        <field name="payment_method_id"/>
+                        <field name="currency_id" readonly="0"/>
+                        <field name="payment_at"/>
+                        <field name="payment_note"/>
+                    </group>
+                    <group name="other" string="OTHER INFO">
+                        <field name="contact_email"/>
+                        <field name="utm_source_id"/>
+                        <field name="domain"/>
+                        <field name="extra_info"/>
+                        <field name="review"/>
+                        <field name="rating"/>
+                        <field name="base_cost"/>
+                    </group>
+                </group>
+                <group name="cancel" string="CANCEL">
                     <field name="cancel_date"/>
                     <field name="cancel_reason"/>
                 </group>
-            </xpath>
-
-            <xpath expr="//page[@name='other_information']" position="before">
-                <page name="order-payment" string="Payment">
-                    <group>
-                        <group name="other">
-                            <field name="currency_id" readonly="0"/>
-                            <field name="payment_at"/>
-                            <field name="payment_status"/>
-                            <field name="payment_method_id"/>
-                            <field name="payment_note"/>
-                            <field name="tip"/>
-                            <field name="discount"/>
-                        </group>
-
-                        <group name="amount">
-                            <field name="transaction_id"/>
-                            <field name="discount_code"/>
-                            <field name="logistic_cost"/>
-                            <field name="contact_email"/>
-                            <field name="crosify_country_code_id"/>
-                            <field name="state_code_id"/>
-                        </group>
-                    </group>
-                </page>
             </xpath>
 
             <xpath expr="//field[@name='date_order']" position="attributes">
@@ -142,6 +150,7 @@
                 <field name="order_id_fix"/>
                 <field name="channel_ref_id"/>
                 <field name="crosify_create_date"/>
+                <field name="payment_status"/>
             </xpath>
 
             <xpath expr="//field[@name='note']" position="attributes">
@@ -149,6 +158,12 @@
             </xpath>
 
         </field>
+    </record>
+
+    <record id="crosify_menu_sale_order_tree_view_action" model="ir.actions.act_window">
+        <field name="name">Sale Orders</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_id" ref="sale_order_tree_view_crosify"/>
     </record>
 
     <record id="sale.action_orders" model="ir.actions.act_window">
@@ -161,5 +176,12 @@
 
     <record id="sale.menu_sale_invoicing" model="ir.ui.menu">
         <field name="groups_id" eval="[(6, 0, [ref('base.group_system')])]"/>
+    </record>
+
+    <record id="sale.menu_sale_order" model="ir.ui.menu">
+        <field name="action" ref="crosify_menu_sale_order_tree_view_action"/>
+    </record>
+    <record id="sale.menu_sale_quotations" model="ir.ui.menu">
+        <field name="action" ref="crosify_menu_sale_order_tree_view_action"/>
     </record>
 </odoo>
