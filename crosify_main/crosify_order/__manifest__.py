@@ -36,6 +36,9 @@ Key Features
         'web.assets_backend': [
             'crosify_order/static/src/css/sale_order_view_css.css',
         ],
+        'web.assets_frontend': [
+            'crosify_order/static/src/xml/tax_totals.xml',
+        ],
     },
     'license': 'LGPL-3',
 }

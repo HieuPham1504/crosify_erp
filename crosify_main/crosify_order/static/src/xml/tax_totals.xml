@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+        <t t-inherit="account.TaxTotalsField" t-inherit-mode="extension">
+            <xpath expr="//tbody" position="inside">
+                <tr>
+                    <td class="o_td_label">
+                        <label class="o_form_label o_tax_total_label">Total Custom</label>
+                    </td>
+
+                    <td class="o_list_monetary">
+                        <span
+                                name="amount_total_custom"
+                                t-out="totals.formatted_amount_total"
+                                style="font-size: 1.3em; font-weight: bold; white-space: nowrap;"
+                        />
+                    </td>
+                </tr>
+            </xpath>
+
+        </t>
+</templates>
