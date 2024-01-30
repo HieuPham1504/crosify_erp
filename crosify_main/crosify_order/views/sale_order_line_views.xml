@@ -55,136 +55,132 @@
                                 <group>
                                     <field name="company_id" invisible="1"/>
                                     <field name="order_id" string="Order ID"/>
-                                    <field name="product_name"/>
-                                    <field name="item_size"/>
-                                    <field name="description_item_size"/>
-                                    <field name="color_item"/>
-                                    <field name="box_size"/>
-                                    <field name="personalize"/>
-                                    <field name="package_size"/>
-                                    <field name="product_code"/>
-                                    <field name="product_type"/>
-                                    <field name="color_set_name"/>
-                                    <field name="design_serial_number"/>
-                                    <field name="accessory_name"/>
-                                    <field name="customer_note"/>
+                                    <field name="order_id_fix" string="Order ID"/>
+                                    <field name="channel_ref_id"/>
                                     <field name="priority"/>
-
                                 </group>
                                 <group>
-                                    <field name="base_cost"/>
-                                    <field name="shipping_cost"/>
-                                    <field name="logistic_cost"/>
-                                    <field name="product_uom_qty" string="Quantity"/>
-                                    <field name="price_unit" string="Price Item"/>
-                                    <field name="tips"/>
-                                    <field name="discount"/>
-                                    <field name="tax_id" widget="many2many_tags"/>
-                                    <field name="price_total"/>
-                                    <field name="extra_info"/>
-                                    <field name="element_message"/>
-                                    <field name="extra_service"/>
-                                    <field name="status"/>
+                                    <field name="product_id" string="SKU"/>
+                                    <field name="product_type"/>
+                                    <field name="production_id"/>
+                                    <field name="personalize" string="Quantity"/>
                                 </group>
                             </group>
                             <notebook>
-                                <page id="fulfillment_tab" string="Fulfillment" name="fulfillment_tab">
-                                    <group>
-                                        <field name="operator_id"/>
-                                        <field name="produce_vendor_id"/>
-                                        <field name="hs_code"/>
-                                        <field name="tkn_code"/>
-                                        <field name="tkn_url"/>
-                                        <field name="label_file"/>
-                                        <field name="upload_tkn_date"/>
-                                        <field name="upload_tkn_by"/>
-                                        <field name="is_upload_tkn"/>
-                                        <field name="fulfill_date"/>
-                                        <field name="note_fulfill"/>
+                                <page id="fulfillment_tab" string="FULFILLMENT" name="fulfillment_tab">
+                                    <group name="fulfillment-main">
+                                        <group name="fulfillment" string="FULFILLMENT">
+                                            <field name="shipping_vendor_id" options='{"no_create": True}'/>
+                                            <field name="packaging_vendor_id" options='{"no_create": True}'/>
+                                            <field name="production_vendor_id" options='{"no_create": True}'/>
+                                            <field name="fulfill_date"/>
+                                        </group>
+                                        <group name="tracking" string="LABEL &amp; TRACKING NUMBER">
+                                            <field name="production_vendor_id"/>
+                                            <field name="label_file_store_name" invisible="1"/>
+                                            <field name="label_file" filename="label_file_store_name"/>
+                                        </group>
+                                    </group>
+                                    <group name="other" string="FULFILLMENT OTHER">
+                                        <group name="left">
+                                            <field name="box_size"/>
+                                            <field name="package_size"/>
+                                            <field name="extra_service"/>
+                                            <field name="extra_info"/>
+                                            <field name="customer_note"/>
+                                        </group>
+                                        <group name="right">
+                                            <field name="base_cost"/>
+                                            <field name="logistic_cost"/>
+                                            <field name="price_unit" string="Price Item"/>
+                                            <field name="tips"/>
+                                            <field name="note_fulfill"/>
+                                        </group>
                                     </group>
                                 </page>
-                                <page id="design_tab" string="Design" name="design_tab">
+                                <page id="design_tab" string="DESIGN &amp; PRODUCTION" name="design_tab">
                                     <group>
-                                        <field name="designer_id"/>
-                                        <field name="design_file"/>
-                                        <field name="design_date"/>
-                                        <field name="variant"/>
+                                        <group name="design" string="DESIGN">
+                                            <field name="designer_id" options='{"no_create": True}'/>
+                                            <field name="design_file_name" invisible="1"/>
+                                            <field name="design_file" filename="design_file_name"/>
+                                            <field name="design_date"/>
+                                        </group>
+                                        <group name="production" string="PRODUCTION">
+                                            <field name="production_estimate_time"/>
+                                            <field name="production_start_date"/>
+                                            <field name="production_done_date"/>
+                                            <field name="production_status"/>
+                                            <field name="production_note"/>
+                                        </group>
                                     </group>
                                 </page>
-                                <page id="production_tab" string="Production" name="production_tab">
-                                    <group>
-                                        <field name="production_id"/>
-                                        <field name="production_vendor_id"/>
-                                        <field name="packaging_location"/>
-                                        <field name="package_status"/>
-                                        <field name="shipping_method"/>
-                                        <field name="shipping_vendor_id"/>
-                                        <field name="production_date"/>
-                                        <field name="production_status"/>
-                                        <field name="production_estimate_time"/>
-                                        <field name="production_note"/>
-                                    </group>
-                                </page>
-                                <page id="shipping_and_pickup_tab" string="Shipping &amp; Pickup"
+                                <page id="shipping_and_pickup_tab" string="SHIPPING &amp; PICKUP"
                                       name="shipping_and_pickup_tab">
-                                    <group>
-                                        <field name="address_sheft"/>
-                                        <field name="shipping_date"/>
-                                        <field name="shipping_confirm_date"/>
-                                        <field name="packed_date"/>
-                                        <field name="pickup_date"/>
+                                    <group name="shipping_and_pickup">
+                                        <group name="pickup" string="PICKUP">
+                                            <field name="address_sheft"/>
+                                            <field name="packed_date"/>
+                                            <field name="pickup_date"/>
+                                        </group>
+                                        <group name="shipping" string="SHIPPING">
+                                            <field name="shipping_cost"/>
+                                            <field name="shipping_date"/>
+                                            <field name="shipping_confirm_date"/>
+                                        </group>
+                                    </group>
+                                    <group name="delivery" string="DELIVER">
                                         <field name="deliver_date"/>
                                         <field name="deliver_status"/>
                                         <field name="customer_received"/>
                                     </group>
                                 </page>
-                                <page id="other_info_tab" string="Other Info" name="other_info_tab">
-                                    <group>
-                                        <group>
-                                            <field name="note_change_request"/>
+                                <page id="other_info_tab" string="OTHER" name="other_info_tab">
+                                    <group name="cancel_and_dispute">
+                                        <group anme="cancel" string="CANCEL">
                                             <field name="cancel_date"/>
-                                            <field name="cancel_reason"/>
                                             <field name="cancel_status"/>
-                                            <field name="dispute_status"/>
-                                            <field name="dispute_note"/>
+                                            <field name="cancel_reason"/>
                                             <field name="approve_by"/>
                                         </group>
-                                        <group>
-                                            <field name="meta_field"/>
-                                            <field name="crosify_discount_amount"/>
-                                            <field name="total_tax"/>
+                                        <group name="dispute" string="DISPUTE">
+                                            <field name="dispute_status"/>
+                                            <field name="dispute_note"/>
                                         </group>
+                                    </group>
+                                    <group name="approve" string="APPROVE">
+                                        <field name="approve_by" options='{"no_create": True}'/>
                                     </group>
                                 </page>
 
-                                <page id="image_tab" string="Images" name="image_tab">
-                                    <group>
-                                        <field name="image_ids" widget="many2many_kanban">
-                                            <kanban quick_create="false" create="true" delete="true">
-                                                <field name="name"/>
-                                                <templates>
-                                                    <t t-name="kanban-box">
-                                                        <div class="oe_kanban_global_click" style="position: relative">
-                                                            <a t-if="! read_only_mode" type="delete"
-                                                               style="position: absolute; right: 0; padding: 4px; diplay: inline-block">
-                                                                X
-                                                            </a>
-                                                            <div class="oe_module_vignette">
-                                                                <img t-att-src="kanban_image('ir.attachment', 'image_small', record.id.value)"
-                                                                     class="oe_avatar oe_kanban_avatar_smallbox"/>
-                                                                <!--                                                                <img t-attf-src="/web/image/#{record.id.raw_value}/datas"-->
-                                                                <!--                                                                     class="oe_avatar oe_kanban_avatar_smallbox"/>-->
-                                                                <div class="oe_module_desc">
-                                                                    <field name="name"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </t>
-                                                </templates>
-                                            </kanban>
-                                        </field>
-                                    </group>
-                                </page>
+<!--                                <page id="image_tab" string="Images" name="image_tab">-->
+<!--                                    <group>-->
+<!--                                        <field name="image_ids" widget="many2many_kanban">-->
+<!--                                            <kanban quick_create="false" create="true" delete="true">-->
+<!--                                                <field name="name"/>-->
+<!--                                                <templates>-->
+<!--                                                    <t t-name="kanban-box">-->
+<!--                                                        <div class="oe_kanban_global_click" style="position: relative">-->
+<!--                                                            <a t-if="! read_only_mode" type="delete"-->
+<!--                                                               style="position: absolute; right: 0; padding: 4px; diplay: inline-block">-->
+<!--                                                                X-->
+<!--                                                            </a>-->
+<!--                                                            <div class="oe_module_vignette">-->
+<!--                                                                <img t-att-src="kanban_image('ir.attachment', 'image_small', record.id.value)"-->
+<!--                                                                     class="oe_avatar oe_kanban_avatar_smallbox"/>-->
+<!--                                                                &lt;!&ndash;                                                                <img t-attf-src="/web/image/#{record.id.raw_value}/datas"&ndash;&gt;-->
+<!--                                                                &lt;!&ndash;                                                                     class="oe_avatar oe_kanban_avatar_smallbox"/>&ndash;&gt;-->
+<!--                                                                <div class="oe_module_desc">-->
+<!--                                                                    <field name="name"/>-->
+<!--                                                                </div>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
+<!--                                                    </t>-->
+<!--                                                </templates>-->
+<!--                                            </kanban>-->
+<!--                                        </field>-->
+<!--                                    </group>-->
+<!--                                </page>-->
                             </notebook>
                         </sheet>
 
