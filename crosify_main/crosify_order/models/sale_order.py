@@ -53,6 +53,10 @@ class SaleOrder(models.Model):
     process_tkn_at = fields.Datetime(string='Process TKN Date')
     shipping_carrier_code = fields.Char(string='Shipping Carrier Code')
     base_cost = fields.Float(string='Base Cost')
-
+    crosify_create_by = fields.Char(string='Create By')
+    crosify_updated_by = fields.Char(string='Updated By')
+    started_checkout_code = fields.Char(string='Started Checkout Code')
+    crosify_update_date = fields.Datetime(string='Update Date')
+    shipping_vendor_id = fields.Many2one('res.partner', string='Shipping Vendor')
 
 

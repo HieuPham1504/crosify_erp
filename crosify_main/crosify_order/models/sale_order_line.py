@@ -7,6 +7,7 @@ class SaleOrderLine(models.Model):
 
     image_ids = fields.Many2many('ir.attachment', string='Images')
     crosify_created_date = fields.Date(string='Create Date')
+    crosify_create_by = fields.Char(string='Created By')
     product_sku = fields.Char(string='SKU', related='product_id.default_code', store=True, index=True)
     my_admin_order_id = fields.Char(string='My Admin Order ID', store=True, index=True)
     order_id_fix = fields.Char(string='Order ID Fix', store=True, index=True)
@@ -81,11 +82,22 @@ class SaleOrderLine(models.Model):
     dispute_note = fields.Text(string='Dispute Note')
     approve_by = fields.Many2one('hr.employee', string='Approve By')
 
-    level = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', True)])
-    sublevel = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', False)])
+    level = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', True)], string='Level')
+    sublevel = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', False)], string='Sublevel')
+    last_update_level_date = fields.Datetime(string='Last Update Level')
     meta_field = fields.Text(string='Meta Field')
     crosify_discount_amount = fields.Float(string='Discount Amount')
     total_tax = fields.Float(string='Total Tax')
+    cost_amount = fields.Float(string='Cost Amount')
+    amount = fields.Float(string='Amount')
+    variant = fields.Text(string='Variant')
+    taxed_total_amount = fields.Float(string='Taxed Total Amount')
+    crosify_approve_cancel_employee_id = fields.Many2one('hr.employee', string='Approve Cancel By')
+    update_date = fields.Datetime(string='Update Date')
+    update_by = fields.Char(string='Update By')
+    chars = fields.Char(string='Chars')
+
+
 
 
 

@@ -61,6 +61,7 @@
                             <field name="shipping_country"/>
                             <field name="shipping_phone_number"/>
                             <field name="shipping_cost"/>
+                            <field name="shipping_vendor_id" options="{'no_create': True}"/>
                         </group>
 
                         <group name="shipping-info-other" string="LABEL &amp; TRACKING NUMBER">
