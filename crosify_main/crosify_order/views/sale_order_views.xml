@@ -67,14 +67,28 @@
                 <page string="Shipping" name="shipping_information">
                     <group name="shipping-info">
                         <group name="shipping-info-customer" string="SHIPPING INFO">
-                            <field name="shipping_firstname"/>
-                            <field name="shipping_lastname"/>
-                            <field name="shipping_address"/>
-                            <field name="shipping_apartment"/>
-                            <field name="shipping_city"/>
-                            <field name="shipping_state"/>
-                            <field name="shipping_zipcode"/>
-                            <field name="shipping_country"/>
+                            <span class="o_form_label o_td_label" name="address_name">
+                                Shipping Name
+                            </span>
+                            <div class="o_address_format">
+                                <field name="shipping_firstname" placeholder="First Name" class="o_address_city"/>
+                                <field name="shipping_lastname" placeholder="Last Name" class="o_address_city"/>
+                            </div>
+                            <span class="o_form_label o_td_label" name="address_name">
+                                Address
+                            </span>
+                            <div class="o_address_format">
+                                <field name="shipping_address" placeholder="Street 1" class="o_address_street"/>
+                                <field name="shipping_apartment" placeholder="Street 2" class="o_address_street"/>
+                                <field name="shipping_city" placeholder="City" class="o_address_city"/>
+                                <field name="shipping_state" class="o_address_state" placeholder="State"
+                                       options="{'no_open': True, 'no_quick_create': True}"/>
+                                <field name="shipping_zipcode" placeholder="Zipcode" class="o_address_zip"/>
+                                <div name="partner_address_country" class="d-flex justify-content-between">
+                                    <field name="shipping_country" placeholder="Country" class="o_address_country"
+                                           options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                </div>
+                            </div>
                             <field name="shipping_phone_number"/>
                             <field name="shipping_cost"/>
                             <field name="shipping_vendor_id" options="{'no_create': True}"/>
