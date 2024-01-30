@@ -17,6 +17,17 @@
         </field>
     </record>
 
+    <record id="sale_management_sale_order_form_quote_inherit" model="ir.ui.view">
+        <field name="name">sale_management_sale_order_form_quote_inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='optional_products']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
     <record id="sale_order_view_inherit_form" model="ir.ui.view">
         <field name="name">sale_order_view_inherit_form</field>
         <field name="model">sale.order</field>
@@ -34,6 +45,14 @@
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='product_template_id']" position="attributes">
                 <attribute name="readonly">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_total']" position="attributes">
+                <attribute name="string">Price Total</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_subtotal']" position="attributes">
+                <attribute name="string">Price Subtotal</attribute>
             </xpath>
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='product_template_id']" position="before">
@@ -117,8 +136,11 @@
                     </group>
                 </group>
                 <group name="cancel" string="CANCEL">
-                    <field name="cancel_date"/>
-                    <field name="cancel_reason"/>
+                    <group>
+                        <field name="cancel_date"/>
+                        <field name="cancel_reason"/>
+                    </group>
+                    <group></group>
                 </group>
             </xpath>
 
