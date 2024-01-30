@@ -127,6 +127,10 @@
                 <xpath expr="//page[@name='variants']" position="attributes">
                     <attribute name="string">Variants</attribute>
                 </xpath>
+
+                <xpath expr="//page[@name='variants']//field[@name='attribute_line_ids']//field[@name='value_ids']" position="attributes">
+                    <attribute name="options">{'no_create_edit': True, 'color_field': 'color','no_create': True}</attribute>
+                </xpath>
             </field>
         </record>
 
