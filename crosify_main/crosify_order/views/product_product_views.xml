@@ -59,6 +59,7 @@
                     <field name="length"/>
                     <field name="width"/>
                     <field name="height"/>
+                    <field name="employee_id" required="1"/>
                 </xpath>
 
                 <xpath expr="//page[@name='general_information']//group[@name='group_standard_price']"

@@ -27,6 +27,7 @@ class ProductProduct(models.Model):
     height = fields.Float(string='Height (cm)')
     vendor_production_price_ids = fields.One2many('product.vendor.production.price', 'product_id',
                                                   string='Production Price')
+    employee_id = fields.Many2one('hr.employee', string='Employee', default=lambda self: self.env.user.employee_id.id, tracking=True)
 
     @api.depends("product_tmpl_id.write_date")
     def _compute_write_date(self):
