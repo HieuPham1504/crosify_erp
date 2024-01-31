@@ -57,7 +57,7 @@
 
                     <td class="o_list_monetary">
                         <div name="tip" class="o_field_widget o_field_float">
-                            <input type="text" id="tip" inputmode="decimal" class="o_input"/>
+                            <input type="text" id="tip" inputmode="decimal" class="o_input" t-on-change="onChangeTipInput"/>
                         </div>
                     </td>
                 </tr>
