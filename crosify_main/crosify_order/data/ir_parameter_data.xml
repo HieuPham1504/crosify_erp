@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo noupdate="1">
+    <record id="hmac_sha256_secret" model="ir.config_parameter">
+        <field name="key">hmac_sha256_secret</field>
+        <field name="value">Zx4MVXz9AC</field>
+    </record>
+</odoo>
