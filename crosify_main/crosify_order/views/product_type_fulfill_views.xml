@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_product_type_fulfill_view" model="ir.ui.view">
+            <field name="name">sale_order_product_type_fulfill_view</field>
+            <field name="model">sale.order.product.type.fulfill</field>
+            <field name="arch" type="xml">
+                <tree string="Product Type - Fulfill" editable="bottom">
+                    <field name="product_type"/>
+                    <field name="product_vendor"/>
+                    <field name="packing_vendor"/>
+                    <field name="shipping_vendor"/>
+                </tree>
+            </field>
+        </record>
+        <record id="crosify_menu_sale_order_product_type_fulfill_action"
+            model="ir.actions.act_window">
+            <field name="name">Product Type - Fulfill</field>
+            <field name="res_model">sale.order.product.type.fulfill</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="crosify_menu_product_type_fulfill" name="Product Types - Fulfill"
+            parent="sale.menu_sales_config"
+            action="crosify_menu_sale_order_product_type_fulfill_action"
+            sequence="22" />
+    </data>
+</odoo>
