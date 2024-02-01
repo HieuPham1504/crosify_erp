@@ -6,10 +6,10 @@
             <field name="model">sale.order.product.type.fulfill</field>
             <field name="arch" type="xml">
                 <tree string="Product Type - Fulfill" editable="bottom">
-                    <field name="product_type"/>
-                    <field name="product_vendor"/>
-                    <field name="packing_vendor"/>
-                    <field name="shipping_vendor"/>
+                    <field name="product_type_id"/>
+                    <field name="product_vendor_id"/>
+                    <field name="packing_vendor_id"/>
+                    <field name="shipping_vendor_id"/>
                 </tree>
             </field>
         </record>
