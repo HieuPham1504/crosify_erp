@@ -146,8 +146,20 @@ class ProductTemplate(models.Model):
             else:
                 rec.product_type = False
 
+    @api.depends('name', 'product_type')
+    @api.depends_context('product_type', 'name')
+    def _compute_display_name(self):
+
+        def get_display_name(name, code):
+            if self._context.get('display_product_type', True) and code:
+                return f'[{code}] {name}'
+            return name
+        for rec in self.sudo():
+                rec.display_name = get_display_name(rec.name, rec.product_type)
+
     def _prepare_variant_values(self, combination):
         variant_dict = super()._prepare_variant_values(combination)
         sku_suffix = self.env['ir.sequence'].sudo().next_by_code('product.product.sku') or '_Undefined'
         variant_dict['default_code'] = f'{self.product_type}{sku_suffix}'
         return variant_dict
+        
