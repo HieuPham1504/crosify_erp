@@ -120,47 +120,139 @@ class SaleOrderController(Controller):
         if not verified:
             return Response("Bad Request", status=400)
         else:
+
+            shipping_state_sql = f"""
+            select id 
+                    from res_country_state 
+                    where code = '{data.get('StateCode')}' 
+                    limit 1
+            """
+
+            request.env.cr.execute(shipping_state_sql)
+            shipping_state_id = request.env.cr.fetchone()[0]
+
+            shipping_country_sql = f"""
+            select id 
+                    from res_country
+                    where code = '{data.get('CountryCode')}'
+                    limit 1
+            
+            """
+
+            request.env.cr.execute(shipping_country_sql)
+            shipping_country_id = request.env.cr.fetchone()[0]
+
+            partner_sql = f"""
+            insert into res_partner(name,street,street2,city,state_id,zip,country_id,phone,mobile,email) 
+            values (
+            '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}', 
+            '{data.get('ShippingAddress', '')}',
+            '{data.get('ShippingApartment', '')}',
+            '{data.get('ShippingCity', '')}',
+            {shipping_state_id},
+            '{data.get('ShippingZipcode', '')}',
+            {shipping_country_id},
+            '{data.get('ShippingPhonenumber', '')}',
+            '{data.get('ShippingPhonenumber', '')}',
+            '{data.get('ContactEmail', '')}'
+            ) 
+            returning id
+            """
+
+            request.env.cr.execute(partner_sql)
+            partner_id = request.env.cr.fetchone()[0]
+
+
             create_order_sql = f"""
                 with currency as (
                     select id 
                     from res_currency 
-                    where name = {data.get('Currency')}
+                    where name = '{data.get('Currency')}' 
+                    limit 1
                 ), 
-                shipping_state as (
-                    select id 
-                    from res_country_state 
-                    where code = '{data.get('StateCode')}'
-                ),
-                shipping_country as (
-                    select id 
-                    from res_country
-                    where code = '{data.get('CountryCode')}'
-                ), 
+
                 order_create_employee as (
                     select id
                     from hr_employee 
-                    where work_email = '{data.get('CreatedBy')}'
+                    where work_email = '{data.get('CreatedBy')}' 
+                    limit 1 
                 ),
                 order_update_employee as (
                     select id
                     from hr_employee 
-                    where work_email = '{data.get('UpdatedBy')}'
-                ),
-                sale_order as (
-                    insert into sale_order(
-                    name,
-                    myadmin_order_id,
-                    transaction_id,
-                    channel_ref_id,
-                    shipping_firstname,
-                    shipping_lastname,
-                    shipping_address,
-                    shipping_city,
-                    shipping_zipcode,
-                    shipping_zipcode,
-                    shipping_phone_number,
-                    )
+                    where work_email = '{data.get('UpdatedBy')}' 
+                    limit 1
                 )
-            """
-            return Response("Success", status=200)
 
+                insert into sale_order(
+                name,
+                myadmin_order_id,
+                transaction_id,
+                channel_ref_id,
+                shipping_firstname,
+                shipping_lastname,
+                shipping_address,
+                shipping_city,
+                shipping_zipcode,
+                shipping_country_id,
+                shipping_state_id,
+                shipping_phone_number,
+                shipping_apartment,
+                contact_email,
+                note,
+                client_secret,
+                domain,
+                tip,
+                shipping_cost,
+                amount_untaxed,
+                discount,
+                amount_total,
+                payment_at,
+                currency_id,
+                payment_status,
+                payment_note,
+                discount_code,
+                logistic_cost,
+                rating,
+                review,
+                crosify_update_date,
+                crosify_updated_by,
+                crosify_create_date,
+                crosify_create_by,
+                tkn,
+                is_upload_tkn,
+                tkn_url, 
+                company_id,
+                partner_id
+                ) 
+                Select '{data.get('Name', '')}', '{data.get('Orderid', '')}', '{data.get('Transactionid', '')}', '{data.get('ChannelRefID', '')}', '{data.get('ShippingFirstname', '')}',
+                       '{data.get('ShippingLastname', '')}', '{data.get('ShippingAddress', '')}', '{data.get('ShippingCity', '')}', '{data.get('shipping_zipcode', '')}', 
+                       {shipping_country_id}, {shipping_state_id}, 
+                       '{data.get('ShippingPhonenumber', '')}', '{data.get('ShippingApartment', '')}', '{data.get('ContactEmail', '')}', '{data.get('CustomerNote', '')}',
+                       '{data.get('ClientSecret', '')}', '{data.get('Domain', '')}', {data.get('Tip', False)}, {data.get('ShippingCost', False)}, {data.get('Subtotal', False)},
+                       {data.get('Discount')}, {data.get('TotalAmount')}, '{data.get('Paymentat')}',  (select currency.id from currency), 
+                       '{data.get('PaymentStatus', '')}', '{data.get('PaymentNote', '')}', '{data.get('DiscountCode', '')}',  
+                       """
+            if data.get('LogisticCost'):
+                create_order_sql += f"""
+                           '{data.get('LogisticCost', False)}', """
+            else:
+                create_order_sql += "0,"
+            create_order_sql += f"""
+                       '{data.get('rating', '')}', '{data.get('review', '')}', '{data.get('Updatedat')}', (select order_update_employee.id from order_update_employee),
+                       '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', )}, 
+                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id}
+             Returning id
+            """
+            request.env.cr.execute(create_order_sql)
+            sale_order_id = request.env.cr.fetchone()
+            return Response("Success", status=200, id=sale_order_id)
+
+    # @route("/api/sale_orders/<int:order_id>", methods=["PUT"], type="json", auth="public", cors="*")
+    # def action_update_sale_order(self, order_id, **kwargs):
+    #     data = request.get_json_data()
+    #     # verified = self.verify_webhook(data, request.httprequest.headers['X-Crosify-Hmac-SHA256'])
+    #     verified = True
+    #     if not verified:
+    #         return Response("Bad Request", status=400)
+    #     else:

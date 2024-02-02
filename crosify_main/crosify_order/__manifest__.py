@@ -40,6 +40,7 @@ Key Features
         'web.assets_backend': [
             'crosify_order/static/src/css/sale_order_view_css.css',
             'crosify_order/static/src/xml/tax_totals.xml',
+            'crosify_order/static/src/xml/form_status_indicator.xml',
         ],
         'web.assets_frontend': [
 

@@ -92,11 +92,11 @@
                                 <field name="shipping_address" placeholder="Street 1" class="o_address_street"/>
                                 <field name="shipping_apartment" placeholder="Street 2" class="o_address_street"/>
                                 <field name="shipping_city" placeholder="City" class="o_address_city"/>
-                                <field name="shipping_state" class="o_address_state" placeholder="State"
+                                <field name="shipping_state_id" class="o_address_state" placeholder="State"
                                        options="{'no_open': True, 'no_quick_create': True}"/>
                                 <field name="shipping_zipcode" placeholder="Zipcode" class="o_address_zip"/>
                                 <div name="partner_address_country" class="d-flex justify-content-between">
-                                    <field name="shipping_country" placeholder="Country" class="o_address_country"
+                                    <field name="shipping_country_id" placeholder="Country" class="o_address_country"
                                            options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
                                 </div>
                             </div>
