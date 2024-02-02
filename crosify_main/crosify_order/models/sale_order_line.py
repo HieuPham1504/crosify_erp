@@ -10,6 +10,7 @@ class SaleOrderLine(models.Model):
     crosify_create_by = fields.Char(string='Created By')
     product_sku = fields.Char(string='SKU', related='product_id.default_code', store=True, index=True)
     my_admin_order_id = fields.Char(string='My Admin Order ID', store=True, index=True)
+    my_admin_detailed_id = fields.Integer(string='My Admin Detailed ID', store=True, index=True)
     order_id_fix = fields.Char(string='Order ID Fix', related='order_id.order_id_fix', store=True, index=True)
     product_name = fields.Char(string='Product Name', related='product_id.name', store=1)
     product_vendor_id = fields.Many2one('res.partner', string='Product Vendor')
