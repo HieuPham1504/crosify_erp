@@ -120,6 +120,47 @@ class SaleOrderController(Controller):
         if not verified:
             return Response("Bad Request", status=400)
         else:
-
+            create_order_sql = f"""
+                with currency as (
+                    select id 
+                    from res_currency 
+                    where name = {data.get('Currency')}
+                ), 
+                shipping_state as (
+                    select id 
+                    from res_country_state 
+                    where code = '{data.get('StateCode')}'
+                ),
+                shipping_country as (
+                    select id 
+                    from res_country
+                    where code = '{data.get('CountryCode')}'
+                ), 
+                order_create_employee as (
+                    select id
+                    from hr_employee 
+                    where work_email = '{data.get('CreatedBy')}'
+                ),
+                order_update_employee as (
+                    select id
+                    from hr_employee 
+                    where work_email = '{data.get('UpdatedBy')}'
+                ),
+                sale_order as (
+                    insert into sale_order(
+                    name,
+                    myadmin_order_id,
+                    transaction_id,
+                    channel_ref_id,
+                    shipping_firstname,
+                    shipping_lastname,
+                    shipping_address,
+                    shipping_city,
+                    shipping_zipcode,
+                    shipping_zipcode,
+                    shipping_phone_number,
+                    )
+                )
+            """
             return Response("Success", status=200)
 
