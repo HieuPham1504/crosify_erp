@@ -8,3 +8,4 @@ from . import product_category
 from . import product_vendor_production_price
 from . import product_type_fulfill
 from . import fulfill_shelf_type
+from . import fulfill_shelf
