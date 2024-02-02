@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api, fields, models
 
 class ProductTypeFulfill(models.Model):
     _name = 'sale.order.product.type.fulfill'
@@ -6,5 +6,6 @@ class ProductTypeFulfill(models.Model):
     
     product_type_id = fields.Many2one('product.template', string='Product Type')
     product_vendor_id = fields.Many2one('res.partner', string='Product Vendor')
-    packing_vendor_id = fields.Many2one('res.partner', string='Packing Vendor')
+    packaging_vendor_id = fields.Many2one('res.partner', string='Packaging Vendor')
     shipping_vendor_id = fields.Many2one('res.partner', string='Shipping Vendor')
+    
