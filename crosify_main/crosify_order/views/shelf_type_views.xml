@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_shelf_type" model="ir.ui.view">
+            <field name="name">sale_order_shelf_type</field>
+            <field name="model">sale.order.shelf.type</field>
+            <field name="arch" type="xml">
+                <tree string="Shelf Type" editable="bottom">
+                    <field name="id"/>
+                    <field name="shelf_type_name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="crosify_menu_sale_order_shelf_type_action"
+            model="ir.actions.act_window">
+            <field name="name">Shelf Type</field>
+            <field name="res_model">sale.order.shelf.type</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="crosify_menu_shelf_type" name="Shelf Type"
+            parent="sale.menu_sales_config"
+            action="crosify_menu_sale_order_shelf_type_action"
+            sequence="23" />
+    </data>
+</odoo>

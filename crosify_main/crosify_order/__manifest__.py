@@ -29,6 +29,7 @@ Key Features
         'views/product_category_views.xml',
         'views/product_product_views.xml',
         'views/product_type_fulfill_views.xml',
+        'views/shelf_type_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
     ],
     'demo': [],
