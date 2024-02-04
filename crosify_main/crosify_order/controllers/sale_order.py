@@ -52,7 +52,7 @@ ORDER_LINE_FIELDS_MAPPING = {
     'Detailid': 'my_admin_detailed_id',
     'Orderid': 'my_admin_order_id',
     'OrderidFix': 'order_id_fix',
-    'ProductID': 'production_id',
+    'ProductID': 'myadmin_product_id',
     'Metafield': 'meta_field',
     'CustomerNote': 'customer_note',
     'Personalize': 'personalize',
@@ -143,8 +143,9 @@ class SaleOrderController(Controller):
             shipping_country_id = request.env.cr.fetchone()[0]
 
             partner_sql = f"""
-            insert into res_partner(name,street,street2,city,state_id,zip,country_id,phone,mobile,email) 
+            insert into res_partner(name, complete_name,street,street2,city,state_id,zip,country_id,phone,mobile,email) 
             values (
+            '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}', 
             '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}', 
             '{data.get('ShippingAddress', '')}',
             '{data.get('ShippingApartment', '')}',
@@ -223,7 +224,12 @@ class SaleOrderController(Controller):
                 is_upload_tkn,
                 tkn_url, 
                 company_id,
-                partner_id
+                partner_id,
+                partner_invoice_id,
+                partner_shipping_id,
+                date_order,
+                warehouse_id,
+                picking_policy
                 ) 
                 Select '{data.get('Name', '')}', '{data.get('Orderid', '')}', '{data.get('Transactionid', '')}', '{data.get('ChannelRefID', '')}', '{data.get('ShippingFirstname', '')}',
                        '{data.get('ShippingLastname', '')}', '{data.get('ShippingAddress', '')}', '{data.get('ShippingCity', '')}', '{data.get('shipping_zipcode', '')}', 
@@ -241,12 +247,28 @@ class SaleOrderController(Controller):
             create_order_sql += f"""
                        '{data.get('rating', '')}', '{data.get('review', '')}', '{data.get('Updatedat')}', (select order_update_employee.id from order_update_employee),
                        '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', )}, 
-                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id}
+                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id}, {partner_id}, {partner_id}, now(), 1, 'direct'
              Returning id
             """
             request.env.cr.execute(create_order_sql)
             sale_order_id = request.env.cr.fetchone()
-            return Response("Success", status=200, id=sale_order_id)
+            order_lines = data.get('Details', [])
+            for line in order_lines:
+                quantity = line.get('Quantity', 0)
+                for sub_item in range(quantity):
+                    create_order_line_sql = f"""
+                    insert into sale_order_line(
+                    my_admin_detailed_id,
+                    my_admin_order_id,
+                    order_id_fix,
+                    myadmin_product_id,
+                    meta_field,
+                    price_unit,
+                    product_uom_qty,
+                    product_uom_qty,
+                    )
+                    """
+            return Response("Success", status=200)
 
     # @route("/api/sale_orders/<int:order_id>", methods=["PUT"], type="json", auth="public", cors="*")
     # def action_update_sale_order(self, order_id, **kwargs):
