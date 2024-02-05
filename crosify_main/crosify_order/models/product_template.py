@@ -12,8 +12,8 @@ class ProductTemplate(models.Model):
     design_number = fields.Char(string='Design Number', require=True, trim=True)
     detailed_type = fields.Selection(string="Detailed Type")
 
-    def _create_variant_ids(self):
-        return
+    # def _create_variant_ids(self):
+    #     return
 
     def create_variants(self):
         self._create_variant_ids()
