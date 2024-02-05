@@ -36,7 +36,7 @@
                 <xpath expr="//form" position="replace">
                     <form string="Item" class="sale_order_view_inherit_form_crosify_order">
                         <header>
-                            <field name="level" widget="statusbar" options="{'clickable': '1'}"/>
+                            <field name="level_id" widget="statusbar" options="{'clickable': '1'}"/>
                         </header>
                         <sheet>
                             <div class="oe_title">
@@ -45,9 +45,9 @@
                                 </h1>
                                 <div class="oe_title ps-0 pe-2">
                                     <h2>
-                                        <label for="sublevel">SubLevel</label>
+                                        <label for="sublevel_id">SubLevel</label>
                                         <span></span>
-                                        <field name="sublevel" domain="[('parent_id', '=', level)]"/>
+                                        <field name="sublevel_id" domain="[('parent_id', '=', level_id)]"/>
                                     </h2>
                                 </div>
                             </div>
