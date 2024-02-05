@@ -339,7 +339,7 @@ class SaleOrderController(Controller):
                         create_order_line_sql += ","
                     create_order_line_sql += f"""
                     (
-                    {line.get('Quantity', 0)},
+                    {line.get('Detailid', 0)},
                     {line.get('Orderid', 0)},
                     '{line.get('OrderidFix', 0)}',
                     {line.get('ProductID', 0)},
@@ -538,50 +538,159 @@ class SaleOrderController(Controller):
         if not verified:
             return Response("Bad Request", status=400)
         else:
+            sale_order = request.env['sale.order'].sudo().browse(order_id)
+            if not sale_order.exists():
+                response = {
+                    'status': 400,
+                    'message': 'Order not found',
+                }
+                return response
+            state_id = request.env['res.country.state'].sudo().search([('code', '=', data.get('StateCode'))], limit=1)
+            country_id = request.env['res.country'].sudo().search([('code', '=', data.get('CountryCode'))], limit=1)
+            currency_id = request.env['res.currency'].sudo().search([('name', '=', data.get('Currency'))], limit=1)
+            order_update_employee = request.env['hr.employee'].sudo().search([('work_email', '=', data.get('UpdatedBy'))], limit=1)
+            order_create_employee = request.env['hr.employee'].sudo().search([('work_email', '=', data.get('CreatedBy'))], limit=1)
+
             update_order_sql = f"""
             update sale_order 
-            set name = ,
-                myadmin_order_id,
-                transaction_id,
-                channel_ref_id,
-                shipping_firstname,
-                shipping_lastname,
-                shipping_address,
-                shipping_city,
-                shipping_zipcode,
-                shipping_country_id,
-                shipping_state_id,
-                shipping_phone_number,
-                shipping_apartment,
-                contact_email,
-                note,
-                client_secret,
-                domain,
-                tip,
-                shipping_cost,
-                amount_untaxed,
-                discount,
-                amount_total,
-                currency_id,
-                payment_status,
-                payment_note,
-                discount_code,
-                logistic_cost,
-                rating,
-                review,
-                crosify_updated_by,
-                crosify_create_by,
-                tkn,
-                is_upload_tkn,
-                tkn_url, 
-                company_id,
-                partner_id,
-                partner_invoice_id,
-                partner_shipping_id,
+            set name = '{data.get('Name', '')}',
+                myadmin_order_id = '{data.get('Orderid', '')}',
+                transaction_id = '{data.get('Transactionid', '')}',
+                channel_ref_id = '{data.get('ChannelRefID', '')}',
+                shipping_firstname = '{data.get('ShippingFirstname', '')}',
+                shipping_lastname = '{data.get('ShippingLastname', '')}',
+                shipping_address = '{data.get('ShippingAddress', '')}',
+                shipping_city = '{data.get('ShippingCity', '')}',
+                shipping_zipcode = '{data.get('shipping_zipcode', '')}',
+                shipping_country_id = {country_id.id if country_id else 'null'},
+                shipping_state_id = {state_id.id if state_id else 'null'},
+                shipping_phone_number = '{data.get('ShippingPhonenumber', '')}',
+                shipping_apartment = '{data.get('ShippingApartment', '')}',
+                contact_email = '{data.get('ContactEmail', '')}',
+                note = '{data.get('CustomerNote', '')}',
+                client_secret = '{data.get('ClientSecret', '')}',
+                domain = '{data.get('Domain', '')}',
+                tip = {data.get('Tip') if data.get('Tip') is not None else 0},
+                shipping_cost = {data.get('ShippingCost') if data.get('ShippingCost') is not None else 0},
+                amount_untaxed = {data.get('Subtotal') if data.get('Subtotal') is not None else 0},
+                discount  = {data.get('Discount') if data.get('Discount') is not None else 0},
+                amount_total = {data.get('TotalAmount') if data.get('TotalAmount') is not None else 0},
+                currency_id = {currency_id.id if currency_id else 'null'},
+                payment_status = '{data.get('PaymentStatus', '')}',
+                payment_note = '{data.get('PaymentNote', '')}',
+                discount_code = '{data.get('DiscountCode', '')}',
+                logistic_cost = {data.get('LogisticCost') if data.get('LogisticCost') is not None else 0},
+                rating = '{data.get('rating', '')}',
+                review = '{data.get('review', '')}',
+                crosify_updated_by = {order_update_employee.id if order_update_employee else 'null'},
+                crosify_create_by = {order_create_employee.id if order_create_employee else 'null'},
+                tkn = '{data.get('Tkn', '')}',
+                is_upload_tkn = {data.get('IsUploadTKN', )},
+                tkn_url = '{data.get('TrackingUrl', '')}'
             
             """
 
-            crosify_update_date,
-            date_order,
-            crosify_create_date,
-            payment_at,
+            if sale_order.partner_id.phone != data.get('ShippingPhonenumber'):
+                partner_sql = f"""
+                            insert into res_partner(name, complete_name,street,street2,city,state_id,zip,country_id,phone,mobile,email) 
+                            values (
+                            '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}', 
+                            '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}', 
+                            '{data.get('ShippingAddress', '')}',
+                            '{data.get('ShippingApartment', '')}',
+                            '{data.get('ShippingCity', '')}',
+                            {state_id.id},
+                            '{data.get('ShippingZipcode', '')}',
+                            {country_id.id},
+                            '{data.get('ShippingPhonenumber', '')}',
+                            '{data.get('ShippingPhonenumber', '')}',
+                            '{data.get('ContactEmail', '')}'
+                            ) 
+                            returning id
+                            """
+
+                request.env.cr.execute(partner_sql)
+                partner_id = request.env.cr.fetchone()[0]
+                update_order_sql += f"""
+                , partner_id = {partner_id}
+                """
+            update_order_sql += f"""
+            where id = {order_id}
+            
+            """
+
+            request.env.cr.execute(update_order_sql)
+
+            order_lines = data.get('Details', [])
+            for line in order_lines:
+                update_order_line_sql = f"""
+                update sale_order_line 
+                set 
+                my_admin_detailed_id = {line.get('Detailid', 0)},
+                my_admin_order_id = {line.get('Orderid', 0) if line.get('Orderid', 0) is not None else 'null'},
+                order_id_fix = '{line.get('OrderidFix') if line.get('OrderidFix') is not None else 'null'}',
+                myadmin_product_id = ,
+                meta_field,
+                price_unit,
+                product_uom_qty,
+                price_subtotal,
+                crosify_discount_amount,
+                total_tax,
+                shipping_cost,
+                tips,
+                price_total,
+                cost_amount,
+                status,
+                sublevel_id,
+                customer_note,
+                product_id,
+                personalize,
+                element_message,
+                design_date,
+                extra_service,
+                note_fulfill,
+                fulfill_date,
+                priority,
+                packed_date,
+                pickup_date,
+                deliver_status,
+                deliver_date,
+                description_item_size,
+                box_size,
+                package_size,
+                product_code,
+                design_serial_number,
+                color_set_name,
+                accessory_name,
+                color_item,
+                logistic_cost,
+                hs_code,
+                tkn_code,
+                upload_tkn_date,
+                upload_tkn_by,
+                tkn_url,
+                is_upload_tkn,
+                note_change_request,
+                dispute_status,
+                dispute_note,
+                crosify_approve_cancel_employee_id,
+                cancel_date,
+                cancel_reason,
+                cancel_status,
+                update_date,
+                crosify_created_date,
+                crosify_create_by,
+                last_update_level_date,
+                packaging_location,
+                shipping_method, 
+                name,
+                """
+
+            response = {
+                'status': 200,
+                'message': 'Updated Order',
+                'data': {
+                    'order_id': order_id
+                }
+            }
+            return response
