@@ -21,3 +21,4 @@
 "access_product_type_fulfill","access_product_type_fulfill","model_sale_order_product_type_fulfill",,1,1,1,1
 "access_fulfill_shelf_type","access_fulfill_shelf_type","model_fulfill_shelf_type",,1,1,1,1
 "access_fulfill_shelf","access_fulfill_shelf","model_fulfill_shelf",,1,1,1,1
+"access_product_type_shelf_type","access_product_type_shelf_type","model_product_type_shelf_type",,1,1,1,1
