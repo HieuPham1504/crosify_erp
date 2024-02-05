@@ -19,6 +19,7 @@
         </record>
         <menuitem id="crosify_menu_product_type_shelf_type" name="Product Type - Shelf Type"
             parent="sale.menu_sales_config"
+            groups="crosify_order.group_sale_team_operator,base.group_system"
             action="crosify_menu_product_type_shelf_type_action"
             sequence="25" />
     </data>
