@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="fulfill_shelf" model="ir.ui.view">
+            <field name="name">fulfill_shelf</field>
+            <field name="model">fulfill.shelf</field>
+            <field name="arch" type="xml">
+                <tree string="Shelf" editable="bottom">
+                    <field name="id"/>
+                    <field name="shelf_code" required="1"/>
+                    <field name="shelf_name" required="1"/>
+                    <field name="shelf_type" required="1"/>
+                </tree>
+            </field>
+        </record>
+        <record id="crosify_menu_fulfill_shelf_action"
+            model="ir.actions.act_window">
+            <field name="name">Shelf</field>
+            <field name="res_model">fulfill.shelf</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="crosify_menu_fulfill_shelf" name="Shelf"
+            parent="sale.menu_sales_config"
+            action="crosify_menu_fulfill_shelf_action"
+            sequence="24" />
+    </data>
+</odoo>
