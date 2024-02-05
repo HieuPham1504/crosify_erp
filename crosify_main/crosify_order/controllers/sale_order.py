@@ -163,7 +163,6 @@ class SaleOrderController(Controller):
             request.env.cr.execute(partner_sql)
             partner_id = request.env.cr.fetchone()[0]
 
-
             create_order_sql = f"""
                 with currency as (
                     select id 
@@ -314,20 +313,27 @@ class SaleOrderController(Controller):
                 last_update_level_date,
                 packaging_location,
                 shipping_method,
-                order_id
+                order_id, 
+                name,
+                customer_lead,
+                product_uom
                 ) 
                 values
                 """
-                price_subtotal = round(line.get('Quantity', 0)/quantity, 2)
-                discount = round(line.get('Discount', 0)/quantity, 2)
-                total_tax = round(line.get('Totaltax', 0)/quantity, 2)
-                shipping_cost = round(line.get('ShippingCost', 0)/quantity, 2)
-                price_total = round(line.get('TotalAmount', 0)/quantity, 2)
-                tip = round(line.get('Tip', 0)/quantity, 2)
-                sub_level = request.env['sale.order.line.level'].sudo().search([('level', '=', line.get('LevelCode', '0'))], limit=1)
-                product_id = request.env['product.product'].sudo().search([('default_code', '=', line.get('Sku', ''))], limit=1)
-                upload_tkn_by = request.env['hr.employee'].sudo().search([('work_email', '=', line.get('UploadTknBy', ''))], limit=1)
-                crosify_approve_cancel_employee_id = request.env['hr.employee'].sudo().search([('work_email', '=', line.get('ApproveCancelBy', ''))], limit=1)
+                price_subtotal = round(line.get('Quantity', 0) / quantity, 2)
+                discount = round(line.get('Discount', 0) / quantity, 2)
+                total_tax = round(line.get('Totaltax', 0) / quantity, 2)
+                shipping_cost = round(line.get('ShippingCost', 0) / quantity, 2)
+                price_total = round(line.get('TotalAmount', 0) / quantity, 2)
+                tip = round(line.get('Tip', 0) / quantity, 2)
+                sub_level = request.env['sale.order.line.level'].sudo().search(
+                    [('level', '=', line.get('LevelCode', '0'))], limit=1)
+                product_id = request.env['product.product'].sudo().search([('default_code', '=', line.get('Sku', ''))],
+                                                                          limit=1)
+                upload_tkn_by = request.env['hr.employee'].sudo().search(
+                    [('work_email', '=', line.get('UploadTknBy', ''))], limit=1)
+                crosify_approve_cancel_employee_id = request.env['hr.employee'].sudo().search(
+                    [('work_email', '=', line.get('ApproveCancelBy', ''))], limit=1)
                 for sub_item in range(quantity):
                     if sub_item > 0:
                         create_order_line_sql += ","
@@ -348,19 +354,37 @@ class SaleOrderController(Controller):
                     {price_total},
                     {line.get('CostAmount', 0)},
                     '{line.get('Status', '')}',
-                    {sub_level.id},
+                    """
+                    if not sub_level:
+
+                        create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                {sub_level.id},
+                                                """
+
+                    create_order_line_sql += f"""
                     '{line.get('CustomerNote', '')}',
-                    {product_id.id},
+                    """
+                    if not product_id:
+
+                        create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                {product_id.id},
+                                                """
+                    create_order_line_sql += f"""
                     '{line.get('Personalize', '')}',
                     '{line.get('ElementMessage', '')}',
                     """
 
                     if line.get('DesignDate') is None:
-                        create_order_line_sql += f"""
-                        '{line.get('DesignDate', '')}',
-                        """
-                    else:
+
                         create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                '{line.get('DesignDate', '')}',
+                                                """
 
                     create_order_line_sql += f"""
                     
@@ -368,17 +392,34 @@ class SaleOrderController(Controller):
                     '{line.get('FulfillNote', '')}',
                     '{line.get('FulfillDate', '')}',
                     {line.get('Priority', '')},
-                    '{line.get('PickupDate', '')}',
+                    """
+
+                    if line.get('PackedDate') is None:
+
+                        create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                '{line.get('PackedDate', '')}',
+                                                """
+                    if line.get('PickupDate') is None:
+
+                        create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                '{line.get('PickupDate', '')}',
+                                                """
+
+                    create_order_line_sql += f"""
                     '{line.get('DeliveryStatus', '')}',
                     """
 
                     if line.get('DeliveryUpdateDate') is None:
-                        create_order_line_sql += f"""
-                        '{line.get('DeliveryUpdateDate', '')}',
-                        """
-                    else:
-                        create_order_line_sql += "null,"
 
+                        create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                '{line.get('DeliveryUpdateDate', '')}',
+                                                """
 
                     create_order_line_sql += f"""
                     '{line.get('DescriptionItemSize', '')}',
@@ -396,68 +437,151 @@ class SaleOrderController(Controller):
                     """
 
                     if line.get('UploadTknat') is None:
-                        create_order_line_sql += f"""
-                        '{line.get('UploadTknat', '')}',
-                        """
-                    else:
+
                         create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                '{line.get('UploadTknat', '')}',
+                                                """
+
+                    if not upload_tkn_by:
+
+                        create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                {upload_tkn_by.id},
+                                                """
+
 
                     create_order_line_sql += f"""
-                    {upload_tkn_by.id},
                     '{line.get('TrackingUrl', '')}',
                     {line.get('IsUploadTKN', '')},
                     '{line.get('ChangeRequestNote', '')}',
                     '{line.get('DisputeStatus', '')}',
                     '{line.get('DisputeNote', '')}',
-                    {crosify_approve_cancel_employee_id.id},
                     """
+                    if not crosify_approve_cancel_employee_id:
+
+                        create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                {crosify_approve_cancel_employee_id.id},
+                                                """
+
 
                     if line.get('Canceledat') is None:
-                        create_order_line_sql += f"""
-                        '{line.get('Canceledat', '')}',
-                        """
-                    else:
-                        create_order_line_sql += "null,"
 
+                        create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                '{line.get('Canceledat', '')}',
+                                                """
 
                     create_order_line_sql += f"""
                     '{line.get('CancelReason', '')}',
                     '{line.get('CancelStatus', '')}',
-                    '{line.get('CancelStatus', '')}',
                     """
 
                     if line.get('Updatedat') is None:
-                        create_order_line_sql += f"""
-                        '{line.get('Updatedat', '')}',
-                        """
-                    else:
+
                         create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                '{line.get('Updatedat', '')}',
+                                                """
 
                     if line.get('Createdat') is None:
-                        create_order_line_sql += f"""
-                        '{line.get('Createdat', '')}',
-                        """
-                    else:
                         create_order_line_sql += "null,"
+
+                    else:
+                        create_order_line_sql += f"""
+                                                '{line.get('Createdat', '')}',
+                                                """
 
                     create_order_line_sql += f"""
                     '{line.get('CreatedBy', '')}',
-                    '{line.get('LastupdateLevel', '')}',
+                    """
+
+                    if line.get('LastupdateLevel') is None:
+
+                        create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                '{line.get('LastupdateLevel', '')}',
+                                                """
+
+                    create_order_line_sql += f"""
                     '{line.get('PackagingLocationInfo', '')}',
                     '{line.get('ShippingMethodInfo', '')}',
-                    {sale_order_id[0]}
+                    {sale_order_id[0]},
+                    '{product_id.display_name}',
+                    0,
+                    1
                     )
                     """
                 request.env.cr.execute(create_order_line_sql)
+            response = {
+                'status': 200,
+                'message': 'Created Order',
+                'data': {
+                    'order_id': sale_order_id
+                }
+            }
+            return response
+            # return Response("Success", status=200)
 
+    @route("/api/sale_orders/<int:order_id>", methods=["PUT"], type="json", auth="public", cors="*")
+    def action_update_sale_order(self, order_id, **kwargs):
+        data = request.get_json_data()
+        # verified = self.verify_webhook(data, request.httprequest.headers['X-Crosify-Hmac-SHA256'])
+        verified = True
+        if not verified:
+            return Response("Bad Request", status=400)
+        else:
+            update_order_sql = f"""
+            update sale_order 
+            set name = ,
+                myadmin_order_id,
+                transaction_id,
+                channel_ref_id,
+                shipping_firstname,
+                shipping_lastname,
+                shipping_address,
+                shipping_city,
+                shipping_zipcode,
+                shipping_country_id,
+                shipping_state_id,
+                shipping_phone_number,
+                shipping_apartment,
+                contact_email,
+                note,
+                client_secret,
+                domain,
+                tip,
+                shipping_cost,
+                amount_untaxed,
+                discount,
+                amount_total,
+                currency_id,
+                payment_status,
+                payment_note,
+                discount_code,
+                logistic_cost,
+                rating,
+                review,
+                crosify_updated_by,
+                crosify_create_by,
+                tkn,
+                is_upload_tkn,
+                tkn_url, 
+                company_id,
+                partner_id,
+                partner_invoice_id,
+                partner_shipping_id,
+            
+            """
 
-            return Response("Success", status=200)
-
-    # @route("/api/sale_orders/<int:order_id>", methods=["PUT"], type="json", auth="public", cors="*")
-    # def action_update_sale_order(self, order_id, **kwargs):
-    #     data = request.get_json_data()
-    #     # verified = self.verify_webhook(data, request.httprequest.headers['X-Crosify-Hmac-SHA256'])
-    #     verified = True
-    #     if not verified:
-    #         return Response("Bad Request", status=400)
-    #     else:
+            crosify_update_date,
+            date_order,
+            crosify_create_date,
+            payment_at,
