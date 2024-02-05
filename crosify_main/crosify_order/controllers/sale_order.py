@@ -52,7 +52,7 @@ ORDER_LINE_FIELDS_MAPPING = {
     'Detailid': 'my_admin_detailed_id',
     'Orderid': 'my_admin_order_id',
     'OrderidFix': 'order_id_fix',
-    'ProductID': 'production_id',
+    'ProductID': 'myadmin_product_id',
     'Metafield': 'meta_field',
     'CustomerNote': 'customer_note',
     'Personalize': 'personalize',
@@ -143,8 +143,9 @@ class SaleOrderController(Controller):
             shipping_country_id = request.env.cr.fetchone()[0]
 
             partner_sql = f"""
-            insert into res_partner(name,street,street2,city,state_id,zip,country_id,phone,mobile,email) 
+            insert into res_partner(name, complete_name,street,street2,city,state_id,zip,country_id,phone,mobile,email) 
             values (
+            '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}', 
             '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}', 
             '{data.get('ShippingAddress', '')}',
             '{data.get('ShippingApartment', '')}',
@@ -223,7 +224,12 @@ class SaleOrderController(Controller):
                 is_upload_tkn,
                 tkn_url, 
                 company_id,
-                partner_id
+                partner_id,
+                partner_invoice_id,
+                partner_shipping_id,
+                date_order
+--                 warehouse_id,
+--                 picking_policy
                 ) 
                 Select '{data.get('Name', '')}', '{data.get('Orderid', '')}', '{data.get('Transactionid', '')}', '{data.get('ChannelRefID', '')}', '{data.get('ShippingFirstname', '')}',
                        '{data.get('ShippingLastname', '')}', '{data.get('ShippingAddress', '')}', '{data.get('ShippingCity', '')}', '{data.get('shipping_zipcode', '')}', 
@@ -241,12 +247,211 @@ class SaleOrderController(Controller):
             create_order_sql += f"""
                        '{data.get('rating', '')}', '{data.get('review', '')}', '{data.get('Updatedat')}', (select order_update_employee.id from order_update_employee),
                        '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', )}, 
-                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id}
+                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id}, {partner_id}, {partner_id}, now() 
              Returning id
             """
             request.env.cr.execute(create_order_sql)
             sale_order_id = request.env.cr.fetchone()
-            return Response("Success", status=200, id=sale_order_id)
+            order_lines = data.get('Details', [])
+            for line in order_lines:
+                quantity = line.get('Quantity', 0)
+                create_order_line_sql = f"""
+                insert into sale_order_line(
+                my_admin_detailed_id,
+                my_admin_order_id,
+                order_id_fix,
+                myadmin_product_id,
+                meta_field,
+                price_unit,
+                product_uom_qty,
+                price_subtotal,
+                crosify_discount_amount,
+                total_tax,
+                shipping_cost,
+                tips,
+                price_total,
+                cost_amount,
+                status,
+                sublevel_id,
+                customer_note,
+                product_id,
+                personalize,
+                element_message,
+                design_date,
+                extra_service,
+                note_fulfill,
+                fulfill_date,
+                priority,
+                packed_date,
+                pickup_date,
+                deliver_status,
+                deliver_date,
+                description_item_size,
+                box_size,
+                package_size,
+                product_code,
+                design_serial_number,
+                color_set_name,
+                accessory_name,
+                color_item,
+                logistic_cost,
+                hs_code,
+                tkn_code,
+                upload_tkn_date,
+                upload_tkn_by,
+                tkn_url,
+                is_upload_tkn,
+                note_change_request,
+                dispute_status,
+                dispute_note,
+                crosify_approve_cancel_employee_id,
+                cancel_date,
+                cancel_reason,
+                cancel_status,
+                update_date,
+                crosify_created_date,
+                crosify_create_by,
+                last_update_level_date,
+                packaging_location,
+                shipping_method,
+                order_id
+                ) 
+                values
+                """
+                price_subtotal = round(line.get('Quantity', 0)/quantity, 2)
+                discount = round(line.get('Discount', 0)/quantity, 2)
+                total_tax = round(line.get('Totaltax', 0)/quantity, 2)
+                shipping_cost = round(line.get('ShippingCost', 0)/quantity, 2)
+                price_total = round(line.get('TotalAmount', 0)/quantity, 2)
+                tip = round(line.get('Tip', 0)/quantity, 2)
+                sub_level = request.env['sale.order.line.level'].sudo().search([('level', '=', line.get('LevelCode', '0'))], limit=1)
+                product_id = request.env['product.product'].sudo().search([('default_code', '=', line.get('Sku', ''))], limit=1)
+                upload_tkn_by = request.env['hr.employee'].sudo().search([('work_email', '=', line.get('UploadTknBy', ''))], limit=1)
+                crosify_approve_cancel_employee_id = request.env['hr.employee'].sudo().search([('work_email', '=', line.get('ApproveCancelBy', ''))], limit=1)
+                for sub_item in range(quantity):
+                    if sub_item > 0:
+                        create_order_line_sql += ","
+                    create_order_line_sql += f"""
+                    (
+                    {line.get('Quantity', 0)},
+                    {line.get('Orderid', 0)},
+                    '{line.get('OrderidFix', 0)}',
+                    {line.get('ProductID', 0)},
+                    {line.get('meta_field', 0)},
+                    {line.get('Amount', 0)},
+                    1,
+                    {price_subtotal},
+                    {discount},
+                    {total_tax},
+                    {shipping_cost},
+                    {tip},
+                    {price_total},
+                    {line.get('CostAmount', 0)},
+                    '{line.get('Status', '')}',
+                    {sub_level.id},
+                    '{line.get('CustomerNote', '')}',
+                    {product_id.id},
+                    '{line.get('Personalize', '')}',
+                    '{line.get('ElementMessage', '')}',
+                    """
+
+                    if line.get('DesignDate') is None:
+                        create_order_line_sql += f"""
+                        '{line.get('DesignDate', '')}',
+                        """
+                    else:
+                        create_order_line_sql += "null,"
+
+                    create_order_line_sql += f"""
+                    
+                    '{line.get('ExtraService', '')}',
+                    '{line.get('FulfillNote', '')}',
+                    '{line.get('FulfillDate', '')}',
+                    {line.get('Priority', '')},
+                    '{line.get('PickupDate', '')}',
+                    '{line.get('DeliveryStatus', '')}',
+                    """
+
+                    if line.get('DeliveryUpdateDate') is None:
+                        create_order_line_sql += f"""
+                        '{line.get('DeliveryUpdateDate', '')}',
+                        """
+                    else:
+                        create_order_line_sql += "null,"
+
+
+                    create_order_line_sql += f"""
+                    '{line.get('DescriptionItemSize', '')}',
+                    '{line.get('Boxsize', '')}',
+                    '{line.get('Packagesize', '')}',
+                    '{line.get('Productcode', '')}',
+                    '{line.get('DesignSerialno', '')}',
+                    '{line.get('ColorsetName', '')}',
+                    '{line.get('AccessoryName', '')}',
+                    '{line.get('ColorItem', '')}',
+                    {line.get('LogisticCost', '')},
+                    '{line.get('HScode', '')}',
+                    '{line.get('TKN', '')}',
+                    
+                    """
+
+                    if line.get('UploadTknat') is None:
+                        create_order_line_sql += f"""
+                        '{line.get('UploadTknat', '')}',
+                        """
+                    else:
+                        create_order_line_sql += "null,"
+
+                    create_order_line_sql += f"""
+                    {upload_tkn_by.id},
+                    '{line.get('TrackingUrl', '')}',
+                    {line.get('IsUploadTKN', '')},
+                    '{line.get('ChangeRequestNote', '')}',
+                    '{line.get('DisputeStatus', '')}',
+                    '{line.get('DisputeNote', '')}',
+                    {crosify_approve_cancel_employee_id.id},
+                    """
+
+                    if line.get('Canceledat') is None:
+                        create_order_line_sql += f"""
+                        '{line.get('Canceledat', '')}',
+                        """
+                    else:
+                        create_order_line_sql += "null,"
+
+
+                    create_order_line_sql += f"""
+                    '{line.get('CancelReason', '')}',
+                    '{line.get('CancelStatus', '')}',
+                    '{line.get('CancelStatus', '')}',
+                    """
+
+                    if line.get('Updatedat') is None:
+                        create_order_line_sql += f"""
+                        '{line.get('Updatedat', '')}',
+                        """
+                    else:
+                        create_order_line_sql += "null,"
+
+                    if line.get('Createdat') is None:
+                        create_order_line_sql += f"""
+                        '{line.get('Createdat', '')}',
+                        """
+                    else:
+                        create_order_line_sql += "null,"
+
+                    create_order_line_sql += f"""
+                    '{line.get('CreatedBy', '')}',
+                    '{line.get('LastupdateLevel', '')}',
+                    '{line.get('PackagingLocationInfo', '')}',
+                    '{line.get('ShippingMethodInfo', '')}',
+                    {sale_order_id[0]}
+                    )
+                    """
+                request.env.cr.execute(create_order_line_sql)
+
+
+            return Response("Success", status=200)
 
     # @route("/api/sale_orders/<int:order_id>", methods=["PUT"], type="json", auth="public", cors="*")
     # def action_update_sale_order(self, order_id, **kwargs):
