@@ -54,7 +54,7 @@ class SaleOrderLine(models.Model):
     #Design
     designer_id = fields.Many2one('hr.employee', string='Designer')
     design_file_url = fields.Binary(string='Design File')
-    design_file_name = fields.Char(string='Design File Name')
+    design_file_name = fields.Text(string='Design File Name')
     design_date = fields.Date(string='Design Date')
     variant = fields.Text(string='Variant')
     #tab production
