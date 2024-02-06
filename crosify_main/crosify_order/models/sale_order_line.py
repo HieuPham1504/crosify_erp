@@ -5,10 +5,20 @@ from odoo import api, fields, models
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    def default_sublevel_id(self):
+    @api.model
+    def default_get(self, fields_list):
+        values = super(SaleOrderLine, self).default_get(fields_list)
+        level = self.get_default_level()
+        values['sublevel_id'] = level.id
+        return values
+
+    def get_default_level(self):
         payment_status = self.order_id.payment_status
         level_code = 'L1.1' if payment_status else 'L1'
         level = self.env['sale.order.line.level'].sudo().search([('level', '=', level_code)], limit=1)
+        return level
+    def default_sublevel_id(self):
+        level = self.get_default_level()
         return level.id
 
     image_ids = fields.Many2many('ir.attachment', string='Images')
