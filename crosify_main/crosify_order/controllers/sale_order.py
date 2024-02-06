@@ -107,7 +107,8 @@ class SaleOrderController(Controller):
 
     def verify_webhook(self, data, hmac_header):
         CLIENT_SECRET = request.env['ir.config_parameter'].sudo().get_param('hmac_sha256_secret', False)
-        digest = hmac.new(CLIENT_SECRET.encode('utf-8'), data, digestmod=hashlib.sha256).digest()
+        digest = hmac.new(CLIENT_SECRET.encode('utf-8'), str(data), digestmod=hashlib.sha256).digest()
+        hexdigest = hmac.new(CLIENT_SECRET.encode('utf-8'), str(data).encode('utf-8'), digestmod=hashlib.sha256).hexdigest()
         computed_hmac = base64.b64encode(digest)
 
         return hmac.compare_digest(computed_hmac, hmac_header.encode('utf-8'))
@@ -115,8 +116,8 @@ class SaleOrderController(Controller):
     @route("/api/sale_orders", methods=["POST"], type="json", auth="public", cors="*")
     def action_create_sale_order(self, **kwargs):
         data = request.get_json_data()
-        # verified = self.verify_webhook(data, request.httprequest.headers['X-Crosify-Hmac-SHA256'])
-        verified = True
+        verified = self.verify_webhook(data, request.httprequest.headers['X-Signature-SHA256'])
+        # verified = True
         if not verified:
             return Response("Bad Request", status=400)
         else:
@@ -320,7 +321,7 @@ class SaleOrderController(Controller):
                 ) 
                 values
                 """
-                price_subtotal = round(line.get('Quantity', 0) / quantity, 2)
+                price_subtotal = round(line.get('Subtotal', 0) / quantity, 2)
                 discount = round(line.get('Discount', 0) / quantity, 2)
                 total_tax = round(line.get('Totaltax', 0) / quantity, 2)
                 shipping_cost = round(line.get('ShippingCost', 0) / quantity, 2)
@@ -623,68 +624,112 @@ class SaleOrderController(Controller):
 
             order_lines = data.get('Details', [])
             for line in order_lines:
+                sub_level = request.env['sale.order.line.level'].sudo().search(
+                    [('level', '=', line.get('LevelCode', '0'))], limit=1)
+                product_id = request.env['product.product'].sudo().search([('default_code', '=', line.get('Sku', ''))],
+                                                                          limit=1)
+                upload_tkn_by = request.env['hr.employee'].sudo().search(
+                    [('work_email', '=', line.get('UploadTknBy', ''))], limit=1)
+                crosify_approve_cancel_employee_id = request.env['hr.employee'].sudo().search(
+                    [('work_email', '=', line.get('ApproveCancelBy', ''))], limit=1)
+                quantity = line.get('Quantity', 0)
+                detail_id = line.get('Detailid') if line.get('Detailid') is not None else 0
                 update_order_line_sql = f"""
                 update sale_order_line 
                 set 
-                my_admin_detailed_id = {line.get('Detailid', 0)},
+                my_admin_detailed_id = {detail_id},
                 my_admin_order_id = {line.get('Orderid', 0) if line.get('Orderid', 0) is not None else 'null'},
                 order_id_fix = '{line.get('OrderidFix') if line.get('OrderidFix') is not None else 'null'}',
-                myadmin_product_id = ,
-                meta_field,
-                price_unit,
-                product_uom_qty,
-                price_subtotal,
-                crosify_discount_amount,
-                total_tax,
-                shipping_cost,
-                tips,
-                price_total,
-                cost_amount,
-                status,
-                sublevel_id,
-                customer_note,
-                product_id,
-                personalize,
-                element_message,
-                design_date,
-                extra_service,
-                note_fulfill,
-                fulfill_date,
-                priority,
-                packed_date,
-                pickup_date,
-                deliver_status,
-                deliver_date,
-                description_item_size,
-                box_size,
-                package_size,
-                product_code,
-                design_serial_number,
-                color_set_name,
-                accessory_name,
-                color_item,
-                logistic_cost,
-                hs_code,
-                tkn_code,
-                upload_tkn_date,
-                upload_tkn_by,
-                tkn_url,
-                is_upload_tkn,
-                note_change_request,
-                dispute_status,
-                dispute_note,
-                crosify_approve_cancel_employee_id,
-                cancel_date,
-                cancel_reason,
-                cancel_status,
-                update_date,
-                crosify_created_date,
-                crosify_create_by,
-                last_update_level_date,
-                packaging_location,
-                shipping_method, 
-                name,
+                myadmin_product_id = {line.get('ProductID') if line.get('ProductID') is not None else 'null'},
+                meta_field = {line.get('meta_field') if line.get('meta_field') is not None else 'null'},
+                price_unit = {line.get('Amount') if line.get('Amount') is not None else 'null'},
+                product_uom_qty = 1,
+                price_subtotal = {round(line.get('Subtotal', 0) / quantity, 2)},
+                crosify_discount_amount = {round(line.get('Discount', 0) / quantity, 2)},
+                total_tax = {round(line.get('Totaltax', 0) / quantity, 2)},
+                shipping_cost = {round(line.get('ShippingCost', 0) / quantity, 2)},
+                tips = {round(line.get('Tip', 0) / quantity, 2)},
+                price_total = {round(line.get('TotalAmount', 0) / quantity, 2)},
+                cost_amount = {line.get('CostAmount') if line.get('CostAmount', 0) is not None else 0},
                 """
+                if line.get('Status') is not None:
+                    update_order_line_sql += f"""
+                    status = {line.get('Status')},
+                    """
+                else:
+                    update_order_line_sql += f"""
+                                        status = null,
+                                        """
+
+                update_order_line_sql += f"""
+                sublevel_id = {sub_level.id if sub_level else 'null'},
+                level_id = {sub_level.parent_id.id if sub_level and sub_level.parent_id else 'null'},
+                customer_note = '{line.get('CustomerNote') if line.get('CustomerNote') is not None else 'null'}',
+                product_id = {product_id.id if product_id else 'null'},
+                personalize = '{line.get('Personalize') if line.get('Personalize') is not None else 'null'}',
+                element_message = '{line.get('ElementMessage') if line.get('ElementMessage') is not None else 'null'}',
+                design_date = '{line.get('DesignDate') if line.get('DesignDate') is not None else 'null'}',
+                extra_service = '{line.get('ExtraService') if line.get('ExtraService') is not None else 'null'}',
+                note_fulfill = '{line.get('FulfillNote') if line.get('FulfillNote') is not None else 'null'}',
+                fulfill_date = '{line.get('FulfillDate') if line.get('FulfillDate') is not None else 'null'}',
+                priority = '{line.get('Priority') if line.get('Priority') is not None else 'null'}',
+                packed_date = '{line.get('PackedDate') if line.get('PackedDate') is not None else 'null'}',
+                pickup_date = '{line.get('PackedDate') if line.get('PackedDate') is not None else 'null'}',
+                deliver_status = '{line.get('PickupDate') if line.get('PickupDate') is not None else 'null'}',
+                deliver_date = '{line.get('DeliveryUpdateDate') if line.get('DeliveryUpdateDate') is not None else 'null'}',
+                description_item_size = '{line.get('DescriptionItemSize') if line.get('DescriptionItemSize') is not None else 'null'}',
+                box_size = '{line.get('Boxsize') if line.get('Boxsize') is not None else 'null'}',
+                package_size = '{line.get('Packagesize') if line.get('Packagesize') is not None else 'null'}',
+                product_code = '{line.get('Productcode') if line.get('Productcode') is not None else 'null'}',
+                design_serial_number = '{line.get('DesignSerialno') if line.get('DesignSerialno') is not None else 'null'}',
+                color_set_name = '{line.get('ColorsetName') if line.get('ColorsetName') is not None else 'null'}',
+                accessory_name = '{line.get('AccessoryName') if line.get('AccessoryName') is not None else 'null'}',
+                color_item = '{line.get('ColorItem') if line.get('ColorItem') is not None else 'null'}',
+                logistic_cost = {line.get('LogisticCost') if line.get('LogisticCost') is not None else 'null'},
+                hs_code = '{line.get('HScode') if line.get('HScode') is not None else 'null'}',
+                tkn_code = '{line.get('TKN') if line.get('TKN') is not None else 'null'}',
+                upload_tkn_date = '{line.get('UploadTknat') if line.get('UploadTknat') is not None else 'null'}',
+                upload_tkn_by = {upload_tkn_by.id if upload_tkn_by else 'null'},
+                tkn_url = '{line.get('TrackingUrl') if line.get('TrackingUrl') is not None else 'null'}',
+                is_upload_tkn = '{line.get('IsUploadTKN') if line.get('IsUploadTKN') is not None else 'null'}',
+                note_change_request = '{line.get('ChangeRequestNote') if line.get('ChangeRequestNote') is not None else 'null'}',
+                dispute_status = '{line.get('DisputeStatus') if line.get('DisputeStatus') is not None else 'null'}',
+                dispute_note = '{line.get('DisputeNote') if line.get('DisputeNote') is not None else 'null'}',
+                crosify_approve_cancel_employee_id = {crosify_approve_cancel_employee_id.id if crosify_approve_cancel_employee_id else 'null'},
+                cancel_date = '{line.get('Canceledat') if line.get('Canceledat') is not None else 'null'}',
+                cancel_reason = '{line.get('CancelReason') if line.get('CancelReason') is not None else 'null'}',
+                cancel_status = '{line.get('CancelStatus') if line.get('CancelStatus') is not None else 'null'}',
+                """
+
+                if line.get('Updatedat') is not None:
+                    update_order_line_sql += f"""
+                    update_date = '{line.get('Updatedat')}',
+                    """
+                else:
+                    update_order_line_sql += f"""
+                                        update_date = null,
+                                        """
+
+
+                if line.get('Createdat') is not None:
+                    update_order_line_sql += f"""
+                    crosify_created_date = '{line.get('Createdat')}',
+                    """
+                else:
+                    update_order_line_sql += f"""
+                                        crosify_created_date = null,
+                                        """
+
+                update_order_line_sql += f"""
+                crosify_create_by = '{line.get('CreatedBy') if line.get('CreatedBy') is not None else 'null'}',
+                last_update_level_date = '{line.get('LastupdateLevel') if line.get('LastupdateLevel') is not None else 'null'}',
+                packaging_location = '{line.get('PackagingLocationInfo') if line.get('PackagingLocationInfo') is not None else 'null'}',
+                shipping_method = '{line.get('ShippingMethodInfo') if line.get('ShippingMethodInfo') is not None else 'null'}', 
+                name = '{product_id.display_name}' 
+                where my_admin_detailed_id = {detail_id} 
+                """
+
+                request.env.cr.execute(update_order_line_sql)
 
             response = {
                 'status': 200,
