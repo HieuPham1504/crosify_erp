@@ -66,6 +66,18 @@ class SaleOrder(models.Model):
     @api.depends('payment_status')
     def compute_order_payment_state(self):
         for rec in self:
-            rec.payment_status = 'paid' if rec.payment_status else 'not_paid'
+            rec.order_payment_state = 'paid' if rec.payment_status else 'not_paid'
+
+    @api.onchange('payment_status')
+    def onchange_order_payment_status(self):
+        payment_status = self.payment_status
+        level_code = 'L1.1' if payment_status else 'L1'
+        level = self.env['sale.order.line.level'].sudo().search([('level', '=', level_code)], limit=1)
+        items = self.order_line
+        for item in items:
+            item_sublevel = item.sublevel_id
+            if not item_sublevel or item_sublevel.level.strip() == 'L1' or item_sublevel.level.strip() == 'L1.1':
+                item.sublevel_id = level.id
+
 
 

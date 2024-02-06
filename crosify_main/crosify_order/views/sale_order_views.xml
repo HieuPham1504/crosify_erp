@@ -110,12 +110,13 @@
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_total']" position="after">
                 <field name="price_total" string="Total"/>
-                <field name="level_id"/>
+                <field name="sublevel_id"/>
             </xpath>
 
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='product_template_id']" position="before">
                 <field name="product_id" string="SKU"/>
+                <field name="personalize"/>
                 <field name="production_id"/>
             </xpath>
 

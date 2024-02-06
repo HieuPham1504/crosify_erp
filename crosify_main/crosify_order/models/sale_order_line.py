@@ -5,6 +5,12 @@ from odoo import api, fields, models
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    def default_sublevel_id(self):
+        payment_status = self.order_id.payment_status
+        level_code = 'L1.1' if payment_status else 'L1'
+        level = self.env['sale.order.line.level'].sudo().search([('level', '=', level_code)], limit=1)
+        return level.id
+
     image_ids = fields.Many2many('ir.attachment', string='Images')
     crosify_created_date = fields.Date(string='Create Date')
     crosify_create_by = fields.Char(string='Created By')
@@ -89,8 +95,8 @@ class SaleOrderLine(models.Model):
     dispute_note = fields.Text(string='Dispute Note')
     approve_by = fields.Many2one('hr.employee', string='Approve By')
 
-    level_id = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', True)], string='Level')
-    sublevel_id = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', False)], string='Sublevel')
+    level_id = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', True)], string='Parent Level')
+    sublevel_id = fields.Many2one('sale.order.line.level', string='Level', default=default_sublevel_id)
     last_update_level_date = fields.Datetime(string='Last Update Level')
     meta_field = fields.Text(string='Meta Field')
     crosify_discount_amount = fields.Float(string='Discount Amount')
@@ -103,6 +109,11 @@ class SaleOrderLine(models.Model):
     update_date = fields.Datetime(string='Update Date')
     update_by = fields.Char(string='Update By')
     chars = fields.Char(string='Chars')
+
+
+
+
+
 
 
 
