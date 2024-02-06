@@ -21,7 +21,7 @@ class SaleOrder(models.Model):
     label_file_attachment = fields.Binary(string="Label File")
     label_file_store_name = fields.Char(string="File Name")
     #payment
-    payment_at = fields.Datetime(string='Payment At')
+    payment_at = fields.Datetime(string='Payment Date')
     currency_id = fields.Many2one('res.currency', string='Currency')
     payment_status = fields.Boolean(string='Payment Status')
     payment_method_id = fields.Many2one('payment.method', string='Payment Method')

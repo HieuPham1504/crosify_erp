@@ -53,12 +53,12 @@ class SaleOrderLine(models.Model):
 
     #Design
     designer_id = fields.Many2one('hr.employee', string='Designer')
-    design_file = fields.Binary(string='Design File')
+    design_file_url = fields.Binary(string='Design File')
     design_file_name = fields.Char(string='Design File Name')
     design_date = fields.Date(string='Design Date')
     variant = fields.Text(string='Variant')
     #tab production
-    production_id = fields.Char(string='Production Id')
+    production_id = fields.Char(string='Production ID')
     production_vendor_code = fields.Char(string='Production Vendor Code')
     production_vendor_id = fields.Many2one('res.partner', string='Production Vendor')
     packaging_location = fields.Char(string='Packaging Location')
@@ -69,7 +69,7 @@ class SaleOrderLine(models.Model):
     production_start_date = fields.Date(string='Production Start Date')
     production_done_date = fields.Date(string='Production Done Date')
     production_status = fields.Char(string='Production Status')
-    production_estimate_time = fields.Datetime(string='Production Estimate Time')
+    production_estimate_time = fields.Datetime(string='Production Estimate Time (h)')
     production_note = fields.Text(string='Production Note')
     #Tab Shipping & Pickup
     address_sheft = fields.Char(string='Address Sheft')

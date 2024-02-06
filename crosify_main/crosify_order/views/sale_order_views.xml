@@ -12,6 +12,7 @@
                 <field name="crosify_create_date"/>
                 <field name="partner_id"/>
                 <field name="amount_total"/>
+                <field name="payment_method_id"/>
                 <field name="payment_status"/>
             </tree>
         </field>
@@ -67,15 +68,21 @@
             </xpath>
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_total']" position="attributes">
-                <attribute name="string">Price Total</attribute>
+                <attribute name="column_invisible">1</attribute>
             </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_total']" position="after">
+                <field name="price_total" string="Total"/>
+                <field name="level_id"/>
+            </xpath>
+
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='product_template_id']" position="before">
                 <field name="product_id" string="SKU"/>
                 <field name="production_id"/>
             </xpath>
 
-            <xpath expr="//field[@name='order_line']//tree//field[@name='unit_price']" position="after">
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">
                 <field name="crosify_discount_amount"/>
                 <field name="total_tax"/>
             </xpath>
@@ -156,6 +163,7 @@
                             <field name="tkn_url"/>
                             <field name="update_tkn_date"/>
                             <field name="update_tkn_employee_id" options="{'no_create': True}"/>
+                            <field name="tracking_note"/>
                         </group>
                     </group>
                 </page>

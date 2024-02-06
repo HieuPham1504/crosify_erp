@@ -63,7 +63,7 @@
                                     <field name="product_id" string="SKU"/>
                                     <field name="product_type"/>
                                     <field name="production_id"/>
-                                    <field name="personalize" string="Quantity"/>
+                                    <field name="personalize"/>
                                 </group>
                             </group>
                             <notebook>
@@ -76,9 +76,12 @@
                                             <field name="fulfill_date"/>
                                         </group>
                                         <group name="tracking" string="LABEL &amp; TRACKING NUMBER">
-                                            <field name="production_vendor_id"/>
                                             <field name="label_file_store_name" invisible="1"/>
                                             <field name="label_file" filename="label_file_store_name"/>
+                                            <field name="tkn_code"/>
+                                            <field name="tkn_url"/>
+                                            <field name="upload_tkn_date"/>
+                                            <field name="upload_tkn_by" options='{"no_create": True}'/>
                                         </group>
                                     </group>
                                     <group name="other" string="FULFILLMENT OTHER">
@@ -102,8 +105,7 @@
                                     <group>
                                         <group name="design" string="DESIGN">
                                             <field name="designer_id" options='{"no_create": True}'/>
-                                            <field name="design_file_name" invisible="1"/>
-                                            <field name="design_file" filename="design_file_name"/>
+                                            <field name="design_file_url"/>
                                             <field name="design_date"/>
                                         </group>
                                         <group name="production" string="PRODUCTION">
@@ -141,7 +143,6 @@
                                             <field name="cancel_date"/>
                                             <field name="cancel_status"/>
                                             <field name="cancel_reason"/>
-                                            <field name="approve_by"/>
                                         </group>
                                         <group name="dispute" string="DISPUTE">
                                             <field name="dispute_status"/>
