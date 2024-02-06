@@ -55,6 +55,43 @@
                 </control>
             </xpath>
 
+            <xpath expr="//button[@name='payment_action_capture']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='payment_action_void']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+             <xpath expr="//button[@name='action_quotation_send']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_confirm']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+
+            <xpath expr="//button[@name='action_unlock']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_preview_sale_order']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_draft']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_lock']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
             <xpath expr="//field[@name='state']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
