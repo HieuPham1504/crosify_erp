@@ -531,15 +531,15 @@ class SaleOrderController(Controller):
             return response
             # return Response("Success", status=200)
 
-    @route("/api/sale_orders/<int:order_id>", methods=["PUT"], type="json", auth="public", cors="*")
-    def action_update_sale_order(self, order_id, **kwargs):
+    @route("/api/sale_orders/<int:my_admin_order_id>", methods=["PUT"], type="json", auth="public", cors="*")
+    def action_update_sale_order(self, my_admin_order_id, **kwargs):
         data = request.get_json_data()
         # verified = self.verify_webhook(data, request.httprequest.headers['X-Crosify-Hmac-SHA256'])
         verified = True
         if not verified:
             return Response("Bad Request", status=400)
         else:
-            sale_order = request.env['sale.order'].sudo().browse(order_id)
+            sale_order = request.env['sale.order'].sudo().search([('myadmin_order_id', '=', my_admin_order_id)], limit=1)
             if not sale_order.exists():
                 response = {
                     'status': 400,
