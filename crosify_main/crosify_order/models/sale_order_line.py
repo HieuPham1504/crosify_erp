@@ -69,7 +69,7 @@ class SaleOrderLine(models.Model):
     production_start_date = fields.Date(string='Production Start Date')
     production_done_date = fields.Date(string='Production Done Date')
     production_status = fields.Char(string='Production Status')
-    production_estimate_time = fields.Datetime(string='Production Estimate Time (h)')
+    production_estimate_time = fields.Integer(string='Production Estimate Time (h)')
     production_note = fields.Text(string='Production Note')
     #Tab Shipping & Pickup
     address_sheft = fields.Char(string='Address Sheft')
