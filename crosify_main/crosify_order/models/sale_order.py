@@ -58,5 +58,14 @@ class SaleOrder(models.Model):
     started_checkout_code = fields.Char(string='Started Checkout Code')
     crosify_update_date = fields.Datetime(string='Update Date')
     shipping_vendor_id = fields.Many2one('res.partner', string='Shipping Vendor')
+    order_payment_state = fields.Selection([
+        ('paid', "Paid"),
+        ('not_paid', "Not Paid")
+    ], default='not_paid', compute='compute_order_payment_state', store=True, index=True)
+
+    @api.depends('payment_status')
+    def compute_order_payment_state(self):
+        for rec in self:
+            rec.payment_status = 'paid' if rec.payment_status else 'not_paid'
 
 
