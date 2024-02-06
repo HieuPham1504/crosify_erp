@@ -9,3 +9,5 @@ from . import product_vendor_production_price
 from . import product_type_fulfill
 from . import fulfill_shelf_type
 from . import fulfill_shelf
+from . import product_type_shelf_type
+from . import sale_order_type
