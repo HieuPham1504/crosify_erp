@@ -11,7 +11,7 @@ class SaleOrder(models.Model):
     ]
 
     myadmin_order_id = fields.Char(string='Order ID')
-    order_id_fix = fields.Char(string='Order ID Fix', tracking=True)
+    order_id_fix = fields.Char(string='Order ID Fix', tracking=1)
     crosify_create_date = fields.Datetime(string='Create Date')
     shipping_firstname = fields.Char(string='Shipping First Name')
     shipping_lastname = fields.Char(string='Shipping Last Name')
@@ -28,7 +28,7 @@ class SaleOrder(models.Model):
     #payment
     payment_at = fields.Datetime(string='Payment Date')
     currency_id = fields.Many2one('res.currency', string='Currency')
-    payment_status = fields.Boolean(string='Payment Status', tracking=True)
+    payment_status = fields.Boolean(string='Payment Status', tracking=1)
     payment_method_id = fields.Many2one('payment.method', string='Payment Method')
     transaction_id = fields.Char(string='Transaction ID')
     discount_code = fields.Char(string='Discount Code')
