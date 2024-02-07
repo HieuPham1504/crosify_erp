@@ -196,6 +196,9 @@ class SaleOrderLine(models.Model):
         not_order_id_items = items.filtered(lambda item: not item.my_admin_order_id)
         if not_order_id_items:
             raise ValidationError(f'Items with no Order ID: {not_order_id_items.ids}')
+        had_production_id_items = items.filtered(lambda item: item.production_id)
+        if had_production_id_items:
+            raise ValidationError(f'Item already has Production ID: {had_production_id_items.ids}')
         order_ids = items.mapped('order_id')
         for order_id in order_ids:
             selected_items = items.search([('order_id', '=', order_id.id)], order='id asc')
