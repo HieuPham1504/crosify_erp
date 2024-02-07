@@ -21,6 +21,20 @@
                             help="Paid Order Items"/>
                     <separator/>
                 </xpath>
+
+                <xpath expr="//filter[@name='salesperson']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//filter[@name='order']" position="attributes">
+                    <attribute name="string">Reference ID</attribute>
+                </xpath>
+
+                <xpath expr="//filter[@name='product']" position="before">
+                    <filter string="MyAdmin Order ID" name="groupby_myadmin_order_id"
+                            domain="[]"
+                            context="{'group_by':'my_admin_order_id'}"/>
+                </xpath>
             </field>
         </record>
 
@@ -35,7 +49,6 @@
                         <field name="production_id" optional="show"/>
                         <field name="my_admin_order_id" optional="show"/>
                         <field name="order_id_fix" optional="show"/>
-                        <field name="production_id" optional="show"/>
                         <field name="produce_vendor_id" optional="hide"/>
                         <field name="crosify_created_date" optional="show"/>
                         <field name="status" optional="hide"/>
@@ -200,6 +213,16 @@
             <field name="state">code</field>
             <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_change_state_awaiting_fulfill()</field>
+        </record>
+
+        <record id="action_create_item_production_id" model="ir.actions.server">
+            <field name="name">Create Production ID</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_create_item_production_id()</field>
         </record>
 
         <record id="crosify_menu_sale_order_line_action" model="ir.actions.act_window">
