@@ -4,6 +4,7 @@ from odoo.exceptions import ValidationError
 class FulfillShelf(models.Model):
     _name = 'fulfill.shelf'
     _description = 'Shelf'
+    _rec_name = 'shelf_name'
 
     shelf_code = fields.Char(string='Shelf Code')
     shelf_name = fields.Char(string='Shelf Name')

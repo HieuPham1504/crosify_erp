@@ -123,7 +123,7 @@
                                       name="shipping_and_pickup_tab">
                                     <group name="shipping_and_pickup">
                                         <group name="pickup" string="PICKUP">
-                                            <field name="address_sheft"/>
+                                            <field name="address_sheft_id" options='{"no_create": True}'/>
                                             <field name="packed_date"/>
                                             <field name="pickup_date"/>
                                         </group>

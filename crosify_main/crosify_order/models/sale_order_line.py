@@ -93,7 +93,7 @@ class SaleOrderLine(models.Model):
     production_estimate_time = fields.Integer(string='Production Estimate Time (h)')
     production_note = fields.Text(string='Production Note')
     #Tab Shipping & Pickup
-    address_sheft = fields.Char(string='Address Sheft')
+    address_sheft_id = fields.Many2one('fulfill.shelf', string='Address Sheft')
     shipping_date = fields.Datetime(string='Shipping Date')
     shipping_confirm_date = fields.Date(string='Shipping Confirm Date')
     packed_date = fields.Datetime(string='Packed Date')
