@@ -14,6 +14,7 @@
                 <field name="amount_total"/>
                 <field name="payment_method_id"/>
                 <field name="payment_status"/>
+                <field name="order_type_id" optional="hide"/>
             </tree>
         </field>
     </record>
@@ -230,6 +231,7 @@
             <xpath expr="//page[@name='other_information']" position="inside">
                 <group name="other-info">
                     <group name="payment-info" string="PAYMENT INFO">
+                        <field name="payment_status"/>
                         <field name="transaction_id"/>
                         <field name="discount_code"/>
                         <field name="payment_method_id"/>
@@ -277,11 +279,11 @@
             </xpath>
 
             <xpath expr="//field[@name='validity_date']" position="after">
+                <field name="order_type_id" options='{"no_open": True, "no_create": True}'/>
                 <field name="myadmin_order_id"/>
                 <field name="order_id_fix"/>
                 <field name="channel_ref_id"/>
                 <field name="crosify_create_date"/>
-                <field name="payment_status"/>
             </xpath>
 
             <xpath expr="//field[@name='note']" position="attributes">

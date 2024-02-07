@@ -120,6 +120,21 @@ class SaleOrderLine(models.Model):
     update_by = fields.Char(string='Update By')
     chars = fields.Char(string='Chars')
 
+    def update_item_level_based_on_payment_status(self):
+        for rec in self:
+            payment_status = rec.order_id.payment_status
+            level_code = 'L1.1' if payment_status else 'L1'
+            level = self.env['sale.order.line.level'].sudo().search([('level', '=', level_code)], limit=1)
+            item_sublevel = rec.sublevel_id
+            if not item_sublevel or item_sublevel.level.strip() == 'L1' or item_sublevel.level.strip() == 'L1.1':
+                rec.sublevel_id = level.id
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        res = super(SaleOrderLine, self).create(vals_list)
+        res.update_item_level_based_on_payment_status()
+        return res
+
 
 
 
