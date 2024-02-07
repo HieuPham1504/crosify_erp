@@ -68,6 +68,7 @@ class SaleOrder(models.Model):
         ('not_paid', "Not Paid")
     ], default='not_paid', compute='compute_order_payment_state', store=True, index=True)
     order_type_id = fields.Many2one('sale.order.type', string='Order Type', required=True, index=True)
+    state = fields.Selection(default='sale')
 
     @api.depends('payment_status')
     def compute_order_payment_state(self):
@@ -84,6 +85,7 @@ class SaleOrder(models.Model):
             item_sublevel = item.sublevel_id
             if not item_sublevel or item_sublevel.level.strip() == 'L1' or item_sublevel.level.strip() == 'L1.1':
                 item.sublevel_id = level.id
+
 
 
 
