@@ -8,6 +8,16 @@ class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'sale.order.line']
 
+    @api.constrains('production_id')
+    def _check_production_id(self):
+        for record in self:
+            production_id = record.production_id
+
+            duplicate_code = self.sudo().search(
+                [('id', '!=', record.id), ('production_id', '=', production_id)])
+            if duplicate_code:
+                raise ValidationError(f"This Production ID {production_id} already exists.")
+
     @api.model
     def default_get(self, fields_list):
         values = super(SaleOrderLine, self).default_get(fields_list)
@@ -113,7 +123,7 @@ class SaleOrderLine(models.Model):
     approve_by = fields.Many2one('hr.employee', string='Approve By')
 
     level_id = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', True)], string='Parent Level')
-    sublevel_id = fields.Many2one('sale.order.line.level', string='Level', default=default_sublevel_id, domain=_sublevel_domain)
+    sublevel_id = fields.Many2one('sale.order.line.level', string='Level', default=default_sublevel_id, domain=_sublevel_domain, tracking=1)
     last_update_level_date = fields.Datetime(string='Last Update Level')
     meta_field = fields.Text(string='Meta Field')
     crosify_discount_amount = fields.Float(string='Discount Amount')
@@ -178,6 +188,21 @@ class SaleOrderLine(models.Model):
                         id = {item_ids_sql}
                         """
         self.env.cr.execute(update_state_items_sql)
+
+    @api.model
+    def action_create_item_production_id(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().browse(item_ids)
+        not_order_id_items = items.filtered(lambda item: not item.my_admin_order_id)
+        if not_order_id_items:
+            raise ValidationError(f'Items with no Order ID: {not_order_id_items.ids}')
+        order_ids = items.mapped('order_id')
+        for order_id in order_ids:
+            selected_items = items.search([('order_id', '=', order_id.id)], order='id asc')
+            for index, item in enumerate(selected_items):
+                production_id = f'{item.my_admin_order_id}-{index+1}'
+                item.production_id = production_id
+
 
 
 
