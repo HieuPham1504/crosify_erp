@@ -3,7 +3,8 @@
 from odoo import api, fields, models
 
 class SaleOrderLine(models.Model):
-    _inherit = 'sale.order.line'
+    _name = 'sale.order.line'
+    _inherit = ['mail.thread', 'mail.activity.mixin', 'sale.order.line']
 
     @api.model
     def default_get(self, fields_list):
