@@ -39,8 +39,8 @@ class SaleOrderLine(models.Model):
         return [('parent_id', '=', level.id)]
 
     image_ids = fields.Many2many('ir.attachment', string='Images')
-    crosify_created_date = fields.Date(string='Create Date')
-    crosify_create_by = fields.Char(string='Created By')
+    crosify_created_date = fields.Date(string='MyAdmin Create Date')
+    crosify_create_by = fields.Char(string='MyAdmin Created By')
     product_sku = fields.Char(string='SKU', related='product_id.default_code', store=True, index=True)
     my_admin_order_id = fields.Char(string='My Admin Order ID', related='order_id.myadmin_order_id', store=True, index=True)
     my_admin_detailed_id = fields.Integer(string='My Admin Detailed ID', store=True, index=True)
@@ -133,8 +133,8 @@ class SaleOrderLine(models.Model):
     variant = fields.Text(string='Variant')
     taxed_total_amount = fields.Float(string='Taxed Total Amount')
     crosify_approve_cancel_employee_id = fields.Many2one('hr.employee', string='Approve Cancel By')
-    update_date = fields.Datetime(string='Update Date')
-    update_by = fields.Char(string='Update By')
+    update_date = fields.Datetime(string='MyAdmin Update Date')
+    update_by = fields.Char(string='MyAdmin Update By')
     chars = fields.Char(string='Chars')
 
     def update_item_level_based_on_payment_status(self):
@@ -192,7 +192,7 @@ class SaleOrderLine(models.Model):
     @api.model
     def action_create_item_production_id(self):
         item_ids = self._context.get('active_ids', [])
-        items = self.sudo().browse(item_ids)
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
         not_order_id_items = items.filtered(lambda item: not item.my_admin_order_id)
         if not_order_id_items:
             raise ValidationError(f'Items with no Order ID: {not_order_id_items.ids}')
@@ -201,10 +201,12 @@ class SaleOrderLine(models.Model):
             raise ValidationError(f'Item already has Production ID: {had_production_id_items.ids}')
         order_ids = items.mapped('order_id')
         for order_id in order_ids:
-            selected_items = items.search([('order_id', '=', order_id.id)], order='id asc')
-            for index, item in enumerate(selected_items):
-                production_id = f'{item.my_admin_order_id}-{index+1}'
-                item.production_id = production_id
+            total_items = order_id.order_line
+            selected_items = items.filtered(lambda item: item.order_id == order_id)
+            for index, item in enumerate(total_items):
+                if item.id in selected_items.ids:
+                    production_id = f'{item.my_admin_order_id}-{index+1}'
+                    item.production_id = production_id
 
 
 
