@@ -2,7 +2,7 @@
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
-
+from datetime import datetime
 
 class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
@@ -224,6 +224,9 @@ class SaleOrderLine(models.Model):
         for item in items:
             product_type_fulfill_data = self.env['sale.order.product.type.fulfill'].sudo().search([('product_type_id', '=', item.product_id.product_tmpl_id.id)], limit=1)
             if product_type_fulfill_data:
+                fulfilled_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L2.2')], limit=1)
+                if not fulfilled_level:
+                    raise ValidationError('There is no status Fulfilled')
                 item_fields_mapping = {
                     'production_vendor_id': 'product_vendor_id',
                     'packaging_vendor_id': 'packaging_vendor_id',
@@ -233,6 +236,8 @@ class SaleOrderLine(models.Model):
                     if not item[field]:
                         item[field] = product_type_fulfill_data[item_fields_mapping[field]].id
                 item.fulfill_employee_id = employee_id
+                item.fulfill_date = datetime.now().date()
+                item.sublevel_id = fulfilled_level.id
 
 
 
