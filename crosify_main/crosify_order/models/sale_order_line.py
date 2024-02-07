@@ -83,6 +83,7 @@ class SaleOrderLine(models.Model):
     is_upload_tkn = fields.Boolean(string='Is Upload TKN')
     fulfill_date = fields.Date(string='Fulfill Date')
     note_fulfill = fields.Text(string='Fulfill Note')
+    fulfill_employee_id = fields.Many2one('hr.employee', string='Fulfill By', index=True)
 
     #Design
     designer_id = fields.Many2one('hr.employee', string='Designer')
@@ -213,6 +214,25 @@ class SaleOrderLine(models.Model):
                         production_id = f'{item.order_id_fix}'
                     item.production_id = production_id
 
+    @api.model
+    def action_update_fulfill(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        if any(item.sublevel_id.level != 'L2.1' for item in items):
+            raise ValidationError('There is an Item with a different status than Awaiting Fulfillment ')
+        employee_id = self.env.user.employee_id.id
+        for item in items:
+            product_type_fulfill_data = self.env['sale.order.product.type.fulfill'].sudo().search([('product_type_id', '=', item.product_id.product_tmpl_id.id)], limit=1)
+            if product_type_fulfill_data:
+                item_fields_mapping = {
+                    'production_vendor_id': 'product_vendor_id',
+                    'packaging_vendor_id': 'packaging_vendor_id',
+                    'shipping_vendor_id': 'shipping_vendor_id',
+                }
+                for field in item_fields_mapping:
+                    if not item[field]:
+                        item[field] = product_type_fulfill_data[item_fields_mapping[field]].id
+                item.fulfill_employee_id = employee_id
 
 
 
