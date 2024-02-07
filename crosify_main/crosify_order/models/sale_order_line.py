@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
+
 
 class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
@@ -141,6 +143,42 @@ class SaleOrderLine(models.Model):
         res = super(SaleOrderLine, self).create(vals_list)
         res.update_item_level_based_on_payment_status()
         return res
+
+    @api.model
+    def action_change_state_awaiting_fulfill(self):
+        itemLevels = self.env['sale.order.line.level'].sudo()
+        safety_state_levels = [False, 'L1.1']
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().browse(item_ids)
+
+
+        if any(item.sublevel_id.level not in safety_state_levels for item in items):
+            raise ValidationError('There is an item with a different status than Paid Order')
+        awaiting_fulfill_level = itemLevels.search([('level', '=', 'L2.1')], limit=1)
+        parent_level = awaiting_fulfill_level.parent_id.id if awaiting_fulfill_level else False
+        if not awaiting_fulfill_level:
+            raise ValidationError('There is no state with level L2.1')
+        if not parent_level:
+            raise ValidationError('This Level does not have Parent Level')
+
+        item_ids_sql = ','.join([str(item_id) for item_id in item_ids])
+
+        update_state_items_sql = f"""
+        UPDATE sale_order_line 
+        SET sublevel_id = {awaiting_fulfill_level.id}, 
+            level_id = {parent_level}
+        WHERE 
+        """
+        if len(item_ids) > 1:
+            update_state_items_sql += f"""
+            id in ({item_ids_sql})
+            """
+        else:
+            update_state_items_sql += f"""
+                        id = {item_ids_sql}
+                        """
+        self.env.cr.execute(update_state_items_sql)
+
 
 
 
