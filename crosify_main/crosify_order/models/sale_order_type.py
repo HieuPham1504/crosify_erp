@@ -4,6 +4,7 @@ from odoo.exceptions import ValidationError
 class SaleOrderType(models.Model):
     _name = 'sale.order.type'
     _description = 'Order Type'
+    _rec_name = 'order_type_name'
 
     order_type_name = fields.Char(string='Order Type', required=True)
 

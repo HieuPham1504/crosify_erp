@@ -5,8 +5,13 @@ from odoo import api, fields, models
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    _sql_constraints = [
+        ('myadmin_order_id_uniq', 'unique (myadmin_order_id)',
+         "The Order ID must be unique, this one is already assigned to another sale order."),
+    ]
+
     myadmin_order_id = fields.Char(string='Order ID')
-    order_id_fix = fields.Char(string='Order ID Fix')
+    order_id_fix = fields.Char(string='Order ID Fix', tracking=True)
     crosify_create_date = fields.Datetime(string='Create Date')
     shipping_firstname = fields.Char(string='Shipping First Name')
     shipping_lastname = fields.Char(string='Shipping Last Name')
@@ -23,7 +28,7 @@ class SaleOrder(models.Model):
     #payment
     payment_at = fields.Datetime(string='Payment Date')
     currency_id = fields.Many2one('res.currency', string='Currency')
-    payment_status = fields.Boolean(string='Payment Status')
+    payment_status = fields.Boolean(string='Payment Status', tracking=True)
     payment_method_id = fields.Many2one('payment.method', string='Payment Method')
     transaction_id = fields.Char(string='Transaction ID')
     discount_code = fields.Char(string='Discount Code')
@@ -62,6 +67,7 @@ class SaleOrder(models.Model):
         ('paid', "Paid"),
         ('not_paid', "Not Paid")
     ], default='not_paid', compute='compute_order_payment_state', store=True, index=True)
+    order_type_id = fields.Many2one('sale.order.type', string='Order Type', required=True, index=True)
 
     @api.depends('payment_status')
     def compute_order_payment_state(self):
@@ -78,6 +84,9 @@ class SaleOrder(models.Model):
             item_sublevel = item.sublevel_id
             if not item_sublevel or item_sublevel.level.strip() == 'L1' or item_sublevel.level.strip() == 'L1.1':
                 item.sublevel_id = level.id
+
+
+
 
 
 
