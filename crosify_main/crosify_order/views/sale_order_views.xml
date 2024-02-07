@@ -120,7 +120,8 @@
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_total']" position="after">
                 <field name="price_total" string="Total"/>
-                <field name="sublevel_id"/>
+                <field name="level_id" column_invisible="1"/>
+                <field name="sublevel_id" domain="[('parent_id', '=', level_id), ('is_parent', '=', False)]"/>
             </xpath>
 
 
