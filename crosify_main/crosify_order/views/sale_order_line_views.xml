@@ -36,31 +36,32 @@
                 <xpath expr="//form" position="replace">
                     <form string="Item" class="sale_order_view_inherit_form_crosify_order">
                         <header>
-                            <field name="level_id" widget="statusbar" options="{'clickable': '1'}"/>
+                            <field name="level_id" invisible="1"/>
+                            <field name="sublevel_id" widget="statusbar"  options="{'clickable': '1'}" domain="[('parent_id', '=', level_id), ('is_parent', '=', False)]"/>
                         </header>
                         <sheet>
                             <div class="oe_title">
                                 <h1>
                                     <field name="name"/>
                                 </h1>
-<!--                                <div class="oe_title ps-0 pe-2">-->
-<!--                                    <h2>-->
-<!--                                        <label for="sublevel_id">SubLevel</label>-->
-<!--                                        <span></span>-->
-<!--                                        <field name="sublevel_id" domain="[('parent_id', '=', level_id)]"/>-->
-<!--                                    </h2>-->
-<!--                                </div>-->
+                                <!--                                <div class="oe_title ps-0 pe-2">-->
+                                <!--                                    <h2>-->
+                                <!--                                        <label for="sublevel_id">SubLevel</label>-->
+                                <!--                                        <span></span>-->
+                                <!--                                        <field name="sublevel_id" domain="[('parent_id', '=', level_id)]"/>-->
+                                <!--                                    </h2>-->
+                                <!--                                </div>-->
                             </div>
                             <group name="main">
                                 <group>
                                     <field name="company_id" invisible="1"/>
-                                    <field name="order_id" string="Order ID"/>
+                                    <field name="my_admin_order_id" string="Order ID"/>
                                     <field name="order_id_fix"/>
-                                    <field name="channel_ref_id"/>
+                                    <field name="order_id" readonly="1" force_save="1" string="Reference ID"/>
                                     <field name="priority"/>
                                 </group>
                                 <group>
-                                    <field name="product_id" string="SKU"/>
+                                    <field name="product_id" string="SKU" readonly="1" force_save="1"/>
                                     <field name="product_type"/>
                                     <field name="production_id"/>
                                     <field name="personalize"/>
@@ -155,7 +156,10 @@
                                 </page>
                             </notebook>
                         </sheet>
-
+<!--                        <div class="oe_chatter">-->
+<!--                            <field name="activity_ids"/>-->
+<!--                            <field name="message_ids"/>-->
+<!--                        </div>-->
                     </form>
                 </xpath>
             </field>
