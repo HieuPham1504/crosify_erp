@@ -12,11 +12,11 @@ class SaleOrderLine(models.Model):
     def _check_production_id(self):
         for record in self:
             production_id = record.production_id
-
-            duplicate_code = self.sudo().search(
-                [('id', '!=', record.id), ('production_id', '=', production_id)])
-            if duplicate_code:
-                raise ValidationError(f"This Production ID {production_id} already exists.")
+            if production_id:
+                duplicate_code = self.sudo().search(
+                    [('id', '!=', record.id), ('production_id', '=', production_id)])
+                if duplicate_code:
+                    raise ValidationError(f"This Production ID {production_id} already exists.")
 
     @api.model
     def default_get(self, fields_list):
