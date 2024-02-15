@@ -1,0 +1,28 @@
+<odoo>
+    <data>
+        <record id="update_fulfillment_user_config_tree_view" model="ir.ui.view">
+            <field name="name">update_fulfillment_user_config_tree_view</field>
+            <field name="model">update.fulfillment.user.config</field>
+            <field name="arch" type="xml">
+                <tree string="Update Fulfillment User Config" editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="user_field_name"/>
+                    <field name="user_field_description"/>
+                    <field name="is_active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="crosify_menu_update_fulfillment_user_config_action" model="ir.actions.act_window">
+            <field name="name">Update Fulfillment User Config</field>
+            <field name="res_model">update.fulfillment.user.config</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="crosify_menu_update_fulfillment_user_config"
+                  name="Update Fulfillment User Config"
+                  groups="base.group_system"
+                  parent="sale.menu_sale_config" action="crosify_menu_update_fulfillment_user_config_action"
+                  sequence="22"/>
+    </data>
+</odoo>

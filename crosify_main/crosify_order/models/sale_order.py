@@ -10,9 +10,9 @@ class SaleOrder(models.Model):
          "The Order ID must be unique, this one is already assigned to another sale order."),
     ]
 
-    myadmin_order_id = fields.Char(string='Order ID')
-    order_id_fix = fields.Char(string='Order ID Fix', tracking=1)
-    crosify_create_date = fields.Datetime(string='Create Date')
+    myadmin_order_id = fields.Char(string='Order ID', required=True)
+    order_id_fix = fields.Char(string='Order ID Fix', tracking=1, required=True)
+    crosify_create_date = fields.Datetime(string='Create Date', default=fields.datetime.today(), required=True)
     shipping_firstname = fields.Char(string='Shipping First Name')
     shipping_lastname = fields.Char(string='Shipping Last Name')
     shipping_address = fields.Char(string='Shipping Address')

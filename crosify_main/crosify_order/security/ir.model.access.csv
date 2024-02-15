@@ -23,3 +23,8 @@
 "access_fulfill_shelf","access_fulfill_shelf","model_fulfill_shelf",,1,1,1,1
 "access_product_type_shelf_type","access_product_type_shelf_type","model_product_type_shelf_type",,1,1,1,1
 "access_sale_order_type","access_sale_order_type","model_sale_order_type",,1,1,1,1
+
+"access_sale_order_line_operator","access_sale_order_line_operator","model_sale_order_line",crosify_order.group_sale_team_operator,1,1,1,0
+
+"access_update_fulfillment_wizard","access_update_fulfillment_wizard","model_update_fulfillment_wizard",,1,1,1,1
+"access_update_fulfillment_user_config_system","access_update_fulfillment_user_config_system","model_update_fulfillment_user_config",,1,1,1,1

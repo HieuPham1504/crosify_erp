@@ -6,18 +6,19 @@
         <field name="model">sale.order</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <tree>
-                <field name="myadmin_order_id"/>
-                <field name="order_id_fix"/>
-                <field name="crosify_create_date"/>
-                <field name="partner_id"/>
-                <field name="amount_total"/>
-                <field name="payment_method_id"/>
-                <field name="payment_status"/>
-                <field name="order_type_id" optional="hide"/>
-            </tree>
+                <tree duplicate="False">
+                    <field name="myadmin_order_id"/>
+                    <field name="order_id_fix"/>
+                    <field name="crosify_create_date"/>
+                    <field name="partner_id"/>
+                    <field name="amount_total"/>
+                    <field name="payment_method_id"/>
+                    <field name="payment_status"/>
+                    <field name="order_type_id" optional="hide"/>
+                </tree>
         </field>
     </record>
+
 
     <record id="sale_management_sale_order_form_quote_inherit" model="ir.ui.view">
         <field name="name">sale_management_sale_order_form_quote_inherit</field>
@@ -64,7 +65,15 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
 
-             <xpath expr="//button[@name='action_quotation_send']" position="attributes">
+            <xpath expr="//button[@id='send_proforma_primary']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@id='send_proforma']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@id='send_by_email']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
 
@@ -74,6 +83,10 @@
 
 
             <xpath expr="//button[@name='action_unlock']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='%(sale.action_view_sale_advance_payment_inv)d']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
 
@@ -97,12 +110,14 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
 
-             <xpath expr="//field[@name='partner_id']" position="attributes">
-                 <attribute name="invisible">1</attribute>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
             </xpath>
 
             <xpath expr="//field[@name='partner_id']" position="after">
-                 <field name="partner_id" widget="res_partner_many2one" context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}" placeholder="Type to find a customer..." />
+                <field name="partner_id" widget="res_partner_many2one"
+                       context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}"
+                       placeholder="Type to find a customer..."/>
             </xpath>
 
 
