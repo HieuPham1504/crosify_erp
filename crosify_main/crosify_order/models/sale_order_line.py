@@ -217,6 +217,10 @@ class SaleOrderLine(models.Model):
 
     @api.model
     def action_update_fulfill(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.env['sale.order.line'].sudo().search([('id', 'in', item_ids)], order='id asc')
+        if any(item.sublevel_id.level != 'L2.1' for item in items):
+            raise ValidationError('There is an Item with a different status than Awaiting Fulfillment ')
         return {
             "type": "ir.actions.act_window",
             "res_model": "update.fulfillment.wizard",

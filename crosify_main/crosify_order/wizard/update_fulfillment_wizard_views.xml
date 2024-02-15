@@ -8,10 +8,23 @@
                     <sheet>
                         <group>
                             <field name="update_type" widget="radio"/>
-                            <field name="update_user_ids" widget="many2many_checkboxes"
-                                   invisible="update_type != 'specific_user'"
-                                   required="update_type == 'specific_user'"/>
                         </group>
+                        <group>
+                            <group>
+                                <field name="production_vendor_id"
+                                       invisible="update_type != 'specific_user'"
+                                       required="update_type == 'specific_user'"/>
+                                <field name="packaging_vendor_id"
+                                       invisible="update_type != 'specific_user'"
+                                       required="update_type == 'specific_user'"/>
+                                <field name="shipping_vendor_id"
+                                       invisible="update_type != 'specific_user'"
+                                       required="update_type == 'specific_user'"/>
+                            </group>
+                            <group></group>
+                        </group>
+
+
                     </sheet>
                     <footer>
                         <button string="Update" name="action_update_fulfill" type="object"
