@@ -45,7 +45,7 @@
             <field name="inherit_id" ref="sale.view_order_line_tree"/>
             <field name="arch" type="xml">
                 <xpath expr="//tree" position="replace">
-                    <tree string="Items" create="1">
+                    <tree string="Items" create="1" duplicate="0">
                         <field name="production_id" optional="show"/>
                         <field name="my_admin_order_id" optional="show"/>
                         <field name="order_id_fix" optional="show"/>
