@@ -39,10 +39,10 @@ class SaleOrderLine(models.Model):
         return [('parent_id', '=', level.id)]
 
     image_ids = fields.Many2many('ir.attachment', string='Images')
-    crosify_created_date = fields.Date(string='MyAdmin Create Date')
+    crosify_created_date = fields.Date(string='Create Date')
     crosify_create_by = fields.Char(string='MyAdmin Created By')
     product_sku = fields.Char(string='SKU', related='product_id.default_code', store=True, index=True)
-    my_admin_order_id = fields.Char(string='My Admin Order ID', related='order_id.myadmin_order_id', store=True, index=True)
+    my_admin_order_id = fields.Char(string='Order ID', related='order_id.myadmin_order_id', store=True, index=True)
     my_admin_detailed_id = fields.Integer(string='My Admin Detailed ID', store=True, index=True)
     myadmin_product_id = fields.Integer(string='My Admin Product ID')
     order_id_fix = fields.Char(string='Order ID Fix', related='order_id.order_id_fix', store=True, index=True)
@@ -137,6 +137,7 @@ class SaleOrderLine(models.Model):
     update_date = fields.Datetime(string='MyAdmin Update Date')
     update_by = fields.Char(string='MyAdmin Update By')
     chars = fields.Char(string='Chars')
+    create_date = fields.Datetime(string='System Creation Date')
 
     def update_item_level_based_on_payment_status(self):
         for rec in self:
@@ -216,29 +217,14 @@ class SaleOrderLine(models.Model):
 
     @api.model
     def action_update_fulfill(self):
-        item_ids = self._context.get('active_ids', [])
-        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
-        if any(item.sublevel_id.level != 'L2.1' for item in items):
-            raise ValidationError('There is an Item with a different status than Awaiting Fulfillment ')
-        employee_id = self.env.user.employee_id.id
-        for item in items:
-            product_type_fulfill_data = self.env['sale.order.product.type.fulfill'].sudo().search([('product_type_id', '=', item.product_id.product_tmpl_id.id)], limit=1)
-            if product_type_fulfill_data:
-                fulfilled_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L2.2')], limit=1)
-                if not fulfilled_level:
-                    raise ValidationError('There is no status Fulfilled')
-                item_fields_mapping = {
-                    'production_vendor_id': 'product_vendor_id',
-                    'packaging_vendor_id': 'packaging_vendor_id',
-                    'shipping_vendor_id': 'shipping_vendor_id',
-                }
-                for field in item_fields_mapping:
-                    if not item[field]:
-                        item[field] = product_type_fulfill_data[item_fields_mapping[field]].id
-                item.fulfill_employee_id = employee_id
-                item.fulfill_date = datetime.now().date()
-                item.sublevel_id = fulfilled_level.id
-
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "update.fulfillment.wizard",
+            "context": {},
+            "name": "Update Fulfillment",
+            'view_mode': 'form',
+            "target": "new",
+        }
 
 
 

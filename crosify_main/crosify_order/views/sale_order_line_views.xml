@@ -75,7 +75,7 @@
                     <form string="Item" class="sale_order_view_inherit_form_crosify_order">
                         <header>
                             <field name="level_id" invisible="1"/>
-                            <field name="sublevel_id" widget="statusbar" options="{'clickable': '1'}"
+                            <field name="sublevel_id" widget="statusbar"
                                    domain="[('parent_id', '=', level_id), ('is_parent', '=', False)]"/>
                         </header>
                         <sheet>
@@ -83,13 +83,6 @@
                                 <h1>
                                     <field name="name"/>
                                 </h1>
-                                <!--                                <div class="oe_title ps-0 pe-2">-->
-                                <!--                                    <h2>-->
-                                <!--                                        <label for="sublevel_id">SubLevel</label>-->
-                                <!--                                        <span></span>-->
-                                <!--                                        <field name="sublevel_id" domain="[('parent_id', '=', level_id)]"/>-->
-                                <!--                                    </h2>-->
-                                <!--                                </div>-->
                             </div>
                             <group name="main">
                                 <group>
@@ -227,7 +220,7 @@
         </record>
 
         <record id="action_update_fulfill" model="ir.actions.server">
-            <field name="name">Update Fulfill</field>
+            <field name="name">Update Fulfillment</field>
             <field name="model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_view_types">form,list</field>

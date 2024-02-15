@@ -1,0 +1,25 @@
+<odoo>
+    <data>
+        <record id="update_fulfillment_wizard_form_view" model="ir.ui.view">
+            <field name="name">update_fulfillment_wizard_form_view</field>
+            <field name="model">update.fulfillment.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="update_type" widget="radio"/>
+                            <field name="update_user_ids" widget="many2many_checkboxes"
+                                   invisible="update_type != 'specific_user'"
+                                   required="update_type == 'specific_user'"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Update" name="action_update_fulfill" type="object"
+                                class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
