@@ -1,17 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <record id="sale_order_line_search_view_inherit" model="ir.ui.view">
+            <field name="name">sale_order_line_search_view_inherit</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_sales_order_line_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='to_invoice']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//filter[@name='my_sales_order_lines']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//filter[@name='to_invoice']" position="before">
+                    <separator/>
+                    <filter string="Paid Order Items" name="paid_order_items"
+                            domain="[('sublevel_id.level', '=', 'L1.1')]"
+                            help="Paid Order Items"/>
+                    <separator/>
+                </xpath>
+
+                <xpath expr="//filter[@name='salesperson']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//filter[@name='order']" position="attributes">
+                    <attribute name="string">Reference ID</attribute>
+                </xpath>
+
+                <xpath expr="//filter[@name='product']" position="before">
+                    <filter string="MyAdmin Order ID" name="groupby_myadmin_order_id"
+                            domain="[]"
+                            context="{'group_by':'my_admin_order_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+
         <record id="sale_order_line_tree_view_inherit" model="ir.ui.view">
             <field name="name">sale_order_line_tree_view_inherit</field>
             <field name="model">sale.order.line</field>
             <field name="inherit_id" ref="sale.view_order_line_tree"/>
             <field name="arch" type="xml">
                 <xpath expr="//tree" position="replace">
-                    <tree string="Items" create="1">
+                    <tree string="Items" create="1" duplicate="0">
                         <field name="production_id" optional="show"/>
                         <field name="my_admin_order_id" optional="show"/>
                         <field name="order_id_fix" optional="show"/>
-                        <field name="production_id" optional="show"/>
                         <field name="produce_vendor_id" optional="hide"/>
                         <field name="crosify_created_date" optional="show"/>
                         <field name="status" optional="hide"/>
@@ -21,6 +58,7 @@
                         <field name="item_size" optional="show"/>
                         <field name="personalize" optional="show"/>
                         <field name="accessory_name" optional="hide"/>
+                        <field name="sublevel_id" optional="hide"/>
                         <field name="price_subtotal" column_invisible="1"/>
                         <field name="write_date" string="Last Update" optional="hide"/>
                     </tree>
@@ -36,34 +74,29 @@
                 <xpath expr="//form" position="replace">
                     <form string="Item" class="sale_order_view_inherit_form_crosify_order">
                         <header>
-                            <field name="level_id" widget="statusbar" options="{'clickable': '1'}"/>
+                            <field name="level_id" invisible="1"/>
+                            <field name="sublevel_id" widget="statusbar"
+                                   domain="[('parent_id', '=', level_id), ('is_parent', '=', False)]"/>
                         </header>
                         <sheet>
                             <div class="oe_title">
                                 <h1>
                                     <field name="name"/>
                                 </h1>
-                                <div class="oe_title ps-0 pe-2">
-                                    <h2>
-                                        <label for="sublevel_id">SubLevel</label>
-                                        <span></span>
-                                        <field name="sublevel_id" domain="[('parent_id', '=', level_id)]"/>
-                                    </h2>
-                                </div>
                             </div>
                             <group name="main">
                                 <group>
                                     <field name="company_id" invisible="1"/>
-                                    <field name="order_id" string="Order ID"/>
-                                    <field name="order_id_fix" string="Order ID"/>
-                                    <field name="channel_ref_id"/>
+                                    <field name="my_admin_order_id" string="Order ID"/>
+                                    <field name="order_id_fix"/>
+                                    <field name="order_id" readonly="1" force_save="1" string="Reference ID"/>
                                     <field name="priority"/>
                                 </group>
                                 <group>
-                                    <field name="product_id" string="SKU"/>
+                                    <field name="product_id" string="SKU" readonly="1" force_save="1"/>
                                     <field name="product_type"/>
                                     <field name="production_id"/>
-                                    <field name="personalize" string="Quantity"/>
+                                    <field name="personalize"/>
                                 </group>
                             </group>
                             <notebook>
@@ -74,11 +107,16 @@
                                             <field name="packaging_vendor_id" options='{"no_create": True}'/>
                                             <field name="production_vendor_id" options='{"no_create": True}'/>
                                             <field name="fulfill_date"/>
+                                            <field name="fulfill_employee_id" options='{"no_create": True}'/>
                                         </group>
                                         <group name="tracking" string="LABEL &amp; TRACKING NUMBER">
-                                            <field name="production_vendor_id"/>
                                             <field name="label_file_store_name" invisible="1"/>
                                             <field name="label_file" filename="label_file_store_name"/>
+                                            <field name="tkn_code"/>
+                                            <field name="tkn_url"/>
+                                            <field name="upload_tkn_date"/>
+                                            <field name="upload_tkn_by" options='{"no_create": True}'/>
+                                            <field name="is_upload_tkn"/>
                                         </group>
                                     </group>
                                     <group name="other" string="FULFILLMENT OTHER">
@@ -102,8 +140,7 @@
                                     <group>
                                         <group name="design" string="DESIGN">
                                             <field name="designer_id" options='{"no_create": True}'/>
-                                            <field name="design_file_name" invisible="1"/>
-                                            <field name="design_file" filename="design_file_name"/>
+                                            <field name="design_file_url"/>
                                             <field name="design_date"/>
                                         </group>
                                         <group name="production" string="PRODUCTION">
@@ -119,7 +156,7 @@
                                       name="shipping_and_pickup_tab">
                                     <group name="shipping_and_pickup">
                                         <group name="pickup" string="PICKUP">
-                                            <field name="address_sheft"/>
+                                            <field name="address_sheft_id" options='{"no_create": True}'/>
                                             <field name="packed_date"/>
                                             <field name="pickup_date"/>
                                         </group>
@@ -141,7 +178,6 @@
                                             <field name="cancel_date"/>
                                             <field name="cancel_status"/>
                                             <field name="cancel_reason"/>
-                                            <field name="approve_by"/>
                                         </group>
                                         <group name="dispute" string="DISPUTE">
                                             <field name="dispute_status"/>
@@ -154,10 +190,64 @@
                                 </page>
                             </notebook>
                         </sheet>
-
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids"/>
+                            <field name="activity_ids"/>
+                            <field name="message_ids"/>
+                        </div>
                     </form>
                 </xpath>
             </field>
+        </record>
+
+        <record id="action_change_item_state_awaiting_fulfillment" model="ir.actions.server">
+            <field name="name">Awaiting Fulfillment</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_change_state_awaiting_fulfill()</field>
+        </record>
+
+        <record id="action_create_item_production_id" model="ir.actions.server">
+            <field name="name">Create Production ID</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_create_item_production_id()</field>
+        </record>
+
+        <record id="action_creating_shipment_item" model="ir.actions.server">
+            <field name="name">Creating Shipment</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_creating_shipment_for_item_model()</field>
+        </record>
+
+        <record id="action_update_fulfill" model="ir.actions.server">
+            <field name="name">Update Fulfillment</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_update_fulfill()</field>
+        </record>
+
+        <record id="action_awating_design" model="ir.actions.server">
+            <field name="name">Awaiting Design</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_set_awaiting_design_level()</field>
         </record>
 
         <record id="crosify_menu_sale_order_line_action" model="ir.actions.act_window">

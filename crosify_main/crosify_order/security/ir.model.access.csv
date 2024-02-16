@@ -24,3 +24,7 @@
 "access_product_type_shelf_type","access_product_type_shelf_type","model_product_type_shelf_type",,1,1,1,1
 "access_sale_order_type","access_sale_order_type","model_sale_order_type",,1,1,1,1
 "access_fulfill_error","access_fulfill_error","model_fulfill_error",,1,1,1,1
+
+"access_sale_order_line_operator","access_sale_order_line_operator","model_sale_order_line",crosify_order.group_sale_team_operator,1,1,1,0
+
+"access_update_fulfillment_wizard","access_update_fulfillment_wizard","model_update_fulfillment_wizard",,1,1,1,1
