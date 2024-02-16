@@ -11,7 +11,6 @@ class UpdateFulFillmentWizard(models.TransientModel):
         ('default', "Update Fulfillment By System Config"),
         ('specific_user', "Update Fulfillment For Specific User")
     ], default='default', required=True)
-    update_user_ids = fields.Many2many('update.fulfillment.user.config', string='Update User')
     production_vendor_id = fields.Many2one('res.partner', string='Product Vendor')
     packaging_vendor_id = fields.Many2one('res.partner', string='Packaging Vendor')
     shipping_vendor_id = fields.Many2one('res.partner', string='Shipping Vendor')
