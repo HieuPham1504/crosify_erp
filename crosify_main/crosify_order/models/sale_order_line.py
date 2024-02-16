@@ -230,7 +230,26 @@ class SaleOrderLine(models.Model):
             "target": "new",
         }
 
+    @api.model
+    def action_creating_shipment_for_item_model(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        items.action_creating_shipment_for_item()
 
+
+    def action_creating_shipment_for_item(self):
+        current_employee = self.env.user.employee_id
+        sub_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L2.3')], limit=1)
+        if not sub_level:
+            raise ValidationError('There is no state with level Creating Shipment')
+        for rec in self:
+            rec.write({
+                'is_upload_tkn': True,
+                'upload_tkn_date': fields.Datetime.now(),
+                'upload_tkn_by': current_employee.id,
+                'sublevel_id': sub_level.id,
+                'level_id': sub_level.parent_id.id,
+            })
 
 
 
