@@ -86,6 +86,22 @@ class SaleOrder(models.Model):
             if not item_sublevel or item_sublevel.level.strip() == 'L1' or item_sublevel.level.strip() == 'L1.1':
                 item.sublevel_id = level.id
 
+    @api.model
+    def action_creating_shipment_for_order_model(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        items.action_creating_shipment_for_order()
+    def action_creating_shipment_for_order(self):
+        current_employee = self.env.user.employee_id
+        now = fields.Datetime.now()
+        for rec in self:
+            rec.write({
+                'is_upload_tkn': True,
+                'update_tkn_date': now,
+                'update_tkn_employee_id': current_employee.id,
+            })
+            can_update_tkn_items = rec.order_line.filtered(lambda item: item.is_upload_tkn)
+            can_update_tkn_items.action_creating_shipment_for_item()
 
 
 

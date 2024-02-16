@@ -116,6 +116,7 @@
                                             <field name="tkn_url"/>
                                             <field name="upload_tkn_date"/>
                                             <field name="upload_tkn_by" options='{"no_create": True}'/>
+                                            <field name="is_upload_tkn"/>
                                         </group>
                                     </group>
                                     <group name="other" string="FULFILLMENT OTHER">
@@ -217,6 +218,16 @@
             <field name="state">code</field>
             <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_create_item_production_id()</field>
+        </record>
+
+        <record id="action_creating_shipment_item" model="ir.actions.server">
+            <field name="name">Creating Shipment</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_creating_shipment_for_item_model()</field>
         </record>
 
         <record id="action_update_fulfill" model="ir.actions.server">
