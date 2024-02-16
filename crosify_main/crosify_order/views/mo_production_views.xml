@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mo_production_tree_view" model="ir.ui.view">
+            <field name="name">mo_production_tree_view</field>
+            <field name="model">mo.production</field>
+            <field name="arch" type="xml">
+                <tree string="Productions">
+                    <field name="code"/>
+                    <field name="date"/>
+                    <field name="employee_id"/>
+                    <field name="note"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="mo_production_form_view" model="ir.ui.view">
+            <field name="name">mo_production_form_view</field>
+            <field name="model">mo.production</field>
+            <field name="arch" type="xml">
+                <form string="Productions">
+                    <sheet>
+                        <header>
+                            <button name="action_produce_items" string="Produce Items"
+                                    type="object" class="oe_highlight" data-hotkey="w" title="Produce Items"
+                                    invisible="state == 'production'"/>
+                            <button name="action_back_to_designed_items" string="Back to Designed"
+                                    type="object" class="oe_highlight" data-hotkey="w" title="Back to Designed"
+                                    invisible="state == 'draft'"/>
+                            <field name="state" invisible="1"/>
+                        </header>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="code" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group name="main-description">
+                            <group>
+                                <field name="date"/>
+                                <field name="employee_id"/>
+                                <field name="note"/>
+                            </group>
+                            <group></group>
+                        </group>
+                        <notebook>
+                            <page string="Items" name="items">
+                                <field name="mo_production_line_ids">
+                                    <tree editable="bottom">
+                                        <field name="sale_order_line_id" readonly="0"/>
+                                        <field name="product_id" readonly="1"/>
+                                        <field name="attribute_value_ids" readonly="1" widget="many2many_tags"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="crosify_menu_mo_production_action" model="ir.actions.act_window">
+            <field name="name">Productions</field>
+            <field name="res_model">mo.production</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="crosify_menu_mo_production"
+                  name="Productions"
+                  action="crosify_menu_mo_production_action"
+                  parent="sale.sale_order_menu"
+                  sequence="22"/>
+    </data>
+</odoo>
