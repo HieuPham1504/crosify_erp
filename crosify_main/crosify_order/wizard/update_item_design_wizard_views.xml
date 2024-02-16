@@ -8,7 +8,7 @@
                     <sheet>
 
                         <field name="sale_order_line_ids" nolabel="1" options="{'no_quick_create': True, 'no_create_edit' : True}">
-                            <tree string="Items" editable="bottom">
+                            <tree string="Items" editable="bottom" create="false" delete="false">
                                 <field name="name" string="Items" readonly="1"/>
                                 <field name="production_id" readonly="1"/>
                                 <field name="product_type" readonly="1"/>
