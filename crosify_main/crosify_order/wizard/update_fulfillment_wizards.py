@@ -35,11 +35,10 @@ class UpdateFulFillmentWizard(models.TransientModel):
                     'shipping_vendor_id': 'shipping_vendor_id',
                 }
                 for field in item_fields_mapping:
-                    if not item[field]:
-                        if update_type == 'default':
-                            item[field] = product_type_fulfill_data[item_fields_mapping[field]].id
-                        else:
-                            item[field] = self[field].id
+                    if update_type == 'default':
+                        item[field] = product_type_fulfill_data[item_fields_mapping[field]].id
+                    else:
+                        item[field] = self[field].id
 
 
                 item.fulfill_employee_id = employee_id
