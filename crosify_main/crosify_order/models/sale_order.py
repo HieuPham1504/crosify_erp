@@ -51,7 +51,7 @@ class SaleOrder(models.Model):
     cancel_reason = fields.Text(string='Cancel Reason')
     tkn = fields.Char(string='TKN Code')
     tkn_url = fields.Text(string='TKN URL')
-    update_tkn_date = fields.Date(string='Update TKN Date')
+    update_tkn_date = fields.Datetime(string='Update TKN Date')
     update_tkn_employee_id = fields.Many2one('hr.employee', string='Update TKN By')
     is_upload_tkn = fields.Boolean(string='Is Upload TKN')
     tracking_note = fields.Text(string='Note')
@@ -100,7 +100,7 @@ class SaleOrder(models.Model):
                 'update_tkn_date': now,
                 'update_tkn_employee_id': current_employee.id,
             })
-            can_update_tkn_items = rec.order_line.filtered(lambda item: item.is_upload_tkn)
+            can_update_tkn_items = rec.order_line.filtered(lambda item: not item.is_upload_tkn)
             can_update_tkn_items.action_creating_shipment_for_item()
 
 
