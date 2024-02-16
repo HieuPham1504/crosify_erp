@@ -19,6 +19,7 @@ Key Features
     'depends': ['sale_management', 'sale', 'account', 'stock', 'hr'],
     'data': [
         'security/sale_operator_security.xml',
+        'security/designer_security.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence_sku.xml',
         'data/ir_parameter_data.xml',
@@ -35,6 +36,7 @@ Key Features
         'views/sale_order_type_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
+        'wizard/update_item_design_wizard_views.xml',
     ],
     'demo': [],
     'installable': True,

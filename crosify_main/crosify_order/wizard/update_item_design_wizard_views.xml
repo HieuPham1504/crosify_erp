@@ -1,0 +1,30 @@
+<odoo>
+    <data>
+        <record id="update_item_design_wizard_form_view" model="ir.ui.view">
+            <field name="name">update_item_design_wizard_form_view</field>
+            <field name="model">update.item.design.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+
+                        <field name="sale_order_line_ids" nolabel="1" options="{'no_quick_create': True, 'no_create_edit' : True}">
+                            <tree string="Items" editable="bottom">
+                                <field name="name" string="Items" readonly="1"/>
+                                <field name="production_id" readonly="1"/>
+                                <field name="product_type" readonly="1"/>
+                                <field name="design_file_url" readonly="0"/>
+                            </tree>
+                        </field>
+
+
+                    </sheet>
+                    <footer>
+                        <button string="Update Design" name="action_update_design_file" type="object"
+                                class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

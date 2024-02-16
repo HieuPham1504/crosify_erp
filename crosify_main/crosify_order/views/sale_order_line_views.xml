@@ -20,6 +20,10 @@
                             domain="[('sublevel_id.level', '=', 'L1.1')]"
                             help="Paid Order Items"/>
                     <separator/>
+                    <filter string="Awaiting Design Items" name="awaiting_design_items"
+                            domain="[('sublevel_id.level', '=', 'L3.1')]"
+                            help="Awaiting Design Items"/>
+                    <separator/>
                 </xpath>
 
                 <xpath expr="//filter[@name='salesperson']" position="attributes">
@@ -248,6 +252,16 @@
             <field name="state">code</field>
             <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_set_awaiting_design_level()</field>
+        </record>
+
+        <record id="action_update_item_design_info" model="ir.actions.server">
+            <field name="name">Design</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_designer_team'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_update_item_design_info()</field>
         </record>
 
         <record id="crosify_menu_sale_order_line_action" model="ir.actions.act_window">
