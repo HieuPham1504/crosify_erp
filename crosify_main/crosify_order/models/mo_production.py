@@ -1,0 +1,70 @@
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
+
+class MOProduction(models.Model):
+    _name = 'mo.production'
+    _description = 'Production'
+    _rec_name = 'code'
+    _order = 'date desc'
+
+    code = fields.Char(string='Code')
+    date = fields.Date(string='Date', required=True)
+    employee_id = fields.Many2one('hr.employee', 'Employee', required=True)
+    note = fields.Text(string='Note')
+    mo_production_line_ids = fields.One2many('mo.production.line', 'production_id', string='Production Lines')
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('production', 'Production')
+    ], string='State', default='draft')
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        results = super(MOProduction, self).create(vals_list)
+        for val in results:
+            if not val.code:
+                val.code = self.env['ir.sequence'].sudo().next_by_code('mo.production.code') or _('New')
+            val.action_set_item_start_info()
+        return results
+
+    def action_set_item_start_info(self):
+        for line in self.mo_production_line_ids:
+            data = {}
+            if self.date:
+                data.update({
+                    'production_start_date': self.date
+                })
+            if self.note:
+                data.update({
+                    'production_note': self.note
+                })
+            line.sale_order_line_id.write(data)
+
+    def action_produce_items(self):
+        production_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.1')], limit=1)
+        if not production_level:
+            raise ValidationError('There is no state with level Production')
+        for rec in self:
+            for line in rec.mo_production_line_ids:
+                item = line.sale_order_line_id
+                item.write({
+                    'sublevel_id': production_level.id,
+                    'level_id': production_level.parent_id.id,
+                    'production_done_date': fields.Date.today()
+                })
+            rec.state = 'production'
+
+    def action_back_to_designed_items(self):
+        designed_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L3.2')], limit=1)
+        if not designed_level:
+            raise ValidationError('There is no state with level Designed')
+        for rec in self:
+            for line in rec.mo_production_line_ids:
+                item = line.sale_order_line_id
+                item.write({
+                    'sublevel_id': designed_level.id,
+                    'level_id': designed_level.parent_id.id,
+                    'production_done_date': False
+                })
+            rec.state = 'draft'
+
+

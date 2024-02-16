@@ -55,7 +55,7 @@ class SaleOrderLine(models.Model):
     personalize = fields.Char(string='Personalize', tracking=1)
     package_size = fields.Char(string='Package Size')
     product_code = fields.Char(string='Product Code')
-    product_type = fields.Char(string='Product Type', related='product_id.product_tmpl_id.product_type', store=True, index=True)
+    product_type = fields.Char(string='Product Type', related='product_id.product_tmpl_product_type', store=True, index=True)
     color_set_name = fields.Char(string='Color Set Name')
     design_serial_number = fields.Char(string='Design Serial Number')
     accessory_name = fields.Char(string='Accessory Name')
