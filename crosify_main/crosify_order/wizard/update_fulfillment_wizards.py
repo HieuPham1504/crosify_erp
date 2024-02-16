@@ -20,7 +20,6 @@ class UpdateFulFillmentWizard(models.TransientModel):
         items = self.env['sale.order.line'].sudo().search([('id', 'in', item_ids)], order='id asc')
         employee_id = self.env.user.employee_id.id
         update_type = self.update_type
-        update_user_ids = self.update_user_ids
         for item in items:
             product_type_fulfill_data = self.env['sale.order.product.type.fulfill'].sudo().search(
                 [('product_type_id', '=', item.product_id.product_tmpl_id.id)], limit=1)
