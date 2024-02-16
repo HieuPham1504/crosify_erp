@@ -251,6 +251,20 @@ class SaleOrderLine(models.Model):
                 'level_id': sub_level.parent_id.id,
             })
 
+    @api.model
+    def action_set_awaiting_design_level(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        if any(item.sublevel_id.level != 'L2.3' for item in items):
+            raise ValidationError('There is an Item with a different status than Creating Shipment')
+        awaiting_design_sub_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L3.1')], limit=1)
+        if not awaiting_design_sub_level:
+            raise ValidationError('There is no state with level Awaiting Design')
+        for item in items:
+            item.write({
+                'sublevel_id': awaiting_design_sub_level.id,
+                'level_id': awaiting_design_sub_level.parent_id.id,
+            })
 
 
 

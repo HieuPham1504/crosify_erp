@@ -240,6 +240,16 @@
             <field name="code">action = model.action_update_fulfill()</field>
         </record>
 
+        <record id="action_awating_design" model="ir.actions.server">
+            <field name="name">Awaiting Design</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_set_awaiting_design_level()</field>
+        </record>
+
         <record id="crosify_menu_sale_order_line_action" model="ir.actions.act_window">
             <field name="name">Items</field>
             <field name="res_model">sale.order.line</field>
