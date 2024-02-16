@@ -278,7 +278,9 @@ class SaleOrderLine(models.Model):
         return {
             "type": "ir.actions.act_window",
             "res_model": "update.item.design.wizard",
-            "context": {},
+            "context": {
+                "create": 0
+            },
             "res_id": wizard.id,
             "name": "Update Design File",
             'view_mode': 'form',
