@@ -8,7 +8,7 @@ class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'sale.order.line']
 
-    @api.constrains('production_id')
+    @api.constrains('production_idproduction_id')
     def _check_production_id(self):
         for record in self:
             production_id = record.production_id
@@ -86,10 +86,10 @@ class SaleOrderLine(models.Model):
     fulfill_employee_id = fields.Many2one('hr.employee', string='Fulfill By', index=True)
 
     #Design
-    designer_id = fields.Many2one('hr.employee', string='Designer')
-    design_file_url = fields.Text(string='Design File')
+    designer_id = fields.Many2one('hr.employee', string='Designer', tracking=1)
+    design_file_url = fields.Text(string='Design File', tracking=1)
     design_file_name = fields.Text(string='Design File Name')
-    design_date = fields.Date(string='Design Date')
+    design_date = fields.Date(string='Design Date', tracking=1)
     variant = fields.Text(string='Variant')
     #tab production
     production_id = fields.Char(string='Production ID', tracking=1)
@@ -266,7 +266,24 @@ class SaleOrderLine(models.Model):
                 'level_id': awaiting_design_sub_level.parent_id.id,
             })
 
-
+    @api.model
+    def action_update_item_design_info(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        if any(item.sublevel_id.level != 'L3.1' for item in items):
+            raise ValidationError('There is an Item with a different status than Awaiting Design')
+        wizard = self.env['update.item.design.wizard'].sudo().create({
+            'sale_order_line_ids': [(6, 0, item_ids)]
+        })
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "update.item.design.wizard",
+            "context": {},
+            "res_id": wizard.id,
+            "name": "Update Design File",
+            'view_mode': 'form',
+            "target": "new",
+        }
 
 
 
