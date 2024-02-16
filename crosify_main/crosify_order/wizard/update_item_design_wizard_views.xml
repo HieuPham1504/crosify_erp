@@ -12,7 +12,7 @@
                                 <field name="name" string="Items" readonly="1"/>
                                 <field name="production_id" readonly="1"/>
                                 <field name="product_type" readonly="1"/>
-                                <field name="design_file_url" readonly="0"/>
+                                <field name="design_file_url" readonly="0" width="280px"/>
                             </tree>
                         </field>
 
