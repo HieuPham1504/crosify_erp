@@ -138,6 +138,8 @@ class SaleOrderLine(models.Model):
     update_by = fields.Char(string='MyAdmin Update By')
     chars = fields.Char(string='Chars')
     create_date = fields.Datetime(string='System Creation Date')
+    name = fields.Char(string='Name')
+
 
     def update_item_level_based_on_payment_status(self):
         for rec in self:
