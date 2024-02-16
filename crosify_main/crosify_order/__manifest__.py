@@ -33,7 +33,6 @@ Key Features
         'views/fulfill_shelf_views.xml',
         'views/product_type_shelf_type_views.xml',
         'views/sale_order_type_views.xml',
-        'views/update_fulfillment_user_config_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
     ],
