@@ -11,11 +11,21 @@ class MOProduction(models.Model):
     date = fields.Date(string='Date', required=True)
     employee_id = fields.Many2one('hr.employee', 'Employee', required=True)
     note = fields.Text(string='Note')
-    mo_production_line_ids = fields.One2many('mo.production.line', 'production_id', string='Production Lines')
+    mo_production_line_ids = fields.Many2many('sale.order.line', 'mo_production_so_line_rel', string='Items')
     state = fields.Selection([
         ('draft', 'Draft'),
         ('production', 'Production')
     ], string='State', default='draft')
+
+    @api.constrains('mo_production_line_ids')
+    def constraint_sale_order_line_id(self):
+        for rec in self:
+            for item in rec.mo_production_line_ids:
+                duplicate_item = self.sudo().search(
+                    [('mo_production_line_ids', 'in', item.ids), ('id', '!=', rec.id)])
+                if duplicate_item:
+                    raise ValidationError(
+                        _(f"This Item {item.display_name} already exists in Productions {','.join(code for code in duplicate_item.mapped('code'))}"))
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -37,15 +47,14 @@ class MOProduction(models.Model):
                 data.update({
                     'production_note': self.note
                 })
-            line.sale_order_line_id.write(data)
+            line.write(data)
 
     def action_produce_items(self):
         production_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.1')], limit=1)
         if not production_level:
             raise ValidationError('There is no state with level Production')
         for rec in self:
-            for line in rec.mo_production_line_ids:
-                item = line.sale_order_line_id
+            for item in rec.mo_production_line_ids:
                 item.write({
                     'sublevel_id': production_level.id,
                     'level_id': production_level.parent_id.id,
@@ -58,8 +67,7 @@ class MOProduction(models.Model):
         if not designed_level:
             raise ValidationError('There is no state with level Designed')
         for rec in self:
-            for line in rec.mo_production_line_ids:
-                item = line.sale_order_line_id
+            for item in rec.mo_production_line_ids:
                 item.write({
                     'sublevel_id': designed_level.id,
                     'level_id': designed_level.parent_id.id,
