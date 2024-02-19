@@ -5,9 +5,14 @@ from odoo import api, fields, models
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    myadmin_order_id = fields.Char(string='Order ID')
-    order_id_fix = fields.Char(string='Order ID Fix')
-    crosify_create_date = fields.Datetime(string='Create Date')
+    _sql_constraints = [
+        ('myadmin_order_id_uniq', 'unique (myadmin_order_id)',
+         "The Order ID must be unique, this one is already assigned to another sale order."),
+    ]
+
+    myadmin_order_id = fields.Char(string='Order ID', required=True)
+    order_id_fix = fields.Char(string='Order ID Fix', tracking=1, required=False)
+    crosify_create_date = fields.Datetime(string='Create Date', default=fields.datetime.today(), required=True)
     shipping_firstname = fields.Char(string='Shipping First Name')
     shipping_lastname = fields.Char(string='Shipping Last Name')
     shipping_address = fields.Char(string='Shipping Address')
@@ -21,9 +26,9 @@ class SaleOrder(models.Model):
     label_file_attachment = fields.Binary(string="Label File")
     label_file_store_name = fields.Char(string="File Name")
     #payment
-    payment_at = fields.Datetime(string='Payment At')
+    payment_at = fields.Datetime(string='Payment Date')
     currency_id = fields.Many2one('res.currency', string='Currency')
-    payment_status = fields.Boolean(string='Payment Status')
+    payment_status = fields.Boolean(string='Payment Status', tracking=1)
     payment_method_id = fields.Many2one('payment.method', string='Payment Method')
     transaction_id = fields.Char(string='Transaction ID')
     discount_code = fields.Char(string='Discount Code')
@@ -46,7 +51,7 @@ class SaleOrder(models.Model):
     cancel_reason = fields.Text(string='Cancel Reason')
     tkn = fields.Char(string='TKN Code')
     tkn_url = fields.Text(string='TKN URL')
-    update_tkn_date = fields.Date(string='Update TKN Date')
+    update_tkn_date = fields.Datetime(string='Update TKN Date')
     update_tkn_employee_id = fields.Many2one('hr.employee', string='Update TKN By')
     is_upload_tkn = fields.Boolean(string='Is Upload TKN')
     tracking_note = fields.Text(string='Note')
@@ -58,5 +63,48 @@ class SaleOrder(models.Model):
     started_checkout_code = fields.Char(string='Started Checkout Code')
     crosify_update_date = fields.Datetime(string='Update Date')
     shipping_vendor_id = fields.Many2one('res.partner', string='Shipping Vendor')
+    order_payment_state = fields.Selection([
+        ('paid', "Paid"),
+        ('not_paid', "Not Paid")
+    ], default='not_paid', compute='compute_order_payment_state', store=True, index=True)
+    order_type_id = fields.Many2one('sale.order.type', string='Order Type', required=True, index=True)
+    state = fields.Selection(default='sale')
+
+    @api.depends('payment_status')
+    def compute_order_payment_state(self):
+        for rec in self:
+            rec.order_payment_state = 'paid' if rec.payment_status else 'not_paid'
+
+    @api.onchange('payment_status')
+    def onchange_order_payment_status(self):
+        payment_status = self.payment_status
+        level_code = 'L1.1' if payment_status else 'L1'
+        level = self.env['sale.order.line.level'].sudo().search([('level', '=', level_code)], limit=1)
+        items = self.order_line
+        for item in items:
+            item_sublevel = item.sublevel_id
+            if not item_sublevel or item_sublevel.level.strip() == 'L1' or item_sublevel.level.strip() == 'L1.1':
+                item.sublevel_id = level.id
+
+    @api.model
+    def action_creating_shipment_for_order_model(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        items.action_creating_shipment_for_order()
+    def action_creating_shipment_for_order(self):
+        current_employee = self.env.user.employee_id
+        now = fields.Datetime.now()
+        for rec in self:
+            rec.write({
+                'is_upload_tkn': True,
+                'update_tkn_date': now,
+                'update_tkn_employee_id': current_employee.id,
+            })
+            can_update_tkn_items = rec.order_line.filtered(lambda item: not item.is_upload_tkn)
+            can_update_tkn_items.action_creating_shipment_for_item()
+
+
+
+
 
 

@@ -188,7 +188,7 @@
 
             <xpath expr="//field[@name='validity_date']" position="after">
                 <field name="myadmin_order_id"/>
-                <field name="order_id_fix"/>
+                <field name="order_id_fix" required="1"/>
                 <field name="channel_ref_id"/>
                 <field name="crosify_create_date"/>
                 <field name="payment_status"/>
