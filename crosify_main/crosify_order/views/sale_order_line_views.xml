@@ -158,6 +158,9 @@
                                             <field name="production_done_date"/>
                                             <field name="production_status"/>
                                             <field name="production_note"/>
+                                            <field name="barcode_name" invisible="1"/>
+                                            <field name="barcode_file" filename="barcode_name"/>
+
                                         </group>
                                     </group>
                                 </page>
@@ -215,7 +218,8 @@
             <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_view_types">form,list</field>
             <field name="state">code</field>
-            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_change_state_awaiting_fulfill()</field>
         </record>
 
@@ -225,7 +229,8 @@
             <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_view_types">form,list</field>
             <field name="state">code</field>
-            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_create_item_production_id()</field>
         </record>
 
@@ -235,7 +240,8 @@
             <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_view_types">form,list</field>
             <field name="state">code</field>
-            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_creating_shipment_for_item_model()</field>
         </record>
 
@@ -245,7 +251,8 @@
             <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_view_types">form,list</field>
             <field name="state">code</field>
-            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_update_fulfill()</field>
         </record>
 
@@ -255,7 +262,8 @@
             <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_view_types">form,list</field>
             <field name="state">code</field>
-            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_set_awaiting_design_level()</field>
         </record>
 
@@ -265,7 +273,8 @@
             <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_view_types">form,list</field>
             <field name="state">code</field>
-            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_designer_team'), ref('base.group_system')])]"/>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_designer_team'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_update_item_design_info()</field>
         </record>
 
@@ -275,8 +284,20 @@
             <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_view_types">form,list</field>
             <field name="state">code</field>
-            <field name="groups_id" eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_create_production_for_item()</field>
+        </record>
+
+        <record id="action_generate_barcode_for_item" model="ir.actions.server">
+            <field name="name">Generate Barcode</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_generate_item_barcode_server()</field>
         </record>
 
         <record id="crosify_menu_sale_order_line_action" model="ir.actions.act_window">

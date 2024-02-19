@@ -3,6 +3,8 @@
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from datetime import datetime
+import base64
+
 
 class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
@@ -139,6 +141,8 @@ class SaleOrderLine(models.Model):
     chars = fields.Char(string='Chars')
     create_date = fields.Datetime(string='System Creation Date')
     name = fields.Char(string='Name')
+    barcode_file = fields.Binary(string='Item Barcode')
+    barcode_name = fields.Char(string='Barcode Name')
 
 
     def update_item_level_based_on_payment_status(self):
@@ -317,6 +321,30 @@ class SaleOrderLine(models.Model):
                 name = f'{name} - {so_line.production_id}'
             so_line.display_name = name
 
+    @api.model
+    def action_generate_item_barcode_server(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        if any(not item.product_id for item in items):
+            raise ValidationError('Could not generate barcode for None Product_id Item')
+        items.action_generate_item_barcode()
+
+    def action_generate_item_barcode(self):
+        for rec in self:
+            production_id = rec.production_id
+            try:
+                barcode = self.env['ir.actions.report'].barcode(barcode_type='Code128', value=f'{production_id}', width=120,
+                                                                height=120,
+                                                               humanreadable='param humanreadable')
+            except (ValueError, AttributeError):
+                raise ValidationError('Cannot convert into barcode.')
+
+            barcode = base64.b64encode(barcode)
+
+            rec.write({
+                'barcode_file': barcode,
+                'barcode_name': production_id,
+            })
 
 
 
