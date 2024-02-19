@@ -122,32 +122,14 @@ class SaleOrderController(Controller):
             return Response("Bad Request", status=400)
         else:
 
-            # shipping_state_sql = f"""
-            # select id
-            #         from res_country_state
-            #         where code = '{data.get('StateCode')}'
-            #         limit 1
-            # """
-            # request.env.cr.execute(shipping_state_sql)
-            # shipping_state = request.env.cr.fetchone()
+            shipping_country = request.env['res.country'].sudo().search([('code', '=', data.get('CountryCode'))],
+                                                                        limit=1)
+            shipping_country_id = shipping_country.id
 
-            shipping_state = request.env['res.country.state'].sudo().search([('code', '=', data.get('StateCode'))], limit=1)
+            shipping_state = request.env['res.country.state'].sudo().search([('code', '=', data.get('StateCode')), ('country_id', '=', shipping_country_id)], limit=1)
 
             shipping_state_id = shipping_state.id
 
-            # shipping_country_sql = f"""
-            # select id
-            #         from res_country
-            #         where code = '{data.get('CountryCode')}'
-            #         limit 1
-            # 
-            # """
-            #
-            # request.env.cr.execute(shipping_country_sql)
-            # shipping_country = request.env.cr.fetchone()
-
-            shipping_country = request.env['res.country'].sudo().search([('code', '=', data.get('CountryCode'))], limit=1)
-            shipping_country_id = shipping_country.id
 
             partner_sql = f"""
             insert into res_partner(name, complete_name,street,street2,city,state_id,zip,country_id,phone,mobile,email) 
@@ -157,7 +139,7 @@ class SaleOrderController(Controller):
             '{data.get('ShippingAddress', '')}',
             '{data.get('ShippingApartment', '')}',
             '{data.get('ShippingCity', '')}',
-            {shipping_state_id},
+            {shipping_state_id if shipping_state_id else 'null'},
             '{data.get('ShippingZipcode', '')}',
             {shipping_country_id},
             '{data.get('ShippingPhonenumber', '')}',
