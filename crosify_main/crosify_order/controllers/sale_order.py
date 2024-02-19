@@ -531,7 +531,7 @@ class SaleOrderController(Controller):
             return response
             # return Response("Success", status=200)
 
-    @route("/api/sale_orders/<int:my_admin_order_id>", methods=["PUT"], type="json", auth="public", cors="*")
+    @route("/api/sale_orders/<int:my_admin_order_id>", methods=["POST"], type="json", auth="public", cors="*")
     def action_update_sale_order(self, my_admin_order_id, **kwargs):
         data = request.get_json_data()
         # verified = self.verify_webhook(data, request.httprequest.headers['X-Crosify-Hmac-SHA256'])
