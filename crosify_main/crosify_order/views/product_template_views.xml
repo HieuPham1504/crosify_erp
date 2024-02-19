@@ -168,7 +168,8 @@
             <field name="inherit_id" ref="product.product_template_search_view" />
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="before">
-                    <field name="design_number" string="Product" filter_domain="['|', '|', ('name', 'ilike', self), ('product_type', 'ilike', self), ('design_number', 'ilike', self)]"/>
+                    <field name="design_number" string="Product"
+                        filter_domain="['|', '|', ('name', 'ilike', self), ('product_type', 'ilike', self), ('design_number', 'ilike', self)]" />
                 </xpath>
                 <field name="name" position="attributes">
                     <attribute name="string">Name</attribute>
@@ -177,8 +178,12 @@
                     <field name="product_type" string="Product Type" />
                     <field name="design_number" string="Design Number" />
                 </xpath>
-                <xpath expr="//field[@name='categ_id']" position="replace"/>
-                <xpath expr="//field[@name='attribute_line_ids']" position="replace"/>
+                <xpath expr="//field[@name='categ_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='attribute_line_ids']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
             </field>
         </record>
     </data>
