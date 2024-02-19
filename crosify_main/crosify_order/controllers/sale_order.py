@@ -139,7 +139,7 @@ class SaleOrderController(Controller):
             '{data.get('ShippingAddress', '')}',
             '{data.get('ShippingApartment', '')}',
             '{data.get('ShippingCity', '')}',
-            {shipping_state_id},
+            {shipping_state_id if shipping_state_id else 'null'},
             '{data.get('ShippingZipcode', '')}',
             {shipping_country_id},
             '{data.get('ShippingPhonenumber', '')}',
