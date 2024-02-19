@@ -382,7 +382,18 @@ class SaleOrderController(Controller):
                     
                     '{line.get('ExtraService', '')}',
                     '{line.get('FulfillNote', '')}',
-                    '{line.get('FulfillDate', '')}',
+                    """
+
+                    if line.get('FulfillDate') is None:
+
+                        create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                '{line.get('FulfillDate', '')}',
+                                                """
+
+
+                    create_order_line_sql += f"""
                     {line.get('Priority', '')},
                     """
 
