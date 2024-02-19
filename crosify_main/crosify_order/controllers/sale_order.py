@@ -122,13 +122,14 @@ class SaleOrderController(Controller):
             return Response("Bad Request", status=400)
         else:
 
-            shipping_state = request.env['res.country.state'].sudo().search([('code', '=', data.get('StateCode'))], limit=1)
+            shipping_country = request.env['res.country'].sudo().search([('code', '=', data.get('CountryCode'))],
+                                                                        limit=1)
+            shipping_country_id = shipping_country.id
+
+            shipping_state = request.env['res.country.state'].sudo().search([('code', '=', data.get('StateCode')), ('country_id', '=', shipping_country_id)], limit=1)
 
             shipping_state_id = shipping_state.id
 
-
-            shipping_country = request.env['res.country'].sudo().search([('code', '=', data.get('CountryCode'))], limit=1)
-            shipping_country_id = shipping_country.id
 
             partner_sql = f"""
             insert into res_partner(name, complete_name,street,street2,city,state_id,zip,country_id,phone,mobile,email) 
@@ -138,9 +139,9 @@ class SaleOrderController(Controller):
             '{data.get('ShippingAddress', '')}',
             '{data.get('ShippingApartment', '')}',
             '{data.get('ShippingCity', '')}',
-            {shipping_state_id},
+            {shipping_state_id if shipping_state_id else 'null'},
             '{data.get('ShippingZipcode', '')}',
-            {shipping_country_id},
+            {shipping_country_id if shipping_country_id else 'null'},
             '{data.get('ShippingPhonenumber', '')}',
             '{data.get('ShippingPhonenumber', '')}',
             '{data.get('ContactEmail', '')}'
@@ -150,6 +151,8 @@ class SaleOrderController(Controller):
 
             request.env.cr.execute(partner_sql)
             partner_id = request.env.cr.fetchone()
+
+            order_type_id = request.env['sale.order.type'].sudo().search([('order_type_name', '=', 'Normal')], limit=1)
 
             create_order_sql = f"""
                 with currency as (
@@ -214,7 +217,8 @@ class SaleOrderController(Controller):
                 partner_id,
                 partner_invoice_id,
                 partner_shipping_id,
-                date_order
+                date_order,
+                order_type_id
 --                 warehouse_id,
 --                 picking_policy
                 ) 
@@ -234,7 +238,7 @@ class SaleOrderController(Controller):
             create_order_sql += f"""
                        '{data.get('rating', '')}', '{data.get('review', '')}', '{data.get('Updatedat')}', (select order_update_employee.id from order_update_employee),
                        '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', )}, 
-                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now() 
+                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now(), {order_type_id.id}
              Returning id
             """
             request.env.cr.execute(create_order_sql)
@@ -378,7 +382,18 @@ class SaleOrderController(Controller):
                     
                     '{line.get('ExtraService', '')}',
                     '{line.get('FulfillNote', '')}',
-                    '{line.get('FulfillDate', '')}',
+                    """
+
+                    if line.get('FulfillDate') is None:
+
+                        create_order_line_sql += "null,"
+                    else:
+                        create_order_line_sql += f"""
+                                                '{line.get('FulfillDate', '')}',
+                                                """
+
+
+                    create_order_line_sql += f"""
                     {line.get('Priority', '')},
                     """
 
