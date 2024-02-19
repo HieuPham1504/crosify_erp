@@ -130,7 +130,7 @@ class SaleOrderController(Controller):
             """
 
             request.env.cr.execute(shipping_state_sql)
-            shipping_state_id = request.env.cr.fetchone()[0]
+            shipping_state_id = request.env.cr.fetchone()
 
             shipping_country_sql = f"""
             select id 
@@ -151,7 +151,7 @@ class SaleOrderController(Controller):
             '{data.get('ShippingAddress', '')}',
             '{data.get('ShippingApartment', '')}',
             '{data.get('ShippingCity', '')}',
-            {shipping_state_id},
+            {shipping_state_id[0]},
             '{data.get('ShippingZipcode', '')}',
             {shipping_country_id},
             '{data.get('ShippingPhonenumber', '')}',
@@ -233,7 +233,7 @@ class SaleOrderController(Controller):
                 ) 
                 Select '{data.get('Name', '')}', '{data.get('Orderid', '')}', '{data.get('Transactionid', '')}', '{data.get('ChannelRefID', '')}', '{data.get('ShippingFirstname', '')}',
                        '{data.get('ShippingLastname', '')}', '{data.get('ShippingAddress', '')}', '{data.get('ShippingCity', '')}', '{data.get('shipping_zipcode', '')}', 
-                       {shipping_country_id}, {shipping_state_id}, 
+                       {shipping_country_id}, {shipping_state_id[0]}, 
                        '{data.get('ShippingPhonenumber', '')}', '{data.get('ShippingApartment', '')}', '{data.get('ContactEmail', '')}', '{data.get('CustomerNote', '')}',
                        '{data.get('ClientSecret', '')}', '{data.get('Domain', '')}', {data.get('Tip', False)}, {data.get('ShippingCost', False)}, {data.get('Subtotal', False)},
                        {data.get('Discount')}, {data.get('TotalAmount')}, '{data.get('Paymentat')}',  (select currency.id from currency), 
