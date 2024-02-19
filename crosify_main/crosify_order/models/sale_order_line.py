@@ -269,6 +269,25 @@ class SaleOrderLine(models.Model):
             })
 
     @api.model
+    def action_create_production_for_item(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        if any(item.sublevel_id.level != 'L3.2' for item in items):
+            raise ValidationError('There is an Item with a different status than Designed')
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "mo.production",
+            "context": {
+                'default_date': fields.Date.today(),
+                'default_employee_id': self.env.user.employee_id.id,
+                'default_mo_production_line_ids': [(6, 0, item_ids)],
+            },
+            "name": "Production",
+            'view_mode': 'form',
+            "target": "current",
+        }
+
+    @api.model
     def action_update_item_design_info(self):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
@@ -289,6 +308,14 @@ class SaleOrderLine(models.Model):
             "target": "new",
         }
 
+    @api.depends('order_partner_id', 'order_id', 'product_id')
+    def _compute_display_name(self):
+        for so_line in self.sudo():
+            name = '{} - {}'.format(so_line.order_id.name,
+                                    so_line.name and so_line.name.split('\n')[0] or so_line.product_id.name)
+            if so_line.production_id:
+                name = f'{name} - {so_line.production_id}'
+            so_line.display_name = name
 
 
 
