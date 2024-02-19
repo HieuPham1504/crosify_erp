@@ -3,11 +3,23 @@
         <record id="product_category_form_view_inherit" model="ir.ui.view">
             <field name="name">product_category_form_view_inherit</field>
             <field name="model">product.category</field>
-            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="inherit_id" ref="product.product_category_form_view" />
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='parent_id']" position="before">
-                    <field name="product_category_code"/>
+                    <field name="product_category_code" />
                 </xpath>
+            </field>
+        </record>
+
+        <record id="product_category_search_view_inherit" model="ir.ui.view">
+            <field name="name">product_category_search_view_inherit</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_search_view" />
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="string">Product Categories</attribute>
+                    <attribute name="filter_domain">['|', ('product_category_code', 'ilike', self), ('name', 'ilike', self)]</attribute>
+                </field>
             </field>
         </record>
     </data>
