@@ -11,7 +11,7 @@ class MOProduction(models.Model):
     date = fields.Date(string='Date', required=True)
     employee_id = fields.Many2one('hr.employee', 'Employee', required=True)
     note = fields.Text(string='Note')
-    mo_production_line_ids = fields.Many2many('sale.order.line', 'mo_production_so_line_rel', string='Items')
+    mo_production_line_ids = fields.Many2many('sale.order.line', 'mo_production_so_line_rel', string='Items', domain=[('sublevel_id.level', '=', 'L3.2')])
     state = fields.Selection([
         ('draft', 'Draft'),
         ('production', 'Production')
