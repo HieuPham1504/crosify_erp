@@ -12,3 +12,4 @@ from . import fulfill_shelf
 from . import product_type_shelf_type
 from . import sale_order_type
 from . import fulfill_error
+from . import mo_production

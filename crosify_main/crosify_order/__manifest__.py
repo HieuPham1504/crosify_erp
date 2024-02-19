@@ -19,8 +19,10 @@ Key Features
     'depends': ['sale_management', 'sale', 'account', 'stock', 'hr'],
     'data': [
         'security/sale_operator_security.xml',
+        'security/designer_security.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence_sku.xml',
+        'data/ir_sequence_mo_production.xml',
         'data/ir_parameter_data.xml',
         'views/sale_order_views.xml',
         'views/sale_order_line_views.xml',
@@ -34,8 +36,10 @@ Key Features
         'views/product_type_shelf_type_views.xml',
         'views/sale_order_type_views.xml',
         'views/fulfill_error_views.xml',
+        'views/mo_production_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
+        'wizard/update_item_design_wizard_views.xml',
     ],
     'demo': [],
     'installable': True,
@@ -45,6 +49,7 @@ Key Features
             'crosify_order/static/src/css/sale_order_view_css.css',
             'crosify_order/static/src/xml/tax_totals.xml',
             'crosify_order/static/src/xml/form_status_indicator.xml',
+            'crosify_order/static/src/xml/list_renderer.xml',
         ],
         'web.assets_frontend': [
 

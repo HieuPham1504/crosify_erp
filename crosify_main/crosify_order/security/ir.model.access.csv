@@ -28,3 +28,7 @@
 "access_sale_order_line_operator","access_sale_order_line_operator","model_sale_order_line",crosify_order.group_sale_team_operator,1,1,1,0
 
 "access_update_fulfillment_wizard","access_update_fulfillment_wizard","model_update_fulfillment_wizard",,1,1,1,1
+
+"access_update_item_design_wizard_for_admin","access_update_item_design_wizard_for_admin","model_update_item_design_wizard",,1,1,1,1
+
+"access_mo_production","access_mo_production","model_mo_production",,1,1,1,1

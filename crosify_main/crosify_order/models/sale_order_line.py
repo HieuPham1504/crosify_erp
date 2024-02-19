@@ -8,7 +8,7 @@ class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'sale.order.line']
 
-    @api.constrains('production_id')
+    @api.constrains('production_idproduction_id')
     def _check_production_id(self):
         for record in self:
             production_id = record.production_id
@@ -39,8 +39,8 @@ class SaleOrderLine(models.Model):
         return [('parent_id', '=', level.id)]
 
     image_ids = fields.Many2many('ir.attachment', string='Images')
-    crosify_created_date = fields.Date(string='Create Date')
-    crosify_create_by = fields.Char(string='MyAdmin Created By')
+    crosify_created_date = fields.Datetime(string='Create Date')
+    crosify_create_by = fields.Char(string='Created By')
     product_sku = fields.Char(string='SKU', related='product_id.default_code', store=True, index=True)
     my_admin_order_id = fields.Char(string='Order ID', related='order_id.myadmin_order_id', store=True, index=True)
     my_admin_detailed_id = fields.Integer(string='My Admin Detailed ID', store=True, index=True)
@@ -55,7 +55,7 @@ class SaleOrderLine(models.Model):
     personalize = fields.Char(string='Personalize', tracking=1)
     package_size = fields.Char(string='Package Size')
     product_code = fields.Char(string='Product Code')
-    product_type = fields.Char(string='Product Type', related='product_id.product_tmpl_id.product_type', store=True, index=True)
+    product_type = fields.Char(string='Product Type', related='product_id.product_tmpl_product_type', store=True, index=True)
     color_set_name = fields.Char(string='Color Set Name')
     design_serial_number = fields.Char(string='Design Serial Number')
     accessory_name = fields.Char(string='Accessory Name')
@@ -81,15 +81,15 @@ class SaleOrderLine(models.Model):
     upload_tkn_date = fields.Datetime(string='Upload TKN Date')
     upload_tkn_by = fields.Many2one('hr.employee', string='Upload TKN By')
     is_upload_tkn = fields.Boolean(string='Is Upload TKN')
-    fulfill_date = fields.Date(string='Fulfill Date')
+    fulfill_date = fields.Datetime(string='Fulfill Date')
     note_fulfill = fields.Text(string='Fulfill Note')
     fulfill_employee_id = fields.Many2one('hr.employee', string='Fulfill By', index=True)
 
     #Design
-    designer_id = fields.Many2one('hr.employee', string='Designer')
-    design_file_url = fields.Text(string='Design File')
+    designer_id = fields.Many2one('hr.employee', string='Designer', tracking=1)
+    design_file_url = fields.Text(string='Design File', tracking=1)
     design_file_name = fields.Text(string='Design File Name')
-    design_date = fields.Date(string='Design Date')
+    design_date = fields.Datetime(string='Design Date', tracking=1)
     variant = fields.Text(string='Variant')
     #tab production
     production_id = fields.Char(string='Production ID', tracking=1)
@@ -111,13 +111,13 @@ class SaleOrderLine(models.Model):
     shipping_confirm_date = fields.Date(string='Shipping Confirm Date')
     packed_date = fields.Datetime(string='Packed Date')
     pickup_date = fields.Datetime(string='Pickup Date')
-    deliver_date = fields.Date(string='Deliver Date')
+    deliver_date = fields.Datetime(string='Deliver Date')
     deliver_status = fields.Char(string='Deliver Status')
     customer_received = fields.Boolean(string='Customer Received')
     #Tab Other Info
     note_change_request = fields.Text(string='Note Change Request')
-    cancel_date = fields.Date(string='Cancel Date')
-    cancel_reason = fields.Date(string='Cancel Reason')
+    cancel_date = fields.Datetime(string='Cancel Date')
+    cancel_reason = fields.Text(string='Cancel Reason')
     cancel_status = fields.Char(string='Cancel Status')
     dispute_status = fields.Char(string='Dispute Status')
     dispute_note = fields.Text(string='Dispute Note')
@@ -138,6 +138,8 @@ class SaleOrderLine(models.Model):
     update_by = fields.Char(string='MyAdmin Update By')
     chars = fields.Char(string='Chars')
     create_date = fields.Datetime(string='System Creation Date')
+    name = fields.Char(string='Name')
+
 
     def update_item_level_based_on_payment_status(self):
         for rec in self:
@@ -266,8 +268,54 @@ class SaleOrderLine(models.Model):
                 'level_id': awaiting_design_sub_level.parent_id.id,
             })
 
+    @api.model
+    def action_create_production_for_item(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        if any(item.sublevel_id.level != 'L3.2' for item in items):
+            raise ValidationError('There is an Item with a different status than Designed')
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "mo.production",
+            "context": {
+                'default_date': fields.Date.today(),
+                'default_employee_id': self.env.user.employee_id.id,
+                'default_mo_production_line_ids': [(6, 0, item_ids)],
+            },
+            "name": "Production",
+            'view_mode': 'form',
+            "target": "current",
+        }
 
+    @api.model
+    def action_update_item_design_info(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        if any(item.sublevel_id.level != 'L3.1' for item in items):
+            raise ValidationError('There is an Item with a different status than Awaiting Design')
+        wizard = self.env['update.item.design.wizard'].sudo().create({
+            'sale_order_line_ids': [(6, 0, item_ids)]
+        })
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "update.item.design.wizard",
+            "context": {
+                "create": 0
+            },
+            "res_id": wizard.id,
+            "name": "Update Design File",
+            'view_mode': 'form',
+            "target": "new",
+        }
 
+    @api.depends('order_partner_id', 'order_id', 'product_id')
+    def _compute_display_name(self):
+        for so_line in self.sudo():
+            name = '{} - {}'.format(so_line.order_id.name,
+                                    so_line.name and so_line.name.split('\n')[0] or so_line.product_id.name)
+            if so_line.production_id:
+                name = f'{name} - {so_line.production_id}'
+            so_line.display_name = name
 
 
 
