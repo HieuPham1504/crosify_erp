@@ -39,8 +39,8 @@ class SaleOrderLine(models.Model):
         return [('parent_id', '=', level.id)]
 
     image_ids = fields.Many2many('ir.attachment', string='Images')
-    crosify_created_date = fields.Date(string='Create Date')
-    crosify_create_by = fields.Char(string='MyAdmin Created By')
+    crosify_created_date = fields.Datetime(string='Create Date')
+    crosify_create_by = fields.Char(string='Created By')
     product_sku = fields.Char(string='SKU', related='product_id.default_code', store=True, index=True)
     my_admin_order_id = fields.Char(string='Order ID', related='order_id.myadmin_order_id', store=True, index=True)
     my_admin_detailed_id = fields.Integer(string='My Admin Detailed ID', store=True, index=True)
@@ -81,7 +81,7 @@ class SaleOrderLine(models.Model):
     upload_tkn_date = fields.Datetime(string='Upload TKN Date')
     upload_tkn_by = fields.Many2one('hr.employee', string='Upload TKN By')
     is_upload_tkn = fields.Boolean(string='Is Upload TKN')
-    fulfill_date = fields.Date(string='Fulfill Date')
+    fulfill_date = fields.Datetime(string='Fulfill Date')
     note_fulfill = fields.Text(string='Fulfill Note')
     fulfill_employee_id = fields.Many2one('hr.employee', string='Fulfill By', index=True)
 
@@ -89,7 +89,7 @@ class SaleOrderLine(models.Model):
     designer_id = fields.Many2one('hr.employee', string='Designer', tracking=1)
     design_file_url = fields.Text(string='Design File', tracking=1)
     design_file_name = fields.Text(string='Design File Name')
-    design_date = fields.Date(string='Design Date', tracking=1)
+    design_date = fields.Datetime(string='Design Date', tracking=1)
     variant = fields.Text(string='Variant')
     #tab production
     production_id = fields.Char(string='Production ID', tracking=1)
@@ -111,13 +111,13 @@ class SaleOrderLine(models.Model):
     shipping_confirm_date = fields.Date(string='Shipping Confirm Date')
     packed_date = fields.Datetime(string='Packed Date')
     pickup_date = fields.Datetime(string='Pickup Date')
-    deliver_date = fields.Date(string='Deliver Date')
+    deliver_date = fields.Datetime(string='Deliver Date')
     deliver_status = fields.Char(string='Deliver Status')
     customer_received = fields.Boolean(string='Customer Received')
     #Tab Other Info
     note_change_request = fields.Text(string='Note Change Request')
-    cancel_date = fields.Date(string='Cancel Date')
-    cancel_reason = fields.Date(string='Cancel Reason')
+    cancel_date = fields.Datetime(string='Cancel Date')
+    cancel_reason = fields.Text(string='Cancel Reason')
     cancel_status = fields.Char(string='Cancel Status')
     dispute_status = fields.Char(string='Dispute Status')
     dispute_note = fields.Text(string='Dispute Note')
