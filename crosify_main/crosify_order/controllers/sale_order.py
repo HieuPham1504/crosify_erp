@@ -141,7 +141,7 @@ class SaleOrderController(Controller):
             '{data.get('ShippingCity', '')}',
             {shipping_state_id if shipping_state_id else 'null'},
             '{data.get('ShippingZipcode', '')}',
-            {shipping_country_id},
+            {shipping_country_id if shipping_country_id else 'null'},
             '{data.get('ShippingPhonenumber', '')}',
             '{data.get('ShippingPhonenumber', '')}',
             '{data.get('ContactEmail', '')}'
