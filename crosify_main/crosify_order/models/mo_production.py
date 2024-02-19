@@ -53,6 +53,8 @@ class MOProduction(models.Model):
         if not production_level:
             raise ValidationError('There is no state with level Production')
         for rec in self:
+            if not rec.mo_production_line_ids:
+                continue
             for item in rec.mo_production_line_ids:
                 item.write({
                     'sublevel_id': production_level.id,
@@ -70,7 +72,7 @@ class MOProduction(models.Model):
                 item.write({
                     'sublevel_id': designed_level.id,
                     'level_id': designed_level.parent_id.id,
-                    'production_done_date': False
+                    'production_start_date': False
                 })
             rec.state = 'draft'
 
