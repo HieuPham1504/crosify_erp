@@ -141,7 +141,7 @@ class SaleOrderController(Controller):
             """
 
             request.env.cr.execute(shipping_country_sql)
-            shipping_country_id = request.env.cr.fetchone()[0]
+            shipping_country_id = request.env.cr.fetchone()
 
             partner_sql = f"""
             insert into res_partner(name, complete_name,street,street2,city,state_id,zip,country_id,phone,mobile,email) 
@@ -153,7 +153,7 @@ class SaleOrderController(Controller):
             '{data.get('ShippingCity', '')}',
             {shipping_state_id[0]},
             '{data.get('ShippingZipcode', '')}',
-            {shipping_country_id},
+            {shipping_country_id[0]},
             '{data.get('ShippingPhonenumber', '')}',
             '{data.get('ShippingPhonenumber', '')}',
             '{data.get('ContactEmail', '')}'
@@ -162,7 +162,7 @@ class SaleOrderController(Controller):
             """
 
             request.env.cr.execute(partner_sql)
-            partner_id = request.env.cr.fetchone()[0]
+            partner_id = request.env.cr.fetchone()
 
             create_order_sql = f"""
                 with currency as (
@@ -233,7 +233,7 @@ class SaleOrderController(Controller):
                 ) 
                 Select '{data.get('Name', '')}', '{data.get('Orderid', '')}', '{data.get('Transactionid', '')}', '{data.get('ChannelRefID', '')}', '{data.get('ShippingFirstname', '')}',
                        '{data.get('ShippingLastname', '')}', '{data.get('ShippingAddress', '')}', '{data.get('ShippingCity', '')}', '{data.get('shipping_zipcode', '')}', 
-                       {shipping_country_id}, {shipping_state_id[0]}, 
+                       {shipping_country_id[0]}, {shipping_state_id[0]}, 
                        '{data.get('ShippingPhonenumber', '')}', '{data.get('ShippingApartment', '')}', '{data.get('ContactEmail', '')}', '{data.get('CustomerNote', '')}',
                        '{data.get('ClientSecret', '')}', '{data.get('Domain', '')}', {data.get('Tip', False)}, {data.get('ShippingCost', False)}, {data.get('Subtotal', False)},
                        {data.get('Discount')}, {data.get('TotalAmount')}, '{data.get('Paymentat')}',  (select currency.id from currency), 
@@ -247,7 +247,7 @@ class SaleOrderController(Controller):
             create_order_sql += f"""
                        '{data.get('rating', '')}', '{data.get('review', '')}', '{data.get('Updatedat')}', (select order_update_employee.id from order_update_employee),
                        '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', )}, 
-                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id}, {partner_id}, {partner_id}, now() 
+                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now() 
              Returning id
             """
             request.env.cr.execute(create_order_sql)
@@ -611,9 +611,9 @@ class SaleOrderController(Controller):
                             """
 
                 request.env.cr.execute(partner_sql)
-                partner_id = request.env.cr.fetchone()[0]
+                partner_id = request.env.cr.fetchone()
                 update_order_sql += f"""
-                , partner_id = {partner_id}
+                , partner_id = {partner_id[0]}
                 """
             update_order_sql += f"""
             where id = {sale_order.id}
