@@ -616,7 +616,7 @@ class SaleOrderController(Controller):
                 , partner_id = {partner_id}
                 """
             update_order_sql += f"""
-            where id = {order_id}
+            where id = {sale_order.id}
             
             """
 
@@ -735,7 +735,7 @@ class SaleOrderController(Controller):
                 'status': 200,
                 'message': 'Updated Order',
                 'data': {
-                    'order_id': order_id
+                    'order_id': sale_order.id
                 }
             }
             return response
