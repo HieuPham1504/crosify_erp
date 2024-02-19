@@ -11,7 +11,7 @@ class MOProduction(models.Model):
     date = fields.Date(string='Date', required=True)
     employee_id = fields.Many2one('hr.employee', 'Employee', required=True)
     note = fields.Text(string='Note')
-    mo_production_line_ids = fields.Many2many('sale.order.line', 'mo_production_so_line_rel', string='Items', domain=[('sublevel_id.level', '=', 'L3.2')])
+    mo_production_line_ids = fields.Many2many('sale.order.line', 'mo_production_so_line_rel', string='Items')
     state = fields.Selection([
         ('draft', 'Draft'),
         ('production', 'Production')
@@ -33,7 +33,6 @@ class MOProduction(models.Model):
         for val in results:
             if not val.code:
                 val.code = self.env['ir.sequence'].sudo().next_by_code('mo.production.code') or _('New')
-            val.action_set_item_start_info()
         return results
 
     def action_set_item_start_info(self):
@@ -58,8 +57,8 @@ class MOProduction(models.Model):
                 item.write({
                     'sublevel_id': production_level.id,
                     'level_id': production_level.parent_id.id,
-                    'production_done_date': fields.Date.today()
                 })
+            rec.action_set_item_start_info()
             rec.state = 'production'
 
     def action_back_to_designed_items(self):
