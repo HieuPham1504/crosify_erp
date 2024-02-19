@@ -227,7 +227,7 @@ class SaleOrderController(Controller):
                        {shipping_country_id}, {shipping_state_id}, 
                        '{data.get('ShippingPhonenumber', '')}', '{data.get('ShippingApartment', '')}', '{data.get('ContactEmail', '')}', '{data.get('CustomerNote', '')}',
                        '{data.get('ClientSecret', '')}', '{data.get('Domain', '')}', {data.get('Tip', False)}, {data.get('ShippingCost', False)}, {data.get('Subtotal', False)},
-                       {data.get('Discount')}, {data.get('TotalAmount')}, '{data.get('Paymentat')}',  (select currency.id from currency), 
+                       {data.get('Discount') if not data.get('Discount') is None else 0}, {data.get('TotalAmount')}, '{data.get('Paymentat')}',  (select currency.id from currency), 
                        '{data.get('PaymentStatus', '')}', '{data.get('PaymentNote', '')}', '{data.get('DiscountCode', '')}',  
                        """
             if data.get('LogisticCost'):
@@ -237,7 +237,7 @@ class SaleOrderController(Controller):
                 create_order_sql += "0,"
             create_order_sql += f"""
                        '{data.get('rating', '')}', '{data.get('review', '')}', '{data.get('Updatedat')}', (select order_update_employee.id from order_update_employee),
-                       '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', )}, 
+                       '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', ) if not data.get('IsUploadTKN', ) is None else 'null'}, 
                        '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now(), {order_type_id.id}
              Returning id
             """
