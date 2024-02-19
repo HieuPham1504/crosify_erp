@@ -152,6 +152,8 @@ class SaleOrderController(Controller):
             request.env.cr.execute(partner_sql)
             partner_id = request.env.cr.fetchone()
 
+            order_type_id = request.env['sale.order.type'].sudo().search([('order_type_name', '=', 'Normal')], limit=1)
+
             create_order_sql = f"""
                 with currency as (
                     select id 
@@ -215,7 +217,8 @@ class SaleOrderController(Controller):
                 partner_id,
                 partner_invoice_id,
                 partner_shipping_id,
-                date_order
+                date_order,
+                order_type_id
 --                 warehouse_id,
 --                 picking_policy
                 ) 
@@ -235,7 +238,7 @@ class SaleOrderController(Controller):
             create_order_sql += f"""
                        '{data.get('rating', '')}', '{data.get('review', '')}', '{data.get('Updatedat')}', (select order_update_employee.id from order_update_employee),
                        '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', )}, 
-                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now() 
+                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now(), {order_type_id.id}
              Returning id
             """
             request.env.cr.execute(create_order_sql)
