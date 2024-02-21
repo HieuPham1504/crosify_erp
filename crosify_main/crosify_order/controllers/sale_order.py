@@ -4,6 +4,7 @@
 import json
 from odoo import http
 import requests
+from . import SUPERUSER_ID
 from odoo.http import Controller, request, Response, route
 
 import hmac
@@ -427,7 +428,7 @@ class SaleOrderController(Controller):
                     create_order_line_sql += f"""
                     '{line.get('CustomerNote') if line.get('CustomerNote') is not None else ''}',
                     """
-                    none_product_id = request.sudo().env.ref('crosify_order.product_product_fail_data')
+                    none_product_id = request.env(user=SUPERUSER_ID, su=True).ref('crosify_order.product_product_fail_data')
                     if not product_id:
                         create_order_line_sql += f"{none_product_id.id},"
                     else:
