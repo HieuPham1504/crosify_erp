@@ -170,7 +170,7 @@ class SaleOrderController(Controller):
 
             order_type_id = request.env['sale.order.type'].sudo().search([('order_type_name', '=', 'Normal')], limit=1)
             payment_method = request.env['payment.method'].sudo().search([('code', '=ilike', data.get('PaymentMethod').strip())], limit=1)
-            utm_source = request.env['utm.source'].sudo().search([('code', '=ilike', data.get('UtmSource').strip())], limit=1)
+            utm_source = request.env['utm.source'].sudo().search([('name', '=ilike', data.get('UtmSource').strip())], limit=1)
 
             create_order_sql = f"""
                 with currency as (
