@@ -243,7 +243,7 @@ class SaleOrderController(Controller):
                 Select '{data.get('Transactionid', '')}',
                  '{data.get('Orderid') if not data.get('Orderid') is None else ''}', 
                  '{data.get('Orderid', '') if not data.get('Orderid') is None else ''}', 
-                 '{data.get('Transactionid') if not data.get('Transactionid') is None else ''}', 
+                 '{data.get('ClientSecret') if not data.get('ClientSecret') is None else ''}', 
                  '{data.get('Transactionid') if not data.get('Transactionid') is None else ''}', 
                  '{data.get('ShippingFirstname') if not data.get('ShippingFirstname') is None else ''}',
                    '{data.get('ShippingLastname') if not data.get('ShippingLastname') is None else ''}', 
@@ -376,6 +376,7 @@ class SaleOrderController(Controller):
                 shipping_method,
                 order_id, 
                 name,
+                product_type,
                 customer_lead,
                 product_uom
                 ) 
@@ -587,6 +588,7 @@ class SaleOrderController(Controller):
                     '{line.get('ShippingMethodInfo')  if line.get('ShippingMethodInfo') is not None else ''}',
                     {sale_order_id[0]},
                     '{product_id.display_name if product_id else none_product_id.display_name}',
+                    '{product_id.product_type if product_id else none_product_id.product_type}',
                     0,
                     1
                     )
