@@ -8,6 +8,7 @@
         <record id="product_template_fail_data" model="product.template">
             <field name="categ_id" ref="product_category_fail_data"/>
             <field name="design_number">01</field>
+            <field name="product_type">NOSKU01</field>
             <field name="name">None SKU</field>
         </record>
 
@@ -16,6 +17,7 @@
             <field name="categ_id" ref="product_category_fail_data"/>
 <!--            <field name="product_tmpl_id" ref="product_template_fail_data"/>-->
             <field name="standard_price">1.0</field>
+            <field name="product_type">NOSKU01</field>
             <field name="list_price">1.0</field>
             <field name="detailed_type">consu</field>
             <field name="weight">0.01</field>
