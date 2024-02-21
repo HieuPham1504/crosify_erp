@@ -282,7 +282,7 @@ class SaleOrderController(Controller):
                    '{data.get('PaymentNote') if not data.get('PaymentNote') is None else ''}', 
                    '{data.get('DiscountCode') if not data.get('DiscountCode') is None else ''}',  
                        """
-            if data.get('LogisticCost'):
+            if data.get('LogisticCost') is not None:
                 create_order_sql += f"""
                            '{data.get('LogisticCost', False)}', """
             else:
