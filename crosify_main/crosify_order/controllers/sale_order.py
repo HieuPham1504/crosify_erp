@@ -130,27 +130,43 @@ class SaleOrderController(Controller):
 
             shipping_state_id = shipping_state.id
 
-
-            partner_sql = f"""
-            insert into res_partner(name, complete_name,street,street2,city,state_id,zip,country_id,phone,mobile,email) 
-            values (
-            '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}', 
-            '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}', 
-            '{data.get('ShippingAddress', '')}',
-            '{data.get('ShippingApartment', '')}',
-            '{data.get('ShippingCity', '')}',
-            {shipping_state_id if shipping_state_id else 'null'},
-            '{data.get('ShippingZipcode', '')}',
-            {shipping_country_id if shipping_country_id else 'null'},
-            '{data.get('ShippingPhonenumber', '')}',
-            '{data.get('ShippingPhonenumber', '')}',
-            '{data.get('ContactEmail', '')}'
-            ) 
-            returning id
-            """
-
-            request.env.cr.execute(partner_sql)
-            partner_id = request.env.cr.fetchone()
+            Partner = request.env['res.partner'].sudo()
+            first_name = data.get('ShippingFirstname') if data.get('ShippingFirstname') is not None else ''
+            last_name = data.get('ShippingLastname') if data.get('ShippingLastname') is not None else ''
+            partner_id = Partner.create({
+                'name': first_name + last_name,
+                'complete_name': first_name + last_name,
+                'street': data.get('ShippingAddress') if data.get('ShippingAddress') is not None else '',
+                'street2': data.get('ShippingApartment') if data.get('ShippingApartment') is not None else '',
+                'city': data.get('ShippingCity') if data.get('ShippingCity') is not None else '',
+                'state_id': shipping_state_id,
+                'zip': data.get('ShippingZipcode') if data.get('ShippingZipcode') is not None else '',
+                'country_id': shipping_country_id,
+                'phone': data.get('ShippingPhonenumber') if data.get('ShippingPhonenumber') is not None else '',
+                'mobile': data.get('ShippingPhonenumber') if data.get('ShippingPhonenumber') is not None else '',
+                'email': data.get('ContactEmail') if data.get('ContactEmail') is not None else '',
+                'active': True,
+            })
+            # partner_sql = f"""
+            # insert into res_partner(name, complete_name,street,street2,city,state_id,zip,country_id,phone,mobile,email,active)
+            # values (
+            # '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}',
+            # '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}',
+            # '{data.get('ShippingAddress', '')}',
+            # '{data.get('ShippingApartment', '')}',
+            # '{data.get('ShippingCity', '')}',
+            # {shipping_state_id if shipping_state_id else 'null'},
+            # '{data.get('ShippingZipcode', '')}',
+            # {shipping_country_id if shipping_country_id else 'null'},
+            # '{data.get('ShippingPhonenumber', '')}',
+            # '{data.get('ShippingPhonenumber', '')}',
+            # '{data.get('ContactEmail', '')}'
+            # )
+            # returning id
+            # """
+            #
+            # request.env.cr.execute(partner_sql)
+            # partner_id = request.env.cr.fetchone()
 
             order_type_id = request.env['sale.order.type'].sudo().search([('order_type_name', '=', 'Normal')], limit=1)
 
@@ -224,13 +240,43 @@ class SaleOrderController(Controller):
 --                 warehouse_id,
 --                 picking_policy
                 ) 
-                Select '{data.get('Transactionid', '')}', '{data.get('Orderid', '')}', '{data.get('Orderid', '')}', '{data.get('Transactionid', '')}', '{data.get('Transactionid', '')}', '{data.get('ShippingFirstname', '')}',
-                       '{data.get('ShippingLastname', '')}', '{data.get('ShippingAddress', '')}', '{data.get('ShippingCity', '')}', '{data.get('shipping_zipcode', '')}', 
-                       {shipping_country_id}, {shipping_state_id}, 
-                       '{data.get('ShippingPhonenumber', '')}', '{data.get('ShippingApartment', '')}', '{data.get('ContactEmail', '')}', '{data.get('CustomerNote', '')}',
-                       '{data.get('ClientSecret', '')}', '{data.get('Domain', '')}', {data.get('Tip', False)}, {data.get('ShippingCost', False)}, {data.get('Subtotal', False)},
-                       {data.get('Discount') if not data.get('Discount') is None else 0}, {data.get('TotalAmount')}, '{data.get('Paymentat')}',  (select currency.id from currency), 
-                       '{data.get('PaymentStatus', '')}', '{data.get('PaymentNote', '')}', '{data.get('DiscountCode', '')}',  
+                Select '{data.get('Transactionid', '')}',
+                 '{data.get('Orderid') if not data.get('Orderid') is None else ''}', 
+                 '{data.get('Orderid', '') if not data.get('Orderid') is None else ''}', 
+                 '{data.get('Transactionid') if not data.get('Transactionid') is None else ''}', 
+                 '{data.get('Transactionid') if not data.get('Transactionid') is None else ''}', 
+                 '{data.get('ShippingFirstname') if not data.get('ShippingFirstname') is None else ''}',
+                   '{data.get('ShippingLastname') if not data.get('ShippingLastname') is None else ''}', 
+                   '{data.get('ShippingAddress') if not data.get('ShippingAddress') is None else ''}', 
+                   '{data.get('ShippingCity') if not data.get('ShippingCity') is None else ''}', 
+                   '{data.get('ShippingZipcode') if not data.get('ShippingZipcode') is None else ''}', 
+                   {shipping_country_id}, 
+                   {shipping_state_id}, 
+                   '{data.get('ShippingPhonenumber') if not data.get('ShippingPhonenumber') is None else ''}', 
+                   '{data.get('ShippingApartment') if not data.get('ShippingApartment') is None else ''}', 
+                   '{data.get('ContactEmail') if not data.get('ContactEmail') is None else ''}', 
+                   '{data.get('CustomerNote') if not data.get('CustomerNote') is None else ''}',
+                   '{data.get('ClientSecret') if not data.get('ClientSecret') is None else ''}', 
+                   '{data.get('Domain') if not data.get('Domain') is None else ''}', 
+                   {data.get('Tip') if not data.get('Domain') is None else 0}, 
+                   {data.get('ShippingCost') if not data.get('ShippingCost') is None else 0}, 
+                   {data.get('Subtotal') if not data.get('Subtotal') is None else 0},
+                   {data.get('Discount') if not data.get('Discount') is None else 0}, 
+                   {data.get('TotalAmount') if not data.get('TotalAmount') is None else 0}, 
+                   """
+            if data.get('Paymentat') is None:
+
+                create_order_sql += "null,"
+            else:
+                create_order_sql += f"""
+                                        '{data.get('Paymentat', '')}',
+                                        """
+            create_order_sql += f"""
+                     
+                   (select currency.id from currency), 
+                   '{data.get('PaymentStatus') if not data.get('PaymentStatus') is None else ''}', 
+                   '{data.get('PaymentNote') if not data.get('PaymentNote') is None else ''}', 
+                   '{data.get('DiscountCode') if not data.get('DiscountCode') is None else ''}',  
                        """
             if data.get('LogisticCost'):
                 create_order_sql += f"""
@@ -250,9 +296,18 @@ class SaleOrderController(Controller):
                                         """
 
             create_order_sql += f"""(select order_update_employee.id from order_update_employee),
-                       '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', ) if not data.get('IsUploadTKN', ) is None else 'null'}, 
-                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now(), 
-                       {order_type_id.id if order_type_id else 'null'}, '{'paid' if data.get('PaymentStatus') == 1 else 'not_paid'}'
+                       '{data.get('Createdat')}', 
+                       (select order_create_employee.id from order_create_employee), 
+                       '{data.get('Tkn') if not data.get('Tkn') is None else ''}', 
+                       {data.get('IsUploadTKN', ) if not data.get('IsUploadTKN', ) is None else 'null'}, 
+                       '{data.get('TrackingUrl', '') if not data.get('TrackingUrl') is None else ''}', 
+                       {request.env(su=True).company.id}, 
+                       {partner_id.id}, 
+                       {partner_id.id}, 
+                       {partner_id.id}, 
+                       now(), 
+                       {order_type_id.id if order_type_id else 'null'}, 
+                       '{'paid' if data.get('PaymentStatus') == 1 else 'not_paid'}'
              Returning id
             """
             request.env.cr.execute(create_order_sql)
