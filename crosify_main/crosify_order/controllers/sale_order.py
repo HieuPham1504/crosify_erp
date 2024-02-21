@@ -400,12 +400,12 @@ class SaleOrderController(Controller):
                         create_order_line_sql += ","
                     create_order_line_sql += f"""
                     (
-                    {line.get('Detailid', 0)},
-                    {line.get('Orderid', 0)},
-                    '{line.get('OrderidFix', 0)}',
-                    {line.get('ProductID', 0)},
-                    {line.get('meta_field', 0)},
-                    {line.get('Amount', 0)},
+                    {line.get('Detailid', 0) if line.get('Detailid') is not None else 0},
+                    {line.get('Orderid', 0) if line.get('Orderid') is not None else 0},
+                    '{line.get('OrderidFix', 0) if line.get('OrderidFix') is not None else line.get('Orderid')}',
+                    {line.get('ProductID') if line.get('ProductID') is not None else 0},
+                    '{line.get('meta_field') if line.get('meta_field') is not None else ''}',
+                    {line.get('Amount') if line.get('Amount') is not None else 0},
                     1,
                     {price_subtotal},
                     {discount},
@@ -413,8 +413,8 @@ class SaleOrderController(Controller):
                     {shipping_cost},
                     {tip},
                     {price_total},
-                    {line.get('CostAmount', 0)},
-                    '{line.get('Status', '')}',
+                    {line.get('CostAmount') if line.get('CostAmount') is not None else 0},
+                    '{line.get('Status') if line.get('Status') is not None else ''}',
                     """
                     if not sub_level:
 
@@ -425,7 +425,7 @@ class SaleOrderController(Controller):
                                                 """
 
                     create_order_line_sql += f"""
-                    '{line.get('CustomerNote', '')}',
+                    '{line.get('CustomerNote') if line.get('CustomerNote') is not None else ''}',
                     """
                     if not product_id:
                         none_product_id = request.env.ref('crosify_order.product_product_fail_data').id
@@ -435,8 +435,8 @@ class SaleOrderController(Controller):
                                                 {product_id.id},
                                                 """
                     create_order_line_sql += f"""
-                    '{line.get('Personalize', '')}',
-                    '{line.get('ElementMessage', '')}',
+                    '{line.get('Personalize') if line.get('Personalize') is not None else ''}',
+                    '{line.get('ElementMessage') if line.get('ElementMessage') is not None else ''}',
                     """
 
                     if line.get('DesignDate') is None:
@@ -449,8 +449,8 @@ class SaleOrderController(Controller):
 
                     create_order_line_sql += f"""
                     
-                    '{line.get('ExtraService', '')}',
-                    '{line.get('FulfillNote', '')}',
+                    '{line.get('ExtraService') if line.get('ExtraService') is not None else ''}',
+                    '{line.get('FulfillNote') if line.get('FulfillNote') is not None else ''}',
                     """
 
                     if line.get('FulfillDate') is None:
@@ -463,7 +463,7 @@ class SaleOrderController(Controller):
 
 
                     create_order_line_sql += f"""
-                    {line.get('Priority', '')},
+                    {line.get('Priority', 'false')},
                     """
 
                     if line.get('PackedDate') is None:
@@ -494,17 +494,17 @@ class SaleOrderController(Controller):
                                                 """
 
                     create_order_line_sql += f"""
-                    '{line.get('DescriptionItemSize', '')}',
-                    '{line.get('Boxsize', '')}',
-                    '{line.get('Packagesize', '')}',
-                    '{line.get('Productcode', '')}',
-                    '{line.get('DesignSerialno', '')}',
-                    '{line.get('ColorsetName', '')}',
-                    '{line.get('AccessoryName', '')}',
-                    '{line.get('ColorItem', '')}',
-                    {line.get('LogisticCost', '')},
-                    '{line.get('HScode', '')}',
-                    '{line.get('TKN', '')}',
+                    '{line.get('DescriptionItemSize') if line.get('DescriptionItemSize') is not None else ''}',
+                    '{line.get('Boxsize') if line.get('Boxsize') is not None else ''}',
+                    '{line.get('Packagesize') if line.get('Packagesize') is not None else ''}',
+                    '{line.get('Productcode') if line.get('Productcode') is not None else ''}',
+                    '{line.get('DesignSerialno') if line.get('DesignSerialno') is not None else ''}',
+                    '{line.get('ColorsetName') if line.get('ColorsetName') is not None else ''}',
+                    '{line.get('AccessoryName') if line.get('AccessoryName') is not None else ''}',
+                    '{line.get('ColorItem') if line.get('ColorItem') is not None else ''}',
+                    {line.get('LogisticCost') if line.get('LogisticCost') is not None else 0},
+                    '{line.get('HScode') if line.get('HScode') is not None else ''}',
+                    '{line.get('TKN') if line.get('TKN') is not None else ''}',
                     
                     """
 
@@ -550,8 +550,8 @@ class SaleOrderController(Controller):
                                                 """
 
                     create_order_line_sql += f"""
-                    '{line.get('CancelReason', '')}',
-                    '{line.get('CancelStatus', '')}',
+                    '{line.get('CancelReason') if line.get('CancelReason') is not None else ''}',
+                    '{line.get('CancelStatus') if line.get('CancelStatus') is not None else ''}',
                     """
 
                     if line.get('Updatedat') is None:
@@ -571,7 +571,7 @@ class SaleOrderController(Controller):
                                                 """
 
                     create_order_line_sql += f"""
-                    '{line.get('CreatedBy', '')}',
+                    '{line.get('CreatedBy') if line.get('CreatedBy') is not None else ''}',
                     """
 
                     if line.get('LastupdateLevel') is None:
@@ -583,8 +583,8 @@ class SaleOrderController(Controller):
                                                 """
 
                     create_order_line_sql += f"""
-                    '{line.get('PackagingLocationInfo', '')}',
-                    '{line.get('ShippingMethodInfo', '')}',
+                    '{line.get('PackagingLocationInfo')  if line.get('PackagingLocationInfo') is not None else ''}',
+                    '{line.get('ShippingMethodInfo')  if line.get('ShippingMethodInfo') is not None else ''}',
                     {sale_order_id[0]},
                     '{product_id.display_name}',
                     0,
