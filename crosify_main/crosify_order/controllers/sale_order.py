@@ -596,7 +596,7 @@ class SaleOrderController(Controller):
                     '{line.get('PackagingLocationInfo')  if line.get('PackagingLocationInfo') is not None else ''}',
                     '{line.get('ShippingMethodInfo')  if line.get('ShippingMethodInfo') is not None else ''}',
                     {sale_order_id[0]},
-                    '{product_id.display_name if product_id else none_product_id.display_name}',
+                    '{product_id.display_name.replace("'", "") if product_id else none_product_id.display_name.replace("'", "")}',
                     '{product_id.product_type if product_id else none_product_id.product_type}',
                     0,
                     1,
