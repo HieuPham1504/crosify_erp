@@ -427,9 +427,9 @@ class SaleOrderController(Controller):
                     create_order_line_sql += f"""
                     '{line.get('CustomerNote') if line.get('CustomerNote') is not None else ''}',
                     """
-                    none_product_id = request.env.ref('crosify_order.product_product_fail_data').id
+                    none_product_id = request.env.ref('crosify_order.product_product_fail_data')
                     if not product_id:
-                        create_order_line_sql += f"{none_product_id},"
+                        create_order_line_sql += f"{none_product_id.id},"
                     else:
                         create_order_line_sql += f"""
                                                 {product_id.id},
