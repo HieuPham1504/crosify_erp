@@ -605,7 +605,7 @@ class SaleOrderController(Controller):
                     from res_currency 
                     where name = '{data.get('Currency')}' 
                     limit 1),
-                    {sale_order_id.partner_id.id}
+                    {partner_id.id}
                     )
                     """
                 request.env.cr.execute(create_order_line_sql)
