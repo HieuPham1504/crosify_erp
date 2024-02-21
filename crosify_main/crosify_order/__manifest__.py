@@ -23,6 +23,7 @@ Key Features
         'security/ir.model.access.csv',
         'data/ir_sequence_sku.xml',
         'data/ir_sequence_mo_production.xml',
+        'data/fail_product_data.xml',
         'data/ir_parameter_data.xml',
         'data/ir_sequence_partner_code.xml',
         'views/sale_order_views.xml',
