@@ -4,7 +4,6 @@
 import json
 from odoo import http
 import requests
-from . import SUPERUSER_ID
 from odoo.http import Controller, request, Response, route
 
 import hmac
