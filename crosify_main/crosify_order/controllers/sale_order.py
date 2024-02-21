@@ -178,6 +178,7 @@ class SaleOrderController(Controller):
                 insert into sale_order(
                 name,
                 myadmin_order_id,
+                order_id_fix,
                 transaction_id,
                 channel_ref_id,
                 shipping_firstname,
@@ -218,11 +219,12 @@ class SaleOrderController(Controller):
                 partner_invoice_id,
                 partner_shipping_id,
                 date_order,
-                order_type_id
+                order_type_id, 
+                order_payment_state,
 --                 warehouse_id,
 --                 picking_policy
                 ) 
-                Select '{data.get('Transactionid', '')}', '{data.get('Orderid', '')}', '{data.get('Transactionid', '')}', '{data.get('Transactionid', '')}', '{data.get('ShippingFirstname', '')}',
+                Select '{data.get('Transactionid', '')}', '{data.get('Orderid', '')}', '{data.get('Orderid', '')}', '{data.get('Transactionid', '')}', '{data.get('Transactionid', '')}', '{data.get('ShippingFirstname', '')}',
                        '{data.get('ShippingLastname', '')}', '{data.get('ShippingAddress', '')}', '{data.get('ShippingCity', '')}', '{data.get('shipping_zipcode', '')}', 
                        {shipping_country_id}, {shipping_state_id}, 
                        '{data.get('ShippingPhonenumber', '')}', '{data.get('ShippingApartment', '')}', '{data.get('ContactEmail', '')}', '{data.get('CustomerNote', '')}',
@@ -249,7 +251,8 @@ class SaleOrderController(Controller):
 
             create_order_sql += f"""(select order_update_employee.id from order_update_employee),
                        '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', ) if not data.get('IsUploadTKN', ) is None else 'null'}, 
-                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now(), {order_type_id.id if order_type_id else 'null'}
+                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now(), 
+                       {order_type_id.id if order_type_id else 'null'}, '{'paid' if data.get('PaymentStatus') == 1 else 'not_paid'}'
              Returning id
             """
             request.env.cr.execute(create_order_sql)
