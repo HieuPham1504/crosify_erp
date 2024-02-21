@@ -220,7 +220,7 @@ class SaleOrderController(Controller):
                 partner_shipping_id,
                 date_order,
                 order_type_id, 
-                order_payment_state,
+                order_payment_state
 --                 warehouse_id,
 --                 picking_policy
                 ) 
