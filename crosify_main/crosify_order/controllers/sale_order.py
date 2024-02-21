@@ -387,7 +387,8 @@ class SaleOrderController(Controller):
                 product_uom,
                 company_id,
                 currency_id,
-                order_partner_id
+                order_partner_id,
+                variant
                 ) 
                 values
                 """
@@ -605,7 +606,8 @@ class SaleOrderController(Controller):
                     from res_currency 
                     where name = '{data.get('Currency')}' 
                     limit 1),
-                    {partner_id.id}
+                    {partner_id.id},
+                    '{line.get('Variant')  if line.get('Variant') is not None else ''}'
                     )
                     """
                 request.env.cr.execute(create_order_line_sql)
