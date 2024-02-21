@@ -235,8 +235,19 @@ class SaleOrderController(Controller):
                            '{data.get('LogisticCost', False)}', """
             else:
                 create_order_sql += "0,"
+
             create_order_sql += f"""
-                       '{data.get('rating', '')}', '{data.get('review', '')}', '{data.get('Updatedat')}', (select order_update_employee.id from order_update_employee),
+                       '{data.get('rating', '')}', '{data.get('review', '')}', 
+                       """
+            if data.get('Updatedat') is None:
+
+                create_order_sql += "null,"
+            else:
+                create_order_sql += f"""
+                                        '{data.get('Updatedat', '')}',
+                                        """
+
+            create_order_sql += f"""(select order_update_employee.id from order_update_employee),
                        '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', ) if not data.get('IsUploadTKN', ) is None else 'null'}, 
                        '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now(), {order_type_id.id}
              Returning id
