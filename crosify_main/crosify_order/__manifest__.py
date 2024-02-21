@@ -21,6 +21,7 @@ Key Features
         'security/sale_operator_security.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence_sku.xml',
+        'data/fail_product_data.xml',
         'data/ir_parameter_data.xml',
         'views/sale_order_views.xml',
         'views/sale_order_line_views.xml',

@@ -222,7 +222,7 @@ class SaleOrderController(Controller):
 --                 warehouse_id,
 --                 picking_policy
                 ) 
-                Select '{data.get('Name', '')}', '{data.get('Orderid', '')}', '{data.get('Transactionid', '')}', '{data.get('ChannelRefID', '')}', '{data.get('ShippingFirstname', '')}',
+                Select '{data.get('Transactionid', '')}', '{data.get('Orderid', '')}', '{data.get('Transactionid', '')}', '{data.get('Transactionid', '')}', '{data.get('ShippingFirstname', '')}',
                        '{data.get('ShippingLastname', '')}', '{data.get('ShippingAddress', '')}', '{data.get('ShippingCity', '')}', '{data.get('shipping_zipcode', '')}', 
                        {shipping_country_id}, {shipping_state_id}, 
                        '{data.get('ShippingPhonenumber', '')}', '{data.get('ShippingApartment', '')}', '{data.get('ContactEmail', '')}', '{data.get('CustomerNote', '')}',
@@ -370,8 +370,8 @@ class SaleOrderController(Controller):
                     '{line.get('CustomerNote', '')}',
                     """
                     if not product_id:
-
-                        create_order_line_sql += "null,"
+                        none_product_id = request.env.ref('crosify_order.product_product_fail_data').id
+                        create_order_line_sql += f"{none_product_id},"
                     else:
                         create_order_line_sql += f"""
                                                 {product_id.id},
