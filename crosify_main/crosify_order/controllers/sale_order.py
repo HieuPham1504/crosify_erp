@@ -169,6 +169,8 @@ class SaleOrderController(Controller):
             # partner_id = request.env.cr.fetchone()
 
             order_type_id = request.env['sale.order.type'].sudo().search([('order_type_name', '=', 'Normal')], limit=1)
+            payment_method = request.env['payment.method'].sudo().search([('code', '=ilike', data.get('PaymentMethod').strip())], limit=1)
+            utm_source = request.env['utm.source'].sudo().search([('name', '=ilike', data.get('UtmSource').strip())], limit=1)
 
             create_order_sql = f"""
                 with currency as (
@@ -236,14 +238,16 @@ class SaleOrderController(Controller):
                 partner_shipping_id,
                 date_order,
                 order_type_id, 
-                order_payment_state
+                order_payment_state,
+                payment_method_id,
+                utm_source_id
 --                 warehouse_id,
 --                 picking_policy
                 ) 
                 Select '{data.get('Transactionid', '')}',
                  '{data.get('Orderid') if not data.get('Orderid') is None else ''}', 
                  '{data.get('Orderid', '') if not data.get('Orderid') is None else ''}', 
-                 '{data.get('Transactionid') if not data.get('Transactionid') is None else ''}', 
+                 '{data.get('ClientSecret') if not data.get('ClientSecret') is None else ''}', 
                  '{data.get('Transactionid') if not data.get('Transactionid') is None else ''}', 
                  '{data.get('ShippingFirstname') if not data.get('ShippingFirstname') is None else ''}',
                    '{data.get('ShippingLastname') if not data.get('ShippingLastname') is None else ''}', 
@@ -278,7 +282,7 @@ class SaleOrderController(Controller):
                    '{data.get('PaymentNote') if not data.get('PaymentNote') is None else ''}', 
                    '{data.get('DiscountCode') if not data.get('DiscountCode') is None else ''}',  
                        """
-            if data.get('LogisticCost'):
+            if data.get('LogisticCost') is not None:
                 create_order_sql += f"""
                            '{data.get('LogisticCost', False)}', """
             else:
@@ -307,7 +311,9 @@ class SaleOrderController(Controller):
                        {partner_id.id}, 
                        now(), 
                        {order_type_id.id if order_type_id else 'null'}, 
-                       '{'paid' if data.get('PaymentStatus') == 1 else 'not_paid'}'
+                       '{'paid' if data.get('PaymentStatus') == 1 else 'not_paid'}',
+                       {payment_method.id},
+                       {utm_source.id}
              Returning id
             """
             request.env.cr.execute(create_order_sql)
@@ -376,6 +382,7 @@ class SaleOrderController(Controller):
                 shipping_method,
                 order_id, 
                 name,
+                product_type,
                 customer_lead,
                 product_uom
                 ) 
@@ -427,9 +434,9 @@ class SaleOrderController(Controller):
                     create_order_line_sql += f"""
                     '{line.get('CustomerNote') if line.get('CustomerNote') is not None else ''}',
                     """
-                    none_product_id = request.env.ref('crosify_order.product_product_fail_data').id
+                    none_product_id = request.env(su=True).ref('crosify_order.product_product_fail_data')
                     if not product_id:
-                        create_order_line_sql += f"{none_product_id},"
+                        create_order_line_sql += f"{none_product_id.id},"
                     else:
                         create_order_line_sql += f"""
                                                 {product_id.id},
@@ -587,6 +594,7 @@ class SaleOrderController(Controller):
                     '{line.get('ShippingMethodInfo')  if line.get('ShippingMethodInfo') is not None else ''}',
                     {sale_order_id[0]},
                     '{product_id.display_name if product_id else none_product_id.display_name}',
+                    '{product_id.product_type if product_id else none_product_id.product_type}',
                     0,
                     1
                     )
