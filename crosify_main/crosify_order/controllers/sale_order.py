@@ -249,7 +249,7 @@ class SaleOrderController(Controller):
 
             create_order_sql += f"""(select order_update_employee.id from order_update_employee),
                        '{data.get('Createdat')}', (select order_create_employee.id from order_create_employee), '{data.get('Tkn', '')}', {data.get('IsUploadTKN', ) if not data.get('IsUploadTKN', ) is None else 'null'}, 
-                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now(), {order_type_id.id}
+                       '{data.get('TrackingUrl', '')}', {request.env(su=True).company.id}, {partner_id[0]}, {partner_id[0]}, {partner_id[0]}, now(), {order_type_id.id if order_type_id else 'null'}
              Returning id
             """
             request.env.cr.execute(create_order_sql)
@@ -468,11 +468,11 @@ class SaleOrderController(Controller):
 
 
                     create_order_line_sql += f"""
-                    '{line.get('TrackingUrl', '')}',
-                    {line.get('IsUploadTKN', '')},
-                    '{line.get('ChangeRequestNote', '')}',
-                    '{line.get('DisputeStatus', '')}',
-                    '{line.get('DisputeNote', '')}',
+                    '{line.get('TrackingUrl') if line.get('TrackingUrl') is not None else ''}',
+                    {line.get('IsUploadTKN') if line.get('IsUploadTKN') is not None else 'false'},
+                    '{line.get('ChangeRequestNote') if line.get('ChangeRequestNote') is not None else ''}',
+                    '{line.get('DisputeStatus') if line.get('DisputeStatus') is not None else ''}',
+                    '{line.get('DisputeNote') if line.get('DisputeNote') is not None else ''}',
                     """
                     if not crosify_approve_cancel_employee_id:
 
@@ -704,7 +704,7 @@ class SaleOrderController(Controller):
                 upload_tkn_date = '{line.get('UploadTknat') if line.get('UploadTknat') is not None else 'null'}',
                 upload_tkn_by = {upload_tkn_by.id if upload_tkn_by else 'null'},
                 tkn_url = '{line.get('TrackingUrl') if line.get('TrackingUrl') is not None else 'null'}',
-                is_upload_tkn = '{line.get('IsUploadTKN') if line.get('IsUploadTKN') is not None else 'null'}',
+                is_upload_tkn = {line.get('IsUploadTKN') if line.get('IsUploadTKN') is not None else 'null'},
                 note_change_request = '{line.get('ChangeRequestNote') if line.get('ChangeRequestNote') is not None else 'null'}',
                 dispute_status = '{line.get('DisputeStatus') if line.get('DisputeStatus') is not None else 'null'}',
                 dispute_note = '{line.get('DisputeNote') if line.get('DisputeNote') is not None else 'null'}',
