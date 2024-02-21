@@ -1,0 +1,26 @@
+<odoo>
+    <data>
+        <record id="view_res_partner_form_inherit" model="ir.ui.view">
+            <field name="name">res.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//h1/following-sibling::div[1]" position="before">
+                    <field name="res_partner_code" string="Code" readonly="1" />
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_res_partner_filter_inherit" model="ir.ui.view">
+            <field name="name">res.partner.filter.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter" />
+            <field name="arch" type="xml">
+                    <field name="name" position="attributes">
+                        <attribute name="filter_domain">['|', '|', '|', '|', '|', ('complete_name', 'ilike', self), ('ref', '=', self), ('email', 'ilike', self), ('vat', 'ilike', self), ('company_registry', 'ilike', self), ('res_partner_code', 'ilike', self)]</attribute>
+                    </field>
+            </field>
+        </record>
+        
+    </data>
+</odoo>
