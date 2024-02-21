@@ -262,7 +262,7 @@ class SaleOrderController(Controller):
                    '{data.get('CustomerNote') if not data.get('CustomerNote') is None else ''}',
                    '{data.get('ClientSecret') if not data.get('ClientSecret') is None else ''}', 
                    '{data.get('Domain') if not data.get('Domain') is None else ''}', 
-                   {data.get('Tip') if not data.get('Domain') is None else 0}, 
+                   {data.get('Tip') if not data.get('Tip') is None else 0}, 
                    {data.get('ShippingCost') if not data.get('ShippingCost') is None else 0}, 
                    {data.get('Subtotal') if not data.get('Subtotal') is None else 0},
                    {data.get('Discount') if not data.get('Discount') is None else 0}, 
