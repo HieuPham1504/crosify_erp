@@ -13,3 +13,4 @@ from . import product_type_shelf_type
 from . import sale_order_type
 from . import fulfill_error
 from . import mo_production
+from . import res_partner
