@@ -427,8 +427,8 @@ class SaleOrderController(Controller):
                     create_order_line_sql += f"""
                     '{line.get('CustomerNote') if line.get('CustomerNote') is not None else ''}',
                     """
+                    none_product_id = request.env.ref('crosify_order.product_product_fail_data').id
                     if not product_id:
-                        none_product_id = request.env.ref('crosify_order.product_product_fail_data').id
                         create_order_line_sql += f"{none_product_id},"
                     else:
                         create_order_line_sql += f"""
@@ -586,7 +586,7 @@ class SaleOrderController(Controller):
                     '{line.get('PackagingLocationInfo')  if line.get('PackagingLocationInfo') is not None else ''}',
                     '{line.get('ShippingMethodInfo')  if line.get('ShippingMethodInfo') is not None else ''}',
                     {sale_order_id[0]},
-                    '{product_id.display_name}',
+                    '{product_id.display_name if product_id else none_product_id.display_name}',
                     0,
                     1
                     )
