@@ -386,7 +386,7 @@ class SaleOrderController(Controller):
                 customer_lead,
                 product_uom,
                 company_id,
-                curency_id,
+                currency_id,
                 order_partner_id
                 ) 
                 values
