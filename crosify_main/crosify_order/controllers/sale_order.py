@@ -384,7 +384,10 @@ class SaleOrderController(Controller):
                 name,
                 product_type,
                 customer_lead,
-                product_uom
+                product_uom,
+                company_id,
+                curency_id,
+                order_partner_id
                 ) 
                 values
                 """
@@ -411,7 +414,7 @@ class SaleOrderController(Controller):
                     {line.get('Orderid', 0) if line.get('Orderid') is not None else 0},
                     '{line.get('OrderidFix', 0) if line.get('OrderidFix') is not None else line.get('Orderid')}',
                     {line.get('ProductID') if line.get('ProductID') is not None else 0},
-                    '{line.get('meta_field') if line.get('meta_field') is not None else ''}',
+                    '{line.get('Metafield') if line.get('Metafield') is not None else ''}',
                     {line.get('Amount') if line.get('Amount') is not None else 0},
                     1,
                     {price_subtotal},
@@ -596,7 +599,13 @@ class SaleOrderController(Controller):
                     '{product_id.display_name if product_id else none_product_id.display_name}',
                     '{product_id.product_type if product_id else none_product_id.product_type}',
                     0,
-                    1
+                    1,
+                    {request.env(su=True).company.id}, 
+                    (select id 
+                    from res_currency 
+                    where name = '{data.get('Currency')}' 
+                    limit 1),
+                    {sale_order_id.partner_id.id}
                     )
                     """
                 request.env.cr.execute(create_order_line_sql)
