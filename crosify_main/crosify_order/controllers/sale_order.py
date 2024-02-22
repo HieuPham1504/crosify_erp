@@ -170,7 +170,9 @@ class SaleOrderController(Controller):
 
             order_type_id = request.env['sale.order.type'].sudo().search([('order_type_name', '=', 'Normal')], limit=1)
             payment_method = request.env['payment.method'].sudo().search([('code', '=ilike', data.get('PaymentMethod').strip())], limit=1)
-            utm_source = request.env['utm.source'].sudo().search([('name', '=ilike', data.get('UtmSource').strip())], limit=1)
+            utm_source = False
+            if data.get('UtmSource') is not None:
+                utm_source = request.env['utm.source'].sudo().search([('name', '=ilike', data.get('UtmSource').strip())], limit=1)
 
             create_order_sql = f"""
                 with currency as (
@@ -313,7 +315,7 @@ class SaleOrderController(Controller):
                        {order_type_id.id if order_type_id else 'null'}, 
                        '{'paid' if data.get('PaymentStatus') == 1 else 'not_paid'}',
                        {payment_method.id},
-                       {utm_source.id}
+                       {utm_source.id if utm_source else 'null'}
              Returning id
             """
             request.env.cr.execute(create_order_sql)
