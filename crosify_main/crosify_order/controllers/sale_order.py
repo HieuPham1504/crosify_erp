@@ -169,7 +169,9 @@ class SaleOrderController(Controller):
             # partner_id = request.env.cr.fetchone()
 
             order_type_id = request.env['sale.order.type'].sudo().search([('order_type_name', '=', 'Normal')], limit=1)
-            payment_method = request.env['payment.method'].sudo().search([('code', '=ilike', data.get('PaymentMethod').strip())], limit=1)
+            payment_method = False
+            if data.get('PaymentMethod') is not None:
+                payment_method = request.env['payment.method'].sudo().search([('code', '=ilike', data.get('PaymentMethod').strip())], limit=1)
             utm_source = False
             if data.get('UtmSource') is not None:
                 utm_source = request.env['utm.source'].sudo().search([('name', '=ilike', data.get('UtmSource').strip())], limit=1)
@@ -314,7 +316,7 @@ class SaleOrderController(Controller):
                        now(), 
                        {order_type_id.id if order_type_id else 'null'}, 
                        '{'paid' if data.get('PaymentStatus') == 1 else 'not_paid'}',
-                       {payment_method.id},
+                       {payment_method.id if payment_method else 'null'},
                        {utm_source.id if utm_source else 'null'}
              Returning id
             """
