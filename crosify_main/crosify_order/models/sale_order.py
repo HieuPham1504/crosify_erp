@@ -8,6 +8,8 @@ class SaleOrder(models.Model):
     _sql_constraints = [
         ('myadmin_order_id_uniq', 'unique (myadmin_order_id)',
          "The Order ID must be unique, this one is already assigned to another sale order."),
+        ('order_name_uniq', 'unique (name)',
+         "The Order Name must be unique, this one is already assigned to another sale order."),
     ]
 
     myadmin_order_id = fields.Char(string='Order ID', required=True)
