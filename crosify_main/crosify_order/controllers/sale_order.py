@@ -121,7 +121,14 @@ class SaleOrderController(Controller):
         if not verified:
             return Response("Bad Request", status=400)
         else:
-
+            if data.get('Transactionid') is not None:
+                duplicate_name_order = request.env['sale.order'].sudo().search([('name', '=', data.get('Transactionid'))])
+                if duplicate_name_order:
+                    response = {
+                        'status': 404,
+                        'message': 'Order Name has already exists.',
+                    }
+                    return response
             shipping_country = request.env['res.country'].sudo().search([('code', '=', data.get('CountryCode'))],
                                                                         limit=1)
             shipping_country_id = shipping_country.id
