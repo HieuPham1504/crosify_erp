@@ -316,6 +316,16 @@
                 <attribute name="placeholder">Customer Note</attribute>
             </xpath>
 
+             <xpath expr="//field[@name='tax_totals']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='tax_totals']" position="after">
+                <field name="discount"/>
+                <field name="tip"/>
+                <field name="amount_total" style="font-weight:bold;font-size:20px"/>
+            </xpath>
+
         </field>
     </record>
 

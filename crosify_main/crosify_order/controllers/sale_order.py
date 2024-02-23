@@ -121,7 +121,14 @@ class SaleOrderController(Controller):
         if not verified:
             return Response("Bad Request", status=400)
         else:
-
+            if data.get('Transactionid') is not None:
+                duplicate_name_order = request.env['sale.order'].sudo().search([('name', '=', data.get('Transactionid'))])
+                if duplicate_name_order:
+                    response = {
+                        'status': 404,
+                        'message': 'Order Name has already exists.',
+                    }
+                    return response
             shipping_country = request.env['res.country'].sudo().search([('code', '=', data.get('CountryCode'))],
                                                                         limit=1)
             shipping_country_id = shipping_country.id
@@ -169,8 +176,12 @@ class SaleOrderController(Controller):
             # partner_id = request.env.cr.fetchone()
 
             order_type_id = request.env['sale.order.type'].sudo().search([('order_type_name', '=', 'Normal')], limit=1)
-            payment_method = request.env['payment.method'].sudo().search([('code', '=ilike', data.get('PaymentMethod').strip())], limit=1)
-            utm_source = request.env['utm.source'].sudo().search([('name', '=ilike', data.get('UtmSource').strip())], limit=1)
+            payment_method = False
+            if data.get('PaymentMethod') is not None:
+                payment_method = request.env['payment.method'].sudo().search([('code', '=ilike', data.get('PaymentMethod').strip())], limit=1)
+            utm_source = False
+            if data.get('UtmSource') is not None:
+                utm_source = request.env['utm.source'].sudo().search([('name', '=ilike', data.get('UtmSource').strip())], limit=1)
 
             create_order_sql = f"""
                 with currency as (
@@ -262,7 +273,7 @@ class SaleOrderController(Controller):
                    '{data.get('CustomerNote') if not data.get('CustomerNote') is None else ''}',
                    '{data.get('ClientSecret') if not data.get('ClientSecret') is None else ''}', 
                    '{data.get('Domain') if not data.get('Domain') is None else ''}', 
-                   {data.get('Tip') if not data.get('Domain') is None else 0}, 
+                   {data.get('Tip') if not data.get('Tip') is None else 0}, 
                    {data.get('ShippingCost') if not data.get('ShippingCost') is None else 0}, 
                    {data.get('Subtotal') if not data.get('Subtotal') is None else 0},
                    {data.get('Discount') if not data.get('Discount') is None else 0}, 
@@ -312,8 +323,8 @@ class SaleOrderController(Controller):
                        now(), 
                        {order_type_id.id if order_type_id else 'null'}, 
                        '{'paid' if data.get('PaymentStatus') == 1 else 'not_paid'}',
-                       {payment_method.id},
-                       {utm_source.id}
+                       {payment_method.id if payment_method else 'null'},
+                       {utm_source.id if utm_source else 'null'}
              Returning id
             """
             request.env.cr.execute(create_order_sql)
@@ -384,7 +395,11 @@ class SaleOrderController(Controller):
                 name,
                 product_type,
                 customer_lead,
-                product_uom
+                product_uom,
+                company_id,
+                currency_id,
+                order_partner_id,
+                variant
                 ) 
                 values
                 """
@@ -411,7 +426,7 @@ class SaleOrderController(Controller):
                     {line.get('Orderid', 0) if line.get('Orderid') is not None else 0},
                     '{line.get('OrderidFix', 0) if line.get('OrderidFix') is not None else line.get('Orderid')}',
                     {line.get('ProductID') if line.get('ProductID') is not None else 0},
-                    '{line.get('meta_field') if line.get('meta_field') is not None else ''}',
+                    '{line.get('Metafield') if line.get('Metafield') is not None else ''}',
                     {line.get('Amount') if line.get('Amount') is not None else 0},
                     1,
                     {price_subtotal},
@@ -593,10 +608,17 @@ class SaleOrderController(Controller):
                     '{line.get('PackagingLocationInfo')  if line.get('PackagingLocationInfo') is not None else ''}',
                     '{line.get('ShippingMethodInfo')  if line.get('ShippingMethodInfo') is not None else ''}',
                     {sale_order_id[0]},
-                    '{product_id.display_name if product_id else none_product_id.display_name}',
+                    '{product_id.display_name.replace("'", "") if product_id else none_product_id.display_name.replace("'", "")}',
                     '{product_id.product_type if product_id else none_product_id.product_type}',
                     0,
-                    1
+                    1,
+                    {request.env(su=True).company.id}, 
+                    (select id 
+                    from res_currency 
+                    where name = '{data.get('Currency')}' 
+                    limit 1),
+                    {partner_id.id},
+                    '{line.get('Variant')  if line.get('Variant') is not None else ''}'
                     )
                     """
                 request.env.cr.execute(create_order_line_sql)
