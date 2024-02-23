@@ -9,7 +9,7 @@ class ResPartner(models.Model):
     @api.model
     def create(self, vals):
         if not vals.get('res_partner_code'):
-            vals['res_partner_code'] = self.env['ir.sequence'].next_by_code('res.partner.code') or '/'
+            vals['res_partner_code'] = self.env['ir.sequence'].next_by_code('res.partner.code')
         return super(ResPartner, self).create(vals)
     
     @api.depends('name', 'res_partner_code')
@@ -51,5 +51,5 @@ class ResPartner(models.Model):
         items.action_generate_code_for_partner()
     def action_generate_code_for_partner(self):
         for rec in self:
-            if not rec.res_partner_code or rec.res_partner_code == '/':
-                rec.res_partner_code = self.env['ir.sequence'].next_by_code('res.partner.code') or '/'
+            if not rec.res_partner_code:
+                rec.res_partner_code = self.env['ir.sequence'].next_by_code('res.partner.code')
