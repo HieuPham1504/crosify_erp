@@ -1,53 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template id="print_item_barcode_custom">
-        <t t-foreach="docs" t-as="doc">
-            <t t-call="web.basic_layout">
-                <div class="page">
-                    <div class="row" id="barcode-container">
-                        <div class="col-6">
-                            <div class="col overflow-hidden text-start order-name">
-                                <p style="font-size:20px">
-                                    <t t-esc="doc.order_id.name"/>
-                                </p>
-                            </div>
-
-                            <div class="col overflow-hidden text-start product-type">
-                                <p style="font-size:20px">
-                                    <t t-esc="doc.product_type"/>
-                                </p>
-                            </div>
-
-                            <t t-foreach="doc.product_id.product_template_attribute_value_ids" t-as="attribute">
-                                <t t-if="attribute.attribute_id.name in ['Size', 'Color']">
-                                    <div class="col overflow-hidden text-start">
-                                        <p style="font-size:20px">
-                                            <t t-esc="attribute.product_attribute_value_id.name"/>
-                                        </p>
-                                    </div>
-                                </t>
-                            </t>
-
-                            <img class="barcode"
-                                 t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=1&amp;quiet=0' % ('Code128',doc.production_id, 205, 67)"
-                                 alt="Barcode"/>
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <div class="row" id="barcode-container">
+                    <div class="col-6">
+                        <div class="col overflow-hidden text-start order-name">
+                            <p style="font-size:20px">
+                                <t t-esc="docs.order_id.name"/>
+                            </p>
                         </div>
-                        <div class="col-6">
-                            <div class="col overflow-hidden text-start">
-                                <p style="font-size:20px">
-                                    <t t-esc="doc.address_sheft_id.shelf_code"/>
-                                </p>
-                            </div>
 
-                            <div class="col overflow-hidden text-start">
-                                <p style="font-size:20px">
-                                    <t t-esc="doc.personalize"/>
-                                </p>
-                            </div>
+                        <div class="col overflow-hidden text-start product-type">
+                            <p style="font-size:20px">
+                                <t t-esc="docs.product_type"/>
+                            </p>
+                        </div>
+
+                        <t t-foreach="docs.product_id.product_template_attribute_value_ids" t-as="attribute">
+                            <t t-if="attribute.attribute_id.name in ['Size', 'Color']">
+                                <div class="col overflow-hidden text-start">
+                                    <p style="font-size:20px">
+                                        <t t-esc="attribute.product_attribute_value_id.name"/>
+                                    </p>
+                                </div>
+                            </t>
+                        </t>
+
+                        <img class="barcode"
+                             t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=1&amp;quiet=0' % ('Code128',docs.production_id, 205, 67)"
+                             alt="Barcode"/>
+                    </div>
+                    <div class="col-6">
+                        <div class="col overflow-hidden text-start">
+                            <p style="font-size:20px">
+                                <t t-esc="docs.address_sheft_id.shelf_code"/>
+                            </p>
+                        </div>
+
+                        <div class="col overflow-hidden text-start">
+                            <p style="font-size:20px">
+                                <t t-esc="docs.personalize"/>
+                            </p>
                         </div>
                     </div>
                 </div>
-            </t>
+            </div>
         </t>
     </template>
 </odoo>
