@@ -18,12 +18,12 @@
 
 "access_product_template_attribute_value_operator","access_product_template_attribute_value_operator","product.model_product_template_attribute_value",crosify_order.group_sale_team_operator,1,1,1,1
 
-"access_product_type_fulfill","access_product_type_fulfill","model_sale_order_product_type_fulfill",base.group_system,1,1,1,1
-"access_fulfill_shelf_type","access_fulfill_shelf_type","model_fulfill_shelf_type",base.group_system,1,1,1,1
-"access_fulfill_shelf","access_fulfill_shelf","model_fulfill_shelf",base.group_system,1,1,1,1
-"access_product_type_shelf_type","access_product_type_shelf_type","model_product_type_shelf_type",base.group_system,1,1,1,1
-"access_sale_order_type","access_sale_order_type","model_sale_order_type",base.group_system,1,1,1,1
-"access_fulfill_error","access_fulfill_error","model_fulfill_error",base.group_system,1,1,1,1
+"access_product_type_fulfill","access_product_type_fulfill","model_sale_order_product_type_fulfill",,1,1,1,1
+"access_fulfill_shelf_type","access_fulfill_shelf_type","model_fulfill_shelf_type",,1,1,1,1
+"access_fulfill_shelf","access_fulfill_shelf","model_fulfill_shelf",,1,1,1,1
+"access_product_type_shelf_type","access_product_type_shelf_type","model_product_type_shelf_type",,1,1,1,1
+"access_sale_order_type","access_sale_order_type","model_sale_order_type",,1,1,1,1
+"access_fulfill_error","access_fulfill_error","model_fulfill_error",,1,1,1,1
 
 "access_sale_order_line_operator","access_sale_order_line_operator","model_sale_order_line",crosify_order.group_sale_team_operator,1,1,1,0
 
@@ -32,4 +32,4 @@
 "access_update_item_design_wizard_for_admin","access_update_item_design_wizard_for_admin","model_update_item_design_wizard",,1,1,1,1
 
 "access_mo_production","access_mo_production","model_mo_production",,1,1,1,1
-"access_fulfill_cancel_item","access_fulfill_cancel_item","model_fulfill_cancel_item",base.group_system,1,1,1,1
+"access_fulfill_cancel_item","access_fulfill_cancel_item","model_fulfill_cancel_item",,1,1,1,1

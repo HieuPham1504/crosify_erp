@@ -20,6 +20,7 @@
         <menuitem id="crosify_menu_fulfill_cancel_item" name="Cancel Item"
             parent="sale.menu_sales_config"
             action="crosify_menu_fulfill_cancel_item_action" 
-            sequence="28"/>
+            sequence="28"
+            groups="base.group_system"/>
     </data>
 </odoo>

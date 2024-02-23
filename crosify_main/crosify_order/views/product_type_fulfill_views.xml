@@ -22,6 +22,7 @@
         <menuitem id="crosify_menu_product_type_fulfill" name="Product Types - Fulfill"
             parent="sale.menu_sales_config"
             action="crosify_menu_sale_order_product_type_fulfill_action"
-            sequence="22" />
+            sequence="22" 
+            groups="base.group_system"/>
     </data>
 </odoo>
