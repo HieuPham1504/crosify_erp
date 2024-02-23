@@ -22,7 +22,7 @@
                         'ilike', self), ('company_registry', 'ilike', self), ('res_partner_code',
                         'ilike', self)]</attribute>
                 </field>
-                <xpath exp="//filter[@name='type_person']" position="before">
+                <xpath expr="//filter[@name='type_person']" position="before">
                     <filter string="None Partner Code" name="none_partner_code" domain="[('res_partner_code', '=', False)]"/>
                 </xpath>
             </field>
