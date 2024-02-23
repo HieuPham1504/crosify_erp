@@ -29,7 +29,7 @@
                             </t>
 
                             <img class="barcode"
-                                 t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=1&amp;quiet=0' % ('Code128',docs.production_id, 205, 67)"
+                                 t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=1&amp;quiet=0' % ('Code128',doc.production_id, 205, 67)"
                                  alt="Barcode"/>
                         </div>
                         <div class="col-6">
