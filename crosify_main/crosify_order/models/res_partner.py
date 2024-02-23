@@ -32,3 +32,13 @@ class ResPartner(models.Model):
                 name = f"{name} ‒ {partner.vat}"
 
             partner.display_name = name.strip()
+    
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        args = args or []
+        domain = args[:]
+        if name:
+            domain = ['|', ('name', operator, name), ('res_partner_code', operator, name)]
+            domain += args
+        partners = self.search(domain, limit=limit)
+        return partners.name_get()
