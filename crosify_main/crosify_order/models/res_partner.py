@@ -1,5 +1,6 @@
 import re
 from odoo import models, fields, api
+
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
@@ -42,3 +43,13 @@ class ResPartner(models.Model):
             domain += args
         partners = self.search(domain, limit=limit)
         return partners.name_get()
+    
+    @api.model
+    def action_generate_code_for_partner_model(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        items.action_generate_code_for_partner()
+    def action_generate_code_for_partner(self):
+        for rec in self:
+            if not rec.res_partner_code or rec.res_partner_code == '/':
+                rec.res_partner_code = self.env['ir.sequence'].next_by_code('res.partner.code') or '/'
