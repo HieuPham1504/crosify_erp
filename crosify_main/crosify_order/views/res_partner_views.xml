@@ -22,17 +22,20 @@
                         'ilike', self), ('company_registry', 'ilike', self), ('res_partner_code',
                         'ilike', self)]</attribute>
                 </field>
+                <xpath exp="//filter[@name='type_person']" position="before">
+                    <filter string="None Partner Code" name="none_partner_code" domain="[('res_partner_code', '=', False)]"/>
+                </xpath>
             </field>
         </record>
 
         <record id="action_generate_code" model="ir.actions.server">
             <field name="name">Generate Code</field>
-            <field name="model_id" ref="crosify_order.model_res_partner"/>
-            <field name="binding_model_id" ref="crosify_order.model_res_partner"/>
+            <field name="model_id" ref="crosify_order.model_res_partner" />
+            <field name="binding_model_id" ref="crosify_order.model_res_partner" />
             <field name="binding_view_types">form,list</field>
             <field name="state">code</field>
             <field name="groups_id"
-                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+                eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]" />
             <field name="code">action = model.action_generate_code_for_partner_model()</field>
         </record>
     </data>
