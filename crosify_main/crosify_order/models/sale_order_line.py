@@ -333,18 +333,24 @@ class SaleOrderLine(models.Model):
         for rec in self:
             production_id = rec.production_id
             try:
-                barcode = self.env['ir.actions.report'].barcode(barcode_type='Code128', value=f'{production_id}', width=120,
-                                                                height=120,
-                                                               humanreadable='param humanreadable')
+                # barcode = self.env['ir.actions.report'].barcode(barcode_type='Code128', value=f'{production_id}', width=200,
+                #                                                 height=100,
+                #                                                humanreadable=1)
+                # data = {
+                #     'response': rec.production_id,
+                # }
+                report = self.env.ref('crosify_order.action_generate_item_barcode')
+                # report_action = report.report_action(rec, data=data)
+                pdf_content, dummy = self.env['ir.actions.report'].sudo()._render_qweb_pdf(report, rec.id)
+                barcode = base64.b64encode(pdf_content)
+
+                rec.write({
+                    'barcode_file': barcode,
+                    'barcode_name': production_id,
+                })
             except (ValueError, AttributeError):
                 raise ValidationError('Cannot convert into barcode.')
 
-            barcode = base64.b64encode(barcode)
-
-            rec.write({
-                'barcode_file': barcode,
-                'barcode_name': production_id,
-            })
 
 
 

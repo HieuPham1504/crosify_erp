@@ -25,6 +25,7 @@ Key Features
         'data/ir_sequence_mo_production.xml',
         'data/fail_product_data.xml',
         'data/ir_parameter_data.xml',
+        'report/item_barcode_template.xml',
         'data/ir_sequence_partner_code.xml',
         'views/sale_order_views.xml',
         'views/sale_order_line_views.xml',
