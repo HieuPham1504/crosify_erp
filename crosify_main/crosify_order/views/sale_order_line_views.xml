@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+
         <record id="sale_order_line_search_view_inherit" model="ir.ui.view">
             <field name="name">sale_order_line_search_view_inherit</field>
             <field name="model">sale.order.line</field>
@@ -298,6 +299,15 @@
             <field name="groups_id"
                    eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_generate_item_barcode_server()</field>
+        </record>
+
+        <record id="action_generate_item_barcode" model="ir.actions.report">
+            <field name="name">Item Barcode</field>
+            <field name="model">sale.order.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">crosify_order.print_item_barcode_custom</field>
+            <field name="report_file">crosify_order.print_item_barcode_custom</field>
+            <field name="binding_model_id" ref="model_sale_order_line"/>
         </record>
 
         <record id="crosify_menu_sale_order_line_action" model="ir.actions.act_window">
