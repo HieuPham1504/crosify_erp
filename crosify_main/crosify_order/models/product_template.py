@@ -12,8 +12,8 @@ class ProductTemplate(models.Model):
     design_number = fields.Char(string='Design Number', require=True, trim=True)
     detailed_type = fields.Selection(string="Detailed Type")
 
-    def _create_variant_ids(self):
-        return
+    # def _create_variant_ids(self):
+    #     return
 
     def create_variants(self):
         self._create_variant_ids()
@@ -146,8 +146,39 @@ class ProductTemplate(models.Model):
             else:
                 rec.product_type = False
 
+    @api.depends('name', 'product_type')
+    @api.depends_context('product_type', 'name')
+    def _compute_display_name(self):
+
+        def get_display_name(name, code):
+            if self._context.get('display_product_type', True) and code:
+                return f'[{code}] {name}'
+            return name
+        for rec in self.sudo():
+                rec.display_name = get_display_name(rec.name, rec.product_type)
+
     def _prepare_variant_values(self, combination):
         variant_dict = super()._prepare_variant_values(combination)
         sku_suffix = self.env['ir.sequence'].sudo().next_by_code('product.product.sku') or '_Undefined'
         variant_dict['default_code'] = f'{self.product_type}{sku_suffix}'
         return variant_dict
+
+    def _set_product_variant_field(self, fname):
+        """Propagate the value of the given field from the templates to their unique variant.
+
+        Only if it's a single variant product.
+        It's used to set fields like barcode, weight, volume..
+
+        :param str fname: name of the field whose value should be propagated to the variant.
+            (field name must be identical between product.product & product.template models)
+        """
+        for template in self:
+            count = len(template.product_variant_ids)
+            if count == 1:
+                # template.product_variant_ids[fname] = template[fname]
+                continue
+            elif count == 0:
+                archived_variants = self.with_context(active_test=False).product_variant_ids
+                if len(archived_variants) == 1:
+                    archived_variants[fname] = template[fname]
+        
