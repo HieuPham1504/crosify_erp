@@ -333,9 +333,9 @@ class SaleOrderLine(models.Model):
         for rec in self:
             production_id = rec.production_id
             try:
-                barcode = self.env['ir.actions.report'].barcode(barcode_type='Code128', value=f'{production_id}', width=120,
-                                                                height=120,
-                                                               humanreadable='param humanreadable')
+                barcode = self.env['ir.actions.report'].barcode(barcode_type='Code128', value=f'{production_id}', width=200,
+                                                                height=100,
+                                                               humanreadable=1)
             except (ValueError, AttributeError):
                 raise ValidationError('Cannot convert into barcode.')
 
