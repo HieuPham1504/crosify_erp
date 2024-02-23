@@ -8,17 +8,17 @@
                         <div class="col-6">
                             <div class="col overflow-hidden text-start order-name">
                                 <p style="font-size:20px">
-                                    <t t-esc="docs.order_id.name"/>
+                                    <t t-esc="doc.order_id.name"/>
                                 </p>
                             </div>
 
                             <div class="col overflow-hidden text-start product-type">
                                 <p style="font-size:20px">
-                                    <t t-esc="docs.product_type"/>
+                                    <t t-esc="doc.product_type"/>
                                 </p>
                             </div>
 
-                            <t t-foreach="docs.product_id.product_template_attribute_value_ids" t-as="attribute">
+                            <t t-foreach="doc.product_id.product_template_attribute_value_ids" t-as="attribute">
                                 <t t-if="attribute.attribute_id.name in ['Size', 'Color']">
                                     <div class="col overflow-hidden text-start">
                                         <p style="font-size:20px">
@@ -35,13 +35,13 @@
                         <div class="col-6">
                             <div class="col overflow-hidden text-start">
                                 <p style="font-size:20px">
-                                    <t t-esc="docs.address_sheft_id.shelf_code"/>
+                                    <t t-esc="doc.address_sheft_id.shelf_code"/>
                                 </p>
                             </div>
 
                             <div class="col overflow-hidden text-start">
                                 <p style="font-size:20px">
-                                    <t t-esc="docs.personalize"/>
+                                    <t t-esc="doc.personalize"/>
                                 </p>
                             </div>
                         </div>
