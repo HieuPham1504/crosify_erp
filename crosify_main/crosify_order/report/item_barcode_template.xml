@@ -4,7 +4,7 @@
         <t t-call="web.basic_layout">
             <t t-foreach="items" t-as="item">
                 <div class="page">
-                    <div class="row border border-dark" style="margin-bottom:10px;height:260px" id="barcode-container">
+                    <div class="row border border-dark" style="margin-bottom:10px;height:280px" id="barcode-container">
                         <div class="col-6 p-3">
                             <div class="col overflow-hidden text-start order-name">
                                 <p style="font-size:20px">
