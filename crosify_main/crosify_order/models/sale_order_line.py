@@ -32,6 +32,7 @@ class SaleOrderLine(models.Model):
         level_code = 'L1.1' if payment_status else 'L1'
         level = self.env['sale.order.line.level'].sudo().search([('level', '=', level_code)], limit=1)
         return level
+
     def default_sublevel_id(self):
         level = self.get_default_level()
         return level.id
@@ -57,7 +58,8 @@ class SaleOrderLine(models.Model):
     personalize = fields.Char(string='Personalize', tracking=1)
     package_size = fields.Char(string='Package Size')
     product_code = fields.Char(string='Product Code')
-    product_type = fields.Char(string='Product Type', related='product_id.product_tmpl_product_type', store=True, index=True)
+    product_type = fields.Char(string='Product Type', related='product_id.product_tmpl_product_type', store=True,
+                               index=True)
     color_set_name = fields.Char(string='Color Set Name')
     design_serial_number = fields.Char(string='Design Serial Number')
     accessory_name = fields.Char(string='Accessory Name')
@@ -72,7 +74,7 @@ class SaleOrderLine(models.Model):
     status = fields.Char(string='Status')
     tips = fields.Float(string='Tips')
     channel_ref_id = fields.Char(string='Reference ID')
-    #Fulfillment
+    # Fulfillment
     operator_id = fields.Many2one('hr.employee', string='Operator')
     produce_vendor_id = fields.Many2one('res.partner', string='Produce Vendor')
     hs_code = fields.Char(string='HS Code')
@@ -87,13 +89,13 @@ class SaleOrderLine(models.Model):
     note_fulfill = fields.Text(string='Fulfill Note')
     fulfill_employee_id = fields.Many2one('hr.employee', string='Fulfill By', index=True)
 
-    #Design
+    # Design
     designer_id = fields.Many2one('hr.employee', string='Designer', tracking=1)
     design_file_url = fields.Text(string='Design File', tracking=1)
     design_file_name = fields.Text(string='Design File Name')
     design_date = fields.Datetime(string='Design Date', tracking=1)
     variant = fields.Text(string='Variant')
-    #tab production
+    # tab production
     production_id = fields.Char(string='Production ID', tracking=1)
     production_vendor_code = fields.Char(string='Production Vendor Code')
     production_vendor_id = fields.Many2one('res.partner', string='Production Vendor')
@@ -107,7 +109,7 @@ class SaleOrderLine(models.Model):
     production_status = fields.Char(string='Production Status')
     production_estimate_time = fields.Integer(string='Production Estimate Time (h)')
     production_note = fields.Text(string='Production Note')
-    #Tab Shipping & Pickup
+    # Tab Shipping & Pickup
     address_sheft_id = fields.Many2one('fulfill.shelf', string='Address Sheft')
     shipping_date = fields.Datetime(string='Shipping Date')
     shipping_confirm_date = fields.Date(string='Shipping Confirm Date')
@@ -116,7 +118,7 @@ class SaleOrderLine(models.Model):
     deliver_date = fields.Datetime(string='Deliver Date')
     deliver_status = fields.Char(string='Deliver Status')
     customer_received = fields.Boolean(string='Customer Received')
-    #Tab Other Info
+    # Tab Other Info
     note_change_request = fields.Text(string='Note Change Request')
     cancel_date = fields.Datetime(string='Cancel Date')
     cancel_reason = fields.Text(string='Cancel Reason')
@@ -126,7 +128,8 @@ class SaleOrderLine(models.Model):
     approve_by = fields.Many2one('hr.employee', string='Approve By')
 
     level_id = fields.Many2one('sale.order.line.level', domain=[('is_parent', '=', True)], string='Parent Level')
-    sublevel_id = fields.Many2one('sale.order.line.level', string='Level', default=default_sublevel_id, domain=_sublevel_domain, tracking=1)
+    sublevel_id = fields.Many2one('sale.order.line.level', string='Level', default=default_sublevel_id,
+                                  domain=_sublevel_domain, tracking=1)
     last_update_level_date = fields.Datetime(string='Last Update Level')
     meta_field = fields.Text(string='Meta Field')
     crosify_discount_amount = fields.Float(string='Discount Amount')
@@ -143,7 +146,6 @@ class SaleOrderLine(models.Model):
     name = fields.Char(string='Name')
     barcode_file = fields.Binary(string='Item Barcode')
     barcode_name = fields.Char(string='Barcode Name')
-
 
     def update_item_level_based_on_payment_status(self):
         for rec in self:
@@ -168,7 +170,6 @@ class SaleOrderLine(models.Model):
         safety_state_levels = [False, 'L1.1']
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().browse(item_ids)
-
 
         if any(item.sublevel_id.level not in safety_state_levels for item in items):
             raise ValidationError('There is an item with a different status than Paid Order')
@@ -216,7 +217,7 @@ class SaleOrderLine(models.Model):
             for index, item in enumerate(total_items):
                 if item.id in selected_items.ids:
                     if len(total_items) > 1:
-                        production_id = f'{item.order_id_fix}-{index+1}'
+                        production_id = f'{item.order_id_fix}-{index + 1}'
                     else:
                         production_id = f'{item.order_id_fix}'
                     item.production_id = production_id
@@ -241,7 +242,6 @@ class SaleOrderLine(models.Model):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
         items.action_creating_shipment_for_item()
-
 
     def action_creating_shipment_for_item(self):
         current_employee = self.env.user.employee_id
@@ -325,41 +325,45 @@ class SaleOrderLine(models.Model):
     def action_generate_item_barcode_server(self):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
-        if any(not item.product_id for item in items):
-            raise ValidationError('Could not generate barcode for None Product_id Item')
-        items.action_generate_item_barcode()
+        if any(not item.production_id for item in items):
+            raise ValidationError('Could not generate barcode for None Production ID Item')
+        return items.action_generate_item_barcode()
 
     def action_generate_item_barcode(self):
-        for rec in self:
-            production_id = rec.production_id
-            try:
-                # barcode = self.env['ir.actions.report'].barcode(barcode_type='Code128', value=f'{production_id}', width=200,
-                #                                                 height=100,
-                #                                                humanreadable=1)
-                # data = {
-                #     'production_id': rec.production_id,
-                #     'order_id_name': rec.order_id.name,
-                #     'product_type': rec.product_type,
-                #     'personalize': rec.product_type,
-                #     'shelf_code': rec.address_sheft_id.shelf_code,
-                #     'product_template_attribute_value_ids': rec.product_id.product_template_attribute_value_ids,
-                # }
-                report = self.env.ref('crosify_order.action_generate_item_barcode')
-                # report_action = report.report_action(rec, data=data)
-                pdf_content, dummy = self.env['ir.actions.report'].sudo()._render_qweb_pdf(report, rec.id)
-                barcode = base64.b64encode(pdf_content)
-                #
-                rec.write({
-                    'barcode_file': barcode,
-                    'barcode_name': production_id,
-                })
-                # report_action = report.report_action(None, data=data, config=False)
-                # report_action.update({'close_on_report_download': True})
-                # return report_action
-            except (ValueError, AttributeError):
-                raise ValidationError('Cannot convert into barcode.')
+        # for rec in self:
+        #     production_id = rec.production_id
+        try:
+            # barcode = self.env['ir.actions.report'].barcode(barcode_type='Code128', value=f'{production_id}', width=200,
+            #                                                 height=100,
+            #                                                humanreadable=1)
+            data = [{
+                'production_id': rec.production_id,
+                'order_id_name': rec.order_id.name,
+                'product_type': rec.product_type,
+                'personalize': rec.personalize,
+                'shelf_code': rec.address_sheft_id.shelf_code,
+                'size': [attribute.product_attribute_value_id.name for attribute in
+                                                         rec.product_id.product_template_attribute_value_ids if
+                                                         attribute.attribute_id.name in ['Size']],
+                'color': [attribute.product_attribute_value_id.name for attribute in
+                                                         rec.product_id.product_template_attribute_value_ids if
+                                                         attribute.attribute_id.name in ['Color']],
 
-
-
-
-
+            } for rec in self]
+            item_data = {
+                'items': data
+            }
+            report = self.env.ref('crosify_order.action_generate_item_barcode')
+            # report_action = report.report_action(rec, data=data)
+            report_action = report.report_action(self, data=item_data, config=False)
+            report_action.update({'close_on_report_download': True})
+            return report_action
+            # pdf_content, dummy = self.env['ir.actions.report'].sudo()._render_qweb_pdf(report, rec.id)
+            # barcode = base64.b64encode(pdf_content)
+            #
+            # rec.write({
+            #     'barcode_file': barcode,
+            #     'barcode_name': production_id,
+            # })
+        except (ValueError, AttributeError):
+            raise ValidationError('Cannot convert into barcode.')
