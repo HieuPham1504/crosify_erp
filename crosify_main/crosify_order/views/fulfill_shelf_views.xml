@@ -22,6 +22,7 @@
         <menuitem id="crosify_menu_fulfill_shelf" name="Shelf"
             parent="sale.menu_sales_config"
             action="crosify_menu_fulfill_shelf_action"
-            sequence="24" />
+            sequence="24" 
+            groups="base.group_system"/>
     </data>
 </odoo>

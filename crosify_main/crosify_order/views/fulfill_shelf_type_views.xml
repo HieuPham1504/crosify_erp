@@ -20,6 +20,7 @@
         <menuitem id="crosify_menu_fulfill_shelf_type" name="Shelf Type"
             parent="sale.menu_sales_config"
             action="crosify_menu_fulfill_shelf_type_action"
-            sequence="23" />
+            sequence="23" 
+            groups="base.group_system"/>
     </data>
 </odoo>

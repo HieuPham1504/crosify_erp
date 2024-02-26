@@ -20,6 +20,7 @@
         <menuitem id="crosify_menu_fulfill_error" name="Error Type"
             parent="sale.menu_sales_config"
             action="crosify_menu_fulfill_error_action"
-            sequence="27" />
+            sequence="27" 
+            groups="base.group_system"/>
     </data>
 </odoo>

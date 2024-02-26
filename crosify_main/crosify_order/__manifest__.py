@@ -41,6 +41,7 @@ Key Features
         'views/fulfill_error_views.xml',
         'views/mo_production_views.xml',
         'views/res_partner_views.xml',
+        'views/fulfill_cancel_item_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
         'wizard/update_item_design_wizard_views.xml',

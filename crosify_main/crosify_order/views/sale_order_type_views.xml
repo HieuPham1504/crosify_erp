@@ -20,6 +20,7 @@
         <menuitem id="crosify_menu_sale_order_type" name="Order Type"
             parent="sale.menu_sales_config"
             action="crosify_menu_sale_order_type_action"
-            sequence="26" />
+            sequence="26" 
+            groups="base.group_system"/>
     </data>
 </odoo>
