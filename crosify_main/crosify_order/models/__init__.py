@@ -1,6 +1,6 @@
 from . import sale_order
-from . import sale_order_line
 from . import sale_order_line_level
+from . import sale_order_line
 from . import sale_order_line_image_url
 from . import product_product
 from . import product_template
@@ -12,3 +12,6 @@ from . import fulfill_shelf
 from . import product_type_shelf_type
 from . import sale_order_type
 from . import mo_production
+from . import production_transfer
+from . import production_transfer_item
+from . import qc_receive_item
