@@ -10,7 +10,7 @@ class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'sale.order.line']
 
-    @api.constrains('production_idproduction_id')
+    @api.constrains('production_id')
     def _check_production_id(self):
         for record in self:
             production_id = record.production_id
