@@ -1,0 +1,57 @@
+<odoo>
+    <data>
+
+        <record id="pack_on_shelf_wizard_form_view" model="ir.ui.view">
+            <field name="name">pack_on_shelf_wizard_form_view</field>
+            <field name="model">pack.on.shelf.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                    </header>
+                    <sheet>
+                        <group name="main">
+                            <group>
+                                <field name="address_shelf_id"
+                                       options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                            </group>
+                            <group>
+                                <button string="Update" name="action_checking_item_shelf" type="object"
+                                        class="btn-primary" data-hotkey="q"/>
+                            </group>
+
+                        </group>
+                        <br/>
+
+                        <field name="line_ids" nolabel="1">
+                            <tree string="Items" editable="bottom" decoration-danger="is_mismatch_shelf == True">
+                                <field name="production_id" readonly="0"/>
+                                <field name="sale_order_line_id" column_invisible="1"/>
+                                <field name="is_mismatch_shelf" column_invisible="1"/>
+                                <field name="product_id" readonly="1" string="SKU"/>
+                                <field name="address_shelf_id" readonly="1"
+                                       options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                                <field name="sublevel_id" readonly="1"
+                                       options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                            </tree>
+                        </field>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="pack_on_shelf_wizard_menu_action" model="ir.actions.act_window">
+            <field name="name">QC Failed</field>
+            <field name="res_model">pack.on.shelf.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="pack_on_shelf_wizard_menu"
+                  name="Pack On Shelf"
+                  action="pack_on_shelf_wizard_menu_action"
+                  groups="base.group_system,crosify_order.group_sale_team_operator"
+                  parent="sale.sale_order_menu"
+                  sequence="27"/>
+    </data>
+</odoo>
