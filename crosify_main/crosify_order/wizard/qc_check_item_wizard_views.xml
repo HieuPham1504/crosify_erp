@@ -8,7 +8,6 @@
                     <header>
                         <button string="Update" name="action_update_qc_item" type="object"
                                 class="btn-primary" data-hotkey="q"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
                     </header>
                     <sheet>
                         <field name="type" invisible="1"/>
