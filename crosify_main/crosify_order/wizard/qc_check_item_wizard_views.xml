@@ -16,7 +16,7 @@
                         <br/>
                     </div>
                     <sheet>
-                        <field name="qc_pass_line_ids" nolabel="1">
+                        <field name="qc_pass_line_ids" nolabel="1" invisible="type != 'passed'">
                             <tree string="Items" editable="bottom">
                                 <field name="production_id" readonly="0"/>
                                 <field name="sale_order_line_id" column_invisible="1"/>
@@ -24,6 +24,16 @@
                                 <field name="product_template_attribute_value_ids" readonly="1"
                                        widget="many2many_tags"/>
                                 <field name="personalize" readonly="1"/>
+                            </tree>
+                        </field>
+
+                        <field name="qc_pass_line_ids" nolabel="1" invisible="type != 'failed'">
+                            <tree string="Items" editable="bottom">
+                                <field name="production_id" readonly="0"/>
+                                <field name="sale_order_line_id" column_invisible="1"/>
+                                <field name="product_id" readonly="1" string="SKU"/>
+                                <field name="error_type_id" options='{"no_open": True, "no_create": True}' required="1"/>
+                                <field name="note"/>
                             </tree>
                         </field>
 

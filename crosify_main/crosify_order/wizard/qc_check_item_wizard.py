@@ -33,9 +33,12 @@ class QCCheckItemWizard(models.TransientModel):
             qc_failed_level = ItemLevels.search([('level', '=', 'L4.4')], limit=1)
             if not qc_failed_level:
                 raise ValidationError('There is no QC Failed Level')
-            for item in qc_pass_line_ids.mapped('sale_order_line_id'):
+            for line in qc_pass_line_ids:
+                item = line.sale_order_line_id
                 item.write({
-                    'sublevel_id': qc_failed_level.id
+                    'sublevel_id': qc_failed_level.id,
+                    'error_type_id': line.error_type_id.id,
+                    'error_note': line.note,
                 })
             return {
                 'type': 'ir.actions.client',
@@ -59,6 +62,8 @@ class QCCheckItemWizardLine(models.TransientModel):
     product_template_attribute_value_ids = fields.Many2many(
         related='sale_order_line_id.product_template_attribute_value_ids')
     personalize = fields.Char(string='Personalize', related='sale_order_line_id.personalize', store=True)
+    error_type_id = fields.Many2one('fulfill.error', string='Error Type')
+    note = fields.Text(string='Note')
 
     @api.onchange('production_id')
     def onchange_production_id(self):
