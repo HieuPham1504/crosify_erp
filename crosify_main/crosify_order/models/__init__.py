@@ -15,3 +15,6 @@ from . import fulfill_error
 from . import mo_production
 from . import res_partner
 from . import fulfill_cancel_item
+from . import production_transfer
+from . import production_transfer_item
+from . import qc_receive_item

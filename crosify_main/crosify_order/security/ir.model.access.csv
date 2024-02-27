@@ -33,3 +33,7 @@
 
 "access_mo_production","access_mo_production","model_mo_production",,1,1,1,1
 "access_fulfill_cancel_item","access_fulfill_cancel_item","model_fulfill_cancel_item",,1,1,1,1
+
+"access_production_transfer","access_production_transfer","model_production_transfer",,1,1,1,1
+"access_production_transfer_item","access_production_transfer_item","model_production_transfer_item",,1,1,1,1
+"access_qc_receive_item","access_qc_receive_item","model_qc_receive_item",,1,1,1,1

@@ -20,8 +20,10 @@ Key Features
     'data': [
         'security/sale_operator_security.xml',
         'security/designer_security.xml',
+        'security/producer_security.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence_sku.xml',
+        'data/ir_sequence_production_transfer.xml',
         'data/ir_sequence_mo_production.xml',
         'data/fail_product_data.xml',
         'data/ir_parameter_data.xml',
@@ -42,6 +44,7 @@ Key Features
         'views/mo_production_views.xml',
         'views/res_partner_views.xml',
         'views/fulfill_cancel_item_views.xml',
+        'views/production_transfer_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
         'wizard/update_item_design_wizard_views.xml',
@@ -52,7 +55,6 @@ Key Features
     'assets': {
         'web.assets_backend': [
             'crosify_order/static/src/css/sale_order_view_css.css',
-            'crosify_order/static/src/xml/tax_totals.xml',
             'crosify_order/static/src/xml/form_status_indicator.xml',
             'crosify_order/static/src/xml/list_renderer.xml',
         ],
