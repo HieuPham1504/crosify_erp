@@ -42,7 +42,7 @@ class SaleOrderLine(models.Model):
         return [('parent_id', '=', level.id)]
 
     image_ids = fields.Many2many('ir.attachment', string='Images')
-    crosify_created_date = fields.Date(string='Create Date')
+    crosify_created_date = fields.Date(string='Create Date', default=fields.Date.today())
     crosify_create_by = fields.Char(string='MyAdmin Created By')
     product_sku = fields.Char(string='SKU', related='product_id.default_code', store=True, index=True)
     my_admin_order_id = fields.Char(string='Order ID', related='order_id.myadmin_order_id', store=True, index=True)

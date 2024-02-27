@@ -1,0 +1,77 @@
+<odoo>
+    <data>
+        <record id="qc_check_item_wizard_form_view" model="ir.ui.view">
+            <field name="name">qc_check_item_wizard_form_view</field>
+            <field name="model">qc.check.item.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="type" invisible="1"/>
+                    <div class="oe_title text-center" style="max-width:100%">
+                        <h1 invisible="type != 'passed'">
+                            QC Passed
+                        </h1>
+                        <h1 invisible="type != 'failed'">
+                            QC Failed
+                        </h1>
+                        <br/>
+                    </div>
+                    <sheet>
+                        <field name="qc_pass_line_ids" nolabel="1">
+                            <tree string="Items" editable="bottom">
+                                <field name="production_id" readonly="0"/>
+                                <field name="sale_order_line_id" column_invisible="1"/>
+                                <field name="product_id" readonly="1" string="SKU"/>
+                                <field name="product_template_attribute_value_ids" readonly="1"
+                                       widget="many2many_tags"/>
+                                <field name="personalize" readonly="1"/>
+                            </tree>
+                        </field>
+
+
+                    </sheet>
+                    <footer>
+                        <button string="Update" name="action_update_qc_item" type="object"
+                                class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="qc_check_item_passed_wizard_menu_action" model="ir.actions.act_window">
+            <field name="name">QC Passed</field>
+            <field name="res_model">qc.check.item.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{
+                'default_type': 'passed'
+                }
+            </field>
+        </record>
+
+        <record id="qc_check_item_failed_wizard_menu_action" model="ir.actions.act_window">
+            <field name="name">QC Failed</field>
+            <field name="res_model">qc.check.item.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{
+                'default_type': 'failed'
+                }
+            </field>
+        </record>
+
+        <menuitem id="qc_check_item_passed_wizard_menu"
+                  name="QC Passed"
+                  action="qc_check_item_passed_wizard_menu_action"
+                  groups="base.group_system,crosify_order.group_sale_team_operator"
+                  parent="sale.sale_order_menu"
+                  sequence="25"/>
+
+        <menuitem id="qc_check_item_failed_wizard_menu"
+                  name="QC Failed"
+                  action="qc_check_item_failed_wizard_menu_action"
+                  groups="base.group_system,crosify_order.group_sale_team_operator"
+                  parent="sale.sale_order_menu"
+                  sequence="26"/>
+    </data>
+</odoo>

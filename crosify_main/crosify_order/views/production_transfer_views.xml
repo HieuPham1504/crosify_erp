@@ -25,6 +25,9 @@
                         <button name="transfer_items" string="Transfer Items"
                                 type="object" class="oe_highlight" title="Transfer Items"
                                 invisible="state != 'draft'" groups="base.group_system,crosify_order.group_producer_team"/>
+                        <button name="back_to_draft" string="Back to Draft"
+                                type="object" class="oe_highlight" title="Back to Draft"
+                                invisible="state != 'waiting_confirm'" groups="base.group_system,crosify_order.group_producer_team"/>
                         <button name="qc_confirm" string="Confirm"
                                 type="object" class="oe_highlight" data-hotkey="w" title="Confirm"
                                 invisible="state != 'waiting_confirm'" groups="base.group_system,crosify_order.group_sale_team_operator"/>
@@ -48,7 +51,7 @@
                         </group>
                         <notebook>
                             <page string="Production Transfer" name="production_transfer">
-                                <field name="production_transfer_item_ids" force_save="1" readonly="state == 'confirm'">
+                                <field name="production_transfer_item_ids" force_save="1" readonly="state != 'draft'">
                                     <tree editable="bottom" decoration-danger="is_wrong_item == True">
                                         <field name="production_id" readonly="0"/>
                                         <field name="sale_order_line_id" column_invisible="1"/>
@@ -62,7 +65,7 @@
                             </page>
 
                             <page string="QC Receive" name="qc_receive">
-                                <field name="qc_receive_item_ids" force_save="1" readonly="state == 'confirm'">
+                                <field name="qc_receive_item_ids" force_save="1" readonly="state != 'waiting_confirm'">
                                     <tree editable="bottom">
                                         <field name="production_id" readonly="0"/>
                                         <field name="sale_order_line_id" column_invisible="1"/>
