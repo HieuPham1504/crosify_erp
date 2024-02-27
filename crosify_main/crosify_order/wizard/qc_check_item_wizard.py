@@ -33,6 +33,8 @@ class QCCheckItemWizard(models.TransientModel):
             qc_failed_level = ItemLevels.search([('level', '=', 'L4.4')], limit=1)
             if not qc_failed_level:
                 raise ValidationError('There is no QC Failed Level')
+            if any( not line.error_type_id for line in qc_pass_line_ids):
+                raise ValidationError('Error Type Is Required.')
             for line in qc_pass_line_ids:
                 item = line.sale_order_line_id
                 item.write({
