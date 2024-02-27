@@ -52,7 +52,7 @@
             <field name="name">QC Passed</field>
             <field name="res_model">qc.check.item.wizard</field>
             <field name="view_mode">form</field>
-            <field name="target">new</field>
+            <field name="target">current</field>
             <field name="context">{
                 'default_type': 'passed'
                 }
@@ -63,7 +63,7 @@
             <field name="name">QC Failed</field>
             <field name="res_model">qc.check.item.wizard</field>
             <field name="view_mode">form</field>
-            <field name="target">new</field>
+            <field name="target">current</field>
             <field name="context">{
                 'default_type': 'failed'
                 }

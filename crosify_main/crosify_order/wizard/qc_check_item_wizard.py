@@ -53,7 +53,7 @@ class QCCheckItemWizardLine(models.TransientModel):
         for record in self:
             sale_order_line_id = record.sale_order_line_id
             if sale_order_line_id.sublevel_id.level != 'L4.2':
-                raise ValidationError(_("Only Transfer Item With Production Level"))
+                raise ValidationError(_("Only Transfer Item With Package Receive Level"))
 
     check_wizard_id = fields.Many2one('qc.check.item.wizard', string='QC Wizard', required=True, index=True, ondelete='cascade')
     sale_order_line_id = fields.Many2one('sale.order.line', required=True, string='Item')
