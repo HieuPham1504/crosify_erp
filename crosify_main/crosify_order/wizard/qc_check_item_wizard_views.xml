@@ -36,8 +36,7 @@
                                 <field name="production_id" readonly="0"/>
                                 <field name="sale_order_line_id" column_invisible="1"/>
                                 <field name="product_id" readonly="1" string="SKU"/>
-                                <field name="error_type_id" options='{"no_open": True, "no_create": True}'
-                                       required="parent.type == 'failed'"/>
+                                <field name="error_type_id" options='{"no_open": True, "no_create": True}'/>
                                 <field name="note"/>
                             </tree>
                         </field>
