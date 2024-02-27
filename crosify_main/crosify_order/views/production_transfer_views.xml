@@ -27,7 +27,7 @@
                                 invisible="state != 'draft'" groups="base.group_system,crosify_order.group_producer_team"/>
                         <button name="qc_confirm" string="Confirm"
                                 type="object" class="oe_highlight" data-hotkey="w" title="Confirm"
-                                invisible="state != 'waiting_confirm'"/>
+                                invisible="state != 'waiting_confirm'" groups="base.group_system,crosify_order.group_sale_team_operator"/>
                         <field name="state" widget="statusbar" invisible="0"/>
                     </header>
                     <sheet>
@@ -92,6 +92,7 @@
         <menuitem id="production_transfer_menu" name="Production Transfer"
                   parent="sale.sale_order_menu"
                   action="production_transfer_menu_action"
+                  groups="base.group_system,crosify_order.group_sale_team_operator,crosify_order.group_producer_team"
                   sequence="24"/>
     </data>
 </odoo>

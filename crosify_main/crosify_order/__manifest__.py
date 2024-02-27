@@ -20,6 +20,7 @@ Key Features
     'data': [
         'security/sale_operator_security.xml',
         'security/designer_security.xml',
+        'security/producer_security.xml',
         'security/ir.model.access.csv',
         'data/ir_sequence_sku.xml',
         'data/ir_sequence_production_transfer.xml',
