@@ -5,6 +5,11 @@
             <field name="model">qc.check.item.wizard</field>
             <field name="arch" type="xml">
                 <form>
+                    <header>
+                        <button string="Update" name="action_update_qc_item" type="object"
+                                class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                    </header>
                     <sheet>
                         <field name="type" invisible="1"/>
                         <div class="oe_title text-center" style="max-width:100%">
@@ -40,11 +45,6 @@
 
 
                     </sheet>
-                    <footer>
-                        <button string="Update" name="action_update_qc_item" type="object"
-                                class="btn-primary" data-hotkey="q"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
-                    </footer>
                 </form>
             </field>
         </record>
