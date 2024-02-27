@@ -113,11 +113,11 @@
                                 <page id="fulfillment_tab" string="FULFILLMENT" name="fulfillment_tab">
                                     <group name="fulfillment-main">
                                         <group name="fulfillment" string="FULFILLMENT">
-                                            <field name="shipping_vendor_id" options='{"no_create": True}'/>
-                                            <field name="packaging_vendor_id" options='{"no_create": True}'/>
-                                            <field name="production_vendor_id" options='{"no_create": True}'/>
+                                            <field name="shipping_vendor_id" options='{"no_open": True, "no_create": True}'/>
+                                            <field name="packaging_vendor_id" options='{"no_open": True, "no_create": True}'/>
+                                            <field name="production_vendor_id" options='{"no_open": True, "no_create": True}'/>
                                             <field name="fulfill_date"/>
-                                            <field name="fulfill_employee_id" options='{"no_create": True}'/>
+                                            <field name="fulfill_employee_id" options='{"no_open": True, "no_create": True}'/>
                                         </group>
                                         <group name="tracking" string="LABEL &amp; TRACKING NUMBER">
                                             <field name="label_file_store_name" invisible="1"/>
@@ -125,7 +125,7 @@
                                             <field name="tkn_code"/>
                                             <field name="tkn_url"/>
                                             <field name="upload_tkn_date"/>
-                                            <field name="upload_tkn_by" options='{"no_create": True}'/>
+                                            <field name="upload_tkn_by" options='{"no_open": True, "no_create": True}'/>
                                             <field name="is_upload_tkn"/>
                                         </group>
                                     </group>
@@ -149,7 +149,7 @@
                                 <page id="design_tab" string="DESIGN &amp; PRODUCTION" name="design_tab">
                                     <group>
                                         <group name="design" string="DESIGN">
-                                            <field name="designer_id" options='{"no_create": True}'/>
+                                            <field name="designer_id" options='{"no_open": True, "no_create": True}'/>
                                             <field name="design_file_url"/>
                                             <field name="design_date"/>
                                         </group>
@@ -169,7 +169,7 @@
                                       name="shipping_and_pickup_tab">
                                     <group name="shipping_and_pickup">
                                         <group name="pickup" string="PICKUP">
-                                            <field name="address_sheft_id" options='{"no_create": True}'/>
+                                            <field name="address_sheft_id" options='{"no_open": True, "no_create": True}'/>
                                             <field name="packed_date"/>
                                             <field name="pickup_date"/>
                                         </group>
@@ -197,8 +197,15 @@
                                             <field name="dispute_note"/>
                                         </group>
                                     </group>
-                                    <group name="approve" string="APPROVE">
-                                        <field name="approve_by" options='{"no_create": True}'/>
+                                    <group>
+                                        <group name="approve" string="APPROVE">
+                                            <field name="approve_by" options='{"no_open": True, "no_create": True}'/>
+                                        </group>
+
+                                        <group name="qc_failed" string="QC Failed">
+                                            <field name="error_type_id" options='{"no_open": True, "no_create": True}' readonly="1" force_save="1"/>
+                                            <field name="error_note" readonly="1" force_save="1"/>
+                                        </group>
                                     </group>
                                 </page>
                             </notebook>

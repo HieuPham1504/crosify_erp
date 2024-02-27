@@ -146,6 +146,8 @@ class SaleOrderLine(models.Model):
     name = fields.Char(string='Name')
     barcode_file = fields.Binary(string='Item Barcode')
     barcode_name = fields.Char(string='Barcode Name')
+    error_type_id = fields.Many2one('fulfill.error', string='Error Type')
+    error_note = fields.Text(string='Error Note')
 
     def update_item_level_based_on_payment_status(self):
         for rec in self:

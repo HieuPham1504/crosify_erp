@@ -4,6 +4,7 @@ from odoo.exceptions import ValidationError
 class FulfillError(models.Model):
     _name = 'fulfill.error'
     _description = 'Error Type'
+    _rec_name = 'error_type'
 
     error_type = fields.Char(string='Error Type', required=True)
 
