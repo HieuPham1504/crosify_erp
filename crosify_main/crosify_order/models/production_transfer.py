@@ -54,9 +54,21 @@ class ProductionTransfer(models.Model):
             else:
                 diff_transfer_productions = list(transfer_diff_production_ids)
                 transfer_item_ids = production_transfer_item_ids.filtered(lambda transfer: transfer.production_id in diff_transfer_productions)
+                not_available_productions = []
                 for transfer_item in transfer_item_ids:
                     transfer_item.is_wrong_item = True
+                    not_available_productions.append(transfer_item.production_id)
 
+                not_available_productions_str = ','.join([production for production in not_available_productions])
+                return {
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'raise.information.wizard',
+                    'views': [[self.env.ref('crosify_order.raise_information_wizard_form_view').id, 'form']],
+                    'context': {
+                        'default_warning': f'Not Available Transfer Item With Production ID: {not_available_productions_str}'
+                    },
+                    'target': 'new',
+                }
 
 
 
