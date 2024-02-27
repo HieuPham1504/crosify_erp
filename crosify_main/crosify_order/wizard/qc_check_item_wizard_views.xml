@@ -5,17 +5,21 @@
             <field name="model">qc.check.item.wizard</field>
             <field name="arch" type="xml">
                 <form>
-                    <field name="type" invisible="1"/>
-                    <div class="oe_title text-center" style="max-width:100%">
-                        <h1 invisible="type != 'passed'">
-                            QC Passed
-                        </h1>
-                        <h1 invisible="type != 'failed'">
-                            QC Failed
-                        </h1>
-                        <br/>
-                    </div>
+                    <header>
+                        <button string="Update" name="action_update_qc_item" type="object"
+                                class="btn-primary" data-hotkey="q"/>
+                    </header>
                     <sheet>
+                        <field name="type" invisible="1"/>
+                        <div class="oe_title text-center" style="max-width:100%">
+                            <h1 invisible="type != 'passed'">
+                                QC Passed
+                            </h1>
+                            <h1 invisible="type != 'failed'">
+                                QC Failed
+                            </h1>
+                            <br/>
+                        </div>
                         <field name="qc_pass_line_ids" nolabel="1" invisible="type != 'passed'">
                             <tree string="Items" editable="bottom">
                                 <field name="production_id" readonly="0"/>
@@ -32,18 +36,14 @@
                                 <field name="production_id" readonly="0"/>
                                 <field name="sale_order_line_id" column_invisible="1"/>
                                 <field name="product_id" readonly="1" string="SKU"/>
-                                <field name="error_type_id" options='{"no_open": True, "no_create": True}' required="1"/>
+                                <field name="error_type_id" options='{"no_open": True, "no_create": True}'
+                                       required="parent.type == 'failed'"/>
                                 <field name="note"/>
                             </tree>
                         </field>
 
 
                     </sheet>
-                    <footer>
-                        <button string="Update" name="action_update_qc_item" type="object"
-                                class="btn-primary" data-hotkey="q"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
-                    </footer>
                 </form>
             </field>
         </record>
