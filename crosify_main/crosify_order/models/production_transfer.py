@@ -50,6 +50,10 @@ class ProductionTransfer(models.Model):
                     qc_receive_ids.unlink()
                 for transfer_item in production_transfer_item_ids.mapped('sale_order_line_id'):
                     transfer_item.sublevel_id = package_receive_level.id
+                    transfer_item.write({
+                        'sublevel_id': package_receive_level.id,
+                        'production_done_date': fields.Date.today(),
+                    })
                 rec.state = 'confirm'
             else:
                 diff_transfer_productions = list(transfer_diff_production_ids)
