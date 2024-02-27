@@ -49,6 +49,7 @@ Key Features
         'wizard/update_fulfillment_wizard_views.xml',
         'wizard/update_item_design_wizard_views.xml',
         'wizard/raise_information_wizard_views.xml',
+        'wizard/qc_check_item_wizard_views.xml',
     ],
     'demo': [],
     'installable': True,

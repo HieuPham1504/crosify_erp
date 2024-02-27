@@ -46,9 +46,10 @@
                             <page string="Items" name="items">
                                 <field name="mo_production_line_ids" force_save="1" domain="[('sublevel_id.level', '=', 'L3.2')]" readonly="state != 'draft'">
                                     <tree editable="bottom" create="false">
-                                        <field name="display_name" readonly="1" string="Item"/>
+                                        <field name="production_id" readonly="1"/>
                                         <field name="product_id" readonly="1" string="SKU"/>
                                         <field name="product_template_attribute_value_ids" readonly="1" widget="many2many_tags"/>
+                                        <field name="personalize" readonly="1"/>
                                     </tree>
                                 </field>
                             </page>

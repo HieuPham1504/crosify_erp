@@ -34,7 +34,18 @@
 "access_mo_production","access_mo_production","model_mo_production",,1,1,1,1
 "access_fulfill_cancel_item","access_fulfill_cancel_item","model_fulfill_cancel_item",,1,1,1,1
 
-"access_production_transfer","access_production_transfer","model_production_transfer",,1,1,1,1
-"access_production_transfer_item","access_production_transfer_item","model_production_transfer_item",,1,1,1,1
-"access_qc_receive_item","access_qc_receive_item","model_qc_receive_item",,1,1,1,1
+"access_production_transfer_user","access_production_transfer_user","model_production_transfer",,1,1,1,1
+
+"access_production_transfer_item_user","access_production_transfer_item_user","model_production_transfer_item",base.group_user,1,0,0,0
+"access_production_transfer_item_operator","access_production_transfer_item_operator","model_production_transfer_item",crosify_order.group_sale_team_operator,1,0,0,0
+"access_production_transfer_item_producer","access_production_transfer_item_producer","model_production_transfer_item",crosify_order.group_producer_team,1,1,1,1
+"access_production_transfer_item_admin","access_production_transfer_item_admin","model_production_transfer_item",base.group_system,1,1,1,1
+
+"access_qc_receive_item_user","access_qc_receive_item_all","model_qc_receive_item",base.group_user,1,0,0,0
+"access_qc_receive_item_producer","access_qc_receive_item_producer","model_qc_receive_item",crosify_order.group_producer_team,1,0,0,0
+"access_qc_receive_item_operator","access_qc_receive_item_operator","model_qc_receive_item",crosify_order.group_sale_team_operator,1,1,1,1
+"access_qc_receive_item_admin","access_qc_receive_item_admin","model_qc_receive_item",base.group_system,1,1,1,1
+
 "access_raise_information_wizard","access_raise_information_wizard","model_raise_information_wizard",,1,1,1,1
+"access_qc_check_item_wizard_line","access_qc_check_item_wizard_line","model_qc_check_item_wizard_line",,1,1,1,1
+"access_qc_check_item_wizard","access_qc_check_item_wizard","model_qc_check_item_wizard",,1,1,1,1

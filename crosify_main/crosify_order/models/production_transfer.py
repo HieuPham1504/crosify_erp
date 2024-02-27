@@ -8,8 +8,8 @@ class ProductionTransfer(models.Model):
     _rec_name = 'code'
 
     code = fields.Char(string='Code', index=True)
-    date = fields.Date(string='Date', required=True)
-    employee_id = fields.Many2one('hr.employee', string='Employee', required=True, index=True)
+    date = fields.Date(string='Date', required=True, default=fields.Date.today())
+    employee_id = fields.Many2one('hr.employee', string='Employee', required=True, index=True, default=lambda self: self.env.user.employee_id.id)
     note = fields.Text(string='Note')
     production_transfer_item_ids = fields.One2many('production.transfer.item', 'production_transfer_id', string='Production Transfer')
     qc_receive_item_ids = fields.One2many('qc.receive.item', 'production_transfer_id', string='QC Receive')
@@ -29,6 +29,10 @@ class ProductionTransfer(models.Model):
     def transfer_items(self):
         for rec in self:
             rec.state = 'waiting_confirm'
+
+    def back_to_draft(self):
+        for rec in self:
+            rec.state = 'draft'
 
     def qc_confirm(self):
         QCReceives = self.env['qc.receive.item'].sudo()
