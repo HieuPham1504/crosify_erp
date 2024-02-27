@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="fulfill_error" model="ir.ui.view">
+            <field name="name">fulfill_error</field>
+            <field name="model">fulfill.error</field>
+            <field name="arch" type="xml">
+                <tree string="Error type" editable="bottom">
+                    <field name="id" />
+                    <field name="error_type" />
+                </tree>
+            </field>
+        </record>
+        <record id="crosify_menu_fulfill_error_action"
+            model="ir.actions.act_window">
+            <field name="name">Error type</field>
+            <field name="res_model">fulfill.error</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="crosify_menu_fulfill_error" name="Error Type"
+            parent="sale.menu_sales_config"
+            action="crosify_menu_fulfill_error_action"
+            sequence="27" />
+    </data>
+</odoo>

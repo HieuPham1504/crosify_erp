@@ -38,6 +38,7 @@ Key Features
         'views/fulfill_shelf_views.xml',
         'views/product_type_shelf_type_views.xml',
         'views/sale_order_type_views.xml',
+        'views/fulfill_error_views.xml',
         'views/mo_production_views.xml',
         'views/production_transfer_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
