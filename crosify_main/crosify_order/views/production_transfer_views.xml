@@ -39,7 +39,7 @@
                         <group name="main-description">
                             <group>
                                 <field name="date" readonly="state != 'draft'"/>
-                                <field name="employee_id" readonly="state != 'draft'"/>
+                                <field name="employee_id" readonly="state != 'draft'" options='{"no_open": True, "no_create": True}'/>
                             </group>
                             <group></group>
                         </group>
