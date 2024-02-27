@@ -42,6 +42,8 @@
                                 <field name="employee_id" readonly="state != 'draft'"/>
                             </group>
                             <group></group>
+                        </group>
+                        <group>
                             <field name="note" readonly="state != 'draft'"/>
                         </group>
                         <notebook>
