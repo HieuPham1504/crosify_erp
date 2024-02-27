@@ -24,9 +24,21 @@ class QCReceiveItem(models.Model):
     def onchange_production_id(self):
         production_id = self.production_id
         if production_id:
+            duplicate_items = self.production_transfer_id.qc_receive_item_ids.filtered(
+                lambda item: item.production_id and item.production_id == production_id)
+            if len(duplicate_items) > 1:
+                return
             Items = self.env['sale.order.line'].sudo()
             item_id = Items.search([('production_id', '=', production_id)], limit=1)
             if item_id.sublevel_id.level != 'L4.1':
                 raise ValidationError(_("Only Transfer Item With Production Level"))
             if item_id:
                 self.sale_order_line_id = item_id.id
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for val in vals_list:
+            if not val.get('sale_order_line_id'):
+                vals_list.remove(val)
+        res = super(QCReceiveItem, self).create(vals_list)
+        return res

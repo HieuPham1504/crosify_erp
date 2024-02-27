@@ -26,4 +26,39 @@ class ProductionTransfer(models.Model):
                 val.code = self.env['ir.sequence'].sudo().next_by_code('production.transfer') or _('New')
         return results
 
+    def transfer_items(self):
+        for rec in self:
+            rec.state = 'waiting_confirm'
+
+    def qc_confirm(self):
+        QCReceives = self.env['qc.receive.item'].sudo()
+        TransferItems = self.env['production.transfer.item'].sudo()
+        package_receive_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.2')], limit=1)
+        if not package_receive_level:
+            raise ValidationError('There is no Package Receive Level')
+        for rec in self:
+            production_transfer_item_ids = rec.production_transfer_item_ids
+            qc_receive_item_ids = rec.qc_receive_item_ids
+            transfer_production_ids = production_transfer_item_ids.mapped('production_id')
+            qc_receive_production_ids = qc_receive_item_ids.mapped('production_id')
+            transfer_diff_production_ids = set(transfer_production_ids) - set(qc_receive_production_ids)
+            if len(transfer_diff_production_ids) == 0:
+                qc_diff_production_ids = set(qc_receive_production_ids) - set(transfer_production_ids)
+                if len(qc_diff_production_ids) > 0:
+                    production_ids = list(qc_diff_production_ids)
+                    qc_receive_ids = qc_receive_item_ids.filtered(lambda qc: qc.production_id in production_ids)
+                    qc_receive_ids.unlink()
+                for transfer_item in production_transfer_item_ids.mapped('sale_order_line_id'):
+                    transfer_item.sublevel_id = package_receive_level.id
+                rec.state = 'confirm'
+            else:
+                diff_transfer_productions = list(transfer_diff_production_ids)
+                transfer_item_ids = production_transfer_item_ids.filtered(lambda transfer: transfer.production_id in diff_transfer_productions)
+                for transfer_item in transfer_item_ids:
+                    transfer_item.is_wrong_item = True
+
+
+
+
+
 

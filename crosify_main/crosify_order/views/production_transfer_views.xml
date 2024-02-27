@@ -22,12 +22,12 @@
             <field name="arch" type="xml">
                 <form string="Production Transfer">
                     <header>
-                        <!--                        <button name="action_produce_items" string="Produce Items"-->
-                        <!--                                type="object" class="oe_highlight" data-hotkey="w" title="Produce Items"-->
-                        <!--                                invisible="state == 'production'"/>-->
-                        <!--                        <button name="action_back_to_designed_items" string="Back to Designed"-->
-                        <!--                                type="object" class="oe_highlight" data-hotkey="w" title="Back to Designed"-->
-                        <!--                                invisible="state == 'draft'"/>-->
+                        <button name="transfer_items" string="Transfer Items"
+                                type="object" class="oe_highlight" title="Transfer Items"
+                                invisible="state != 'draft'" groups="base.group_system,crosify_order.group_producer_team"/>
+                        <button name="qc_confirm" string="Confirm"
+                                type="object" class="oe_highlight" data-hotkey="w" title="Confirm"
+                                invisible="state != 'waiting_confirm'"/>
                         <field name="state" widget="statusbar" invisible="0"/>
                     </header>
                     <sheet>
@@ -46,20 +46,21 @@
                         </group>
                         <notebook>
                             <page string="Production Transfer" name="production_transfer">
-                                <field name="production_transfer_item_ids" force_save="1" readonly="state != 'draft'">
-                                    <tree editable="bottom">
+                                <field name="production_transfer_item_ids" force_save="1" readonly="state == 'confirm'">
+                                    <tree editable="bottom" decoration-danger="is_wrong_item == True">
                                         <field name="production_id" readonly="0"/>
                                         <field name="sale_order_line_id" column_invisible="1"/>
                                         <field name="product_id" readonly="1" string="SKU"/>
                                         <field name="product_template_attribute_value_ids" readonly="1"
                                                widget="many2many_tags"/>
                                         <field name="personalize" readonly="1"/>
+                                        <field name="is_wrong_item" column_invisible="1"/>
                                     </tree>
                                 </field>
                             </page>
 
                             <page string="QC Receive" name="qc_receive">
-                                <field name="qc_receive_item_ids" force_save="1" readonly="state != 'draft'">
+                                <field name="qc_receive_item_ids" force_save="1" readonly="state == 'confirm'">
                                     <tree editable="bottom">
                                         <field name="production_id" readonly="0"/>
                                         <field name="sale_order_line_id" column_invisible="1"/>
