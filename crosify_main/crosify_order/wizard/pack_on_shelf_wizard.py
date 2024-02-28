@@ -74,4 +74,16 @@ class PackOnShelfLineWizard(models.TransientModel):
             if item_id:
                 self.sale_order_line_id = item_id.id
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        remove_vals = []
+        for val in vals_list:
+            if not val.get('sale_order_line_id'):
+                remove_vals.append(val)
+        for remove_val in remove_vals:
+            vals_list.remove(remove_val)
+        res = super(PackOnShelfLineWizard, self).create(vals_list)
+        return res
+
+
 

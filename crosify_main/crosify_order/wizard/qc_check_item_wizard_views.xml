@@ -4,7 +4,7 @@
             <field name="name">qc_check_item_wizard_form_view</field>
             <field name="model">qc.check.item.wizard</field>
             <field name="arch" type="xml">
-                <form>
+                <form class="sale_order_view_inherit_form_crosify_order">
                     <header>
                         <button string="Update" name="action_update_qc_item" type="object"
                                 class="btn-primary" data-hotkey="q"/>

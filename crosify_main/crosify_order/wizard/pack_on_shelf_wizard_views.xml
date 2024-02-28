@@ -5,7 +5,7 @@
             <field name="name">pack_on_shelf_wizard_form_view</field>
             <field name="model">pack.on.shelf.wizard</field>
             <field name="arch" type="xml">
-                <form>
+                <form class="sale_order_view_inherit_form_crosify_order">
                     <header>
                     </header>
                     <sheet>
