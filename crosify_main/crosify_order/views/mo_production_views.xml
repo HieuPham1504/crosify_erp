@@ -18,7 +18,7 @@
             <field name="name">mo_production_form_view</field>
             <field name="model">mo.production</field>
             <field name="arch" type="xml">
-                <form string="Productions">
+                <form string="Productions" class="sale_order_view_inherit_form_crosify_order">
                     <header>
                         <button name="action_produce_items" string="Produce Items"
                                 type="object" class="oe_highlight" data-hotkey="w" title="Produce Items"

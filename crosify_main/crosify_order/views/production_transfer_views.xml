@@ -20,7 +20,7 @@
             <field name="name">production_transfer_form_view</field>
             <field name="model">production.transfer</field>
             <field name="arch" type="xml">
-                <form string="Production Transfer">
+                <form string="Production Transfer" class="sale_order_view_inherit_form_crosify_order">
                     <header>
                         <button name="transfer_items" string="Transfer Items"
                                 type="object" class="oe_highlight" title="Transfer Items"
