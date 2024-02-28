@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="print_ready_packing_item_pdf">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Production ID</th>
+                            <th scope="col">SKU</th>
+                            <th scope="col">Product Type</th>
+                            <th scope="col">Address Shelf</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="counter" t-value="0"/>
+                        <t t-foreach="items" t-as="item">
+                            <t t-set="counter" t-value="counter + 1"/>
+                            <tr>
+                                <th scope="row">
+                                    <t t-esc="counter"/>
+                                </th>
+                                <td>
+                                    <t t-esc="item['production_id']"/>
+                                </td>
+
+                                <td>
+                                    <t t-esc="item['product_default_code']"/>
+                                </td>
+
+                                <td>
+                                    <t t-esc="item['product_type']"/>
+                                </td>
+
+                                <td>
+                                    <t t-esc="item['shelf_name']"/>
+                                </td>
+
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>
