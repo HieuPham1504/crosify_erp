@@ -38,8 +38,11 @@ class ProductionTransferItem(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        remove_vals = []
         for val in vals_list:
             if not val.get('sale_order_line_id'):
-                vals_list.remove(val)
+                remove_vals.append(val)
+        for remove_val in remove_vals:
+            vals_list.remove(remove_val)
         res = super(ProductionTransferItem, self).create(vals_list)
         return res
