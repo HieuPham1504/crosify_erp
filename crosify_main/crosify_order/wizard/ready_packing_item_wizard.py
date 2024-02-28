@@ -33,6 +33,8 @@ class ReadyPackingItemWizard(models.TransientModel):
         self.line_ids = [(6, 0, line_ids.ids)]
 
     def action_print_pdf_file(self):
+        if not self.line_ids:
+            raise ValidationError(_('No Data To Export PDF File'))
         try:
             data = [{
                 'production_id': rec.production_id,
