@@ -11,7 +11,7 @@ class SaleOrder(models.Model):
     ]
 
     myadmin_order_id = fields.Char(string='Order ID', required=True)
-    order_id_fix = fields.Char(string='Order ID Fix', tracking=1, required=True)
+    order_id_fix = fields.Char(string='Order ID Fix', tracking=1, required=True, index=1)
     crosify_create_date = fields.Datetime(string='Create Date', default=fields.datetime.today(), required=True)
     shipping_firstname = fields.Char(string='Shipping First Name')
     shipping_lastname = fields.Char(string='Shipping Last Name')
