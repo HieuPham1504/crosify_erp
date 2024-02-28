@@ -18,12 +18,13 @@ class ReadyPackingItemWizard(models.TransientModel):
             raise ValidationError('There is no Ready To Pack Level')
         Items = self.env['sale.order.line']
         pack_on_shelf_items = Items.sudo().search([('sublevel_id.level', '=', 'L4.5')])
-        order_id_fixes = pack_on_shelf_items.mapped('order_id_fix')
+        order_id_fixes = list(set(pack_on_shelf_items.mapped('order_id_fix')))
         orders = self.env['sale.order'].sudo().search([('order_id_fix', 'in', order_id_fixes)])
         success_items = Items
-        for order in orders:
-            pack_on_shelf_item_orders = pack_on_shelf_items.filtered(lambda item: item.order_id == order)
-            order_total_items = order.order_line
+        for order_id_fix in order_id_fixes:
+            same_orders = orders.filtered(lambda order: order.order_id_fix == order_id_fix)
+            pack_on_shelf_item_orders = pack_on_shelf_items.filtered(lambda item: item.order_id_fix == order_id_fix)
+            order_total_items = same_orders.order_line
             if pack_on_shelf_item_orders == order_total_items:
                 for item in pack_on_shelf_item_orders:
                     item.sublevel_id = ready_to_pack_level.id

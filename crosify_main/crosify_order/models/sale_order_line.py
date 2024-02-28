@@ -212,14 +212,20 @@ class SaleOrderLine(models.Model):
         if had_production_id_items:
             had_production_id_items_order_ids = ','.join([str(item.order_id_fix) for item in had_production_id_items])
             raise ValidationError(f'Item already has Production ID: {had_production_id_items_order_ids}')
-        order_id_fixes = items.mapped('order_id_fix')
+        order_id_fixes = list(set(items.mapped('order_id_fix')))
         for order_id_fix in order_id_fixes:
             total_items = self.sudo().search([('order_id_fix', '=', order_id_fix)])
+            none_production_id_items = total_items.filtered(lambda item: not item.production_id)
             selected_items = items.filtered(lambda item: item.order_id_fix == order_id_fix)
-            for index, item in enumerate(total_items):
+            has_production_id_items = total_items.filtered(lambda item: item.production_id).mapped('production_id')
+            if has_production_id_items:
+                max_index = max([int(rec.split('-')[1]) for rec in has_production_id_items])
+            else:
+                max_index = 0
+            for index, item in enumerate(none_production_id_items):
                 if item.id in selected_items.ids:
                     if len(total_items) > 1:
-                        production_id = f'{item.order_id_fix}-{index + 1}'
+                        production_id = f'{item.order_id_fix}-{max_index + index + 1}'
                     else:
                         production_id = f'{item.order_id_fix}'
                     item.production_id = production_id
