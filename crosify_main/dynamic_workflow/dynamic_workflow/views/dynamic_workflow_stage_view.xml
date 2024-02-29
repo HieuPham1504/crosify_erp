@@ -55,10 +55,10 @@
                                             <group>
                                                 <field name="name"/>
                                                 <field name="field_type" readonly="id != False"/>
-                                                <field name="selection_field" placeholder="[('blue', 'Blue'),('yellow', 'Yellow')]"
+                                                <field name="selection_field" placeholder="Blue; Red; ....."
                                                     required="field_type == 'selection'"
-                                                    readonly="field_type != 'selection'"
-                                                    invisible="field_type != 'selection'"
+                                                    readonly="field_type != 'selection' or id != False"
+                                                    invisible="field_type != 'selection'" string="Các lựa chọn"
                                                     />
                                             </group>
                                             <group>

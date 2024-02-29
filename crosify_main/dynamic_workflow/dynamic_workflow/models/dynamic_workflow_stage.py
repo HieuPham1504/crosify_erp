@@ -39,7 +39,33 @@ class DynamicField(models.Model):
             color = '#ffffff'
 
         inherit_id = self.env.ref('dynamic_workflow.dynamic_workflow_task_view_form')
-        if res.field_type == 'binary':
+        if res.field_type != 'binary':
+            selection = []
+            if res.field_type == 'selection':
+                selection_value = res.selection_field.split(';')
+                print(selection_value, '22222222222')
+                num = 1
+                for select in selection_value:
+                    selection.append(('selection_%s' % num, select.strip()))
+                    num += 1
+            field = self.env['ir.model.fields'].sudo().create({'name': field_name,
+                                                               'field_description': res.name,
+                                                               'model_id': model_id.id,
+                                                               'ttype': res.field_type,
+                                                               'is_required': res.is_required,
+                                                               'help': res.help,
+                                                               'selection': selection,
+                                                               'is_dynamic': True,
+                                                               'stage_id': res.stage_id.id
+                                                               })
+            arch_base = ('<?xml version="1.0"?>'
+                         '<data>'
+                         '<group name="dynamic_fields" position="inside">'
+                         '<field name="%s" style="background-color:%s" invisible="%s not in stages_show_fields" readonly="is_not_edit == True"/>'
+                         '</group>'
+                         '</data>') % (field_name, color, res.stage_id.id)
+
+        else:
             arch_base = ('<?xml version="1.0"?>'
                          '<data>'
                          '<group name="dynamic_fields" position="inside">'
@@ -54,30 +80,11 @@ class DynamicField(models.Model):
                                                                'is_required': res.is_required,
                                                                'help': res.help,
                                                                'relation': 'ir.attachment',
-                                                               'selection': res.selection_field,
                                                                'is_dynamic': True,
                                                                'stage_id': res.stage_id.id
                                                                })
 
-        else:
-            print('11111')
-            field = self.env['ir.model.fields'].sudo().create({'name': field_name,
-                                                               'field_description': res.name,
-                                                               'model_id': model_id.id,
-                                                               'ttype': res.field_type,
-                                                               'is_required': res.is_required,
-                                                               'help': res.help,
-                                                               'selection': res.selection_field,
-                                                               'is_dynamic': True,
-                                                               'stage_id': res.stage_id.id
-                                                               })
-            arch_base = ('<?xml version="1.0"?>'
-                         '<data>'
-                         '<group name="dynamic_fields" position="inside">'
-                         '<field name="%s" style="background-color:%s" invisible="%s not in stages_show_fields" readonly="is_not_edit == True"/>'
-                         '</group>'
-                         '</data>') % (field_name, color, res.stage_id.id)
-        print('222222')
+
         view = self.env['ir.ui.view'].sudo().create({'name': 'dynamic.workflow.task.fields',
                                                      'type': 'form',
                                                      'model': 'dynamic.workflow.task',
@@ -85,7 +92,6 @@ class DynamicField(models.Model):
                                                      'inherit_id': inherit_id.id,
                                                      'arch_base': arch_base,
                                                      'active': True})
-        print('3333333333')
         field.dynamic_view = view
         res.field_id = field
         return res
