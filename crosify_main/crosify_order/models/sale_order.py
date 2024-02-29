@@ -115,10 +115,9 @@ class SaleOrder(models.Model):
             raise ValueError("Not Found Client Key")
         headers = {"Content-Type": "application/json", "Accept": "application/json", "Catch-Control": "no-cache", "clientkey": f"{client_key}"}
         index = random.randrange(10000000, 90000000)
-        url = "https://myadmin.crosify.com/api/labels"
+        url = "https://myadmin.crosify.com/api/labels/3"
         json_data = {
-            "ReferenceNumber": f"TESTREFERENCENUMBE92847{index}",
-            "X-HPW-Service-Type": 1,
+            "ReferenceNumber": f"TEST{self.name}",
             "Weight": 0.545,
             "Receiver": {
                 "CountryCode": "US",
@@ -148,12 +147,13 @@ class SaleOrder(models.Model):
         }
 
         response = requests.post(url, data=json.dumps(json_data), headers=headers)
-        data = json.loads(response.text)
+
         if response.status_code == 200:
+            data = json.loads(response.text)
             self.write({
                 'label_file_url': data.get('linkPdf'),
                 'tkn': data.get('shipmentId'),
             })
         else:
-            raise ValidationError(data.get('msg'))
+            raise ValidationError(response.reason)
         return True

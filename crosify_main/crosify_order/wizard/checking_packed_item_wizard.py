@@ -10,6 +10,13 @@ class CheckingPackedItemWizard(models.TransientModel):
     order_ids = fields.One2many('checking.packed.item.line.order.wizard', 'checking_packed_item_wizard_id', 'Orders')
     item_ids = fields.One2many('checking.packed.item.line.item.wizard', 'checking_packed_item_wizard_id', 'Items')
 
+    # @api.onchange('order_ids')
+    # def onchange_order_ids(self):
+    #     order_ids = self.order_ids
+    #     line_datas = [{'sale_order_line_id': line.id} for line in order_ids.order_line]
+    #     item_line_ids = self.env['checking.packed.item.line.item.wizard'].create(line_datas)
+    #     self.item_ids = [(6, 0, item_line_ids.ids)]
+
 class CheckingPackedItemLineItemrWizard(models.TransientModel):
     _name = 'checking.packed.item.line.item.wizard'
 
@@ -19,6 +26,7 @@ class CheckingPackedItemLineItemrWizard(models.TransientModel):
     production_id = fields.Char(string='Order ID Fix', related='sale_order_line_id.production_id')
     product_id = fields.Many2one('product.product', string='SKU', related='sale_order_line_id.product_id')
     sublevel_id = fields.Many2one('sale.order.line.level', related='sale_order_line_id.sublevel_id')
+
 
 class CheckingPackedItemLineOrderWizard(models.TransientModel):
     _name = 'checking.packed.item.line.order.wizard'
@@ -31,9 +39,15 @@ class CheckingPackedItemLineOrderWizard(models.TransientModel):
     def onchange_order_name(self):
         order_name = self.order_name
         if order_name:
+            order_name = order_name.replace('TEST', '')
             sale_order = self.env['sale.order'].sudo().search([('name', '=', order_name)], limit=1)
             if sale_order:
-                self.order_id = sale_order.id
-                line_datas = [{'sale_order_line_id': line.id} for line in sale_order.order_line]
-                line_ids = self.env['checking.packed.item.line.item.wizard'].create(line_datas)
-                self.line_ids = [(6, 0, line_ids.ids)]
+                self.write({
+                    'order_id': sale_order.id,
+                    'order_name': order_name,
+                })
+
+            order_ids = self.checking_packed_item_wizard_id.order_ids
+            line_datas = [{'sale_order_line_id': line.id} for line in order_ids.order_id.order_line]
+            item_line_ids = self.env['checking.packed.item.line.item.wizard'].create(line_datas)
+            self.checking_packed_item_wizard_id.item_ids = [(6, 0, item_line_ids.ids)]

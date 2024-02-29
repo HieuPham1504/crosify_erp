@@ -49,6 +49,7 @@ Key Features
         'wizard/qc_check_item_wizard_views.xml',
         'wizard/pack_on_shelf_wizard_views.xml',
         'wizard/ready_to_pack_item_wizard_views.xml',
+        'wizard/checking_packed_item_wizard_views.xml',
     ],
     'demo': [],
     'installable': True,
