@@ -7,47 +7,78 @@ from odoo.exceptions import UserError, ValidationError
 class CheckingPackedItemWizard(models.TransientModel):
     _name = 'checking.packed.item.wizard'
 
-    order_ids = fields.One2many('checking.packed.item.line.order.wizard', 'checking_packed_item_wizard_id', 'Orders')
     item_ids = fields.One2many('checking.packed.item.line.item.wizard', 'checking_packed_item_wizard_id', 'Items')
 
-    # @api.onchange('order_ids')
-    # def onchange_order_ids(self):
-    #     order_ids = self.order_ids
-    #     line_datas = [{'sale_order_line_id': line.id} for line in order_ids.order_line]
-    #     item_line_ids = self.env['checking.packed.item.line.item.wizard'].create(line_datas)
-    #     self.item_ids = [(6, 0, item_line_ids.ids)]
+
+    def action_packed_items(self):
+        now = fields.Datetime.now()
+        packed_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.7')], limit=1)
+        if not packed_level:
+            raise ValidationError('There is no Packed Level')
+        items = self.item_ids.mapped('sale_order_line_id')
+        for item in items:
+            item.write({
+                'packed_date': now,
+                'sublevel_id': packed_level.id
+            })
 
 class CheckingPackedItemLineItemrWizard(models.TransientModel):
     _name = 'checking.packed.item.line.item.wizard'
 
     checking_packed_item_wizard_id = fields.Many2one('checking.packed.item.wizard')
+    barcode = fields.Char(string='Barcode')
+    tkn_code = fields.Char(string='TKN Code')
+    order_ids = fields.Many2many('sale.order')
     sale_order_line_id = fields.Many2one('sale.order.line')
-    order_id_fix = fields.Char(string='Order ID Fix', related='sale_order_line_id.order_id_fix')
-    production_id = fields.Char(string='Order ID Fix', related='sale_order_line_id.production_id')
-    product_id = fields.Many2one('product.product', string='SKU', related='sale_order_line_id.product_id')
-    sublevel_id = fields.Many2one('sale.order.line.level', related='sale_order_line_id.sublevel_id')
+    is_checked = fields.Boolean(default=False)
+    type = fields.Selection([
+        ('item', 'Item'),
+        ('order', 'Order')], string='Type')
+    state = fields.Selection([
+        ('fail', 'Fail'),
+        ('pass', 'Pass')], string='State', default='pass')
 
+    @api.onchange('barcode')
+    def onchange_barcode(self):
+        barcode = self.barcode
+        Items = self.env['sale.order.line'].sudo()
+        Orders = self.env['sale.order'].sudo()
+        if barcode:
+            item = Items.search([('production_id', '=', barcode)], limit=1)
+            if item:
+               data = {
+                   'tkn_code': item.tkn_code,
+                   'type': 'item',
+                   'sale_order_line_id': item.id,
+               }
+               item_order_rel = self.checking_packed_item_wizard_id.item_ids.filtered(lambda item_line: not item_line.is_checked and item_line.type == 'order')
+               if item_order_rel:
+                   if item_order_rel.tkn_code != item.tkn_code:
+                       data.update({
+                           'state': 'fail'
+                       })
+                       item_order_rel.write({
+                           'state': 'fail',
+                           'is_checked': True,
+                       })
+               self.write(data)
+            else:
+                orders = Orders.search([('order_id_fix', '=', barcode)])
+                data = {
+                    'order_ids': [(6, 0, orders.ids)],
+                    'tkn_code': orders.mapped('tkn')[0],
+                    'type': 'order',
+                }
+                self.write(data)
 
-class CheckingPackedItemLineOrderWizard(models.TransientModel):
-    _name = 'checking.packed.item.line.order.wizard'
+    # @api.model_create_multi
+    # def create(self, vals_list):
+    #     remove_vals = []
+    #     for val in vals_list:
+    #         if not val.get('order_id'):
+    #             remove_vals.append(val)
+    #     for remove_val in remove_vals:
+    #         vals_list.remove(remove_val)
+    #     res = super(CheckingPackedItemLineOrderWizard, self).create(vals_list)
+    #     return res
 
-    checking_packed_item_wizard_id = fields.Many2one('checking.packed.item.wizard')
-    order_name = fields.Char(string='Order Name', required=True)
-    order_id = fields.Many2one('sale.order', string='Order')
-
-    @api.onchange('order_name')
-    def onchange_order_name(self):
-        order_name = self.order_name
-        if order_name:
-            order_name = order_name.replace('TEST', '')
-            sale_order = self.env['sale.order'].sudo().search([('name', '=', order_name)], limit=1)
-            if sale_order:
-                self.write({
-                    'order_id': sale_order.id,
-                    'order_name': order_name,
-                })
-
-            order_ids = self.checking_packed_item_wizard_id.order_ids
-            line_datas = [{'sale_order_line_id': line.id} for line in order_ids.order_id.order_line]
-            item_line_ids = self.env['checking.packed.item.line.item.wizard'].create(line_datas)
-            self.checking_packed_item_wizard_id.item_ids = [(6, 0, item_line_ids.ids)]

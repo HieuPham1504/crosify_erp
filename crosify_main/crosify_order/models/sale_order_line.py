@@ -4,7 +4,7 @@ from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 from datetime import datetime
 import base64
-
+import json
 
 class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
@@ -82,6 +82,7 @@ class SaleOrderLine(models.Model):
     tkn_url = fields.Char(string='TKN URL')
     label_file = fields.Binary(string='Label File')
     label_file_store_name = fields.Char(string='Label File Store Name')
+    label_file_url = fields.Text(string="Label File Url")
     upload_tkn_date = fields.Datetime(string='Upload TKN Date')
     upload_tkn_by = fields.Many2one('hr.employee', string='Upload TKN By')
     is_upload_tkn = fields.Boolean(string='Is Upload TKN')
@@ -252,12 +253,36 @@ class SaleOrderLine(models.Model):
         items.action_creating_shipment_for_item()
 
     def action_creating_shipment_for_item(self):
+        response = self.order_id.get_label_data()
+        if response.status_code == 200:
+            data = json.loads(response.text)
+            current_employee = self.env.user.employee_id
+            sub_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L2.3')], limit=1)
+            if not sub_level:
+                raise ValidationError('There is no state with level Creating Shipment')
+            for rec in self:
+                rec.write({
+                    'label_file_url': data.get('linkPdf'),
+                    'tkn_code': data.get('shipmentId'),
+                    'is_upload_tkn': True,
+                    'upload_tkn_date': fields.Datetime.now(),
+                    'upload_tkn_by': current_employee.id,
+                    'sublevel_id': sub_level.id,
+                    'level_id': sub_level.parent_id.id,
+                })
+        else:
+            raise ValidationError(response.reason)
+
+    def action_creating_shipment_for_item_order(self):
         current_employee = self.env.user.employee_id
         sub_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L2.3')], limit=1)
         if not sub_level:
             raise ValidationError('There is no state with level Creating Shipment')
         for rec in self:
+            order_id = rec.order_id
             rec.write({
+                'label_file_url': order_id.label_file_url,
+                'tkn_code': order_id.tkn,
                 'is_upload_tkn': True,
                 'upload_tkn_date': fields.Datetime.now(),
                 'upload_tkn_by': current_employee.id,

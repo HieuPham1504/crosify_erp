@@ -98,26 +98,19 @@ class SaleOrder(models.Model):
         items.action_creating_shipment_for_order()
 
     def action_creating_shipment_for_order(self):
-        current_employee = self.env.user.employee_id
-        now = fields.Datetime.now()
         for rec in self:
-            rec.write({
-                'is_upload_tkn': True,
-                'update_tkn_date': now,
-                'update_tkn_employee_id': current_employee.id,
-            })
+            rec.generate_order_label_file()
             can_update_tkn_items = rec.order_line.filtered(lambda item: not item.is_upload_tkn)
-            can_update_tkn_items.action_creating_shipment_for_item()
+            can_update_tkn_items.action_creating_shipment_for_item_order()
 
-    def generate_order_label_file(self):
+    def get_label_data(self):
         client_key = self.env['ir.config_parameter'].sudo().get_param('create.label.client.key')
         if not client_key:
             raise ValueError("Not Found Client Key")
         headers = {"Content-Type": "application/json", "Accept": "application/json", "Catch-Control": "no-cache", "clientkey": f"{client_key}"}
-        index = random.randrange(10000000, 90000000)
         url = "https://myadmin.crosify.com/api/labels/3"
         json_data = {
-            "ReferenceNumber": f"TEST{self.name}",
+            "ReferenceNumber": f"{self.order_id_fix}",
             "Weight": 0.545,
             "Receiver": {
                 "CountryCode": "US",
@@ -146,13 +139,20 @@ class SaleOrder(models.Model):
             ]
         }
 
-        response = requests.post(url, data=json.dumps(json_data), headers=headers)
+        return requests.post(url, data=json.dumps(json_data), headers=headers)
 
+    def generate_order_label_file(self):
+        response = self.get_label_data()
         if response.status_code == 200:
             data = json.loads(response.text)
+            current_employee = self.env.user.employee_id
+            now = fields.Datetime.now()
             self.write({
                 'label_file_url': data.get('linkPdf'),
                 'tkn': data.get('shipmentId'),
+                'is_upload_tkn': True,
+                'update_tkn_date': now,
+                'update_tkn_employee_id': current_employee.id,
             })
         else:
             raise ValidationError(response.reason)

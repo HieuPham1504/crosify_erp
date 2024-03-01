@@ -10,27 +10,17 @@
                     </header>
                     <sheet>
                         <group name="main">
-                            <group>
-                                <field name="order_ids">
-                                    <tree string="Orders" editable="bottom">
-                                        <field name="order_name" readonly="0"/>
-                                        <field name="order_id" column_invisible="1"/>
-                                    </tree>
-                                </field>
-
-                            </group>
-                            <group>
-                                <field name="item_ids">
-                                    <tree string="Orders" editable="bottom">
-                                        <field name="order_id_fix" readonly="1"/>
-                                        <field name="sale_order_line_id" column_invisible="1"/>
-                                        <field name="production_id" readonly="1"/>
-                                        <field name="product_id" readonly="1"/>
-                                        <field name="sublevel_id" readonly="1"/>
-                                    </tree>
-                                </field>
-                            </group>
-
+                            <field name="item_ids">
+                                <tree string="Orders" editable="bottom">
+                                    <field name="barcode"/>
+                                    <field name="tkn_code" readonly="1" force_save="1"/>
+                                    <field name="order_ids" column_invisible="1"/>
+                                    <field name="sale_order_line_id" column_invisible="1"/>
+                                    <field name="is_checked" column_invisible="0"/>
+                                    <field name="type" column_invisible="0"/>
+                                    <field name="state" readonly="1" force_save="1"/>
+                                </tree>
+                            </field>
                         </group>
                         <br/>
                     </sheet>
