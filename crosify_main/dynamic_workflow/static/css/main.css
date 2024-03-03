@@ -16,3 +16,7 @@
     align-items: center;
     padding: 10px 0px;
 }
+
+.color-required {
+    color: red !important;
+}

@@ -19,14 +19,14 @@ class DynamicField(models.Model):
 
     name = fields.Char('Tên trường', required=True)
     sequence = fields.Integer()
-    help = fields.Text('Hỗ trợ')
+    help = fields.Text('Mô tả')
     is_required = fields.Boolean('Bắt buộc')
     field_id = fields.Many2one('ir.model.fields')
     stage_id = fields.Many2one('dynamic.workflow.stage', ondelete='cascade')
     field_type = fields.Selection(selection=FIELD_TYPE, string='Kiểu dữ liệu', required=True)
-    selection_field = fields.Char(string="Selection Options")
-
-    # @api.constrains('sequence')
+    selection_field = fields.Char(string="Các lựa chọn")
+    selection_field_add = fields.Char(string="Thêm lựa chọn")
+    is_used = fields.Boolean(related='stage_id.is_used')
 
     @api.model
     def create(self, values):
@@ -34,16 +34,15 @@ class DynamicField(models.Model):
         field_name = 'x_truong_%s_%s' % (res.stage_id.id, res.id)
         model_id = self.env['ir.model'].sudo().search([('model', '=', 'dynamic.workflow.task')])
         if res.is_required:
-            color = '#ffdede'
+            class_color = 'color-required'
         else:
-            color = '#ffffff'
+            class_color = 'color-default'
 
         inherit_id = self.env.ref('dynamic_workflow.dynamic_workflow_task_view_form')
         if res.field_type != 'binary':
             selection = []
             if res.field_type == 'selection':
                 selection_value = res.selection_field.split(';')
-                print(selection_value, '22222222222')
                 num = 1
                 for select in selection_value:
                     selection.append(('selection_%s' % num, select.strip()))
@@ -61,17 +60,19 @@ class DynamicField(models.Model):
             arch_base = ('<?xml version="1.0"?>'
                          '<data>'
                          '<group name="dynamic_fields" position="inside">'
-                         '<field name="%s" style="background-color:%s" invisible="%s not in stages_show_fields" readonly="is_not_edit == True"/>'
+                         '<label for="%s" class="color-required"/>'
+                         '<field name="%s" nolabel="1" style="background-color:%s" invisible="%s not in stages_show_fields" readonly="is_not_edit == True"/>'
                          '</group>'
-                         '</data>') % (field_name, color, res.stage_id.id)
+                         '</data>') % (field_name, field_name, class_color, res.stage_id.id)
 
         else:
             arch_base = ('<?xml version="1.0"?>'
                          '<data>'
                          '<group name="dynamic_fields" position="inside">'
-                         '<field name="%s" style="background-color:%s" invisible="%s not in stages_show_fields" widget="many2many_binary" readonly="is_not_edit == True"/>'
+                         '<label for="%s" class="color-required"/>'
+                         '<field name="%s" nolabel="1" style="background-color:%s" invisible="%s not in stages_show_fields" widget="many2many_binary" readonly="is_not_edit == True"/>'
                          '</group>'
-                         '</data>') % (field_name, color, res.stage_id.id)
+                         '</data>') % (field_name, field_name, class_color, res.stage_id.id)
 
             field = self.env['ir.model.fields'].sudo().create({'name': field_name,
                                                                'field_description': res.name,
@@ -97,16 +98,37 @@ class DynamicField(models.Model):
         return res
 
     def write(self, values):
+        if values['selection_field_add'] and 'selection_field_add' in values:
+            values['selection_field'] = self.selection_field + '; ' + values['selection_field_add']
+            values['selection_field_add'] = False
         res = super(DynamicField, self).write(values)
+        selection = False
+        if self.field_type == 'selection':
+            selection = []
+            selection_value = self.selection_field.split(';')
+            num = 1
+            for select in selection_value:
+                selection.append(('selection_%s' % num, select.strip()))
+                num += 1
         self.field_id.sudo().write({
             'field_description': self.name,
             'is_required': self.is_required,
+            'selection': str(selection) if selection else False,
             'help': self.help
         })
         return res
 
+    @api.model
+    def create(self, values):
+        res = super(DynamicField, self).create(values)
+        if res.stage_id.workflow_id.is_used:
+            raise ValidationError('Không thể tạo thêm trường khi quy trình đang được sử dụng.')
+        return res
+
     def unlink(self):
         for rec in self:
+            if rec.stage_id.workflow_id.is_used:
+                raise ValidationError('Không thể xóa trường khi quy trình đang được sử dụng.')
             rec.field_id.sudo().unlink()
         return super(DynamicField, self).unlink()
 
@@ -150,6 +172,7 @@ class WorkflowStage(models.Model):
     is_done_stage = fields.Boolean()
     is_fail_stage = fields.Boolean()
     is_not_edit = fields.Boolean(related='workflow_id.is_not_edit')
+    is_used = fields.Boolean(related='workflow_id.is_used')
 
     @api.constrains('dynamic_field_ids')
     def _constrains_dynamic_field_ids(self):
