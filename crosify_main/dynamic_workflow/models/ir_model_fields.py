@@ -20,8 +20,8 @@ class IrModelFields(models.Model):
         view = self.dynamic_view.arch_base
         if view:
             if self.is_required:
-                self.sudo().dynamic_view.arch_base = view.replace('background-color:#ffffff',
-                                                                  'background-color:#ffdede')
+                self.sudo().dynamic_view.arch_base = view.replace('color-default',
+                                                                  'color-required')
             else:
-                self.sudo().dynamic_view.arch_base = view.replace('background-color:#ffdede',
-                                                                  'background-color:#ffffff')
+                self.sudo().dynamic_view.arch_base = view.replace('color-required',
+                                                                  'color-default')

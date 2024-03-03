@@ -58,15 +58,18 @@
                                                 <field name="selection_field" placeholder="Blue; Red; ....."
                                                     required="field_type == 'selection'"
                                                     readonly="field_type != 'selection' or id != False"
-                                                    invisible="field_type != 'selection'" string="Các lựa chọn"
+                                                    invisible="field_type != 'selection'"
                                                     />
+                                                <field name="selection_field_add"
+                                                       invisible="field_type != 'selection' or id == False"
+                                                       readonly="field_type != 'selection'"/>
                                             </group>
                                             <group>
-                                                <field name="is_required"/>
+                                                <field name="is_used" invisible="1"/>
+                                                <field name="is_required" readonly="is_used == True"/>
                                                 <field name="help"/>
                                             </group>
                                         </group>
-
                                     </form>
                                 </field>
                             </page>
