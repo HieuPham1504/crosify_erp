@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+import pytz
 from datetime import datetime
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
+from odoo.tools import config, DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT, pycompat
 
 
 class ApprovalRequest(models.Model):
@@ -11,10 +13,14 @@ class ApprovalRequest(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        today_format = datetime.now().date().strftime('%d/%d/%Y').split('/')
-        date = today_format[0]
-        month = today_format[1]
-        year = today_format[-1][-2:]
+        user_tz = pytz.timezone(self.env.context['tz'])
+        time = fields.Date.to_string(user_tz.localize(fields.Datetime.from_string(datetime.now().date()),
+                                                           is_dst=None).astimezone(pytz.utc))
+
+        today_format_split = time.strftime('%d/%d/%Y').split('/')
+        date = today_format_split[0]
+        month = today_format_split[1]
+        year = today_format_split[-1][-2:]
         requests = super(ApprovalRequest, self).create(vals_list)
         for request in requests:
             if not request.request_code:
