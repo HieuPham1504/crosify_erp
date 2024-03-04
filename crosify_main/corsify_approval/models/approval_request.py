@@ -17,7 +17,7 @@ class ApprovalRequest(models.Model):
         time = fields.Date.to_string(user_tz.localize(fields.Datetime.from_string(datetime.now().date()),
                                                            is_dst=None).astimezone(pytz.utc))
 
-        today_format_split = time.strftime('%d/%d/%Y').split('/')
+        today_format_split = time.split('/')
         date = today_format_split[0]
         month = today_format_split[1]
         year = today_format_split[-1][-2:]
