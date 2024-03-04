@@ -42,6 +42,7 @@ Key Features
         'views/fulfill_error_views.xml',
         'views/mo_production_views.xml',
         'views/production_transfer_views.xml',
+        'views/res_country_state_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
         'wizard/update_item_design_wizard_views.xml',

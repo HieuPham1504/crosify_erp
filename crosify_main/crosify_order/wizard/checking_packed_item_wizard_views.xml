@@ -13,13 +13,14 @@
                     <sheet>
                         <group name="main">
                             <field name="item_ids">
-                                <tree string="Orders" editable="bottom">
-                                    <field name="barcode"/>
+                                <tree string="Orders" editable="bottom" decoration-danger="state == 'fail'" options="{'autosave': true}">
+                                    <field name="barcode" force_save="1"/>
                                     <field name="tkn_code" readonly="1" force_save="1"/>
                                     <field name="order_ids" column_invisible="1"/>
                                     <field name="sale_order_line_id" column_invisible="1"/>
-                                    <field name="is_checked" column_invisible="0"/>
-                                    <field name="type" column_invisible="0"/>
+                                    <field name="order_tracking_code" column_invisible="1"/>
+                                    <field name="is_checked" column_invisible="1"/>
+                                    <field name="type" column_invisible="1"/>
                                     <field name="state" readonly="1" force_save="1"/>
                                 </tree>
                             </field>
