@@ -11,7 +11,7 @@ class ApprovalRequest(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        today_format = datetime.date.today().strftime('%d/%d/%Y').split('/')
+        today_format = datetime.now().date().strftime('%d/%d/%Y').split('/')
         date = today_format[0]
         month = today_format[1]
         year = today_format[-1][-2:]
