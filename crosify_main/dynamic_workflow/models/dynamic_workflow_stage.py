@@ -31,6 +31,8 @@ class DynamicField(models.Model):
     @api.model
     def create(self, values):
         res = super(DynamicField, self).create(values)
+        if res.stage_id.workflow_id.is_used:
+            raise ValidationError('Không thể tạo thêm trường khi quy trình đang được sử dụng.')
         field_name = 'x_truong_%s_%s' % (res.stage_id.id, res.id)
         model_id = self.env['ir.model'].sudo().search([('model', '=', 'dynamic.workflow.task')])
         if res.is_required:
@@ -60,19 +62,19 @@ class DynamicField(models.Model):
             arch_base = ('<?xml version="1.0"?>'
                          '<data>'
                          '<group name="dynamic_fields" position="inside">'
-                         '<label for="%s" class="color-required"/>'
-                         '<field name="%s" nolabel="1" style="background-color:%s" invisible="%s not in stages_show_fields" readonly="is_not_edit == True"/>'
+                         '<label for="%s" class="%s" invisible="%s not in stages_show_fields"/>'
+                         '<field name="%s" nolabel="1" invisible="%s not in stages_show_fields" readonly="is_not_edit == True"/>'
                          '</group>'
-                         '</data>') % (field_name, field_name, class_color, res.stage_id.id)
+                         '</data>') % (field_name, class_color, res.stage_id.id, field_name, res.stage_id.id)
 
         else:
             arch_base = ('<?xml version="1.0"?>'
                          '<data>'
                          '<group name="dynamic_fields" position="inside">'
-                         '<label for="%s" class="color-required"/>'
-                         '<field name="%s" nolabel="1" style="background-color:%s" invisible="%s not in stages_show_fields" widget="many2many_binary" readonly="is_not_edit == True"/>'
+                         '<label for="%s" class="%s" invisible="%s not in stages_show_fields"/>'
+                         '<field name="%s" nolabel="1" invisible="%s not in stages_show_fields" widget="many2many_binary" readonly="is_not_edit == True"/>'
                          '</group>'
-                         '</data>') % (field_name, field_name, class_color, res.stage_id.id)
+                         '</data>') % (field_name, class_color, res.stage_id.id, field_name, res.stage_id.id)
 
             field = self.env['ir.model.fields'].sudo().create({'name': field_name,
                                                                'field_description': res.name,
@@ -98,7 +100,7 @@ class DynamicField(models.Model):
         return res
 
     def write(self, values):
-        if values['selection_field_add'] and 'selection_field_add' in values:
+        if 'selection_field_add' in values and values['selection_field_add']:
             values['selection_field'] = self.selection_field + '; ' + values['selection_field_add']
             values['selection_field_add'] = False
         res = super(DynamicField, self).write(values)
@@ -116,13 +118,6 @@ class DynamicField(models.Model):
             'selection': str(selection) if selection else False,
             'help': self.help
         })
-        return res
-
-    @api.model
-    def create(self, values):
-        res = super(DynamicField, self).create(values)
-        if res.stage_id.workflow_id.is_used:
-            raise ValidationError('Không thể tạo thêm trường khi quy trình đang được sử dụng.')
         return res
 
     def unlink(self):
@@ -149,7 +144,7 @@ class WorkflowStage(models.Model):
     manager_ids = fields.Many2many('res.users', string='Người quản trị giai đoạn', tracking=True)
     follower_ids = fields.Many2many('res.users', 'follower_workflow_stage_rel', string='Người theo dõi giai đoạn',
                                     tracking=True)
-    work_by_ids = fields.Many2many('res.users', 'work_by_workflow_stage_rel', string='Người thực hiện', tracking=True)
+    work_by_ids = fields.Many2many('res.users', 'work_by_workflow_stage_rel', string='Người thực hiện', tracking=True, required=True)
     assign_method = fields.Selection(string="Phương thức giao việc",
                                      selection=[
                                          ('keep', 'Giữ nguyên người nhận việc ở giai đoạn trước'),
