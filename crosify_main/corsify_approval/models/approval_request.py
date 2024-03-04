@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from datetime import datetime
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
@@ -11,7 +11,7 @@ class ApprovalRequest(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
-        today_format = fields.Date.today().strftime('%d/%d/%Y').split('/')
+        today_format = datetime.Date.today().strftime('%d/%d/%Y').split('/')
         date = today_format[0]
         month = today_format[1]
         year = today_format[-1][-2:]
