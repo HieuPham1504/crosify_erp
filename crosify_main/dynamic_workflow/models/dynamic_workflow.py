@@ -64,13 +64,20 @@ class DynamicWorkflow(models.Model):
 
     @api.constrains('stage_ids')
     def _constrains_stage_ids(self):
-        self.stage_ids.filtered(lambda r: r.is_done_stage).sequence = len(self.stage_ids) + 1
-        self.stage_ids.filtered(lambda r: r.is_fail_stage).sequence = len(self.stage_ids) + 2
+        num = 1
+        for stage_id in self.stage_ids.filtered(lambda r: not r.is_fail_stage and not r.is_done_stage).sorted(key=lambda r: r.sequence):
+            stage_id.sequence = num
+            num += 1
+
+        self.stage_ids.filtered(lambda r: r.is_done_stage).sequence = num + 1
+        self.stage_ids.filtered(lambda r: r.is_fail_stage).sequence = num + 2
 
     @api.model
     def create(self, values):
         res = super(DynamicWorkflow, self).create(values)
-        sequence = len(res.stage_ids)
+        sequence = 0
+        if res.stage_ids:
+            sequence = max(res.stage_ids.mapped('sequence'))
         self.env['dynamic.workflow.stage'].sudo().create({
             'name': 'Hoàn thành',
             'is_done_stage': True,
