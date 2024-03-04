@@ -15,8 +15,8 @@ class CheckingPackedItemWizard(models.TransientModel):
         packed_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.7')], limit=1)
         if not packed_level:
             raise ValidationError('There is no Packed Level')
-        items = self.item_ids.mapped('sale_order_line_id')
-        for item in items:
+        orders = self.item_ids.filtered(lambda line: line.state == 'pass' and line.type == 'order').mapped('order_ids')
+        for item in orders.order_line:
             item.write({
                 'packed_date': now,
                 'sublevel_id': packed_level.id
@@ -36,7 +36,7 @@ class CheckingPackedItemLineItemrWizard(models.TransientModel):
         ('order', 'Order')], string='Type')
     state = fields.Selection([
         ('fail', 'Fail'),
-        ('pass', 'Pass')], string='State', default='pass')
+        ('pass', 'Pass')], string='State', default=False)
 
     @api.onchange('barcode')
     def onchange_barcode(self):
@@ -52,16 +52,15 @@ class CheckingPackedItemLineItemrWizard(models.TransientModel):
                    'sale_order_line_id': item.id,
                }
                item_order_rel = self.checking_packed_item_wizard_id.item_ids.filtered(lambda item_line: not item_line.is_checked and item_line.type == 'order')
+               item_order_rel_data = {}
                if item_order_rel:
                    if item_order_rel.tkn_code != item.tkn_code:
                        data.update({
-                           'state': 'fail'
-                       })
-                       item_order_rel.write({
                            'state': 'fail',
-                           'is_checked': True,
+                           'line_item_id': item_order_rel.id,
                        })
                self.write(data)
+               self.checking_packed_item_wizard_id.item_ids.filtered(lambda item_line: not item_line.is_checked and item_line.type == 'order').write(item_order_rel_data)
             else:
                 orders = Orders.search([('order_id_fix', '=', barcode)])
                 data = {
@@ -70,6 +69,7 @@ class CheckingPackedItemLineItemrWizard(models.TransientModel):
                     'type': 'order',
                 }
                 self.write(data)
+            return
 
     # @api.model_create_multi
     # def create(self, vals_list):
