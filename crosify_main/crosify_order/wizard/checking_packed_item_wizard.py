@@ -9,7 +9,6 @@ class CheckingPackedItemWizard(models.TransientModel):
 
     item_ids = fields.One2many('checking.packed.item.line.item.wizard', 'checking_packed_item_wizard_id', 'Items')
 
-
     def action_packed_items(self):
         now = fields.Datetime.now()
         packed_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.7')], limit=1)
@@ -26,6 +25,7 @@ class CheckingPackedItemLineItemrWizard(models.TransientModel):
     _name = 'checking.packed.item.line.item.wizard'
 
     checking_packed_item_wizard_id = fields.Many2one('checking.packed.item.wizard')
+    item_line_id = fields.Many2one('checking.packed.item.line.item.wizard')
     barcode = fields.Char(string='Barcode')
     tkn_code = fields.Char(string='TKN Code')
     order_ids = fields.Many2many('sale.order')
@@ -57,7 +57,8 @@ class CheckingPackedItemLineItemrWizard(models.TransientModel):
                    if item_order_rel.tkn_code != item.tkn_code:
                        data.update({
                            'state': 'fail',
-                           'line_item_id': item_order_rel.id,
+                           'is_checked': True,
+                           'item_line_id': item_order_rel.id,
                        })
                self.write(data)
                self.checking_packed_item_wizard_id.item_ids.filtered(lambda item_line: not item_line.is_checked and item_line.type == 'order').write(item_order_rel_data)
