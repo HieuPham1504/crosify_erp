@@ -169,12 +169,12 @@ class WorkflowStage(models.Model):
     is_not_edit = fields.Boolean(related='workflow_id.is_not_edit')
     is_used = fields.Boolean(related='workflow_id.is_used')
 
-    @api.constrains('dynamic_field_ids')
-    def _constrains_dynamic_field_ids(self):
+    @api.constrains('dynamic_field_ids', 'sequence')
+    def set_priority_view_dynamic_field_ids(self):
         for rec in self:
             num = 1
             for field in self.dynamic_field_ids:
-                field.field_id.sudo().dynamic_view.priority = rec.sequence * 2 + num
+                field.field_id.sudo().dynamic_view.priority = rec.sequence * 100 + num
                 num += 1
 
     def action_show_details(self):
