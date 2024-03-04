@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
-
+import json
+import requests
+import random
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
+
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -25,7 +29,8 @@ class SaleOrder(models.Model):
     shipping_cost = fields.Float(string='Shipping Cost')
     label_file_attachment = fields.Binary(string="Label File")
     label_file_store_name = fields.Char(string="File Name")
-    #payment
+    label_file_url = fields.Text(string="Label File Url")
+    # payment
     payment_at = fields.Datetime(string='Payment Date')
     currency_id = fields.Many2one('res.currency', string='Currency')
     payment_status = fields.Boolean(string='Payment Status', tracking=1)
@@ -38,7 +43,7 @@ class SaleOrder(models.Model):
     crosify_country_code_id = fields.Many2one('res.country', string='Country Code')
     state_code_id = fields.Many2one('res.country.state', string='State Code')
     payment_note = fields.Text(string='Payment Note')
-    #other
+    # other
     client_secret = fields.Char(string='Client Secret')
     utm_source_id = fields.Many2one('utm.source', string='UTM Source')
     domain = fields.Char(string='Domain')
@@ -91,20 +96,64 @@ class SaleOrder(models.Model):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
         items.action_creating_shipment_for_order()
+
     def action_creating_shipment_for_order(self):
-        current_employee = self.env.user.employee_id
-        now = fields.Datetime.now()
         for rec in self:
-            rec.write({
+            rec.generate_order_label_file()
+            can_update_tkn_items = rec.order_line.filtered(lambda item: not item.is_upload_tkn)
+            can_update_tkn_items.action_creating_shipment_for_item_order()
+
+    def get_label_data(self):
+        client_key = self.env['ir.config_parameter'].sudo().get_param('create.label.client.key')
+        if not client_key:
+            raise ValueError("Not Found Client Key")
+        headers = {"Content-Type": "application/json", "Accept": "application/json", "Catch-Control": "no-cache", "clientkey": f"{client_key}"}
+        url = "https://myadmin.crosify.com/api/labels/3"
+        json_data = {
+            "ReferenceNumber": f"{self.order_id_fix}",
+            "Weight": 0.545,
+            "Receiver": {
+                "CountryCode": "US",
+                "Name": "Test",
+                "Company": "gs",
+                "Street": "67700 test Lockwood-Jolon Road",
+                "Street2": "1",
+                "City": "Lockwood",
+                "State": "California",
+                "Zip": "93932",
+                "Phone": "5869098233",
+                "Email": " 12345@email.com "
+            },
+            "Parcels": [
+                {
+                    "EName": "shirt",
+                    "CName": "衬衫",
+                    "HSCode": 12345678,
+                    "Quantity": 1,
+                    "UnitPrice": 30,
+                    "UnitWeight": 0.45,
+                    "SKU": "SKU1",
+                    "CurrencyCode": "USD"
+                }
+
+            ]
+        }
+
+        return requests.post(url, data=json.dumps(json_data), headers=headers)
+
+    def generate_order_label_file(self):
+        response = self.get_label_data()
+        if response.status_code == 200:
+            data = json.loads(response.text)
+            current_employee = self.env.user.employee_id
+            now = fields.Datetime.now()
+            self.write({
+                'label_file_url': data.get('linkPdf'),
+                'tkn': data.get('shipmentId'),
                 'is_upload_tkn': True,
                 'update_tkn_date': now,
                 'update_tkn_employee_id': current_employee.id,
             })
-            can_update_tkn_items = rec.order_line.filtered(lambda item: not item.is_upload_tkn)
-            can_update_tkn_items.action_creating_shipment_for_item()
-
-
-
-
-
-
+        else:
+            raise ValidationError(response.reason)
+        return True

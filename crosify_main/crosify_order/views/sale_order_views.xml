@@ -221,9 +221,12 @@
                         </group>
 
                         <group name="shipping-info-other" string="LABEL &amp; TRACKING NUMBER">
-                            <field name="label_file_store_name" invisible="1"/>
-                            <field name="label_file_attachment" filename="label_file_store_name"/>
-                            <field name="tkn"/>
+                            <label for="label_file_url"/>
+                            <div class="o_row mw-50">
+                                <field name="label_file_url" widget="url" readonly="1" force_save="1"/>
+                                <button name="generate_order_label_file" invisible="label_file_url != False" class="btn btn-primary" type="object" string="Get Label"/>
+                            </div>
+                            <field name="tkn" readonly="1" force_save="1"/>
                             <field name="tkn_url"/>
                             <field name="update_tkn_date"/>
                             <field name="update_tkn_employee_id" options="{'no_create': True}"/>

@@ -113,15 +113,24 @@
                                 <page id="fulfillment_tab" string="FULFILLMENT" name="fulfillment_tab">
                                     <group name="fulfillment-main">
                                         <group name="fulfillment" string="FULFILLMENT">
-                                            <field name="shipping_vendor_id" options='{"no_open": True, "no_create": True}'/>
-                                            <field name="packaging_vendor_id" options='{"no_open": True, "no_create": True}'/>
-                                            <field name="production_vendor_id" options='{"no_open": True, "no_create": True}'/>
+                                            <field name="shipping_vendor_id"
+                                                   options='{"no_open": True, "no_create": True}'/>
+                                            <field name="packaging_vendor_id"
+                                                   options='{"no_open": True, "no_create": True}'/>
+                                            <field name="production_vendor_id"
+                                                   options='{"no_open": True, "no_create": True}'/>
                                             <field name="fulfill_date"/>
-                                            <field name="fulfill_employee_id" options='{"no_open": True, "no_create": True}'/>
+                                            <field name="fulfill_employee_id"
+                                                   options='{"no_open": True, "no_create": True}'/>
                                         </group>
                                         <group name="tracking" string="LABEL &amp; TRACKING NUMBER">
-                                            <field name="label_file_store_name" invisible="1"/>
-                                            <field name="label_file" filename="label_file_store_name"/>
+                                            <label for="label_file_url"/>
+                                            <div class="o_row mw-50">
+                                                <field name="label_file_url" widget="url" readonly="1" force_save="1"/>
+                                                <button name="action_creating_shipment_for_item"
+                                                        invisible="label_file_url != False" class="btn btn-primary"
+                                                        type="object" string="Get Label"/>
+                                            </div>
                                             <field name="tkn_code"/>
                                             <field name="tkn_url"/>
                                             <field name="upload_tkn_date"/>
@@ -169,7 +178,8 @@
                                       name="shipping_and_pickup_tab">
                                     <group name="shipping_and_pickup">
                                         <group name="pickup" string="PICKUP">
-                                            <field name="address_sheft_id" options='{"no_open": True, "no_create": True}'/>
+                                            <field name="address_sheft_id"
+                                                   options='{"no_open": True, "no_create": True}'/>
                                             <field name="packed_date"/>
                                             <field name="pickup_date"/>
                                         </group>
@@ -203,7 +213,8 @@
                                         </group>
 
                                         <group name="qc_failed" string="QC Failed">
-                                            <field name="error_type_id" options='{"no_open": True, "no_create": True}' readonly="1" force_save="1"/>
+                                            <field name="error_type_id" options='{"no_open": True, "no_create": True}'
+                                                   readonly="1" force_save="1"/>
                                             <field name="error_note" readonly="1" force_save="1"/>
                                         </group>
                                     </group>

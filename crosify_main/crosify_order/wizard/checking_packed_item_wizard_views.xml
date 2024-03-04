@@ -1,0 +1,47 @@
+<odoo>
+    <data>
+
+        <record id="checking_packed_item_wizard_form_view" model="ir.ui.view">
+            <field name="name">checking_packed_item_wizard_form_view</field>
+            <field name="model">checking.packed.item.wizard</field>
+            <field name="arch" type="xml">
+                <form class="sale_order_view_inherit_form_crosify_order">
+                    <header>
+                        <button string="Update" name="action_packed_items" type="object"
+                                class="btn-primary" data-hotkey="q"/>
+                    </header>
+                    <sheet>
+                        <group name="main">
+                            <field name="item_ids">
+                                <tree string="Orders" editable="bottom">
+                                    <field name="barcode"/>
+                                    <field name="tkn_code" readonly="1" force_save="1"/>
+                                    <field name="order_ids" column_invisible="1"/>
+                                    <field name="sale_order_line_id" column_invisible="1"/>
+                                    <field name="is_checked" column_invisible="0"/>
+                                    <field name="type" column_invisible="0"/>
+                                    <field name="state" readonly="1" force_save="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <br/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="checking_packed_item_wizard_menu_action" model="ir.actions.act_window">
+            <field name="name">Check Packed Item</field>
+            <field name="res_model">checking.packed.item.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="checking_packed_item_wizard_menu"
+                  name="Check Packed Item"
+                  action="checking_packed_item_wizard_menu_action"
+                  groups="base.group_system,crosify_order.group_sale_team_operator"
+                  parent="sale.sale_order_menu"
+                  sequence="28"/>
+    </data>
+</odoo>
