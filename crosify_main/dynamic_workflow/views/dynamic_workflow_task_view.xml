@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="dynamic_workflow_task_view_tree" model="ir.ui.view">
+            <field name="name">dynamic.workflow.task.tree</field>
+            <field name="model">dynamic.workflow.task</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="name"/>
+                    <field name="workflow_id"/>
+                </tree>
+            </field>
+        </record>
+        <record id="dynamic_workflow_task_view_form" model="ir.ui.view">
+            <field name="name">dynamic.workflow.task.form</field>
+            <field name="model">dynamic.workflow.task</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <header>
+                        <field name="is_not_edit" invisible="1"/>
+                        <field name="is_hide_back" invisible="1"/>
+                        <field name="is_hide_next" invisible="1"/>
+                        <field name="is_hide_fail" invisible="1"/>
+                        <button name="action_back_stage" string="Quay lại" type="object" invisible="is_hide_back == True"/>
+                        <button name="action_next_stage" class="btn-primary" string="Chuyển tiếp" type="object" invisible="is_hide_next == True"/>
+                        <button name="action_fail" class="btn-danger" style="background: #42b814; color: white;" string="Đánh dấu thất bại" type="object" invisible="is_hide_fail == True"/>
+                        <field name="stage_id" widget="statusbar" readonly="1"/>
+                    </header>
+
+                    <sheet>
+                        <div class="alert alert-warning text-center o_form_header" role="status" invisible="bg_color != 'warning'">
+                            <field invisible="1" name="bg_color"/>
+                            <div>
+                                <strong>Nhiện vụ đã quá hạn!
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="alert alert-danger text-center o_form_header" role="status" invisible="bg_color != 'fail'">
+                            <field name="bg_color" invisible="1"/>
+                            <div>
+                                <strong>Lí do thất bại: <field name="fail_reason"/>
+                                </strong>
+                            </div>
+                        </div>
+
+
+                        <div class="oe_title">
+                            <h1 class="d-flex flex-row">
+                                <field name="name" options="{'line_breaks': False}" widget="text" class="o_text_overflow" placeholder="Tên nhiệm vụ" readonly="is_not_edit == True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="stages_show_fields" widget="many2many_tags" invisible="1"/>
+                                <field name="work_by_domain" widget="many2many_tags" invisible="1"/>
+                                <field name="workflow_id"/>
+
+                                <field name="work_by_id" domain="[('id', 'in', work_by_domain)]" options='{"no_open": True, "no_create": True}' readonly="is_not_edit == True"/>
+                                <field name="follower_ids" widget="many2many_tags" options='{"no_open": True, "no_create": True}' readonly="is_not_edit == True"/>
+                                <field name="description" readonly="is_not_edit == True"/>
+                            </group>
+                            <group>
+                                <field name="type_set_work_time" invisible="1" readonly=""/>
+                                <field name="date_start"/>
+                                <field name="date_end" readonly="type_set_work_time != 'dynamic' or is_not_edit == True"/>
+                            </group>
+                        </group>
+                        <group name="dynamic_fields" string="Trường tùy chỉnh">
+
+                        </group>
+                        <notebook>
+                            <page name="Công việc">
+                                <field name="job_ids"  readonly="is_not_edit == True">
+                                    <tree editable="bottom">
+                                        <field name="description"/>
+                                        <field name="stage_id"/>
+                                        <field name="is_done"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="Tiến trình">
+                                <field name="task_process" readonly="1">
+                                    <tree>
+                                        <field name="stage_id"/>
+                                        <field name="work_by_id"/>
+                                        <field name="expected_time"/>
+                                        <field name="real_time"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="Hướng dẫn giai đoạn">
+                                <field name="stage_description"/>
+                            </page>
+
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="dynamic_workflow_task_view_kanban" model="ir.ui.view">
+            <field name="name">dynamic.workflow.task.kanban</field>
+            <field name="model">dynamic.workflow.task</field>
+            <field name="arch" type="xml">
+                <kanban
+                    default_group_by="stage_id"
+                    class="o_kanban_dashboard"
+                    default_order="priority desc, id desc"
+                    records_draggable="false"
+                    groups_draggable="false"
+                    group_create="false"
+                    group_delete="false"
+                    disable_sort_column="true"
+                    quick_create="false"
+                >
+                    <field name="name"/>
+                    <field name="stage_id" readonly="1"/>
+                    <field name="is_hide_back"/>
+                    <field name="is_hide_next"/>
+                    <field name="work_by_domain"/>
+                    <field name="bg_color"/>
+                    <field name="is_not_edit"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-att-class="(record.bg_color.value) + ' oe_kanban_global_click o_has_icon oe_kanban_content oe_kanban_card'">
+                                <div class="o_project_kanban_main d-flex align-items-baseline gap-1">
+                                    <div class="o_kanban_card_content mw-100">
+                                        <div class="o_kanban_primary_left">
+                                            <div class="o_primary">
+                                                <span class="o_text_overflow" t-att-title="record.name.value"><t t-esc="record.name.value"/></span>
+                                                <div t-if="record.date_end.raw_value" class="text-muted o_row" style="font-size: 13px">
+                                                    <span class="fa fa-clock-o me-2" title="Dates"/><field name="date_start"/>
+                                                    <i class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon" title="Arrow"/>
+                                                    <field name="date_end"/>
+                                                </div>
+                                                <span class="wf_kanban_work_by">
+                                                    <field name="work_by_id" domain="[('id', 'in', work_by_domain)]" widget="many2one_avatar_user" readonly="is_not_edit == True"/>
+                                                    <span class="p-1" t-esc="record.work_by_id.value"/>
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <button class="btn btn-secondary oe_kanban_action oe_kanban_action_button" name="action_back_stage" type="object" invisible="is_hide_back == True"><span>Quay lại</span></button>
+                                        <button class="btn btn-primary oe_kanban_action oe_kanban_action_button" name="action_next_stage" type="object" invisible="is_hide_next == True"><span>Chuyển tiếp</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="view_dynamic_workflow_task_filter" model="ir.ui.view">
+            <field name="name">dynamic.workflow.task.select</field>
+            <field name="model">dynamic.workflow.task</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" filter_domain="[('workflow_id', 'ilike', self)]" string="Tên nhiệm vụ"/>
+                    <field name="work_by_id" filter_domain="[('work_by_id', 'ilike', self)]" string="Người thực hiện"/>
+                    <field name="workflow_id" filter_domain="[('workflow_id', 'ilike', self)]" string="Quy trình"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="act_dynamic_workflow_task_all" model="ir.actions.act_window">
+            <field name="name">Nhiệm vụ</field>
+            <field name="res_model">dynamic.workflow.task</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('workflow_id', '=', active_id)]</field>
+            <field name="context">{
+                'default_workflow_id': active_id,
+            }</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Không có công việc nào!
+                </p>
+            </field>
+        </record>
+
+        <record id="view_task_kanban_inherit_my_task" model="ir.ui.view">
+            <field name="name">dynamic.workflow.task.kanban.inherit.my.task</field>
+            <field name="model">dynamic.workflow.task</field>
+            <field name="inherit_id" ref="dynamic_workflow_task_view_kanban"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <xpath expr="//kanban" position="attributes">
+                    <attribute name="default_group_by">workflow_id</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_view_my_task" model="ir.actions.act_window">
+            <field name="name">Nhiệm vụ của tôi</field>
+            <field name="res_model">dynamic.workflow.task</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('work_by_id', '=', uid)]</field>
+            <field name="context">{'create': 0}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Không có công việc nào!
+                </p>
+            </field>
+        </record>
+
+        <record id="open_view_my_task_list_kanban" model="ir.actions.act_window.view">
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="view_task_kanban_inherit_my_task"/>
+            <field name="act_window_id" ref="action_view_my_task"/>
+        </record>
+
+
+
+
+    </data>
+</odoo>

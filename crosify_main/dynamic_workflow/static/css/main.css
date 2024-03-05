@@ -1,0 +1,22 @@
+.bg-fail {
+    background: #ffe8e8 !important;
+}
+
+.bg-success {
+    background: #deffdb !important;
+}
+
+.bg-warning {
+    background: #f3d14a !important;
+    border: 1px solid #d09e49 !important;
+}
+
+.wf_kanban_work_by {
+    display: flex;
+    align-items: center;
+    padding: 10px 0px;
+}
+
+.color-required {
+    color: red !important;
+}
