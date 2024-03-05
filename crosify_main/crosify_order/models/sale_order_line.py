@@ -256,7 +256,8 @@ class SaleOrderLine(models.Model):
     def action_creating_shipment_for_item(self):
         orders = self.mapped('order_id')
         for order in orders:
-            self.with_delay().action_updated_shipping_items(order)
+            data = order.get_label_json_data()
+            self.with_delay(description=data).action_updated_shipping_items(order)
 
     def action_updated_shipping_items(self, order):
         items = self
