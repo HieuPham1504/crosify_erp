@@ -198,9 +198,9 @@
                                 <page id="other_info_tab" string="OTHER" name="other_info_tab">
                                     <group name="cancel_and_dispute">
                                         <group anme="cancel" string="CANCEL">
+                                            <field name="cancel_reason_id" options='{"no_open": True, "no_create": True}'/>
                                             <field name="cancel_date"/>
-                                            <field name="cancel_status"/>
-                                            <field name="cancel_reason"/>
+                                            <field name="cancel_note"/>
                                         </group>
                                         <group name="dispute" string="DISPUTE">
                                             <field name="dispute_status"/>
@@ -324,7 +324,7 @@
             <field name="state">code</field>
             <field name="groups_id"
                    eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
-            <field name="code">action = model.action_cancel_item()</field>
+            <field name="code">action = model.action_action_cancel_item()</field>
         </record>
 
         <record id="action_generate_barcode_for_item" model="ir.actions.server">

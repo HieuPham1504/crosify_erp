@@ -6,3 +6,4 @@ from . import qc_check_item_wizard
 from . import pack_on_shelf_wizard
 from . import ready_packing_item_wizard
 from . import checking_packed_item_wizard
+from . import cancel_item_wizard

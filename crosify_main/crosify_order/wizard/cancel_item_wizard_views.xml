@@ -1,0 +1,24 @@
+<odoo>
+    <data>
+        <record id="cancel_item_wizard_form_view" model="ir.ui.view">
+            <field name="name">cancel_item_wizard_form_view</field>
+            <field name="model">cancel.item.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Cancel Items">
+                    <sheet>
+                        <group name="main">
+                            <field name="cancel_reason_id" required="1" options='{"no_open": True, "no_create": True}'/>
+                            <field name="cancel_note"/>
+                            <field name="item_ids" invisible="1"/>
+                        </group>
+                        <br/>
+                    </sheet>
+                    <footer>
+                        <button name="action_cancel_items" string="Cancel Items" type="object" class="oe_highlight" data-hotkey="q"/>
+                        <button string="Discard" special="cancel" data-hotkey="x"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
