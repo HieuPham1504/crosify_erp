@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hs_product_config_name_action_list_view" model="ir.ui.view">
+            <field name="name">hs_product_config_name_action_list_view</field>
+            <field name="model">hs.product.config</field>
+            <field name="arch" type="xml">
+                <tree string="HS Product Config" editable="bottom">
+                    <field name="hs_code"/>
+                    <field name="product_ename"/>
+                    <field name="product_cname"/>
+                </tree>
+            </field>
+        </record>
+        <record id="hs_product_config_name_action" model="ir.actions.act_window">
+            <field name="name">HS Product Config</field>
+            <field name="res_model">hs.product.config</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="hs_product_config_name" name="HS Product Config"
+                  parent="sale.prod_config_main"
+                  action="hs_product_config_name_action"
+                  sequence="15"/>
+    </data>
+</odoo>

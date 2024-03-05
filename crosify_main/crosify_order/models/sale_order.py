@@ -105,38 +105,79 @@ class SaleOrder(models.Model):
 
     def get_label_data(self):
         client_key = self.env['ir.config_parameter'].sudo().get_param('create.label.client.key')
+        HSCodeConfigs = self.env['hs.product.config'].sudo()
+        Items = self.env['sale.order.line'].sudo()
         if not client_key:
             raise ValueError("Not Found Client Key")
-        headers = {"Content-Type": "application/json", "Accept": "application/json", "Catch-Control": "no-cache", "clientkey": f"{client_key}"}
+        total_item = self.order_line
+        item_hs_codes = total_item.mapped('hs_code')
+        items = Items
+        for hs_code in item_hs_codes:
+            first_item = total_item.filtered(lambda item: item.hs_code == hs_code)[0]
+            items |= first_item
+
+        parcel_datas = []
+        for item in items:
+            hs_code = item.hs_code
+            hs_code_product_config = HSCodeConfigs.search([('hs_code', '=', hs_code)], limit=1)
+            if not hs_code_product_config:
+                raise ValueError(f"There is no Config with HS Code {hs_code}")
+            parcel_datas.append({
+                "EName": f"{hs_code_product_config.product_ename}",
+                "CName": f"{hs_code_product_config.product_cname}",
+                "HTSCode": f"{hs_code}",
+                "DGCode": "",
+                "Coo": "US",
+                "Quantity": 1,
+                "UnitPrice": item.price_unit,
+                "UnitWeight": item.product_id.weight,
+                "UnitLength": item.product_id.length,
+                "UnitHeight": item.product_id.height,
+                "UnitWidth": item.product_id.width,
+                "SKU": f"{item.product_id.default_code}",
+                "Url": f"{item.design_file_url if item.design_file_url else ''}"
+            })
+
+        customer = self.partner_id
+        headers = {"Content-Type": "application/json", "Accept": "application/json", "Catch-Control": "no-cache",
+                   "clientkey": f"{client_key}"}
         url = "https://myadmin.crosify.com/api/labels/3"
+        total_weight = sum(self.order_line.product_id.mapped('weight'))
         json_data = {
             "ReferenceNumber": f"{self.order_id_fix}",
-            "Weight": 0.545,
-            "Receiver": {
-                "CountryCode": "US",
-                "Name": "Test",
-                "Company": "gs",
-                "Street": "67700 test Lockwood-Jolon Road",
+            "Weight": round(60*total_weight/100000, 3),
+            "Length": 30,
+            "Height": 5,
+            "Width": 12,
+            "Service": "HPW Parcel",
+            "ServiceCode": "HPW_PB_LAX",
+            "CurrencyCode": f"{self.currency_id.name}",
+            "Override": False,
+            "Consignor": {
+                "CountryCode": "CN",
+                "Name": "xin",
+                "Company": "test gs",
+                "Street": "3/F,Second Phase,Qianlong Logistics Park,,China South City,Pinghu,Longgang",
                 "Street2": "1",
-                "City": "Lockwood",
-                "State": "California",
-                "Zip": "93932",
-                "Phone": "5869098233",
-                "Email": " 12345@email.com "
+                "City": "SHEN ZHEN",
+                "State": "GUANG DONG",
+                "Zip": "518111",
+                "Phone": "17727165012"
             },
-            "Parcels": [
-                {
-                    "EName": "shirt",
-                    "CName": "衬衫",
-                    "HSCode": 12345678,
-                    "Quantity": 1,
-                    "UnitPrice": 30,
-                    "UnitWeight": 0.45,
-                    "SKU": "SKU1",
-                    "CurrencyCode": "USD"
-                }
-
-            ]
+            "Receiver": {
+                "CountryCode": f"{customer.country_id.code}",
+                "Name": f"{customer.name}",
+                "Company": f"{customer.company_id.name if customer.company_id else ''}",
+                "Street": f"{customer.street}",
+                "Street2": f"{customer.street2}",
+                "City": f"{customer.city}",
+                "State": f"{customer.state_id.code}",
+                "Zip": f"{customer.zip}",
+                "Phone": f"{customer.phone}",
+                "Email": f"{customer.email}",
+                "Province": "TX"
+            },
+            "Parcels": parcel_datas
         }
 
         return requests.post(url, data=json.dumps(json_data), headers=headers)
@@ -144,7 +185,8 @@ class SaleOrder(models.Model):
     def generate_order_label_file(self):
         response = self.get_label_data()
         if response.status_code == 200:
-            data = json.loads(response.text)
+            total_data = json.loads(response.text)
+            data = total_data.get('labels')[0]
             current_employee = self.env.user.employee_id
             now = fields.Datetime.now()
             self.write({

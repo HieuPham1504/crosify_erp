@@ -46,6 +46,8 @@ Key Features
         'views/res_partner_views.xml',
         'views/fulfill_cancel_item_views.xml',
         'views/production_transfer_views.xml',
+        'views/res_country_state_views.xml',
+        'views/hs_product_config_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
         'wizard/update_item_design_wizard_views.xml',

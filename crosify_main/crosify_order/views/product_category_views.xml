@@ -8,6 +8,10 @@
                 <xpath expr="//field[@name='parent_id']" position="before">
                     <field name="product_category_code" />
                 </xpath>
+
+                <xpath expr="//field[@name='parent_id']" position="after">
+                    <field name="hs_code"/>
+                </xpath>
             </field>
         </record>
 

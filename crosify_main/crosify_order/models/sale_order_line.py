@@ -149,6 +149,7 @@ class SaleOrderLine(models.Model):
     barcode_name = fields.Char(string='Barcode Name')
     error_type_id = fields.Many2one('fulfill.error', string='Error Type')
     error_note = fields.Text(string='Error Note')
+    hs_code = fields.Char(string='HS Code', related='product_template_id.categ_id.hs_code', store=True, index=1)
 
     def update_item_level_based_on_payment_status(self):
         for rec in self:
@@ -253,14 +254,24 @@ class SaleOrderLine(models.Model):
         items.action_creating_shipment_for_item()
 
     def action_creating_shipment_for_item(self):
-        response = self.order_id.get_label_data()
+        orders = self.mapped('order_id')
+        for order in orders:
+            self.with_delay().action_updated_shipping_items(order)
+
+    def action_updated_shipping_items(self, order):
+        items = self
+        updated_items = items.filtered(lambda item: item.order_id.id == order.id)
+        response = order.get_label_data()
         if response.status_code == 200:
-            data = json.loads(response.text)
+            total_data = json.loads(response.text)
+            data = total_data.get('labels')[0]
+            if not data.get('linkPdf'):
+                raise ValidationError(total_data.get('msg'))
             current_employee = self.env.user.employee_id
             sub_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L2.3')], limit=1)
             if not sub_level:
                 raise ValidationError('There is no state with level Creating Shipment')
-            for rec in self:
+            for rec in updated_items:
                 rec.write({
                     'label_file_url': data.get('linkPdf'),
                     'tkn_code': data.get('shipmentId'),
