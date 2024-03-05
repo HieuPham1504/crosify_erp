@@ -45,6 +45,8 @@
 "access_qc_receive_item_operator","access_qc_receive_item_operator","model_qc_receive_item",crosify_order.group_sale_team_operator,1,1,1,1
 "access_qc_receive_item_admin","access_qc_receive_item_admin","model_qc_receive_item",base.group_system,1,1,1,1
 
+"access_hs_product_config","access_hs_product_config","model_hs_product_config",,1,1,1,1
+
 "access_raise_information_wizard","access_raise_information_wizard","model_raise_information_wizard",,1,1,1,1
 "access_qc_check_item_wizard_line","access_qc_check_item_wizard_line","model_qc_check_item_wizard_line",,1,1,1,1
 "access_qc_check_item_wizard","access_qc_check_item_wizard","model_qc_check_item_wizard",,1,1,1,1

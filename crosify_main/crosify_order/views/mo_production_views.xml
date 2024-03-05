@@ -69,6 +69,7 @@
                   name="Productions"
                   action="crosify_menu_mo_production_action"
                   parent="sale.sale_order_menu"
+                   groups="base.group_system,crosify_order.group_sale_team_operator,crosify_order.group_producer_team"
                   sequence="22"/>
     </data>
 </odoo>
