@@ -103,20 +103,19 @@ class SaleOrder(models.Model):
             can_update_tkn_items = rec.order_line.filtered(lambda item: not item.is_upload_tkn)
             can_update_tkn_items.action_creating_shipment_for_item_order()
 
-    def get_label_data(self):
-        client_key = self.env['ir.config_parameter'].sudo().get_param('create.label.client.key')
+    def get_label_json_data(self):
+        parcel_datas = []
         HSCodeConfigs = self.env['hs.product.config'].sudo()
+        States = self.env['res.country.state'].sudo()
         Items = self.env['sale.order.line'].sudo()
-        if not client_key:
-            raise ValueError("Not Found Client Key")
-        total_item = self.order_line
-        item_hs_codes = total_item.mapped('hs_code')
+        customer = self.partner_id
         items = Items
+        total_item = self.order_line
+        total_weight = sum(total_item.product_id.mapped('weight'))
+        item_hs_codes = total_item.mapped('hs_code')
         for hs_code in item_hs_codes:
             first_item = total_item.filtered(lambda item: item.hs_code == hs_code)[0]
             items |= first_item
-
-        parcel_datas = []
         for item in items:
             hs_code = item.hs_code
             hs_code_product_config = HSCodeConfigs.search([('hs_code', '=', hs_code)], limit=1)
@@ -138,14 +137,9 @@ class SaleOrder(models.Model):
                 "Url": f"{item.design_file_url if item.design_file_url else ''}"
             })
 
-        customer = self.partner_id
-        headers = {"Content-Type": "application/json", "Accept": "application/json", "Catch-Control": "no-cache",
-                   "clientkey": f"{client_key}"}
-        url = "https://myadmin.crosify.com/api/labels/3"
-        total_weight = sum(self.order_line.product_id.mapped('weight'))
         json_data = {
             "ReferenceNumber": f"{self.order_id_fix}",
-            "Weight": round(60*total_weight/100000, 3),
+            "Weight": round(60 * total_weight / 100000, 3),
             "Length": 30,
             "Height": 5,
             "Width": 12,
@@ -179,6 +173,22 @@ class SaleOrder(models.Model):
             },
             "Parcels": parcel_datas
         }
+        return json_data
+    def get_label_data(self):
+        client_key = self.env['ir.config_parameter'].sudo().get_param('create.label.client.key')
+        if not client_key:
+            raise ValueError("Not Found Client Key")
+
+
+        headers = {"Content-Type": "application/json", "Accept": "application/json", "Catch-Control": "no-cache",
+                   "clientkey": f"{client_key}"}
+        customer = self.partner_id
+        if customer.country_id.code != 'US':
+            service_type = 3
+        else:
+            service_type = customer.state_id.service_type
+        url = f"https://myadmin.crosify.com/api/labels/{service_type}"
+        json_data = self.get_label_json_data()
 
         return requests.post(url, data=json.dumps(json_data), headers=headers)
 
