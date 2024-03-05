@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="wz_fail_reason_view_form" model="ir.ui.view">
+        <field name="name">Lí do thất bại</field>
+        <field name="model">wizard.fail.reason</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="fail_reason_ids" widget="many2many_tags" invisible="1"/>
+                        <field name="fail_reason" domain="[('id', 'in', fail_reason_ids)]" options='{"no_open": True, "no_create": True}'/>
+                        <field name="task_id" invisible="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" string="Xác nhận" type="object" class="oe_highlight"/>
+                    <button string="Hủy" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="back_stage_view_form" model="ir.ui.view">
+        <field name="name">Giai đoạn kéo ngược</field>
+        <field name="model">back.stage</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="back_stage_ids" widget="many2many_tags" invisible="1"/>
+                        <field name="back_stage_id" domain="[('id', 'in', back_stage_ids)]" options='{"no_open": True, "no_create": True}'/>
+                        <field name="stage_id" invisible="1"/>
+                        <field name="task_id" invisible="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" string="Xác nhận" type="object" class="oe_highlight"/>
+                    <button string="Hủy" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
