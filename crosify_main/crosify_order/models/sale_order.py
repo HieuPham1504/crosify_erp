@@ -179,7 +179,7 @@ class SaleOrder(models.Model):
             },
             "Parcels": parcel_datas
         }
-
+        print(json_data)
         return requests.post(url, data=json.dumps(json_data), headers=headers)
 
     def generate_order_label_file(self):
