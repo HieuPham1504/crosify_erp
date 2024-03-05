@@ -122,8 +122,8 @@ class SaleOrderLine(models.Model):
     # Tab Other Info
     note_change_request = fields.Text(string='Note Change Request')
     cancel_date = fields.Datetime(string='Cancel Date')
-    cancel_reason = fields.Text(string='Cancel Reason')
-    cancel_status = fields.Char(string='Cancel Status')
+    cancel_reason_id = fields.Many2one('fulfill.cancel.item', string='Cancel Reason')
+    cancel_note = fields.Text(string='Cancel Note')
     dispute_status = fields.Char(string='Dispute Status')
     dispute_note = fields.Text(string='Dispute Note')
     approve_by = fields.Many2one('hr.employee', string='Approve By')
@@ -336,6 +336,19 @@ class SaleOrderLine(models.Model):
             "target": "current",
         }
 
+    @api.model
+    def action_action_cancel_item(self):
+        item_ids = self._context.get('active_ids', [])
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "cancel.item.wizard",
+            "context": {
+                "default_item_ids": [(6, 0, item_ids)]
+            },
+            "name": "Cancel Item",
+            'view_mode': 'form',
+            "target": "new",
+        }
     @api.model
     def action_update_item_design_info(self):
         item_ids = self._context.get('active_ids', [])
