@@ -337,6 +337,20 @@ class SaleOrderLine(models.Model):
         }
 
     @api.model
+    def action_action_cancel_item(self):
+        item_ids = self._context.get('active_ids', [])
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "update.item.design.wizard",
+            "context": {
+                "create": 0
+            },
+            "res_id": wizard.id,
+            "name": "Update Design File",
+            'view_mode': 'form',
+            "target": "new",
+        }
+    @api.model
     def action_update_item_design_info(self):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
