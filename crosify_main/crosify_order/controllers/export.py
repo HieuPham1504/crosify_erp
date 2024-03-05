@@ -20,7 +20,13 @@ class ExportFormatInherit(ExportFormat):
         if import_compat:
             columns_headers = field_names
         else:
-            columns_headers = [val['label'].strip() for val in fields]
+            columns_headers = []
+            attributes = request.env['product.attribute'].sudo().search([], order='id desc')
+            for field in fields:
+                if field['name'].strip() == 'product_template_attribute_value_ids':
+                    columns_headers += [attribute.name for attribute in attributes]
+                else:
+                    columns_headers.append(field['label'].strip())
 
         groupby = params.get('groupby')
         if not import_compat and groupby:
@@ -40,11 +46,3 @@ class ExportFormatInherit(ExportFormat):
 
             export_data = records.export_data(field_names).get('datas', [])
             response_data = self.from_data(columns_headers, export_data)
-
-        # TODO: call `clean_filename` directly in `content_disposition`?
-        return request.make_response(response_data,
-            headers=[('Content-Disposition',
-                            content_disposition(
-                                osutil.clean_filename(self.filename(model) + self.extension))),
-                     ('Content-Type', self.content_type)],
-        )

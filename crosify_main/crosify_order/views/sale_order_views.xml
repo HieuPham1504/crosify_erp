@@ -310,13 +310,23 @@
             <xpath expr="//field[@name='validity_date']" position="after">
                 <field name="order_type_id" options='{"no_open": True, "no_create": True}'/>
                 <field name="myadmin_order_id"/>
-                <field name="order_id_fix"/>
+                <field name="order_id_fix" required="1"/>
                 <field name="channel_ref_id"/>
                 <field name="crosify_create_date"/>
             </xpath>
 
             <xpath expr="//field[@name='note']" position="attributes">
                 <attribute name="placeholder">Customer Note</attribute>
+            </xpath>
+
+             <xpath expr="//field[@name='tax_totals']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='tax_totals']" position="after">
+                <field name="discount"/>
+                <field name="tip"/>
+                <field name="amount_total" style="font-weight:bold;font-size:20px"/>
             </xpath>
 
         </field>

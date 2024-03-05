@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import contextlib
+import collections
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
-
+from odoo.models import BaseModel
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'

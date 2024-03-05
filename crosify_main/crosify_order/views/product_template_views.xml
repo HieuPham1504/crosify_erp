@@ -8,22 +8,23 @@
         <record id="stock_product_template_form_view_procurement_button" model="ir.ui.view">
             <field name="name">stock_product_template_form_view_procurement_button</field>
             <field name="model">product.template</field>
-            <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+            <field name="inherit_id" ref="stock.product_template_form_view_procurement_button" />
             <field name="arch" type="xml">
-                <xpath expr="//button[@name='%(stock.action_product_replenish)d']" position="attributes">
+                <xpath expr="//button[@name='%(stock.action_product_replenish)d']"
+                    position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
 
                 <xpath expr="//button[@name='%(stock.action_product_replenish)d']" position="before">
                     <button string="Create Variant" type="object"
-                            name="create_variants"/>
+                        name="create_variants" />
                 </xpath>
 
                 <xpath expr="//field[@name='default_code']" position="before">
-                    <field name="categ_id" optional="show"/>
-                    <field name="product_type" optional="show"/>
-                    <field name="design_number" optional="show"/>
-                    <field name="detailed_type" optional="show"/>
+                    <field name="categ_id" optional="show" />
+                    <field name="product_type" optional="show" />
+                    <field name="design_number" optional="show" />
+                    <field name="detailed_type" optional="show" />
                 </xpath>
             </field>
         </record>
@@ -31,17 +32,17 @@
         <record id="product_product_template_tree_view_inherit" model="ir.ui.view">
             <field name="name">product_product_template_tree_view_inherit</field>
             <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="inherit_id" ref="product.product_template_tree_view" />
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='default_code']" position="attributes">
                     <attribute name="column_invisible">1</attribute>
                 </xpath>
 
                 <xpath expr="//field[@name='default_code']" position="before">
-                    <field name="categ_id" optional="show"/>
-                    <field name="product_type" optional="show"/>
-                    <field name="design_number" optional="show"/>
-                    <field name="detailed_type" optional="show"/>
+                    <field name="categ_id" optional="show" />
+                    <field name="product_type" optional="show" />
+                    <field name="design_number" optional="show" />
+                    <field name="detailed_type" optional="show" />
                 </xpath>
             </field>
         </record>
@@ -49,9 +50,11 @@
         <record id="product_product_template_form_view_inherit" model="ir.ui.view">
             <field name="name">product_product_template_form_view_inherit</field>
             <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="inherit_id" ref="product.product_template_form_view" />
             <field name="arch" type="xml">
-                 <xpath expr="//page[@name='general_information']//group[@name='group_standard_price']" position="attributes">
+                <xpath
+                    expr="//page[@name='general_information']//group[@name='group_standard_price']"
+                    position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
 
@@ -85,7 +88,7 @@
         <record id="account_product_template_form_view_inherit" model="ir.ui.view">
             <field name="name">account_product_template_form_view_inherit</field>
             <field name="model">product.template</field>
-            <field name="inherit_id" ref="account.product_template_form_view"/>
+            <field name="inherit_id" ref="account.product_template_form_view" />
             <field name="arch" type="xml">
                 <xpath expr="//page[@name='invoicing']" position="attributes">
                     <attribute name="invisible">1</attribute>
@@ -96,7 +99,7 @@
         <record id="sale_product_template_form_view_inherit" model="ir.ui.view">
             <field name="name">sale_product_template_form_view_inherit</field>
             <field name="model">product.template</field>
-            <field name="inherit_id" ref="sale.product_template_form_view"/>
+            <field name="inherit_id" ref="sale.product_template_form_view" />
             <field name="arch" type="xml">
                 <xpath expr="//div[hasclass('fst-italic')]" position="attributes">
                     <attribute name="invisible">1</attribute>
@@ -107,14 +110,15 @@
         <record id="product_template_form_view_inherit" model="ir.ui.view">
             <field name="name">product_template_form_view_inherit</field>
             <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="inherit_id" ref="product.product_template_only_form_view" />
             <field name="arch" type="xml">
 
                 <xpath expr="//field[@name='default_code']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
 
-                <xpath expr="//button[@name='%(product.product_variant_action)d']" position="attributes">
+                <xpath expr="//button[@name='%(product.product_variant_action)d']"
+                    position="attributes">
                     <attribute name="invisible">product_variant_count &lt; 1</attribute>
                 </xpath>
 
@@ -123,23 +127,26 @@
                 </xpath>
 
                 <xpath expr="//field[@name='detailed_type']" position="before">
-                    <field name="categ_id"/>
-                    <field name="design_number"/>
-                    <field name="product_type"/>
+                    <field name="categ_id" />
+                    <field name="design_number" />
+                    <field name="product_type" />
                 </xpath>
 
                 <xpath expr="//page[@name='variants']" position="attributes">
                     <attribute name="string">Variants</attribute>
                 </xpath>
 
-                <xpath expr="//page[@name='variants']//field[@name='attribute_line_ids']//field[@name='value_ids']" position="attributes">
-                    <attribute name="options">{'no_create_edit': True, 'color_field': 'color','no_create': True}</attribute>
+                <xpath
+                    expr="//page[@name='variants']//field[@name='attribute_line_ids']//field[@name='value_ids']"
+                    position="attributes">
+                    <attribute name="options">{'no_create_edit': True, 'color_field':
+                        'color','no_create': True}</attribute>
                 </xpath>
             </field>
         </record>
 
         <record id="sale.menu_product_categories" model="ir.ui.menu">
-            <field name="parent_id" ref="sale.product_menu_catalog"/>
+            <field name="parent_id" ref="sale.product_menu_catalog" />
             <field name="sequence">1</field>
         </record>
 
@@ -153,6 +160,31 @@
 
         <record id="sale.menu_product_template_action" model="ir.ui.menu">
             <field name="name">Product Type</field>
+        </record>
+
+        <record id="product_template_search_view" model="ir.ui.view">
+            <field name="name">product_template_search_view</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_search_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="design_number" string="Product"
+                        filter_domain="['|', '|', ('name', 'ilike', self), ('product_type', 'ilike', self), ('design_number', 'ilike', self)]" />
+                </xpath>
+                <field name="name" position="attributes">
+                    <attribute name="string">Name</attribute>
+                </field>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="product_type" string="Product Type" />
+                    <field name="design_number" string="Design Number" />
+                </xpath>
+                <xpath expr="//field[@name='categ_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='attribute_line_ids']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
         </record>
     </data>
 </odoo>
