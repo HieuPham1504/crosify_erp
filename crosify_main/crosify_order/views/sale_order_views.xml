@@ -14,8 +14,6 @@
                 <field name="amount_total"/>
                 <field name="payment_method_id"/>
                 <field name="payment_status"/>
-                <field name="payment_status"/>
-                <field name="payment_status"/>
                 <field name="order_type_id" optional="hide"/>
             </tree>
         </field>
