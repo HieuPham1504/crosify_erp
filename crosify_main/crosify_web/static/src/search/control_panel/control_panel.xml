@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crosify_web.Breadcrumbs" t-inherit="web.Breadcrumbs" t-inherit-mode="extension">
+        <xpath expr="//t[@t-slot='control-panel-status-indicator']" position="replace">
+        </xpath>
+        <xpath expr="//t[@t-set='breadcrumb']" position="after">
+            <div style="margin-right: 0 !important;">
+                <t t-slot="control-panel-status-indicator" />
+            </div>
+        </xpath>
+    </t>
+
+</templates>
