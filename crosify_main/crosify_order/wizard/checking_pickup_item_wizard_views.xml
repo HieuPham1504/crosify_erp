@@ -43,6 +43,6 @@
                   action="checking_pickup_item_wizard_menu_action"
                   groups="base.group_system,crosify_order.group_sale_team_operator"
                   parent="sale.sale_order_menu"
-                  sequence="28"/>
+                  sequence="35"/>
     </data>
 </odoo>
