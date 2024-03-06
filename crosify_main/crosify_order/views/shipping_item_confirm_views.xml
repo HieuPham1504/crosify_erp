@@ -26,7 +26,13 @@
                         </group>
                         <label for="note"/>
                         <field name="note"/>
-
+                        <br/>
+<!--                        <label for="label_file_url"/>-->
+                        <div class="o_row mw-50">
+                            <field name="delivered_item_file_name" invisible="1"/>
+                            <field name="delivered_item_file" filename="delivered_item_file_name"/>
+                            <button name="action_import_items" invisible="delivered_item_file == False" class="btn btn-primary" type="object" string="Upload"/>
+                        </div>
                         <br/>
                         <group name="items">
                             <field name="item_ids" nolabel="0">

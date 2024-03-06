@@ -10,6 +10,8 @@ class ShippingItemConfirm(models.Model):
     employee_id = fields.Many2one('hr.employee', string='Employee', default=lambda self: self.env.user.employee_id.id, required=True, index=True)
     note = fields.Text(string='Note')
     item_ids = fields.One2many('shipping.item.confirm.line', 'shipping_item_confirm_id', 'Confirm Items')
+    delivered_item_file = fields.Binary(string='Delivered Items File')
+    delivered_item_file_name = fields.Char(string='Delivered')
 
     @api.model_create_multi
     def create(self, vals_list):

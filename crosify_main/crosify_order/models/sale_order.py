@@ -95,7 +95,9 @@ class SaleOrder(models.Model):
     def action_creating_shipment_for_order_model(self):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
-        items.action_creating_shipment_for_order()
+        for item in items:
+            data = item.get_label_json_data()
+            item.with_delay(description=data).action_creating_shipment_for_order()
 
     def action_creating_shipment_for_order(self):
         for rec in self:
@@ -112,10 +114,17 @@ class SaleOrder(models.Model):
         items = Items
         total_item = self.order_line
         total_weight = sum(total_item.product_id.mapped('weight'))
+
         item_hs_codes = total_item.mapped('hs_code')
         for hs_code in item_hs_codes:
             first_item = total_item.filtered(lambda item: item.hs_code == hs_code)[0]
             items |= first_item
+
+        weight_param = round(60 * total_weight / 100000, 3)
+        length_param = min(items.mapped('length'))
+        height_param = min(items.mapped('height'))
+        width_param = min(items.mapped('width'))
+
         for item in items:
             hs_code = item.hs_code
             hs_code_product_config = HSCodeConfigs.search([('hs_code', '=', hs_code)], limit=1)
@@ -139,10 +148,10 @@ class SaleOrder(models.Model):
 
         json_data = {
             "ReferenceNumber": f"{self.order_id_fix}",
-            "Weight": round(60 * total_weight / 100000, 3),
-            "Length": 30,
-            "Height": 5,
-            "Width": 12,
+            "Weight": weight_param,
+            "Length": length_param,
+            "Height": height_param,
+            "Width": width_param,
             "Service": "HPW Parcel",
             "ServiceCode": "HPW_PB_LAX",
             "CurrencyCode": f"{self.currency_id.name}",
