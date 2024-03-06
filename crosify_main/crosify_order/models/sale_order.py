@@ -210,3 +210,16 @@ class SaleOrder(models.Model):
         else:
             raise ValidationError(response.reason)
         return True
+
+    @api.model
+    def action_merge_order(self):
+        order_ids = self._context.get('active_ids', [])
+        orders = self.sudo().search([('id', 'in', order_ids)], order='id asc')
+        new_order_id_fix = False
+        order_id_fixes = orders.mapped('order_id_fix')
+        if len(order_id_fixes) == 0:
+            raise ValidationError('Can Not Merge None Order ID Fix Orders')
+        else:
+            new_order_id_fix = order_id_fixes[0]
+        for order in orders:
+            order.order_id_fix = new_order_id_fix
