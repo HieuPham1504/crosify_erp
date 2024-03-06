@@ -343,6 +343,17 @@
         <field name="code">action = model.action_creating_shipment_for_order_model()</field>
     </record>
 
+    <record id="action_merge_order" model="ir.actions.server">
+            <field name="name">Merge Order</field>
+            <field name="model_id" ref="crosify_order.model_sale_order"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_merge_order()</field>
+        </record>
+
     <record id="crosify_menu_sale_order_tree_view_action" model="ir.actions.act_window">
         <field name="name">Sale Orders</field>
         <field name="res_model">sale.order</field>
