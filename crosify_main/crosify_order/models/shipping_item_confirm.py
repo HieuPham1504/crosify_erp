@@ -1,3 +1,4 @@
+from datetime import datetime
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 import openpyxl
@@ -36,21 +37,55 @@ class ShippingItemConfirm(models.Model):
         return results
 
     def action_import_items(self):
+        Orders = self.env['sale.order'].sudo()
+        ItemLines = self.env['shipping.item.confirm.line'].sudo()
         import_file = self.delivered_item_file
         try:
             wb = openpyxl.load_workbook(
 
                 filename=BytesIO(base64.b64decode(import_file)), read_only=True
             )
+            item_file_datas = []
+            order_id_fixes = []
             ws = wb.active
             for record in ws.iter_rows(min_row=2, max_row=None, min_col=None,
-
                                        max_col=None, values_only=True):
-                search = self.env['res.partner'].search([
-                    ('name', '=', record[1]), ('customer_rank', '=', True)])
+                order_id_fix = record[1]
+                if order_id_fix and order_id_fix not in order_id_fixes:
+                    order_id_fix = order_id_fix.strip()
+                    order_id_fixes.append(order_id_fix)
+                    order = Orders.search([('order_id_fix', '=', order_id_fix), ('tkn', '!=', False)], limit=1)
+                    if order:
+                        item_file_datas.append({
+                            'order_id_fix': order_id_fix,
+                            'tkn_code': order.tkn,
+                            'shipping_item_confirm_id': self.id,
+                        })
+
+            item_ids = ItemLines.create(item_file_datas)
+            self.item_ids = [(6, 0, item_ids.ids)]
+
         except:
             raise ValidationError(_('Insert Invalid File'))
 
+    def action_confirm_item(self):
+        Levels = self.env['sale.order.line.level'].sudo()
+        Orders = self.env['sale.order'].sudo()
+        pickup_level = Levels.search([('level', '=', 'L5.1')], limit=1)
+        shipping_confirm_level = Levels.search([('level', '=', 'L5.2')], limit=1)
+        if not pickup_level:
+            raise ValidationError('There is no state with level Pickup')
+        if not pickup_level:
+            raise shipping_confirm_level('There is no state with level Shipping Confirm')
+        items = self.item_ids
+        order_id_fixes = items.mapped('order_id_fix')
+        orders = Orders.search([('order_id_fix', 'in', order_id_fixes)])
+        pickup_items = orders.mapped('order_line').filtered(lambda item: item.sublevel_id.id == pickup_level.id)
+        for item in pickup_items:
+            item.write({
+                'sublevel_id': shipping_confirm_level.id,
+                'shipping_confirm_date': datetime.now().date(),
+            })
 
 class ShippingItemConfirmLine(models.Model):
     _name = 'shipping.item.confirm.line'
