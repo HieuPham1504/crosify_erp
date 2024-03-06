@@ -5,18 +5,17 @@ from odoo.exceptions import UserError, ValidationError
 
 
 class CheckingPackedItemWizard(models.TransientModel):
-    _name = 'checking.packed.item.wizard'
+    _name = 'checking.pickup.item.wizard'
     _rec_name = 'name'
 
-    name = fields.Char(string='Check Packed Item')
-    item_ids = fields.One2many('checking.packed.item.line.item.wizard', 'checking_packed_item_wizard_id', 'Items')
+    name = fields.Char(string='Pickup Item')
+    item_ids = fields.One2many('checking.pickup.item.line.item.wizard', 'checking_pickup_item_wizard_id', 'Items')
 
-    def action_packed_items(self):
-        LineWizards = self.env['checking.packed.item.line.item.wizard'].sudo()
+    def action_pickup_items(self):
         now = fields.Datetime.now()
-        packed_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.7')], limit=1)
-        if not packed_level:
-            raise ValidationError('There is no Packed Level')
+        pickup_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L5.1')], limit=1)
+        if not pickup_level:
+            raise ValidationError('There is no Pickup Level')
         total_items = self.item_ids
         if any(item.state == 'fail' for item in total_items):
             failed_items = total_items.filtered(lambda item: item.state == 'fail')
@@ -45,8 +44,10 @@ class CheckingPackedItemWizard(models.TransientModel):
         orders = order_lines_total.order_ids
         for item in orders.order_line:
             item.write({
-                'packed_date': now,
-                'sublevel_id': packed_level.id
+                'pickup_date': now,
+                'shipping_date': now,
+                'sublevel_id': pickup_level.id,
+                'level_id': pickup_level.parent_Id.id
             })
         return {
             'type': 'ir.actions.client',
@@ -55,10 +56,10 @@ class CheckingPackedItemWizard(models.TransientModel):
 
 
 class CheckingPackedItemLineItemrWizard(models.TransientModel):
-    _name = 'checking.packed.item.line.item.wizard'
+    _name = 'checking.pickup.item.line.item.wizard'
     _order = 'is_fail_item desc'
 
-    checking_packed_item_wizard_id = fields.Many2one('checking.packed.item.wizard')
+    checking_pickup_item_wizard_id = fields.Many2one('checking.pickup.item.wizard')
     barcode = fields.Char(string='Barcode')
     tkn_code = fields.Char(string='TKN Code')
     order_ids = fields.Many2many('sale.order')
@@ -80,18 +81,18 @@ class CheckingPackedItemLineItemrWizard(models.TransientModel):
         Orders = self.env['sale.order'].sudo()
         if barcode:
             orders = Orders.search([('order_id_fix', '=', barcode)])
-            existed_order_line = self.checking_packed_item_wizard_id.item_ids.filtered(lambda line: line.type == 'order' and line.barcode == barcode)
+            existed_order_line = self.checking_pickup_item_wizard_id.item_ids.filtered(lambda line: line.type == 'order' and line.barcode == barcode)
             if not orders or existed_order_line:
                 item = Items.search([('production_id', '=', barcode)], limit=1)
-                if item.sublevel_id.level != 'L4.6':
-                    raise ValidationError(_("Only Packed Item With Ready To Pack Level"))
+                if item.sublevel_id.level != 'L4.7':
+                    raise ValidationError(_("Only Pickup Item With Packed Level"))
                 if item:
                     data = {
                         'tkn_code': item.tkn_code,
                         'type': 'item',
                         'sale_order_line_id': item.id,
                     }
-                    item_order_rel = self.checking_packed_item_wizard_id.item_ids.filtered(
+                    item_order_rel = self.checking_pickup_item_wizard_id.item_ids.filtered(
                         lambda item_line: not item_line.is_checked and item_line.type == 'order')
                     if item_order_rel:
                         item_order_rel = item_order_rel[-1]
@@ -115,7 +116,7 @@ class CheckingPackedItemLineItemrWizard(models.TransientModel):
                     'tkn_code': order_tkn,
                     'type': 'order',
                 }
-                items = self.checking_packed_item_wizard_id.item_ids.filtered(lambda line: line.type == 'item' and not line.is_checked and not line.state)
+                items = self.checking_pickup_item_wizard_id.item_ids.filtered(lambda line: line.type == 'item' and not line.is_checked and not line.state)
                 if items:
                     tkn_code = items.mapped('tkn_code')[0]
                     data.update({
