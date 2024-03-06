@@ -89,12 +89,15 @@ class WorkflowTask(models.Model):
 
     def _compute_is_not_edit(self):
         for rec in self:
-            user_can_edit = rec.workflow_id.manager_ids + rec.work_by_id + rec.workflow_id.department_ids.member_ids.user_id
-            if self.env.uid in user_can_edit.ids or self.env.user.has_group(
-                    'dynamic_workflow.group_workflow_manager'):
-                rec.is_not_edit = False
-            else:
+            if rec.stage_id.is_done_stage or rec.stage_id.is_fail_stage:
                 rec.is_not_edit = True
+            else:
+                user_can_edit = rec.workflow_id.manager_ids + rec.work_by_id + rec.workflow_id.department_ids.member_ids.user_id
+                if self.env.uid in user_can_edit.ids or self.env.user.has_group(
+                        'dynamic_workflow.group_workflow_manager'):
+                    rec.is_not_edit = False
+                else:
+                    rec.is_not_edit = True
 
     def _compute_bg_color(self):
         for rec in self:
