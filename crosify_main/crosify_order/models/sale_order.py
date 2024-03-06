@@ -210,7 +210,7 @@ class SaleOrder(models.Model):
             now = fields.Datetime.now()
             self.write({
                 'label_file_url': data.get('linkPdf'),
-                'tkn': data.get('shipmentId'),
+                'tkn': data.get('trackingNumber'),
                 'is_upload_tkn': True,
                 'update_tkn_date': now,
                 'update_tkn_employee_id': current_employee.id,
