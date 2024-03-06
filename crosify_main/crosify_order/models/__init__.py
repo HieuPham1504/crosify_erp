@@ -20,3 +20,5 @@ from . import production_transfer_item
 from . import qc_receive_item
 from . import res_contry_state
 from . import hs_product_config
+from . import pickup_item
+from . import shipping_item_confirm
