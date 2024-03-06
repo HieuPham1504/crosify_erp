@@ -121,9 +121,10 @@ class SaleOrder(models.Model):
             items |= first_item
 
         weight_param = round(60 * total_weight / 100000, 3)
-        length_param = min(items.mapped('length'))
-        height_param = min(items.mapped('height'))
-        width_param = min(items.mapped('width'))
+        product_ids = items.mapped('product_id')
+        length_param = min(product_ids.mapped('length'))
+        height_param = min(product_ids.mapped('height'))
+        width_param = min(product_ids.mapped('width'))
 
         for item in items:
             hs_code = item.hs_code
