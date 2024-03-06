@@ -8,8 +8,8 @@ class MOProduction(models.Model):
     _order = 'date desc'
 
     code = fields.Char(string='Code')
-    date = fields.Date(string='Date', required=True)
-    employee_id = fields.Many2one('hr.employee', 'Employee', required=True)
+    date = fields.Date(string='Date', required=True, default=fields.Date.today)
+    employee_id = fields.Many2one('hr.employee', 'Employee', required=True, default=lambda self: self.env.user.employee_id.id)
     note = fields.Text(string='Note')
     mo_production_line_ids = fields.Many2many('sale.order.line', 'mo_production_so_line_rel', string='Items')
     state = fields.Selection([
