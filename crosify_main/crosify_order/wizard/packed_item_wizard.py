@@ -18,7 +18,7 @@ class PackedItemWizard(models.TransientModel):
         Levels = self.env['sale.order.line.level'].sudo()
         packed_level = Levels.search([('level', '=', 'L4.7')])
         pending_level = Levels.search([('level', '=', 'L7.4')])
-        for item in items:
+        for item in items.mapped('sale_order_line_id'):
             is_upload_tkn = item.is_upload_tkn
             if is_upload_tkn:
                 if not packed_level:
