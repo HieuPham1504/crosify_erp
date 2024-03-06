@@ -1,0 +1,59 @@
+<odoo>
+    <data>
+
+        <record id="shipping_item_confirm_form_view" model="ir.ui.view">
+            <field name="name">shipping_item_confirm_form_view</field>
+            <field name="model">shipping.item.confirm</field>
+            <field name="arch" type="xml">
+                <form class="sale_order_view_inherit_form_crosify_order">
+                    <header>
+                        <button string="Import File" name="action_import_items" type="object"
+                                class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="code"/>
+                            <h1>
+                                <field name="code" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+                        <group name="main">
+                            <group>
+                                <field name="date"/>
+                                <field name="employee_id" options='{"no_open": True, "no_create": True}'/>
+                            </group>
+                            <group></group>
+                        </group>
+                        <label for="note"/>
+                        <field name="note"/>
+
+                        <br/>
+                        <group name="items">
+                            <field name="item_ids" nolabel="0">
+                                <tree string="Items" editable="bottom">
+                                    <field name="order_id_fix" readonly="0"/>
+                                    <field name="tkn_code" readonly="0"/>>
+                                </tree>
+                            </field>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="shipping_item_confirm_menu_action" model="ir.actions.act_window">
+            <field name="name">Shipping Confirm</field>
+            <field name="res_model">shipping.item.confirm</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="shipping_item_confirm_menu"
+                  name="Shipping Confirm"
+                  action="shipping_item_confirm_menu_action"
+                  groups="base.group_system,crosify_order.group_sale_team_operator"
+                  parent="sale.sale_order_menu"
+                  sequence="37"/>
+    </data>
+</odoo>

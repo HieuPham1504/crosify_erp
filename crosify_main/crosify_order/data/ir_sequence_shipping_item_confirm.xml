@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="shipping_item_confirm_code" model="ir.sequence">
+            <field name="name">Shipping Item Confirm Sequence</field>
+            <field name="code">shipping.item.confirm</field>
+            <field name="prefix"></field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>
