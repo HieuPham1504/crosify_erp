@@ -95,7 +95,7 @@ class SaleOrder(models.Model):
     @api.depends('amount_untaxed', 'amount_tax', 'discount', 'tip')
     def _compute_amount_total(self):
         for rec in self:
-            total = rec.amount_untaxed + rec.amount_tax - rec.discount + rec.tip
+            total = rec.amount_untaxed + rec.amount_tax + rec.tip - rec.discount - rec.shipping_cost
             rec.amount_total = total
 
     @api.onchange('order_line')

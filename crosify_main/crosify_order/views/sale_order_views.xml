@@ -231,7 +231,6 @@
                                 </div>
                             </div>
                             <field name="shipping_phone_number"/>
-                            <field name="shipping_cost"/>
                             <field name="shipping_vendor_id" options="{'no_create': True}"/>
                         </group>
 
@@ -343,6 +342,7 @@
                 <field name="amount_tax"/>
                 <field name="discount"/>
                 <field name="tip"/>
+                <field name="shipping_cost"/>
                 <field name="amount_total" style="font-weight:bold;font-size:20px"/>
             </xpath>
 
