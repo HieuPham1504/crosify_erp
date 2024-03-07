@@ -178,7 +178,7 @@ class SaleOrderLine(models.Model):
             line.update({
                 'price_subtotal': amount_untaxed,
                 'price_tax': amount_tax,
-                'price_total': amount_untaxed + line.total_tax,
+                'price_total': line.price_unit + line.total_tax - line.crosify_discount_amount,
             })
 
     def update_item_level_based_on_payment_status(self):
