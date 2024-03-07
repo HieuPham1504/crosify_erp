@@ -75,6 +75,34 @@ class SaleOrder(models.Model):
     order_type_id = fields.Many2one('sale.order.type', string='Order Type', required=True, index=True)
     state = fields.Selection(default='sale')
 
+    #override_fields
+    amount_untaxed = fields.Float(string="Untaxed Amount", store=True, compute='compute_amount_untaxed', tracking=5)
+    amount_tax = fields.Float(string="Taxes", store=True, compute='compute_amount_tax')
+    amount_total = fields.Monetary(string="Total", store=True, compute='_compute_amount_total', tracking=4)
+
+    @api.depends('order_line.price_total')
+    def compute_amount_untaxed(self):
+        for rec in self:
+            total = sum(rec.order_line.mapped('price_total'))
+            rec.amount_untaxed = total
+
+    @api.depends('order_line.total_tax')
+    def compute_amount_tax(self):
+        for rec in self:
+            total = sum(rec.order_line.mapped('total_tax'))
+            rec.amount_tax = total
+
+    @api.depends('amount_untaxed', 'amount_tax', 'discount', 'tip')
+    def _compute_amount_total(self):
+        for rec in self:
+            total = rec.amount_untaxed + rec.amount_tax - rec.discount + rec.tip
+            rec.amount_total = total
+
+    @api.onchange('order_line')
+    def onchange_crosify_discount_amount(self):
+        total = sum(self.order_line.mapped('crosify_discount_amount'))
+        self.discount = total
+
     @api.depends('payment_status')
     def compute_order_payment_state(self):
         for rec in self:
