@@ -572,7 +572,6 @@ class SaleOrderController(Controller):
 
                     create_order_line_sql += f"""
                     '{line.get('CancelReason') if line.get('CancelReason') is not None else ''}',
-                    '{line.get('CancelStatus') if line.get('CancelStatus') is not None else ''}',
                     """
 
                     if line.get('Updatedat') is None:
