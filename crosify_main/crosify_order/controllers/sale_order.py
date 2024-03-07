@@ -463,10 +463,10 @@ class SaleOrderController(Controller):
                                                 """
 
                     if not product_id:
-                        create_order_line_sql += f"{none_product_id.default_code},"
+                        create_order_line_sql += f"'{none_product_id.default_code}',"
                     else:
                         create_order_line_sql += f"""
-                                                {product_id.default_code},
+                                                '{product_id.default_code}',
                                                 """
 
                     create_order_line_sql += f"""
