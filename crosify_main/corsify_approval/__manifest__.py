@@ -9,6 +9,7 @@
     'data': [
         'data/approval_request_sequence.xml',
         'views/approval_request_views.xml',
+        'views/approval_category_views.xml',
     ],
     'demo': [],
     'installable': True,
