@@ -463,10 +463,10 @@ class SaleOrderController(Controller):
                                                 """
 
                     if not product_id:
-                        create_order_line_sql += f"{none_product_id.default_code},"
+                        create_order_line_sql += f"'{none_product_id.default_code}',"
                     else:
                         create_order_line_sql += f"""
-                                                {product_id.default_code},
+                                                '{product_id.default_code}',
                                                 """
 
                     create_order_line_sql += f"""
@@ -631,7 +631,7 @@ class SaleOrderController(Controller):
                     limit 1),
                     {partner_id.id},
                     '{line.get('Variant')  if line.get('Variant') is not None else ''}', 
-                    now(),
+                    now()
                     )
                     """
                 request.env.cr.execute(create_order_line_sql)
