@@ -95,13 +95,13 @@ class SaleOrder(models.Model):
     @api.depends('amount_untaxed', 'amount_tax', 'discount', 'tip')
     def _compute_amount_total(self):
         for rec in self:
-            total = rec.amount_untaxed + rec.amount_tax + rec.tip - rec.discount + rec.shipping_cost
+            total = rec.amount_untaxed + rec.amount_tax + rec.tip - rec.discount - rec.shipping_cost
             rec.amount_total = total
 
-    # @api.onchange('order_line.crosify_discount_amount')
-    # def onchange_crosify_discount_amount(self):
-    #     total = sum(self.order_line.mapped('crosify_discount_amount'))
-    #     self.discount = total
+    @api.onchange('order_line')
+    def onchange_crosify_discount_amount(self):
+        total = sum(self.order_line.mapped('crosify_discount_amount'))
+        self.discount = total
 
     @api.depends('payment_status')
     def compute_order_payment_state(self):
@@ -212,7 +212,6 @@ class SaleOrder(models.Model):
             "Parcels": parcel_datas
         }
         return json_data
-
     def get_label_data(self):
         client_key = self.env['ir.config_parameter'].sudo().get_param('create.label.client.key')
         if not client_key:
