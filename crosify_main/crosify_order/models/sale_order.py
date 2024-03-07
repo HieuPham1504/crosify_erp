@@ -163,7 +163,7 @@ class SaleOrder(models.Model):
                 "EName": f"{hs_code_product_config.product_ename}",
                 "CName": f"{hs_code_product_config.product_cname}",
                 "HTSCode": f"{hs_code}",
-                "DGCode": "",
+                "DGCode": None,
                 "Coo": "US",
                 "Quantity": 1,
                 "UnitPrice": item.price_unit,
