@@ -212,7 +212,6 @@ class WorkflowTask(models.Model):
             [('stage_id.sequence', '<=', next_stage.sequence),
              ('is_required', '=', True),
              ('stage_id.workflow_id', '=', self.workflow_id.id)])
-        print(dynamic_fields_required, '222222222222222')
 
         message = ''
         for field in dynamic_fields_required:
@@ -275,10 +274,18 @@ class WorkflowTask(models.Model):
             }
         self.stage_id = back_stage
 
+
     @api.model
     def create(self, values):
         values['date_start'] = datetime.now()
-        return super(WorkflowTask, self).create(values)
+
+        res = super(WorkflowTask, self).create(values)
+        attachment_ids = self.env['ir.attachment'].sudo().search([('create_uid', '=', self.env.uid),
+                                                                ('res_model', '=', 'dynamic.workflow.task'),
+                                                                ('res_id', '=', 0)])
+        for attachment_id in attachment_ids:
+            attachment_id.write({'res_model': res._name, 'res_id': res.id})
+        return res
 
     def write(self, values):
         if 'stage_id' in values:

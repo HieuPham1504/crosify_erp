@@ -56,6 +56,17 @@
         <field name="domain_force">[(1, '=', 1)]</field>
     </record>
 
+    <record id="ir_attachment_rule" model="ir.rule">
+        <field name="name">View</field>
+        <field ref="base.model_ir_attachment" name="model_id"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
     <record id="department_create_task" model="ir.rule">
         <field name="name">Nhóm tạo nhiệm vụ</field>
         <field ref="model_dynamic_workflow_task" name="model_id"/>
