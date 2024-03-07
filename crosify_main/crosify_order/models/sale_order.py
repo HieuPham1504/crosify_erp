@@ -92,7 +92,7 @@ class SaleOrder(models.Model):
             total = sum(rec.order_line.mapped('total_tax'))
             rec.amount_tax = total
 
-    @api.depends('amount_untaxed', 'amount_tax', 'discount', 'tip')
+    @api.depends('amount_untaxed', 'amount_tax', 'discount', 'tip', 'shipping_cost')
     def _compute_amount_total(self):
         for rec in self:
             total = rec.amount_untaxed + rec.amount_tax + rec.tip - rec.discount + rec.shipping_cost
