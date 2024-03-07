@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="sale_order_search_view_inherit" model="ir.ui.view">
+        <field name="name">sale_order_search_view_inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="filter_domain">['|', '|', ('name', 'ilike', self), ('myadmin_order_id', 'ilike', self),
+                    ('order_id_fix', 'ilike', self)]
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+
     <record id="sale_order_tree_view_crosify" model="ir.ui.view">
         <field name="name">sale_order_tree_view_crosify</field>
         <field name="model">sale.order</field>
@@ -238,7 +251,8 @@
                             <label for="label_file_url"/>
                             <div class="o_row mw-50">
                                 <field name="label_file_url" widget="url" readonly="1" force_save="1"/>
-                                <button name="generate_order_label_file" invisible="label_file_url != False" class="btn btn-primary" type="object" string="Get Label"/>
+                                <button name="generate_order_label_file" invisible="label_file_url != False"
+                                        class="btn btn-primary" type="object" string="Get Label"/>
                             </div>
                             <field name="tkn" readonly="1" force_save="1"/>
                             <field name="tkn_url"/>
@@ -333,7 +347,7 @@
                 <attribute name="placeholder">Customer Note</attribute>
             </xpath>
 
-             <xpath expr="//field[@name='tax_totals']" position="attributes">
+            <xpath expr="//field[@name='tax_totals']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
 
@@ -361,15 +375,15 @@
     </record>
 
     <record id="action_merge_order" model="ir.actions.server">
-            <field name="name">Merge Order</field>
-            <field name="model_id" ref="crosify_order.model_sale_order"/>
-            <field name="binding_model_id" ref="crosify_order.model_sale_order"/>
-            <field name="binding_view_types">form,list</field>
-            <field name="state">code</field>
-            <field name="groups_id"
-                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
-            <field name="code">action = model.action_merge_order()</field>
-        </record>
+        <field name="name">Merge Order</field>
+        <field name="model_id" ref="crosify_order.model_sale_order"/>
+        <field name="binding_model_id" ref="crosify_order.model_sale_order"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="groups_id"
+               eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+        <field name="code">action = model.action_merge_order()</field>
+    </record>
 
     <record id="crosify_menu_sale_order_tree_view_action" model="ir.actions.act_window">
         <field name="name">Sale Orders</field>
