@@ -631,7 +631,7 @@ class SaleOrderController(Controller):
                     limit 1),
                     {partner_id.id},
                     '{line.get('Variant')  if line.get('Variant') is not None else ''}', 
-                    now(),
+                    now()
                     )
                     """
                 request.env.cr.execute(create_order_line_sql)
