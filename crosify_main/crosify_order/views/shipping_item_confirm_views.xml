@@ -21,19 +21,34 @@
                             <group>
                                 <field name="date"/>
                                 <field name="employee_id" options='{"no_open": True, "no_create": True}'/>
+                                <field name="relate_pickup_ids" widget="many2many_tags"
+                                       options='{"no_open": True, "no_create": True}'/>
                             </group>
                             <group></group>
                         </group>
                         <label for="note"/>
                         <field name="note"/>
                         <br/>
-<!--                        <label for="label_file_url"/>-->
+                        <!--                        <label for="label_file_url"/>-->
                         <div class="o_row mw-50">
                             <field name="delivered_item_file_name" invisible="1"/>
                             <field name="delivered_item_file" filename="delivered_item_file_name"/>
-                            <button name="action_import_items" invisible="delivered_item_file == False" class="btn btn-primary" type="object" string="Upload"/>
+                            <button name="action_import_items" invisible="delivered_item_file == False"
+                                    class="btn btn-primary" type="object" string="Upload"/>
                         </div>
                         <br/>
+                        <notebook>
+                            <page name="pickup-info" string="'Pickup Info">
+                                <field name="pickup_order_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <field name="pickup_id" />
+                                        <field name="pickup_date" />
+                                        <field name="order_id_fix" />
+                                        <field name="tkn_code" />
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                         <group name="items">
                             <field name="item_ids" nolabel="0">
                                 <tree string="Items" editable="bottom">
