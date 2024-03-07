@@ -358,6 +358,20 @@ class SaleOrderLine(models.Model):
             })
 
     @api.model
+    def action_update_level(self):
+        item_ids = self._context.get('active_ids', [])
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "update.item.level.wizard",
+            "context": {
+                'default_item_ids': [(6, 0, item_ids)],
+            },
+            "name": "Update Items Level",
+            'view_mode': 'form',
+            "target": "new",
+        }
+
+    @api.model
     def action_create_production_for_item(self):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')

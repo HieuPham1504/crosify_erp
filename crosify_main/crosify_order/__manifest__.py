@@ -61,6 +61,7 @@ Key Features
         'wizard/ready_to_pack_item_wizard_views.xml',
         'wizard/cancel_item_wizard_views.xml',
         'wizard/packed_item_wizard_views.xml',
+        'wizard/update_item_level_wizard_views.xml',
     ],
     'demo': [],
     'installable': True,

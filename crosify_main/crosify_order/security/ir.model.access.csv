@@ -64,3 +64,4 @@
 "access_cancel_item_wizard","access_cancel_item_wizard","model_cancel_item_wizard",,1,1,1,1
 "access_packed_item_wizard","access_packed_item_wizard","model_packed_item_wizard",,1,1,1,1
 "access_packed_item_line_wizard","access_packed_item_line_wizard","model_packed_item_line_wizard",,1,1,1,1
+"access_update_item_level_wizard","access_update_item_level_wizard","model_update_item_level_wizard",,1,1,1,1
