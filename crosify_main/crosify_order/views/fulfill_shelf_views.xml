@@ -10,6 +10,8 @@
                     <field name="shelf_code" required="1"/>
                     <field name="shelf_name" required="1"/>
                     <field name="shelf_type" required="1"/>
+                    <field name="max_shelf" required="1" optional="hide"/>
+                    <field name="current_shelf" optional="hide"/>
                 </tree>
             </field>
         </record>

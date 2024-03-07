@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 from datetime import datetime
 import base64
 import json
+
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
@@ -467,3 +471,53 @@ class SaleOrderLine(models.Model):
 
         except (ValueError, AttributeError):
             raise ValidationError('Cannot convert into barcode.')
+
+    @api.model
+    def action_set_address_shelf(self):
+        try:
+            item_ids = self._context.get('active_ids', [])
+            items = self.sudo().search([('id', 'in', item_ids)], order='product_type,order_id')
+            data_shelf = {}
+            for item in items:
+                if not item.address_sheft_id and item.product_type:
+                    order_id = item.order_id
+                    product_type = item.product_type
+
+                    value_current_shelf = self.handle_data_shelf(data_shelf, order_id, product_type)
+                    if value_current_shelf:
+                        fulfill_shelf_id = value_current_shelf
+                    else:
+                        key_shelf = str(order_id) + str(product_type)
+                        fulfill_shelf_id = item.search_fulfill_shelf(item.product_type)
+                        data_shelf[key_shelf] = fulfill_shelf_id
+
+                    if fulfill_shelf_id:
+                        item.write({
+                            'address_sheft_id': fulfill_shelf_id,
+                        })
+        except Exception as e:
+            _logger.exception(str(e))
+            raise UserError("Something went wrong! Please contact the administrator.")
+
+
+    def search_fulfill_shelf(self, product_type):
+        """
+        Search for product.type.shelf.type and fulfill.shelf and return fulfill.shelf.id match
+        """
+        product_type_shelf_type = self.env['product.type.shelf.type'].sudo().search([('product_type', '=', product_type)], limit=1)
+        if product_type_shelf_type and product_type_shelf_type.shelf_type_id:
+            shelf_type_id = product_type_shelf_type.shelf_type_id.id
+            fulfill_shelf_id = self.env['fulfill.shelf'].sudo().search([
+                ('shelf_type', '=', shelf_type_id)], limit=1)
+            if fulfill_shelf_id:
+                return fulfill_shelf_id.id
+            return False
+        return False
+
+    def handle_data_shelf(self, data_shelf, order_id, product_type):
+
+        key_shelf = str(order_id) + str(product_type)
+        if data_shelf.get(key_shelf):
+            return data_shelf.get(key_shelf)
+        else:
+            return False

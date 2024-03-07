@@ -6,7 +6,7 @@
     'version': '1.0',
     'website': '',
     'summary': """ Crosify web""",
-    'depends': ['base','web'],
+    'depends': ['web'],
     'data': [
     ],
     'demo': [],
@@ -15,8 +15,8 @@
     "category": "Crosify/Crosify",
     'assets': {
         'web.assets_backend': [
-            'crosify_web/static/src/search/control_panel/control_panel.xml',
-            'crosify_web/static/src/views/form/form_controller.xml',
+            'crosify_web/static/src/search/**/*',
+            'crosify_web/static/src/views/**/*',
         ],
     },
     'license': 'LGPL-3',

@@ -42,6 +42,10 @@
                             domain="[('sublevel_id.level', '=', 'L3.2')]"
                             help="Designed Items"/>
                     <separator/>
+                    <filter string="Not have Address Sheft" name="address_sheft_id"
+                            domain="[('address_sheft_id', '=', False)]"
+                            help="Don't have Address Sheft"/>
+
                 </xpath>
 
                 <xpath expr="//filter[@name='salesperson']" position="attributes">
@@ -76,6 +80,7 @@
                         <field name="status" optional="hide"/>
                         <field name="product_type" optional="show"/>
                         <field name="product_sku" optional="show"/>
+                        <field name="address_sheft_id" optional="hide"/>
                         <field name="color_set_name" optional="show"/>
                         <field name="item_size" optional="show"/>
                         <field name="personalize" optional="show"/>
@@ -304,6 +309,17 @@
             <field name="groups_id"
                    eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_set_awaiting_design_level()</field>
+        </record>
+
+        <record id="action_set_address_shelf" model="ir.actions.server">
+            <field name="name">Set Address Sheft</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_set_address_shelf()</field>
         </record>
 
         <record id="action_update_item_design_info" model="ir.actions.server">
