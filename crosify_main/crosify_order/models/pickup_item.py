@@ -12,6 +12,9 @@ class PickupItem(models.Model):
     employee_id = fields.Many2one('hr.employee', string='Employee', default=lambda self: self.env.user.employee_id.id, required=True, index=True)
     note = fields.Text(string='Note')
     item_ids = fields.One2many('pickup.item.line', 'pickup_item_id', 'Deliver Items')
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('done', 'Done')], string='State', default="draft", index=True)
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -68,6 +71,7 @@ class PickupItem(models.Model):
                 'sublevel_id': pickup_level.id,
                 'level_id': pickup_level.parent_id.id
             })
+        self.state = 'done'
         return {
             'type': 'ir.actions.client',
             'tag': 'reload',

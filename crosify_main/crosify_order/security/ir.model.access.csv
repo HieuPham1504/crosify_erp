@@ -53,6 +53,7 @@
 
 "access_shipping_item_confirm","access_shipping_item_confirm","model_shipping_item_confirm",,1,1,1,1
 "access_shipping_item_confirm_line","access_shipping_item_confirm_line","model_shipping_item_confirm_line",,1,1,1,1
+"access_shipping_item_confirm_pickup_order","access_shipping_item_confirm_pickup_order","model_shipping_item_confirm_pickup_order",,1,1,1,1
 
 "access_raise_information_wizard","access_raise_information_wizard","model_raise_information_wizard",,1,1,1,1
 "access_qc_check_item_wizard_line","access_qc_check_item_wizard_line","model_qc_check_item_wizard_line",,1,1,1,1
