@@ -99,7 +99,7 @@ class PickupItemLine(models.Model):
         Items = self.env['sale.order.line'].sudo()
         Orders = self.env['sale.order'].sudo()
         if barcode:
-            if len(barcode) > 30:
+            if len(barcode) >= 30:
                 barcode = barcode[8:]
             orders = Orders.search([('tkn', '=', barcode)])
             existed_order_line = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'order' and line.barcode == barcode)
