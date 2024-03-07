@@ -383,7 +383,7 @@ class SaleOrderController(Controller):
                 dispute_note,
                 crosify_approve_cancel_employee_id,
                 cancel_date,
-                cancel_reason,
+                cancel_note,
                 cancel_status,
                 update_date,
                 crosify_created_date,
