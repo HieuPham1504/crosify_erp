@@ -101,7 +101,7 @@ class PickupItemLine(models.Model):
         if barcode:
             if len(barcode) > 30:
                 barcode = barcode[8:]
-            orders = Orders.search([('order_id_fix', '=', barcode)])
+            orders = Orders.search([('tkn', '=', barcode)])
             existed_order_line = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'order' and line.barcode == barcode)
             if not orders or existed_order_line:
                 item = Items.search([('production_id', '=', barcode)], limit=1)
