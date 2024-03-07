@@ -334,6 +334,7 @@ class SaleOrderController(Controller):
             request.env.cr.execute(create_order_sql)
             sale_order_id = request.env.cr.fetchone()
             order_lines = data.get('Details', [])
+
             for line in order_lines:
                 quantity = line.get('Quantity', 0)
                 create_order_line_sql = f"""
@@ -414,8 +415,13 @@ class SaleOrderController(Controller):
                 shipping_cost = round(line.get('ShippingCost', 0) / quantity, 2)
                 price_total = round(line.get('TotalAmount', 0) / quantity, 2)
                 tip = round(line.get('Tip', 0) / quantity, 2)
+                PaymentStatus = data.get('PaymentStatus')
+                if PaymentStatus == 1:
+                    level_code = 'L1.1'
+                else:
+                    level_code = 'L1'
                 sub_level = request.env['sale.order.line.level'].sudo().search(
-                    [('level', '=', line.get('LevelCode', '0'))], limit=1)
+                    [('level', '=', level_code)], limit=1)
                 product_id = request.env['product.product'].sudo().search([('default_code', '=', line.get('Sku', ''))],
                                                                           limit=1)
                 upload_tkn_by = request.env['hr.employee'].sudo().search(
