@@ -160,11 +160,21 @@ class SaleOrderLine(models.Model):
 
     price_total = fields.Float(
         string="Total",
-        compute='_compute_amount',
+        compute='_compute_amount_custom',
         store=True, precompute=True)
 
-    @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id', 'total_tax')
-    def _compute_amount(self):
+    price_subtotal = fields.Monetary(
+        string="Subtotal",
+        compute='_compute_amount_custom',
+        store=True, precompute=True)
+
+    price_tax = fields.Float(
+        string="Total Tax",
+        compute='_compute_amount_custom',
+        store=True, precompute=True)
+
+    @api.depends('price_unit', 'crosify_discount_amount', 'total_tax')
+    def _compute_amount_custom(self):
         """
         Compute the amounts of the SO line.
         """
