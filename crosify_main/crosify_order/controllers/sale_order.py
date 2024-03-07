@@ -328,7 +328,7 @@ class SaleOrderController(Controller):
                        {payment_method.id if payment_method else 'null'},
                        {utm_source.id if utm_source else 'null'}, 
                        now(), 
-                       {data.get('TaxPrice') if not data.get('TaxPrice') is None else 0},
+                       {data.get('TaxPrice') if not data.get('TaxPrice') is None else 0}
              Returning id
             """
             request.env.cr.execute(create_order_sql)
