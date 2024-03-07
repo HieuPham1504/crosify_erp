@@ -19,11 +19,12 @@ class ShippingItemConfirm(models.Model):
     delivered_item_file = fields.Binary(string='Delivered Items File')
     delivered_item_file_name = fields.Char(string='Delivered')
     relate_pickup_ids = fields.Many2many('pickup.item', 'shipping_item_confirm_pickup_item_rel', 'shipping_item_confirm_id', 'pickup_id', string='Relate Pickup')
-    pickup_order_ids = fields.One2many('shipping.item.confirm.pickup.order', 'shipping_item_confirm_id', string='Pickup Info')
+    pickup_order_ids = fields.One2many('shipping.item.confirm.pickup.order', 'shipping_item_confirm_id', string='Pickup Info', compute='compute_pickup_order_ids', store=True)
+
+
     @api.model_create_multi
     def create(self, vals_list):
         results = super(ShippingItemConfirm, self).create(vals_list)
-
         for val in results:
             if not val.code:
                 date = val.date
@@ -36,6 +37,26 @@ class ShippingItemConfirm(models.Model):
                 code = f'CONFIRM_{date}{month}{year}_{sequence}'
                 val.code = code
         return results
+
+    @api.depends('relate_pickup_ids')
+    def compute_pickup_order_ids(self):
+        PickupOrders = self.env['shipping.item.confirm.pickup.order'].sudo()
+        for rec in self:
+            pickup_ids = rec.relate_pickup_ids
+            datas = []
+            for pickup in pickup_ids:
+                total_items = pickup.item_ids
+                order_lines_total = total_items.filtered(lambda line: line.type == 'order')
+                orders = order_lines_total.order_ids
+                for order in orders:
+                    datas.append({
+                        'pickup_id': pickup.id,
+                        'pickup_date': pickup.date,
+                        'order_id_fix': order.order_id_fix,
+                        'tkn_code': order.tkn,
+                    })
+            pickup_orders = PickupOrders.create(datas)
+            rec.pickup_order_ids = [(6, 0, pickup_orders.ids)]
 
     def action_import_items(self):
         Orders = self.env['sale.order'].sudo()
@@ -88,9 +109,8 @@ class ShippingItemConfirm(models.Model):
                 'shipping_confirm_date': datetime.now().date(),
             })
 
-class ShippingItemConfirm(models.Model):
+class ShippingItemConfirmPickupOrder(models.Model):
     _name = 'shipping.item.confirm.pickup.order'
-    _rec_name = 'code'
 
     shipping_item_confirm_id = fields.Many2one('shipping.item.confirm')
     pickup_id = fields.Many2one('pickup.item', string='Pickup Item')

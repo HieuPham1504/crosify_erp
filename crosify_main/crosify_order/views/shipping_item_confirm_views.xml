@@ -22,7 +22,7 @@
                                 <field name="date"/>
                                 <field name="employee_id" options='{"no_open": True, "no_create": True}'/>
                                 <field name="relate_pickup_ids" widget="many2many_tags"
-                                       options='{"no_open": True, "no_create": True}'/>
+                                       options='{"no_open": True, "no_create": True}' domain="[('state', '=', 'done')]"/>
                             </group>
                             <group></group>
                         </group>
@@ -38,25 +38,25 @@
                         </div>
                         <br/>
                         <notebook>
-                            <page name="pickup-info" string="'Pickup Info">
+                            <page name="pickup-info" string="Pickup Info">
                                 <field name="pickup_order_ids" nolabel="1" readonly="1">
                                     <tree>
-                                        <field name="pickup_id" />
-                                        <field name="pickup_date" />
-                                        <field name="order_id_fix" />
-                                        <field name="tkn_code" />
+                                        <field name="pickup_id"/>
+                                        <field name="pickup_date"/>
+                                        <field name="order_id_fix"/>
+                                        <field name="tkn_code"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="confirm-items" string="Confirm Items">
+                                <field name="item_ids" nolabel="0">
+                                    <tree string="Items" editable="bottom">
+                                        <field name="order_id_fix" readonly="0"/>
+                                        <field name="tkn_code" readonly="0"/>>
                                     </tree>
                                 </field>
                             </page>
                         </notebook>
-                        <group name="items">
-                            <field name="item_ids" nolabel="0">
-                                <tree string="Items" editable="bottom">
-                                    <field name="order_id_fix" readonly="0"/>
-                                    <field name="tkn_code" readonly="0"/>>
-                                </tree>
-                            </field>
-                        </group>
 
                     </sheet>
                 </form>
