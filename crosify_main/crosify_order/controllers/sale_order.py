@@ -356,6 +356,7 @@ class SaleOrderController(Controller):
                 sublevel_id,
                 customer_note,
                 product_id,
+                product_sku,
                 personalize,
                 element_message,
                 design_date,
@@ -460,6 +461,14 @@ class SaleOrderController(Controller):
                         create_order_line_sql += f"""
                                                 {product_id.id},
                                                 """
+
+                    if not product_id:
+                        create_order_line_sql += f"{none_product_id.default_code},"
+                    else:
+                        create_order_line_sql += f"""
+                                                {product_id.default_code},
+                                                """
+
                     create_order_line_sql += f"""
                     '{line.get('Personalize') if line.get('Personalize') is not None else ''}',
                     '{line.get('ElementMessage') if line.get('ElementMessage') is not None else ''}',
@@ -622,7 +631,7 @@ class SaleOrderController(Controller):
                     limit 1),
                     {partner_id.id},
                     '{line.get('Variant')  if line.get('Variant') is not None else ''}', 
-                    now()
+                    now(),
                     )
                     """
                 request.env.cr.execute(create_order_line_sql)
