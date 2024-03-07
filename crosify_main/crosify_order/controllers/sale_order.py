@@ -587,12 +587,12 @@ class SaleOrderController(Controller):
                                                 '{line.get('Updatedat', '')}',
                                                 """
 
-                    if line.get('Createdat') is None:
+                    if data.get('Createdat') is None:
                         create_order_line_sql += "null,"
 
                     else:
                         create_order_line_sql += f"""
-                                                '{line.get('Createdat', '')}',
+                                                '{data.get('Createdat')}',
                                                 """
 
                     create_order_line_sql += f"""
