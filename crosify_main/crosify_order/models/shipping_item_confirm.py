@@ -18,7 +18,8 @@ class ShippingItemConfirm(models.Model):
     item_ids = fields.One2many('shipping.item.confirm.line', 'shipping_item_confirm_id', 'Confirm Items')
     delivered_item_file = fields.Binary(string='Delivered Items File')
     delivered_item_file_name = fields.Char(string='Delivered')
-
+    relate_pickup_ids = fields.Many2many('pickup.item', 'shipping_item_confirm_pickup_item_rel', 'shipping_item_confirm_id', 'pickup_id', string='Relate Pickup')
+    pickup_order_ids = fields.One2many('shipping.item.confirm.pickup.order', 'shipping_item_confirm_id', string='Pickup Info')
     @api.model_create_multi
     def create(self, vals_list):
         results = super(ShippingItemConfirm, self).create(vals_list)
@@ -86,6 +87,16 @@ class ShippingItemConfirm(models.Model):
                 'sublevel_id': shipping_confirm_level.id,
                 'shipping_confirm_date': datetime.now().date(),
             })
+
+class ShippingItemConfirm(models.Model):
+    _name = 'shipping.item.confirm.pickup.order'
+    _rec_name = 'code'
+
+    shipping_item_confirm_id = fields.Many2one('shipping.item.confirm')
+    pickup_id = fields.Many2one('pickup.item', string='Pickup Item')
+    pickup_date = fields.Date(string='Pickup Date')
+    order_id_fix = fields.Char(string='Order ID Fix')
+    tkn_code = fields.Char(string='TKN Code')
 
 class ShippingItemConfirmLine(models.Model):
     _name = 'shipping.item.confirm.line'
