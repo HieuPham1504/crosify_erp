@@ -7,6 +7,18 @@
             <field name="model">sale.order.line</field>
             <field name="inherit_id" ref="sale.view_sales_order_line_filter"/>
             <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_id']" position="attributes">
+                    <attribute name="string">Order</attribute>
+                    <attribute name="filter_domain">['|', '|', ('order_id.name', 'ilike', self), ('my_admin_order_id', 'ilike',
+                        self),
+                        ('order_id_fix', 'ilike', self)]
+                    </attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='order_id']" position="before">
+                    <field name="production_id" filter_domain="[('production_id', 'ilike', self)]"/>
+                </xpath>
+
                 <xpath expr="//filter[@name='to_invoice']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
@@ -127,9 +139,9 @@
                                             <label for="label_file_url"/>
                                             <div class="o_row mw-50">
                                                 <field name="label_file_url" widget="url" readonly="1" force_save="1"/>
-<!--                                                <button name="action_creating_shipment_for_item"-->
-<!--                                                        invisible="label_file_url != False" class="btn btn-primary"-->
-<!--                                                        type="object" string="Get Label"/>-->
+                                                <!--                                                <button name="action_creating_shipment_for_item"-->
+                                                <!--                                                        invisible="label_file_url != False" class="btn btn-primary"-->
+                                                <!--                                                        type="object" string="Get Label"/>-->
                                             </div>
                                             <field name="tkn_code" readonly="1" force_save="1"/>
                                             <field name="upload_tkn_date"/>
@@ -197,7 +209,8 @@
                                 <page id="other_info_tab" string="OTHER" name="other_info_tab">
                                     <group name="cancel_and_dispute">
                                         <group anme="cancel" string="CANCEL">
-                                            <field name="cancel_reason_id" options='{"no_open": True, "no_create": True}'/>
+                                            <field name="cancel_reason_id"
+                                                   options='{"no_open": True, "no_create": True}'/>
                                             <field name="cancel_date"/>
                                             <field name="cancel_note"/>
                                         </group>
@@ -260,16 +273,16 @@
             <field name="code">action = model.action_create_item_production_id()</field>
         </record>
 
-<!--        <record id="action_creating_shipment_item" model="ir.actions.server">-->
-<!--            <field name="name">Creating Shipment</field>-->
-<!--            <field name="model_id" ref="crosify_order.model_sale_order_line"/>-->
-<!--            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>-->
-<!--            <field name="binding_view_types">form,list</field>-->
-<!--            <field name="state">code</field>-->
-<!--            <field name="groups_id"-->
-<!--                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>-->
-<!--            <field name="code">action = model.action_creating_shipment_for_item_model()</field>-->
-<!--        </record>-->
+        <!--        <record id="action_creating_shipment_item" model="ir.actions.server">-->
+        <!--            <field name="name">Creating Shipment</field>-->
+        <!--            <field name="model_id" ref="crosify_order.model_sale_order_line"/>-->
+        <!--            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>-->
+        <!--            <field name="binding_view_types">form,list</field>-->
+        <!--            <field name="state">code</field>-->
+        <!--            <field name="groups_id"-->
+        <!--                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>-->
+        <!--            <field name="code">action = model.action_creating_shipment_for_item_model()</field>-->
+        <!--        </record>-->
 
         <record id="action_update_fulfill" model="ir.actions.server">
             <field name="name">Update Fulfillment</field>
