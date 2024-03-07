@@ -384,7 +384,6 @@ class SaleOrderController(Controller):
                 crosify_approve_cancel_employee_id,
                 cancel_date,
                 cancel_note,
-                cancel_status,
                 update_date,
                 crosify_created_date,
                 crosify_create_by,
@@ -799,7 +798,6 @@ class SaleOrderController(Controller):
                 crosify_approve_cancel_employee_id = {crosify_approve_cancel_employee_id.id if crosify_approve_cancel_employee_id else 'null'},
                 cancel_date = '{line.get('Canceledat') if line.get('Canceledat') is not None else 'null'}',
                 cancel_reason = '{line.get('CancelReason') if line.get('CancelReason') is not None else 'null'}',
-                cancel_status = '{line.get('CancelStatus') if line.get('CancelStatus') is not None else 'null'}',
                 """
 
                 if line.get('Updatedat') is not None:
