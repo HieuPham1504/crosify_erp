@@ -172,7 +172,18 @@
                 <attribute name="column_invisible">1</attribute>
             </xpath>
 
+            <xpath expr="//field[@name='order_line']//tree//field[@name='qty_delivered']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='qty_invoiced']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_total']" position="after">
+                <field name="name" optional="hide"/>
+                <field name="meta_field" optional="hide"/>
+                <field name="variant" optional="hide"/>
                 <field name="my_admin_order_id" optional="hide"/>
                 <field name="order_id_fix" optional="hide"/>
                 <field name="product_type" optional="hide"/>
@@ -182,6 +193,10 @@
             </xpath>
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='tax_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='customer_lead']" position="attributes">
                 <attribute name="column_invisible">1</attribute>
             </xpath>
 
@@ -324,6 +339,8 @@
             </xpath>
 
             <xpath expr="//field[@name='tax_totals']" position="after">
+                <field name="amount_untaxed"/>
+                <field name="amount_tax"/>
                 <field name="discount"/>
                 <field name="tip"/>
                 <field name="amount_total" style="font-weight:bold;font-size:20px"/>
