@@ -155,7 +155,7 @@ class SaleOrder(models.Model):
         width_param = min(product_ids.mapped('width'))
 
         for item in items:
-            hs_code = item.hs_code
+            hs_code = item.product_id.product_tmpl_id.categ_id.hs_code
             hs_code_product_config = HSCodeConfigs.search([('hs_code', '=', hs_code)], limit=1)
             if not hs_code_product_config:
                 raise ValueError(f"There is no Config with HS Code {hs_code}")
