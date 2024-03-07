@@ -252,7 +252,8 @@ class SaleOrderController(Controller):
                 order_payment_state,
                 payment_method_id,
                 utm_source_id, 
-                create_date
+                create_date, 
+                amount_tax
 --                 warehouse_id,
 --                 picking_policy
                 ) 
@@ -326,7 +327,8 @@ class SaleOrderController(Controller):
                        '{'paid' if data.get('PaymentStatus') == 1 else 'not_paid'}',
                        {payment_method.id if payment_method else 'null'},
                        {utm_source.id if utm_source else 'null'}, 
-                       now()
+                       now(), 
+                       {data.get('TaxPrice') if not data.get('TaxPrice') is None else 0},
              Returning id
             """
             request.env.cr.execute(create_order_sql)
