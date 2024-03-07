@@ -122,7 +122,7 @@ class SaleOrderController(Controller):
             return Response("Bad Request", status=400)
         else:
             if data.get('Transactionid') is not None:
-                duplicate_name_order = request.env['sale.order'].sudo().search([('name', '=', data.get('Transactionid'))])
+                duplicate_name_order = request.env['sale.order'].sudo().search([('name', '=', data.get('Name'))])
                 if duplicate_name_order:
                     response = {
                         'status': 404,
