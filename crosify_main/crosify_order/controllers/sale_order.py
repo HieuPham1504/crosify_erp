@@ -251,11 +251,12 @@ class SaleOrderController(Controller):
                 order_type_id, 
                 order_payment_state,
                 payment_method_id,
-                utm_source_id
+                utm_source_id, 
+                create_date
 --                 warehouse_id,
 --                 picking_policy
                 ) 
-                Select '{data.get('Transactionid', '')}',
+                Select '{data.get('Name', '')}',
                  '{data.get('Orderid') if not data.get('Orderid') is None else ''}', 
                  '{data.get('Orderid', '') if not data.get('Orderid') is None else ''}', 
                  '{data.get('ClientSecret') if not data.get('ClientSecret') is None else ''}', 
@@ -324,7 +325,8 @@ class SaleOrderController(Controller):
                        {order_type_id.id if order_type_id else 'null'}, 
                        '{'paid' if data.get('PaymentStatus') == 1 else 'not_paid'}',
                        {payment_method.id if payment_method else 'null'},
-                       {utm_source.id if utm_source else 'null'}
+                       {utm_source.id if utm_source else 'null'}, 
+                       now()
              Returning id
             """
             request.env.cr.execute(create_order_sql)
@@ -398,7 +400,8 @@ class SaleOrderController(Controller):
                 company_id,
                 currency_id,
                 order_partner_id,
-                variant
+                variant, 
+                create_date
                 ) 
                 values
                 """
@@ -616,7 +619,8 @@ class SaleOrderController(Controller):
                     where name = '{data.get('Currency')}' 
                     limit 1),
                     {partner_id.id},
-                    '{line.get('Variant')  if line.get('Variant') is not None else ''}'
+                    '{line.get('Variant')  if line.get('Variant') is not None else ''}', 
+                    now()
                     )
                     """
                 request.env.cr.execute(create_order_line_sql)
