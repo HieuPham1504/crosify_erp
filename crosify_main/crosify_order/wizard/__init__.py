@@ -8,3 +8,4 @@ from . import ready_packing_item_wizard
 from . import cancel_item_wizard
 from . import packed_item_wizard
 from . import update_item_level_wizard
+from . import update_item_wizard
