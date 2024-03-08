@@ -50,7 +50,7 @@ class UpdateOrderWizard(models.TransientModel):
                 if not country_code:
                     country_id = False
                 else:
-                    state_id = States.search([('code', '=', state_code)], limit=1)
+                    state_id = Country.search([('code', '=', country_code)], limit=1)
                 zip = record[9]
                 phone = record[10]
                 email = record[11]
