@@ -39,7 +39,7 @@
                         <br/>
                         <notebook>
                             <page name="pickup-info" string="Pickup Info">
-                                <field name="pickup_order_ids" nolabel="1" readonly="1">
+                                <field name="pickup_order_ids" nolabel="1" readonly="1" force_save="1">
                                     <tree>
                                         <field name="pickup_id"/>
                                         <field name="pickup_date"/>
@@ -52,7 +52,16 @@
                                 <field name="item_ids" nolabel="0">
                                     <tree string="Items" editable="bottom">
                                         <field name="order_id_fix" readonly="0"/>
-                                        <field name="tkn_code" readonly="0"/>>
+                                        <field name="tkn_code" readonly="0"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page name="error-items" string="Error">
+                                <field name="pickup_order_error_ids" nolabel="0" readonly="1" force_save="1">
+                                    <tree string="Items">
+                                        <field name="order_id_fix" readonly="0"/>
+                                        <field name="tkn_code" readonly="0"/>
                                     </tree>
                                 </field>
                             </page>
