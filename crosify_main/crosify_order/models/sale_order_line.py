@@ -177,6 +177,19 @@ class SaleOrderLine(models.Model):
         compute='_compute_amount_custom',
         store=True, precompute=True)
 
+    def write(self, vals):
+        # OVERRIDE
+        old_sublevel_id = self.sublevel_id
+        res = super().write(vals)
+
+        if vals.get('sublevel_id'):
+            new_sublevel_id = self.sublevel_id
+            self.add_or_minus_fulfill_shelf(old_sublevel_id, new_sublevel_id)
+
+
+        return res
+
+
     @api.depends('price_unit', 'crosify_discount_amount', 'total_tax')
     def _compute_amount_custom(self):
         """
@@ -508,7 +521,7 @@ class SaleOrderLine(models.Model):
         if product_type_shelf_type and product_type_shelf_type.shelf_type_id:
             shelf_type_id = product_type_shelf_type.shelf_type_id.id
             fulfill_shelf_id = self.env['fulfill.shelf'].sudo().search([
-                ('shelf_type', '=', shelf_type_id)], limit=1)
+                ('shelf_type', '=', shelf_type_id), ('available', '=', True)], limit=1)
             if fulfill_shelf_id:
                 return fulfill_shelf_id.id
             return False
@@ -521,3 +534,11 @@ class SaleOrderLine(models.Model):
             return data_shelf.get(key_shelf)
         else:
             return False
+
+    def add_or_minus_fulfill_shelf(self, old_sublevel_id, new_sublevel_id):
+        if new_sublevel_id and new_sublevel_id.level == 'L4.5':
+            if self.address_sheft_id:
+                self.address_sheft_id.current_shelf += 1
+        if old_sublevel_id and old_sublevel_id.level == 'L4.5':
+            if self.address_sheft_id:
+                self.address_sheft_id.current_shelf -= 1
