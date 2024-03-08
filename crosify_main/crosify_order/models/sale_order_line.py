@@ -97,7 +97,7 @@ class SaleOrderLine(models.Model):
     design_date = fields.Datetime(string='Design Date', tracking=1)
     variant = fields.Text(string='Variant')
     # tab production
-    production_id = fields.Char(string='Production ID', tracking=1)
+    production_id = fields.Char(string='Production ID', tracking=1, index=True)
     production_vendor_code = fields.Char(string='Production Vendor Code')
     production_vendor_id = fields.Many2one('res.partner', string='Production Vendor')
     packaging_location = fields.Char(string='Packaging Location')
