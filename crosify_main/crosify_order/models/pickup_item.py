@@ -142,7 +142,11 @@ class PickupItemLine(models.Model):
                     'tkn_code': order_tkn,
                     'type': 'order',
                 }
-                items = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'item' and not line.is_checked and not line.state)
+                total_items = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'item')
+                item_tkn_codes = total_items.mapped('tkn_code')
+                checked_orders = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'order' and line.order_tracking_code in item_tkn_codes).mapped('order_tracking_code')
+
+                items = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'item' and not line.is_checked and not line.state and line.tkn_code not in checked_orders)
                 if items:
                     tkn_code = items.mapped('tkn_code')[0]
                     data.update({
