@@ -105,9 +105,15 @@ class PickupItemLine(models.Model):
         if barcode:
             if len(barcode) >= 30:
                 barcode = barcode[8:]
+            is_item = False
             orders = Orders.search([('tkn', '=', barcode)])
-            existed_order_line = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'order' and line.barcode == barcode)
-            if not orders or existed_order_line:
+            if orders:
+                is_item = True
+            else:
+                existed_order_line = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'order' and line.barcode == barcode)
+                if existed_order_line:
+                    is_item = True
+            if is_item:
                 item = Items.search([('production_id', '=', barcode)], limit=1)
                 if item.sublevel_id.level != 'L4.7':
                     raise ValidationError(_("Only Pickup Item With Packed Level"))
