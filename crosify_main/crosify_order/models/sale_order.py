@@ -139,6 +139,11 @@ class SaleOrder(models.Model):
         States = self.env['res.country.state'].sudo()
         Items = self.env['sale.order.line'].sudo()
         customer = self.partner_id
+        customer_name = customer.name
+        customer_name_split = customer_name.split(' ')
+        if len(customer_name_split) == 1:
+            customer_name = customer_name * 2
+
         items = Items
         total_item = self.order_line
         total_weight = sum(total_item.product_id.mapped('weight'))
@@ -198,7 +203,7 @@ class SaleOrder(models.Model):
             },
             "Receiver": {
                 "CountryCode": f"{customer.country_id.code}",
-                "Name": f"{customer.name}",
+                "Name": f"{customer_name}",
                 "Company": f"{customer.company_id.name if customer.company_id else ''}",
                 "Street": f"{customer.street}",
                 "Street2": f"{customer.street2}",
