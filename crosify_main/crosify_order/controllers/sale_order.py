@@ -141,8 +141,8 @@ class SaleOrderController(Controller):
             first_name = data.get('ShippingFirstname') if data.get('ShippingFirstname') is not None else ''
             last_name = data.get('ShippingLastname') if data.get('ShippingLastname') is not None else ''
             partner_id = Partner.create({
-                'name': first_name + last_name,
-                'complete_name': first_name + last_name,
+                'name': f"{first_name} {last_name}",
+                'complete_name': f"{first_name} {last_name}",
                 'street': data.get('ShippingAddress') if data.get('ShippingAddress') is not None else '',
                 'street2': data.get('ShippingApartment') if data.get('ShippingApartment') is not None else '',
                 'city': data.get('ShippingCity') if data.get('ShippingCity') is not None else '',
