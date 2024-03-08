@@ -142,7 +142,7 @@ class SaleOrder(models.Model):
         customer_name = customer.name
         customer_name_split = customer_name.split(' ')
         if len(customer_name_split) == 1:
-            customer_name = customer_name * 2
+            customer_name = f"{customer_name} {customer_name}"
 
         items = Items
         total_item = self.order_line
