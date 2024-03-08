@@ -117,8 +117,9 @@ class PickupItemLine(models.Model):
                         'type': 'item',
                         'sale_order_line_id': item.id,
                     }
+                    order_tracking_code = list(set(self.pickup_item_id.item_ids.mapped('order_tracking_code')))
                     item_order_rel = self.pickup_item_id.item_ids.filtered(
-                        lambda item_line: not item_line.is_checked and item_line.type == 'order')
+                        lambda item_line: not item_line.is_checked and item_line.type == 'order' and item_line.tkn_code not in order_tracking_code)
                     if item_order_rel:
                         item_order_rel = item_order_rel[-1]
                         if item_order_rel.tkn_code != item.tkn_code:
