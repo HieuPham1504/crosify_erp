@@ -239,16 +239,19 @@ class SaleOrder(models.Model):
         response = self.get_label_data()
         if response.status_code == 200:
             total_data = json.loads(response.text)
-            data = total_data.get('labels')[0]
-            current_employee = self.env.user.employee_id
-            now = fields.Datetime.now()
-            self.write({
-                'label_file_url': data.get('linkPdf'),
-                'tkn': data.get('trackingNumber'),
-                'is_upload_tkn': True,
-                'update_tkn_date': now,
-                'update_tkn_employee_id': current_employee.id,
-            })
+            if total_data.get('rs'):
+                data = total_data.get('labels')[0]
+                current_employee = self.env.user.employee_id
+                now = fields.Datetime.now()
+                self.write({
+                    'label_file_url': data.get('linkPdf'),
+                    'tkn': data.get('trackingNumber'),
+                    'is_upload_tkn': True,
+                    'update_tkn_date': now,
+                    'update_tkn_employee_id': current_employee.id,
+                })
+            else:
+                raise ValidationError(total_data.get('msg'))
         else:
             raise ValidationError(response.reason)
         return True
