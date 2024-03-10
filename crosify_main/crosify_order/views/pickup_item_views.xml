@@ -34,10 +34,11 @@
                                 <tree string="Items" editable="bottom">
                                     <field name="barcode" readonly="0"/>
                                     <field name="tkn_code" readonly="0"/>
-                                    <field name="sale_order_line_id" column_invisible="1" orce_save="1"/>
-                                    <field name="is_checked" column_invisible="1" orce_save="1"/>
-                                    <field name="type" column_invisible="1" orce_save="1"/>
-                                    <field name="order_ids" column_invisible="1" orce_save="1"/>
+                                    <field name="sale_order_line_id" column_invisible="1" force_save="1"/>
+                                    <field name="pair_number" column_invisible="1" force_save="1"/>
+                                    <field name="is_checked" column_invisible="1" force_save="1"/>
+                                    <field name="type" column_invisible="1" force_save="1"/>
+                                    <field name="order_ids" column_invisible="1" force_save="1"/>
                                     <field name="state" readonly="1" force_save="1"/>
                                 </tree>
                             </field>
