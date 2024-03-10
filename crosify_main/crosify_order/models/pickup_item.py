@@ -9,7 +9,8 @@ class PickupItem(models.Model):
 
     code = fields.Char(string='Code', index=True)
     date = fields.Date(string='Date', default=fields.Date.today, required=True)
-    employee_id = fields.Many2one('hr.employee', string='Employee', default=lambda self: self.env.user.employee_id.id, required=True, index=True)
+    employee_id = fields.Many2one('hr.employee', string='Employee', default=lambda self: self.env.user.employee_id.id,
+                                  required=True, index=True)
     note = fields.Text(string='Note')
     item_ids = fields.One2many('pickup.item.line', 'pickup_item_id', 'Deliver Items')
     state = fields.Selection([
@@ -96,74 +97,129 @@ class PickupItemLine(models.Model):
         ('pass', 'Pass')], string='State', default=False)
     order_tracking_code = fields.Char('Order Tracking Code')
     is_fail_item = fields.Boolean(default=False)
+    pair_number = fields.Integer(string='Pair Number')
 
     @api.onchange('barcode')
     def onchange_barcode(self):
         barcode = self.barcode
-        Items = self.env['sale.order.line'].sudo()
         Orders = self.env['sale.order'].sudo()
+        Items = self.env['sale.order.line'].sudo()
         if barcode:
             if len(barcode) >= 30:
                 barcode = barcode[8:]
+            total_lines = self.pickup_item_id.item_ids
+            total_line_length = len(total_lines)
+            pair_number = (total_line_length // 2) + (total_line_length % 2)
             orders = Orders.search([('tkn', '=', barcode)])
-            existed_order_line = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'order' and line.barcode == barcode)
-            if not orders:
-                item = Items.search([('production_id', '=', barcode)], limit=1)
-                if item.sublevel_id.level != 'L4.7':
-                    raise ValidationError(_("Only Pickup Item With Packed Level"))
-                if item:
-                    data = {
-                        'tkn_code': item.tkn_code,
-                        'type': 'item',
-                        'sale_order_line_id': item.id,
-                    }
-                    order_tracking_code = list(set(self.pickup_item_id.item_ids.mapped('order_tracking_code')))
-                    item_order_rel = self.pickup_item_id.item_ids.filtered(
-                        lambda item_line: item_line.type == 'order' and item_line.tkn_code not in order_tracking_code)
-                    if item_order_rel:
-                        item_order_rel = item_order_rel[-1]
-                        if item_order_rel.tkn_code != item.tkn_code:
-                            data.update({
-                                'state': 'fail',
-                                'is_checked': True,
-                                'order_tracking_code': item_order_rel.tkn_code,
-                            })
-                        else:
-                            data.update({
-                                'state': 'pass',
-                                'is_checked': True,
-                                'order_tracking_code': item_order_rel.tkn_code,
-                            })
-                    self.write(data)
-            else:
+            nearest_line = False
+            if total_line_length > 1:
+                nearest_line = total_lines[-2]
+            if orders:
                 order_tkn = orders.mapped('tkn')[0]
+                state = False
+                if nearest_line:
+                    tkn = nearest_line.tkn_code
+                    if tkn != order_tkn:
+                        state = 'fail'
+                    else:
+                        state = 'pass'
                 data = {
                     'order_ids': [(6, 0, orders.ids)],
                     'tkn_code': order_tkn,
                     'type': 'order',
+                    'state': state,
+                    'pair_number': pair_number
                 }
-                total_items = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'item')
-                item_tkn_codes = total_items.mapped('tkn_code')
-                checked_orders = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'order' and line.order_tracking_code in item_tkn_codes).mapped('order_tracking_code')
+            else:
+                item = Items.search([('production_id', '=', barcode)], limit=1)
+                if item.sublevel_id.level != 'L4.7':
+                    raise ValidationError(_("Only Pickup Item With Packed Level"))
+                if item:
 
-                items = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'item' and not line.is_checked and not line.state and line.tkn_code not in checked_orders)
-                if items:
-                    tkn_code = items.mapped('tkn_code')[0]
-                    data.update({
-                        'order_tracking_code': tkn_code,
-                        'state': 'pass' if order_tkn == tkn_code else 'fail'
-                    })
-                self.write(data)
-        return
+                    state = False
+                    if nearest_line:
+                        tkn = nearest_line.tkn_code
+                        if tkn != item.tkn_code:
+                            state = 'fail'
+                        else:
+                            state = 'pass'
+                    data = {
+                        'tkn_code': item.tkn_code,
+                        'type': 'item',
+                        'state': state,
+                        'pair_number': pair_number,
+                        'sale_order_line_id': item.id,
+                    }
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        remove_vals = []
-        for val in vals_list:
-            if not val.get('barcode'):
-                remove_vals.append(val)
-        for remove_val in remove_vals:
-            vals_list.remove(remove_val)
-        res = super(PickupItemLine, self).create(vals_list)
-        return res
 
+                # @api.onchange('barcode')
+
+
+# def onchange_barcode(self):
+#     barcode = self.barcode
+#     Items = self.env['sale.order.line'].sudo()
+#     Orders = self.env['sale.order'].sudo()
+#     if barcode:
+#         if len(barcode) >= 30:
+#             barcode = barcode[8:]
+#         orders = Orders.search([('tkn', '=', barcode)])
+#         existed_order_line = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'order' and line.barcode == barcode)
+#         if not orders or existed_order_line:
+#             item = Items.search([('production_id', '=', barcode)], limit=1)
+#             if item.sublevel_id.level != 'L4.7':
+#                 raise ValidationError(_("Only Pickup Item With Packed Level"))
+#             if item:
+#                 data = {
+#                     'tkn_code': item.tkn_code,
+#                     'type': 'item',
+#                     'sale_order_line_id': item.id,
+#                 }
+#                 order_tracking_code = list(set(self.pickup_item_id.item_ids.mapped('order_tracking_code')))
+#                 item_order_rel = self.pickup_item_id.item_ids.filtered(
+#                     lambda item_line: item_line.type == 'order' and item_line.tkn_code not in order_tracking_code)
+#                 if item_order_rel:
+#                     item_order_rel = item_order_rel[-1]
+#                     if item_order_rel.tkn_code != item.tkn_code:
+#                         data.update({
+#                             'state': 'fail',
+#                             'is_checked': True,
+#                             'order_tracking_code': item_order_rel.tkn_code,
+#                         })
+#                     else:
+#                         data.update({
+#                             'state': 'pass',
+#                             'is_checked': True,
+#                             'order_tracking_code': item_order_rel.tkn_code,
+#                         })
+#                 self.write(data)
+#         else:
+#             order_tkn = orders.mapped('tkn')[0]
+#             data = {
+#                 'order_ids': [(6, 0, orders.ids)],
+#                 'tkn_code': order_tkn,
+#                 'type': 'order',
+#             }
+#             total_items = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'item')
+#             item_tkn_codes = total_items.mapped('tkn_code')
+#             checked_orders = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'order' and line.order_tracking_code in item_tkn_codes).mapped('order_tracking_code')
+#
+#             items = self.pickup_item_id.item_ids.filtered(lambda line: line.type == 'item' and not line.is_checked and not line.state and line.tkn_code not in checked_orders)
+#             if items:
+#                 tkn_code = items.mapped('tkn_code')[0]
+#                 data.update({
+#                     'order_tracking_code': tkn_code,
+#                     'state': 'pass' if order_tkn == tkn_code else 'fail'
+#                 })
+#             self.write(data)
+#     return
+
+@api.model_create_multi
+def create(self, vals_list):
+    remove_vals = []
+    for val in vals_list:
+        if not val.get('barcode'):
+            remove_vals.append(val)
+    for remove_val in remove_vals:
+        vals_list.remove(remove_val)
+    res = super(PickupItemLine, self).create(vals_list)
+    return res
