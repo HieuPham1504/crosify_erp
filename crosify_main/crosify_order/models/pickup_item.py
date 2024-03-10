@@ -42,11 +42,9 @@ class PickupItem(models.Model):
         total_items = self.item_ids
         if any(item.state == 'fail' for item in total_items):
             failed_items = total_items.filtered(lambda item: item.state == 'fail')
-            tracking_code_faileds = list(set(failed_items.mapped('order_tracking_code')))
-            total_items_fails = total_items.filtered(lambda item: item.order_tracking_code in tracking_code_faileds)
-            total_order_fails = total_items.filtered(
-                lambda item: item.tkn_code in tracking_code_faileds)
-            total_fails = total_items_fails | total_order_fails
+            pair_number_faileds = list(set(failed_items.mapped('pair_number')))
+            total_items_fails = total_items.filtered(lambda item: item.pair_number in pair_number_faileds)
+            total_fails = total_items_fails
             for line in total_fails:
                 line.write({
                     'is_fail_item': True,
