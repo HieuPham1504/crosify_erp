@@ -112,7 +112,7 @@ class PickupItemLine(models.Model):
             pair_number = (total_line_length // 2) + (total_line_length % 2)
             orders = Orders.search([('tkn', '=', barcode)])
             nearest_line = False
-            if total_line_length > 1:
+            if total_line_length > 2:
                 nearest_line = total_lines[-2]
             if orders:
                 order_tkn = orders.mapped('tkn')[0]
