@@ -130,6 +130,7 @@ class PickupItemLine(models.Model):
                     'state': state,
                     'pair_number': pair_number
                 }
+                self.write(data)
             else:
                 item = Items.search([('production_id', '=', barcode)], limit=1)
                 if item.sublevel_id.level != 'L4.7':
@@ -150,6 +151,7 @@ class PickupItemLine(models.Model):
                         'pair_number': pair_number,
                         'sale_order_line_id': item.id,
                     }
+                self.write(data)
 
 
                 # @api.onchange('barcode')
