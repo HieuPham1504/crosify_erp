@@ -21,6 +21,9 @@ class ShippingItemConfirm(models.Model):
     relate_pickup_ids = fields.Many2many('pickup.item', 'shipping_item_confirm_pickup_item_rel', 'shipping_item_confirm_id', 'pickup_id', string='Relate Pickup')
     pickup_order_line_ids = fields.One2many('shipping.item.confirm.pickup.order', 'shipping_item_confirm_id', compute=False, string='Pickup Info')
     pickup_order_error_ids = fields.One2many('shipping.item.confirm.pickup.order.error', 'shipping_item_confirm_id', string='Pickup Error Info', compute='compute_pickup_order_error_ids', store=True)
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('done', 'Done')], string='State', default="draft", index=True)
 
     @api.depends('pickup_order_line_ids', 'item_ids')
     def compute_pickup_order_error_ids(self):
@@ -71,7 +74,7 @@ class ShippingItemConfirm(models.Model):
         for pickup in pickup_ids:
             total_items = pickup.item_ids
             order_lines_total = total_items.filtered(lambda line: line.type == 'order')
-            orders = order_lines_total.order_ids
+            orders = order_lines_total.order_ids.filtered(lambda item: item.sublevel_id.level == 'L5.1')
             for order in orders:
                 datas.append((0, 0, {
                     'pickup_id': pickup.id,
@@ -149,6 +152,7 @@ class ShippingItemConfirm(models.Model):
                     'sublevel_id': shipping_confirm_level.id,
                     'shipping_confirm_date': datetime.now().date(),
                 })
+            self.state = 'done'
 
 class ShippingItemConfirmPickupOrder(models.Model):
     _name = 'shipping.item.confirm.pickup.order'
