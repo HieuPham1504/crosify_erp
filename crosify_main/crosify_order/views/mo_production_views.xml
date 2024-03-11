@@ -5,7 +5,7 @@
             <field name="name">mo_production_tree_view</field>
             <field name="model">mo.production</field>
             <field name="arch" type="xml">
-                <tree string="Productions">
+                <tree string="Fulfillment To Production">
                     <field name="code"/>
                     <field name="date"/>
                     <field name="employee_id"/>
@@ -18,7 +18,7 @@
             <field name="name">mo_production_form_view</field>
             <field name="model">mo.production</field>
             <field name="arch" type="xml">
-                <form string="Productions" class="sale_order_view_inherit_form_crosify_order">
+                <form string="Fulfillment To Production" class="sale_order_view_inherit_form_crosify_order">
                     <header>
                         <button name="action_produce_items" string="Produce Items"
                                 type="object" class="oe_highlight" data-hotkey="w" title="Produce Items"
@@ -60,13 +60,13 @@
         </record>
 
         <record id="crosify_menu_mo_production_action" model="ir.actions.act_window">
-            <field name="name">Productions</field>
+            <field name="name">Fulfillment To Production</field>
             <field name="res_model">mo.production</field>
             <field name="view_mode">tree,form</field>
         </record>
 
         <menuitem id="crosify_menu_mo_production"
-                  name="Productions"
+                  name="Fulfillment To Production"
                   action="crosify_menu_mo_production_action"
                   parent="sale.sale_order_menu"
                    groups="base.group_system,crosify_order.group_sale_team_operator,crosify_order.group_producer_team"

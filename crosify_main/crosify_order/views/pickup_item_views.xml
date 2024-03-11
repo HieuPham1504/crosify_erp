@@ -1,6 +1,20 @@
 <odoo>
     <data>
 
+        <record id="pickup_item_search_view" model="ir.ui.view">
+            <field name="name">pickup_item_search_view</field>
+            <field name="model">pickup.item</field>
+            <field name="arch" type="xml">
+                <search>
+                    <separator/>
+                    <filter name="draft_pickup" string="Draft Pickup" domain="[('state', '=', 'draft')]"/>
+                    <separator/>
+                    <filter name="done_pickup" string="Done Pickup" domain="[('state', '=', 'done')]"/>
+                    <separator/>
+                </search>
+            </field>
+        </record>
+
         <record id="pickup_item_tree_view" model="ir.ui.view">
             <field name="name">pickup_item_tree_view</field>
             <field name="model">pickup.item</field>
