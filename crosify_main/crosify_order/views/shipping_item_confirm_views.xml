@@ -1,6 +1,20 @@
 <odoo>
     <data>
 
+        <record id="shipping_item_confirm_search_view" model="ir.ui.view">
+            <field name="name">shipping_item_confirm_search_view</field>
+            <field name="model">shipping.item.confirm</field>
+            <field name="arch" type="xml">
+                <search>
+                    <separator/>
+                    <filter name="draft_shipping_confirm" string="Draft Shipping Confirm" domain="[('state', '=', 'draft')]"/>
+                    <separator/>
+                    <filter name="done_shipping_confirm" string="Done Shipping Confirm" domain="[('state', '=', 'done')]"/>
+                    <separator/>
+                </search>
+            </field>
+        </record>
+
         <record id="shipping_item_confirm_tree_view" model="ir.ui.view">
             <field name="name">shipping_item_confirm_tree_view</field>
             <field name="model">shipping.item.confirm</field>
