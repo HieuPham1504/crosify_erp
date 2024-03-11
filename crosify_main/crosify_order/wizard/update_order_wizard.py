@@ -18,7 +18,7 @@ class UpdateOrderWizard(models.TransientModel):
     line_ids = fields.One2many('update.order.line.wizard', 'update_order_wizard_id', string='Update Orders')
 
     def action_import_items(self):
-        Items = self.env['sale.order.line'].sudo()
+        Orders = self.env['sale.order'].sudo()
         Products = self.env['product.product'].sudo()
         ItemLines = self.env['update.order.line.wizard'].sudo()
         States = self.env['res.country.state'].sudo()
@@ -45,7 +45,7 @@ class UpdateOrderWizard(models.TransientModel):
                 if not country_code:
                     country_id = False
                 else:
-                    state_id = Country.search([('code', '=', country_code)], limit=1).id
+                    country_id = Country.search([('code', '=', country_code)], limit=1).id
                 if not state_code:
                     state_id = False
                 else:
@@ -59,7 +59,7 @@ class UpdateOrderWizard(models.TransientModel):
                 else:
                     order_id_fix = order_id_fix.strip()
                     order_id_fixes.append(order_id_fix)
-                    order = Items.search([('order_id_fix', '=', order_id_fix)], limit=1)
+                    order = Orders.search([('order_id_fix', '=', order_id_fix)], limit=1)
                     if order:
                         item_file_datas.append({
                             'order_id_fix': order_id_fix,
@@ -82,14 +82,14 @@ class UpdateOrderWizard(models.TransientModel):
         except:
             raise ValidationError(_('Insert Invalid File'))
 
-    def action_update_item(self):
+    def action_update_order(self):
         line_ids = self.line_ids
         for line in line_ids:
             order_id = line.order_id
             if order_id and order_id.partner_id:
                 order_id.partner_id.write({
-                    'first_name': line.first_name,
-                    'last_name': line.last_name,
+                    'name': f'{line.first_name} {line.last_name}',
+                    'complete_name': f'{line.first_name} {line.last_name}',
                     'street': line.street,
                     'street2': line.street2,
                     'city': line.city,
@@ -98,6 +98,18 @@ class UpdateOrderWizard(models.TransientModel):
                     'zip': line.zip,
                     'phone': line.phone,
                     'email': line.email,
+                })
+                order_id.write({
+                    'shipping_firstname': line.first_name,
+                    'shipping_lastname': line.last_name,
+                    'shipping_address': line.street,
+                    'shipping_apartment': line.street2,
+                    'shipping_city': line.city,
+                    'shipping_state_id': line.state_id.id,
+                    'shipping_zipcode': line.zip,
+                    'shipping_country_id': line.country_id.id,
+                    'shipping_phone_number': line.phone,
+                    'contact_email': line.email,
                 })
 
 

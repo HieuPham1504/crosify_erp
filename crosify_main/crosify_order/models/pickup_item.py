@@ -5,17 +5,19 @@ from odoo.exceptions import UserError, ValidationError
 
 class PickupItem(models.Model):
     _name = 'pickup.item'
+    _description = 'Pickup Item'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'code'
 
     code = fields.Char(string='Code', index=True)
     date = fields.Date(string='Date', default=fields.Date.today, required=True)
     employee_id = fields.Many2one('hr.employee', string='Employee', default=lambda self: self.env.user.employee_id.id,
-                                  required=True, index=True)
+                                  required=True, index=True, tracking=1)
     note = fields.Text(string='Note')
     item_ids = fields.One2many('pickup.item.line', 'pickup_item_id', 'Deliver Items')
     state = fields.Selection([
         ('draft', 'Draft'),
-        ('done', 'Done')], string='State', default="draft", index=True)
+        ('done', 'Done')], string='State', default="draft", index=True, tracking=1)
 
     @api.model_create_multi
     def create(self, vals_list):

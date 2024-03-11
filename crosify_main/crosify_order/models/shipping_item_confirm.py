@@ -8,22 +8,24 @@ from io import BytesIO
 
 class ShippingItemConfirm(models.Model):
     _name = 'shipping.item.confirm'
+    _description = 'Shipping Item Confirm'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'code'
 
     code = fields.Char(string='Code', index=True)
     date = fields.Date(string='Date', default=fields.Date.today, required=True)
     employee_id = fields.Many2one('hr.employee', string='Employee', default=lambda self: self.env.user.employee_id.id,
-                                  required=True, index=True)
+                                  required=True, index=True, tracking=1)
     note = fields.Text(string='Note')
     item_ids = fields.One2many('shipping.item.confirm.line', 'shipping_item_confirm_id', 'Confirm Items')
     delivered_item_file = fields.Binary(string='Delivered Items File')
     delivered_item_file_name = fields.Char(string='Delivered')
-    relate_pickup_ids = fields.Many2many('pickup.item', 'shipping_item_confirm_pickup_item_rel', 'shipping_item_confirm_id', 'pickup_id', string='Relate Pickup')
+    relate_pickup_ids = fields.Many2many('pickup.item', 'shipping_item_confirm_pickup_item_rel', 'shipping_item_confirm_id', 'pickup_id', string='Relate Pickup', tracking=1)
     pickup_order_line_ids = fields.One2many('shipping.item.confirm.pickup.order', 'shipping_item_confirm_id', compute=False, string='Pickup Info')
     pickup_order_error_ids = fields.One2many('shipping.item.confirm.pickup.order.error', 'shipping_item_confirm_id', string='Pickup Error Info', compute='compute_pickup_order_error_ids', store=True)
     state = fields.Selection([
         ('draft', 'Draft'),
-        ('done', 'Done')], string='State', default="draft", index=True)
+        ('done', 'Done')], string='State', default="draft", index=True, tracking=1)
 
     @api.depends('pickup_order_line_ids', 'item_ids')
     def compute_pickup_order_error_ids(self):

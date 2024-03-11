@@ -63,6 +63,7 @@ Key Features
         'wizard/packed_item_wizard_views.xml',
         'wizard/update_item_level_wizard_views.xml',
         'wizard/update_item_wizard_views.xml',
+        'wizard/update_order_wizard_views.xml',
     ],
     'demo': [],
     'installable': True,

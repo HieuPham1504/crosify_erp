@@ -18,7 +18,7 @@
                         </div>
                         <br/>
                         <notebook>
-                            <page name="pickup-info" string="Pickup Info">
+                            <page name="item-info" string="Item Info">
                                 <field name="line_ids" nolabel="1" readonly="1" force_save="1">
                                     <tree>
                                         <field name="production_id"/>

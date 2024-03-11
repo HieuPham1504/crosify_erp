@@ -3,6 +3,7 @@ from odoo.exceptions import ValidationError
 
 class MOProduction(models.Model):
     _name = 'mo.production'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Production'
     _rec_name = 'code'
     _order = 'date desc'
@@ -15,7 +16,7 @@ class MOProduction(models.Model):
     state = fields.Selection([
         ('draft', 'Draft'),
         ('production', 'Production')
-    ], string='State', default='draft')
+    ], string='State', default='draft', index=True, tracking=1)
 
     @api.constrains('mo_production_line_ids')
     def constraint_sale_order_line_id(self):
