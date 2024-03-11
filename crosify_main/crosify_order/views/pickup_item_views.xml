@@ -1,6 +1,20 @@
 <odoo>
     <data>
 
+        <record id="pickup_item_tree_view" model="ir.ui.view">
+            <field name="name">pickup_item_tree_view</field>
+            <field name="model">pickup.item</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code"/>
+                    <field name="date"/>
+                    <field name="employee_id"/>
+                    <field name="state"/>
+                    <field name="note"/>
+                </tree>
+            </field>
+        </record>
+
         <record id="pickup_item_form_view" model="ir.ui.view">
             <field name="name">pickup_item_form_view</field>
             <field name="model">pickup.item</field>
@@ -52,7 +66,7 @@
         <record id="pickup_item_menu_action" model="ir.actions.act_window">
             <field name="name">Pickup Item</field>
             <field name="res_model">pickup.item</field>
-            <field name="view_mode">form</field>
+            <field name="view_mode">tree,form</field>
             <field name="target">current</field>
         </record>
 
