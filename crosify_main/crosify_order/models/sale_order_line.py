@@ -443,20 +443,30 @@ class SaleOrderLine(models.Model):
 
     def action_generate_item_barcode(self):
         try:
-            data = [{
-                'production_id': rec.production_id,
-                'order_id_name': rec.order_id.name,
-                'product_type': rec.product_type,
-                'personalize': rec.personalize,
-                'shelf_code': rec.address_sheft_id.shelf_code,
-                'size': [attribute.product_attribute_value_id.name for attribute in
-                                                         rec.product_id.product_template_attribute_value_ids if
-                                                         attribute.attribute_id.name in ['Size']],
-                'color': [attribute.product_attribute_value_id.name for attribute in
-                                                         rec.product_id.product_template_attribute_value_ids if
-                                                         attribute.attribute_id.name in ['Color']],
+            data = []
+            for rec in self:
+                order_total_items = rec.order_id.order_line
+                total_product_types = list(set(order_total_items.mapped('product_type')))
+                product_str = f'{rec.address_sheft_id.shelf_code}'
+                for product_type in total_product_types:
+                    product_type_items =  order_total_items.filtered(lambda item: item.product_type == product_type)
+                    product_format = f'_{len(product_type_items)}{product_type}'
+                    product_str += product_format
+                data.append({
+                    'production_id': rec.production_id,
+                    'order_id_name': rec.order_id.name,
+                    'product_type': rec.product_type,
+                    'personalize': rec.personalize,
+                    'shelf_code': rec.address_sheft_id.shelf_code,
+                    'product_str': product_str,
+                    'size': [attribute.product_attribute_value_id.name for attribute in
+                                                             rec.product_id.product_template_attribute_value_ids if
+                                                             attribute.attribute_id.name in ['Size']],
+                    'color': [attribute.product_attribute_value_id.name for attribute in
+                                                             rec.product_id.product_template_attribute_value_ids if
+                                                             attribute.attribute_id.name in ['Color']],
 
-            } for rec in self]
+                })
             item_data = {
                 'items': data
             }

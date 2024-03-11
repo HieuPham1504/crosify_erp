@@ -58,9 +58,9 @@
                         <div class="col-6 p-3">
 
                             <div class="col overflow-hidden text-start">
-                                <t t-if="item['shelf_code']">
+                                <t t-if="item['product_str']">
                                     <p style="font-size:20px">
-                                        <t t-esc="item['shelf_code']"/>
+                                        <t t-esc="item['product_str']"/>
                                     </p>
                                 </t>
                                 <t t-else="">
