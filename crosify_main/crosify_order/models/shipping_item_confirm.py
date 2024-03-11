@@ -74,7 +74,7 @@ class ShippingItemConfirm(models.Model):
         for pickup in pickup_ids:
             total_items = pickup.item_ids
             order_lines_total = total_items.filtered(lambda line: line.type == 'order')
-            orders = order_lines_total.order_ids.filtered(lambda item: item.sublevel_id.level == 'L5.1')
+            orders = order_lines_total.order_ids.order_line.filtered(lambda item: item.sublevel_id.level == 'L5.1').mapped('order_id')
             for order in orders:
                 datas.append((0, 0, {
                     'pickup_id': pickup.id,
