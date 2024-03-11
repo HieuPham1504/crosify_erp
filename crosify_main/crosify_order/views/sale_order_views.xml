@@ -244,6 +244,7 @@
                                 </div>
                             </div>
                             <field name="shipping_phone_number"/>
+                            <field name="contact_email"/>
                             <field name="shipping_vendor_id" options="{'no_create': True}"/>
                         </group>
 
@@ -297,7 +298,6 @@
                         <field name="payment_note"/>
                     </group>
                     <group name="other" string="OTHER INFO">
-                        <field name="contact_email"/>
                         <field name="utm_source_id"/>
                         <field name="domain"/>
                         <field name="extra_info"/>
