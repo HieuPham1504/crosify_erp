@@ -10,6 +10,7 @@
                     <field name="date"/>
                     <field name="employee_id"/>
                     <field name="relate_pickup_ids" widget="many2many_tags"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
@@ -22,6 +23,7 @@
                     <header>
                         <button string="Confirm Item" name="action_confirm_item" type="object"
                                 class="btn-primary"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
                     </header>
                     <sheet>
                         <div class="oe_title">
