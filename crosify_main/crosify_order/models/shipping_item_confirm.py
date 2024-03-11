@@ -19,32 +19,32 @@ class ShippingItemConfirm(models.Model):
     delivered_item_file = fields.Binary(string='Delivered Items File')
     delivered_item_file_name = fields.Char(string='Delivered')
     relate_pickup_ids = fields.Many2many('pickup.item', 'shipping_item_confirm_pickup_item_rel', 'shipping_item_confirm_id', 'pickup_id', string='Relate Pickup')
-    pickup_order_ids = fields.One2many('shipping.item.confirm.pickup.order', 'shipping_item_confirm_id', string='Pickup Info', compute='compute_pickup_order_ids', store=True)
+    pickup_order_line_ids = fields.One2many('shipping.item.confirm.pickup.order', 'shipping_item_confirm_id', compute=False, string='Pickup Info')
     pickup_order_error_ids = fields.One2many('shipping.item.confirm.pickup.order.error', 'shipping_item_confirm_id', string='Pickup Error Info', compute='compute_pickup_order_error_ids', store=True)
 
-    @api.depends('pickup_order_ids', 'item_ids')
+    @api.depends('pickup_order_line_ids', 'item_ids')
     def compute_pickup_order_error_ids(self):
         Errors = self.env['shipping.item.confirm.pickup.order.error'].sudo()
         for rec in self:
+            rec.pickup_order_error_ids = False
             items = rec.item_ids
-            pickup_order_ids = rec.pickup_order_ids
+            pickup_order_line_ids = rec.pickup_order_line_ids
 
             item_order_id_fix_list = set(items.mapped('order_id_fix'))
-            pickup_order_order_id_fix_list = set(pickup_order_ids.mapped('order_id_fix'))
+            pickup_order_order_id_fix_list = set(pickup_order_line_ids.mapped('order_id_fix'))
 
             diff = pickup_order_order_id_fix_list.difference(item_order_id_fix_list)
-            error_items = pickup_order_ids.filtered(lambda line: line.order_id_fix in list(diff))
+            error_items = pickup_order_line_ids.filtered(lambda line: line.order_id_fix in list(diff))
             datas = []
             for data in error_items:
-                datas.append({
+                datas.append((0, 0, {
                     'shipping_item_confirm_id': rec.id,
                     'pickup_id': data.pickup_id.id,
                     'pickup_date': data.pickup_date,
                     'order_id_fix': data.order_id_fix,
                     'tkn_code': data.tkn_code,
-                })
-            errors = Errors.create(datas)
-            rec.pickup_order_error_ids = [(6, 0, errors.ids)]
+                }))
+            rec.pickup_order_error_ids = datas
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -62,25 +62,25 @@ class ShippingItemConfirm(models.Model):
                 val.code = code
         return results
 
-    @api.depends('relate_pickup_ids')
-    def compute_pickup_order_ids(self):
+    @api.onchange('relate_pickup_ids')
+    def onchange_pickup_order_line_ids(self):
+        self.pickup_order_line_ids = False
         PickupOrders = self.env['shipping.item.confirm.pickup.order'].sudo()
-        for rec in self:
-            pickup_ids = rec.relate_pickup_ids
-            datas = []
-            for pickup in pickup_ids:
-                total_items = pickup.item_ids
-                order_lines_total = total_items.filtered(lambda line: line.type == 'order')
-                orders = order_lines_total.order_ids
-                for order in orders:
-                    datas.append({
-                        'pickup_id': pickup.id,
-                        'pickup_date': pickup.date,
-                        'order_id_fix': order.order_id_fix,
-                        'tkn_code': order.tkn,
-                    })
-            pickup_orders = PickupOrders.create(datas)
-            rec.pickup_order_ids = [(6, 0, pickup_orders.ids)]
+        pickup_ids = self.relate_pickup_ids
+        datas = []
+        for pickup in pickup_ids:
+            total_items = pickup.item_ids
+            order_lines_total = total_items.filtered(lambda line: line.type == 'order')
+            orders = order_lines_total.order_ids
+            for order in orders:
+                datas.append((0, 0, {
+                    'pickup_id': pickup.id,
+                    'pickup_date': pickup.date,
+                    'order_id_fix': order.order_id_fix,
+                    'tkn_code': order.tkn,
+                }))
+        # pickup_orders = PickupOrders.create(datas)
+        self.pickup_order_line_ids = datas
 
     def action_import_items(self):
         Orders = self.env['sale.order'].sudo()
@@ -126,10 +126,20 @@ class ShippingItemConfirm(models.Model):
             raise shipping_confirm_level('There is no state with level Shipping Confirm')
 
         if len(self.pickup_order_error_ids) > 0:
-            # error_items = ShippingLines.search([('order_id_fix', 'in', list(diff))])
-            # for error_item in error_items:
-            #     error_item.is_fail_order = True
-            raise ValidationError('Can not Confirm Item')
+            order_id_fixes = self.pickup_order_error_ids.mapped('order_id_fix')
+            wrong_orders =  self.pickup_order_line_ids.filtered(lambda line: line.order_id_fix in order_id_fixes)
+            for wrong_order in wrong_orders:
+                wrong_order.is_error = True
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'raise.information.wizard',
+                'views': [[self.env.ref('crosify_order.raise_information_wizard_form_view').id, 'form']],
+                'context': {
+                    'default_warning': f'Can not Confirm Item'
+                },
+                'target': 'new',
+            }
+
         else:
             order_id_fixes = self.item_ids.mapped('order_id_fix')
             orders = Orders.search([('order_id_fix', 'in', order_id_fixes)])
@@ -142,17 +152,19 @@ class ShippingItemConfirm(models.Model):
 
 class ShippingItemConfirmPickupOrder(models.Model):
     _name = 'shipping.item.confirm.pickup.order'
+    _order = 'is_error desc'
 
-    shipping_item_confirm_id = fields.Many2one('shipping.item.confirm')
+    shipping_item_confirm_id = fields.Many2one('shipping.item.confirm', ondelete='cascade')
     pickup_id = fields.Many2one('pickup.item', string='Pickup Item')
     pickup_date = fields.Date(string='Pickup Date')
     order_id_fix = fields.Char(string='Order ID Fix')
     tkn_code = fields.Char(string='TKN Code')
+    is_error = fields.Boolean(string='Is Error', default=False)
 
 class ShippingItemConfirmPickupOrderError(models.Model):
     _name = 'shipping.item.confirm.pickup.order.error'
 
-    shipping_item_confirm_id = fields.Many2one('shipping.item.confirm')
+    shipping_item_confirm_id = fields.Many2one('shipping.item.confirm', ondelete='cascade')
     pickup_id = fields.Many2one('pickup.item', string='Pickup Item')
     pickup_date = fields.Date(string='Pickup Date')
     order_id_fix = fields.Char(string='Order ID Fix')
@@ -162,7 +174,7 @@ class ShippingItemConfirmPickupOrderError(models.Model):
 class ShippingItemConfirmLine(models.Model):
     _name = 'shipping.item.confirm.line'
 
-    shipping_item_confirm_id = fields.Many2one('shipping.item.confirm')
+    shipping_item_confirm_id = fields.Many2one('shipping.item.confirm', ondelete='cascade')
     order_id_fix = fields.Char(string='Order ID Fix')
     tkn_code = fields.Char(string='TKN Code')
 

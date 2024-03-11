@@ -1,6 +1,19 @@
 <odoo>
     <data>
 
+        <record id="shipping_item_confirm_tree_view" model="ir.ui.view">
+            <field name="name">shipping_item_confirm_tree_view</field>
+            <field name="model">shipping.item.confirm</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code"/>
+                    <field name="date"/>
+                    <field name="employee_id"/>
+                    <field name="relate_pickup_ids" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
         <record id="shipping_item_confirm_form_view" model="ir.ui.view">
             <field name="name">shipping_item_confirm_form_view</field>
             <field name="model">shipping.item.confirm</field>
@@ -39,12 +52,13 @@
                         <br/>
                         <notebook>
                             <page name="pickup-info" string="Pickup Info">
-                                <field name="pickup_order_ids" nolabel="1" readonly="1" force_save="1">
-                                    <tree>
+                                <field name="pickup_order_line_ids" nolabel="1" readonly="0">
+                                    <tree decoration-danger="is_error == True">
                                         <field name="pickup_id"/>
                                         <field name="pickup_date"/>
                                         <field name="order_id_fix"/>
                                         <field name="tkn_code"/>
+                                        <field name="is_error" column_invisible="1" force_save="1"/>
                                     </tree>
                                 </field>
                             </page>
@@ -75,7 +89,7 @@
         <record id="shipping_item_confirm_menu_action" model="ir.actions.act_window">
             <field name="name">Shipping Confirm</field>
             <field name="res_model">shipping.item.confirm</field>
-            <field name="view_mode">form</field>
+            <field name="view_mode">tree,form</field>
             <field name="target">current</field>
         </record>
 
