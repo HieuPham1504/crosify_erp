@@ -5,14 +5,17 @@
             <field name="name">sale_order_sync_form</field>
             <field name="model">sale.order.sync</field>
             <field name="arch" type="xml">
-                <form string="Sale Order Sync">
+                <form string="Sale Order Sync" create="false" edit="false">
                     <header>
                         <field name="status" widget="statusbar"/>
                     </header>
                     <sheet>
-                        <field name="sale_order_id"/>
-                        <field name="description"/>
-                        <field name="create_date"/>
+                        <group>
+                            <field name="sale_order_id"/>
+                            <field name="description"/>
+                            <field name="create_date"/>
+                            <field name="response"/>
+                        </group>
                     </sheet>
                 </form>
             </field>
@@ -22,11 +25,11 @@
             <field name="name">sale_order_sync_tree</field>
             <field name="model">sale.order.sync</field>
             <field name="arch" type="xml">
-                <tree string="Sale Order Sync" decoration-danger="status == 'fail'">
+                <tree string="Sale Order Sync" decoration-danger="status == 'fail'" create="false">
                     <field name="sale_order_id"/>
-                    <field name="status"/>
-                    <field name="description"/>
                     <field name="create_date"/>
+                    <field name="response"/>
+                    <field name="status"/>
                 </tree>
             </field>
         </record>

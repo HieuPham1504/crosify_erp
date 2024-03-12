@@ -9,4 +9,5 @@ class SaleOrderSync(models.Model):
     status = fields.Selection([
         ('pass', 'Pass'),
         ('fail', 'Fail')], string='Status')
+    response = fields.Text(string='Response')
 
