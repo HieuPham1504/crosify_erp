@@ -403,6 +403,7 @@
                             <field name="update_tkn_date"/>
                             <field name="update_tkn_employee_id" options="{'no_create': True}"/>
                             <field name="is_upload_tkn"/>
+                            <field name="label_status"/>
                             <field name="tracking_note"/>
                         </group>
                     </group>
