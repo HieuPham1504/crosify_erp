@@ -35,10 +35,141 @@
     <record id="sale_order_form_view_crosify" model="ir.ui.view">
         <field name="name">sale_order_tree_view_crosify</field>
         <field name="model">sale.order</field>
-        <field name="priority">1</field>
+        <field name="priority">100</field>
         <field name="arch" type="xml">
-            <form>
+            <form class="sale_order_view_inherit_form_crosify_order">
+                <header>
+                    <field name="order_payment_state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group name="sale_header">
+                        <group name="partner_details">
+                            <field name="partner_id" widget="res_partner_many2one"
+                                   context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}"
+                                   readonly="1"/>
+                        </group>
+                        <group name="order_details">
+                            <field name="order_type_id" readonly="1"/>
+                            <field name="myadmin_order_id" readonly="1"/>
+                            <field name="order_id_fix" readonly="1"/>
+                            <field name="channel_ref_id" readonly="1"/>
+                            <field name="crosify_create_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Lines" name="order_lines">
+                            <field name="order_line" widget="section_and_note_one2many" mode="tree"
+                                   readonly="1">
+                                <tree string="Sales Order Lines" limit="200">
+                                    <field name="production_id" readonly="1" string="SKU"/>
+                                    <field name="personalize" readonly="1"/>
+                                    <field name="production_id" readonly="1"/>
+                                    <field name="price_unit" readonly="1"/>
+                                    <field name="crosify_discount_amount"/>
+                                    <field name="total_tax" readonly="1"/>
+                                    <field name="price_total" readonly="1"/>
+                                    <field name="sublevel_id" readonly="1"/>
+                                    <field name="name" optional="hide" readonly="1"/>
+                                    <field name="meta_field" optional="hide" readonly="1"/>
+                                    <field name="variant" optional="hide" readonly="1"/>
+                                    <field name="my_admin_order_id" optional="hide" readonly="1"/>
+                                    <field name="order_id_fix" optional="hide" readonly="1"/>
+                                    <field name="product_type" optional="hide" readonly="1"/>
+                                    <field name="color_set_name" optional="hide" readonly="1"/>
+                                    <field name="item_size" optional="hide" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
 
+                        <page string="Shipping" name="shipping_information">
+                            <group name="shipping-info">
+                                <group name="shipping-info-customer" string="SHIPPING INFO">
+                                    <span class="o_form_label o_td_label" name="address_name">
+                                        Shipping Name
+                                    </span>
+                                    <div class="o_address_format" readonly="1">
+                                        <field name="shipping_firstname" placeholder="First Name"
+                                               class="o_address_city" readonly="1"/>
+                                        <field name="shipping_lastname" placeholder="Last Name" class="o_address_city" readonly="1"/>
+                                    </div>
+                                    <span class="o_form_label o_td_label" name="address_name">
+                                        Address
+                                    </span>
+                                    <div class="o_address_format" readonly="1">
+                                        <field name="shipping_address" placeholder="Street 1" class="o_address_street" readonly="1"/>
+                                        <field name="shipping_apartment" placeholder="Street 2"
+                                               class="o_address_street" readonly="1"/>
+                                        <field name="shipping_city" placeholder="City" class="o_address_city" readonly="1"/>
+                                        <field name="shipping_state_id" class="o_address_state" placeholder="State"
+                                               options="{'no_open': True, 'no_quick_create': True}" readonly="1"/>
+                                        <field name="shipping_zipcode" placeholder="Zipcode" class="o_address_zip" readonly="1"/>
+                                        <div name="partner_address_country" class="d-flex justify-content-between">
+                                            <field name="shipping_country_id" placeholder="Country"
+                                                   class="o_address_country"
+                                                   options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" readonly="1"/>
+                                        </div>
+                                    </div>
+                                    <field name="shipping_phone_number" readonly="1"/>
+                                    <field name="contact_email" readonly="1"/>
+                                    <field name="shipping_vendor_id" options="{'no_create': True}" readonly="1"/>
+                                </group>
+
+                                <group name="shipping-info-other" string="LABEL &amp; TRACKING NUMBER" readonly="1">
+                                    <label for="label_file_url"/>
+                                    <div class="o_row mw-50">
+                                        <field name="label_file_url" widget="url" readonly="1" force_save="1"/>
+                                        <button name="generate_order_label_file" invisible="label_file_url != False"
+                                                class="btn btn-primary" type="object" string="Get Label"/>
+                                    </div>
+                                    <field name="tkn" readonly="1" force_save="1"/>
+                                    <field name="tkn_url" readonly="1"/>
+                                    <field name="update_tkn_date" readonly="1"/>
+                                    <field name="update_tkn_employee_id" options="{'no_create': True}" readonly="1"/>
+                                    <field name="is_upload_tkn" readonly="1"/>
+                                    <field name="tracking_note" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Other Info" name="other_information">
+                            <group name="other-info">
+                                <group name="payment-info" string="PAYMENT INFO">
+                                    <field name="payment_status" readonly="1"/>
+                                    <field name="transaction_id" readonly="1"/>
+                                    <field name="discount_code" readonly="1"/>
+                                    <field name="payment_method_id" readonly="1"/>
+                                    <field name="currency_id" readonly="1"/>
+                                    <field name="payment_at" readonly="1"/>
+                                    <field name="payment_note" readonly="1"/>
+                                </group>
+                                <group name="other" string="OTHER INFO">
+                                    <field name="utm_source_id" readonly="1"/>
+                                    <field name="domain" readonly="1"/>
+                                    <field name="extra_info" readonly="1"/>
+                                    <field name="review" readonly="1"/>
+                                    <field name="rating" readonly="1"/>
+                                    <field name="base_cost" readonly="1"/>
+                                </group>
+                            </group>
+                            <group name="cancel" string="CANCEL">
+                                <group>
+                                    <field name="cancel_date"/>
+                                    <field name="cancel_reason"/>
+                                </group>
+                                <group></group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
@@ -423,16 +554,19 @@
         <field name="groups_id" eval="[(6, 0, [ref('base.group_system')])]"/>
     </record>
 
-    <record id="sale.menu_sale_order_for_other" model="ir.ui.menu">
-        <field name="action" ref="menu_sale_order_for_other_action"/>
-        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('crosify_order.group_designer_team'), ref('crosify_order.group_producer_team')])]"/>
-    </record>
-
     <record id="sale.menu_sale_order" model="ir.ui.menu">
         <field name="action" ref="crosify_menu_sale_order_tree_view_action"/>
-        <field name="groups_id" eval="[(6, 0, [ref('base.group_system'), ref('crosify_order.group_sale_team_operator')])]"/>
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system'), ref('crosify_order.group_sale_team_operator')])]"/>
     </record>
     <record id="sale.menu_sale_quotations" model="ir.ui.menu">
         <field name="action" ref="crosify_menu_sale_order_tree_view_action"/>
     </record>
+
+    <menuitem id="menu_sale_order_for_other"
+              name="Orders"
+              action="menu_sale_order_for_other_action"
+              groups="crosify_order.group_designer_team,crosify_order.group_producer_team"
+              parent="sale.sale_order_menu"
+              sequence="20"/>
 </odoo>
