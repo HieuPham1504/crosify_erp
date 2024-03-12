@@ -123,11 +123,21 @@ class SaleOrder(models.Model):
 
     @api.model
     def action_creating_shipment_for_order_model(self):
-        item_ids = self._context.get('active_ids', [])
-        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
-        for item in items:
-            data = item.get_label_json_data()
-            item.with_delay(description=data).action_creating_shipment_for_order()
+        order_ids = self._context.get('active_ids', [])
+        fulfill_vedor_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.0')], limit=1)
+        if not fulfill_vedor_level:
+            raise ValidationError(_('There is no Fulfill Vendor Level'))
+        orders = self.sudo().search([('id', 'in', order_ids)], order='id asc')
+        items = orders.mapped('order_line')
+        not_available_item_levels = items.filtered(lambda item: item.sublevel_id.sequence < fulfill_vedor_level.sequence)
+        if not_available_item_levels:
+            not_available_orders_name = list(set(not_available_item_levels.mapped('order_id').mapped('order_id_fix')))
+            not_available_orders_name_str = ','.join([name for name in not_available_orders_name])
+            raise ValidationError(_(f'Not Available Orders: {not_available_orders_name_str}'))
+
+        for order in orders:
+            data = order.get_label_json_data()
+            order.with_delay(description=data).action_creating_shipment_for_order()
 
     def action_creating_shipment_for_order(self):
         for rec in self:

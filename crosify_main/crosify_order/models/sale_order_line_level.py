@@ -4,8 +4,9 @@ from odoo import api, fields, models
 
 class SaleOrderLineLevel(models.Model):
     _name = 'sale.order.line.level'
-    _order = "level ASC"
+    _order = "sequence ASC, level ASC"
 
+    sequence = fields.Integer(string='Sequence')
     level = fields.Char(string='Level')
     name = fields.Char(string='Level Name')
     parent_id = fields.Many2one('sale.order.line.level', string='Parent Level')

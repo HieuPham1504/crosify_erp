@@ -18,7 +18,7 @@ class UpdateItemDesignWizard(models.TransientModel):
             design_file_url = rec.design_file_url
             rec.write({
                 'design_file_url': design_file_url,
-                'design_date': fields.Date.today(),
+                'design_date': fields.Datetime.now(),
                 'designer_id': current_employee.id,
                 'sublevel_id': designed_level.id,
             })

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 from datetime import datetime
 import base64
@@ -86,9 +86,13 @@ class SaleOrderLine(models.Model):
     upload_tkn_date = fields.Datetime(string='Upload TKN Date')
     upload_tkn_by = fields.Many2one('hr.employee', string='Upload TKN By')
     is_upload_tkn = fields.Boolean(string='Is Upload TKN')
-    fulfill_date = fields.Datetime(string='Fulfill Date')
     note_fulfill = fields.Text(string='Fulfill Note')
-    fulfill_employee_id = fields.Many2one('hr.employee', string='Fulfill By', index=True)
+    fulfill_order_employee_id = fields.Many2one('hr.employee', string='Fulfill Order By', index=True)
+    fulfill_order_date = fields.Datetime(string='Fulfill Order Date')
+
+    #fulfill vendor
+    fulfill_vendor_date = fields.Datetime(string='Fulfill Vendor Date')
+    fulfill_vendor_employee_id = fields.Many2one('hr.employee', string='Fulfill Vendor By', index=True)
 
     # Design
     designer_id = fields.Many2one('hr.employee', string='Designer', tracking=1)
@@ -172,6 +176,16 @@ class SaleOrderLine(models.Model):
         string="Total Tax",
         compute='_compute_amount_custom',
         store=True, precompute=True)
+
+    def write(self, vals):
+        # OVERRIDE
+        sublevel_id = vals.get('sublevel_id')
+        if sublevel_id:
+            level = self.env['sale.order.line.level'].sudo().browse(sublevel_id)
+            if self.sublevel_id.level == 'L0' and level.level != 'L1.1':
+                raise ValidationError(_('Level must be L0 or L1.1'))
+        res = super().write(vals)
+        return res
 
     @api.depends('price_unit', 'crosify_discount_amount', 'total_tax')
     def _compute_amount_custom(self):
@@ -273,16 +287,33 @@ class SaleOrderLine(models.Model):
                     item.production_id = production_id
 
     @api.model
-    def action_update_fulfill(self):
+    def action_update_order_fulfill(self):
         item_ids = self._context.get('active_ids', [])
+        current_employee_id = self.env.user.employee_id
+        fulfilled_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L2.2')], limit=1)
+        if not fulfilled_level:
+            raise ValidationError(_('There is no Fulfilled Level'))
         items = self.env['sale.order.line'].sudo().search([('id', 'in', item_ids)], order='id asc')
         if any(item.sublevel_id.level != 'L2.1' for item in items):
             raise ValidationError('There is an Item with a different status than Awaiting Fulfillment ')
+        for item in items:
+            item.write({
+                'sublevel_id': fulfilled_level.id,
+                'level_id': fulfilled_level.parent_id.id,
+                'fulfill_order_date': datetime.now(),
+                'fulfill_order_employee_id': current_employee_id.id
+            })
+    @api.model
+    def action_update_vendor_fulfill(self):
+        item_ids = self._context.get('active_ids', [])
+        items = self.env['sale.order.line'].sudo().search([('id', 'in', item_ids)], order='id asc')
+        if any(item.sublevel_id.level != 'L3.2' for item in items):
+            raise ValidationError('There is an Item with a different status than Designed')
         return {
             "type": "ir.actions.act_window",
             "res_model": "update.fulfillment.wizard",
             "context": {},
-            "name": "Update Fulfillment",
+            "name": "Update Vendor Fulfillment",
             'view_mode': 'form',
             "target": "new",
         }
@@ -327,9 +358,9 @@ class SaleOrderLine(models.Model):
 
     def action_creating_shipment_for_item_order(self):
         current_employee = self.env.user.employee_id
-        sub_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L2.3')], limit=1)
-        if not sub_level:
-            raise ValidationError('There is no state with level Creating Shipment')
+        # sub_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L2.3')], limit=1)
+        # if not sub_level:
+        #     raise ValidationError('There is no state with level Creating Shipment')
         for rec in self:
             order_id = rec.order_id
             rec.write({
@@ -338,16 +369,14 @@ class SaleOrderLine(models.Model):
                 'is_upload_tkn': True,
                 'upload_tkn_date': fields.Datetime.now(),
                 'upload_tkn_by': current_employee.id,
-                'sublevel_id': sub_level.id,
-                'level_id': sub_level.parent_id.id,
             })
 
     @api.model
     def action_set_awaiting_design_level(self):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
-        if any(item.sublevel_id.level != 'L2.3' for item in items):
-            raise ValidationError('There is an Item with a different status than Creating Shipment')
+        if any(item.sublevel_id.level != 'L2.2' for item in items):
+            raise ValidationError('There is an Item with a different status than Fulfilled')
         awaiting_design_sub_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L3.1')], limit=1)
         if not awaiting_design_sub_level:
             raise ValidationError('There is no state with level Awaiting Design')
@@ -375,8 +404,8 @@ class SaleOrderLine(models.Model):
     def action_create_production_for_item(self):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
-        if any(item.sublevel_id.level != 'L3.2' for item in items):
-            raise ValidationError('There is an Item with a different status than Designed')
+        if any(item.sublevel_id.level != 'L4.0' for item in items):
+            raise ValidationError('There is an Item with a different status than Fulfill Vendor')
         return {
             "type": "ir.actions.act_window",
             "res_model": "mo.production",
