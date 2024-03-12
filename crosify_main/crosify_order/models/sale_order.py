@@ -193,8 +193,7 @@ class SaleOrder(models.Model):
                 "UnitLength": item.product_id.length,
                 "UnitHeight": item.product_id.height,
                 "UnitWidth": item.product_id.width,
-                "SKU": f"{item.product_id.default_code}",
-                "Url": f"{item.design_file_url if item.design_file_url else ''}"
+                "SKU": f"{item.product_id.default_code}"
             })
 
         json_data = {
