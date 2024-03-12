@@ -419,7 +419,7 @@ class SaleOrderController(Controller):
                 if PaymentStatus == 1:
                     level_code = 'L1.1'
                 else:
-                    level_code = 'L1'
+                    level_code = 'L0'
                 sub_level = request.env['sale.order.line.level'].sudo().search(
                     [('level', '=', level_code)], limit=1)
                 product_id = request.env['product.product'].sudo().search([('default_code', '=', line.get('Sku', ''))],
