@@ -74,6 +74,11 @@ class SaleOrder(models.Model):
     ], default='not_paid', compute='compute_order_payment_state', store=True, index=True)
     order_type_id = fields.Many2one('sale.order.type', string='Order Type', required=True, index=True)
     state = fields.Selection(default='sale')
+    label_status = fields.Selection([
+        ('success', "Success"),
+        ('not_get_label', "Not Get Label"),
+        ('fail', "Fail To Get Label"),
+    ], default='not_get_label', index=True)
 
     #override_fields
     amount_untaxed = fields.Float(string="Untaxed Amount", store=True, compute='compute_amount_untaxed', tracking=5)
@@ -261,11 +266,20 @@ class SaleOrder(models.Model):
                     'is_upload_tkn': True,
                     'update_tkn_date': now,
                     'update_tkn_employee_id': current_employee.id,
+                    'label_status': 'success',
                 })
             else:
-                raise ValidationError(total_data.get('msg'))
+                self.write({
+                    'tracking_note': total_data.get('msg'),
+                    'label_status': 'fail'
+                })
+                return total_data.get('msg')
         else:
-            raise ValidationError(response.reason)
+            self.write({
+                'tracking_note': response.reason,
+                'label_status': 'fail'
+            })
+            return response.reason
         return True
 
     @api.model
