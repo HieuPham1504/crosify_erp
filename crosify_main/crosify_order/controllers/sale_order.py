@@ -363,7 +363,7 @@ class SaleOrderController(Controller):
                 design_date,
                 extra_service,
                 note_fulfill,
-                fulfill_date,
+                fulfill_order_date,
                 priority,
                 packed_date,
                 pickup_date,
