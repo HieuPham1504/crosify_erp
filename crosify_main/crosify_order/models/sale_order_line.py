@@ -182,8 +182,8 @@ class SaleOrderLine(models.Model):
         sublevel_id = vals.get('sublevel_id')
         if sublevel_id:
             level = self.env['sale.order.line.level'].sudo().browse(sublevel_id)
-            if self.sublevel_id.level == 'L0' and level.level != 'L1.1':
-                raise ValidationError(_('Level must be L0 or L1.1'))
+            if self.sublevel_id.level == 'L0' and level.level not in ['L1.1', 'L7.2']:
+                raise ValidationError(_('Level must be L1.1 or L7.2'))
         res = super().write(vals)
         return res
 
