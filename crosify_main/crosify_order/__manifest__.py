@@ -43,6 +43,7 @@ Key Features
         'views/fulfill_shelf_views.xml',
         'views/product_type_shelf_type_views.xml',
         'views/sale_order_type_views.xml',
+        'views/sale_order_sync_views.xml',
         'views/fulfill_error_views.xml',
         'views/mo_production_views.xml',
         'views/res_partner_views.xml',

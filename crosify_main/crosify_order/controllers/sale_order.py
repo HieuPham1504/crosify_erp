@@ -122,7 +122,7 @@ class SaleOrderController(Controller):
             return Response("Bad Request", status=400)
         else:
             if data.get('Transactionid') is not None:
-                duplicate_name_order = request.env['sale.order'].sudo().search([('name', '=', data.get('Transactionid'))])
+                duplicate_name_order = request.env['sale.order'].sudo().search([('name', '=', data.get('Name'))])
                 if duplicate_name_order:
                     response = {
                         'status': 404,
@@ -141,8 +141,8 @@ class SaleOrderController(Controller):
             first_name = data.get('ShippingFirstname') if data.get('ShippingFirstname') is not None else ''
             last_name = data.get('ShippingLastname') if data.get('ShippingLastname') is not None else ''
             partner_id = Partner.create({
-                'name': first_name + last_name,
-                'complete_name': first_name + last_name,
+                'name': f"{first_name} {last_name}",
+                'complete_name': f"{first_name} {last_name}",
                 'street': data.get('ShippingAddress') if data.get('ShippingAddress') is not None else '',
                 'street2': data.get('ShippingApartment') if data.get('ShippingApartment') is not None else '',
                 'city': data.get('ShippingCity') if data.get('ShippingCity') is not None else '',
@@ -251,15 +251,17 @@ class SaleOrderController(Controller):
                 order_type_id, 
                 order_payment_state,
                 payment_method_id,
-                utm_source_id
+                utm_source_id, 
+                create_date, 
+                amount_tax
 --                 warehouse_id,
 --                 picking_policy
                 ) 
-                Select '{data.get('Transactionid', '')}',
+                Select '{data.get('Name', '')}',
                  '{data.get('Orderid') if not data.get('Orderid') is None else ''}', 
                  '{data.get('Orderid', '') if not data.get('Orderid') is None else ''}', 
-                 '{data.get('ClientSecret') if not data.get('ClientSecret') is None else ''}', 
                  '{data.get('Transactionid') if not data.get('Transactionid') is None else ''}', 
+                 '{data.get('ChannelRefID') if not data.get('ChannelRefID') is None else ''}', 
                  '{data.get('ShippingFirstname') if not data.get('ShippingFirstname') is None else ''}',
                    '{data.get('ShippingLastname') if not data.get('ShippingLastname') is None else ''}', 
                    '{data.get('ShippingAddress') if not data.get('ShippingAddress') is None else ''}', 
@@ -324,12 +326,15 @@ class SaleOrderController(Controller):
                        {order_type_id.id if order_type_id else 'null'}, 
                        '{'paid' if data.get('PaymentStatus') == 1 else 'not_paid'}',
                        {payment_method.id if payment_method else 'null'},
-                       {utm_source.id if utm_source else 'null'}
+                       {utm_source.id if utm_source else 'null'}, 
+                       now(), 
+                       {data.get('TaxPrice') if not data.get('TaxPrice') is None else 0}
              Returning id
             """
             request.env.cr.execute(create_order_sql)
             sale_order_id = request.env.cr.fetchone()
             order_lines = data.get('Details', [])
+
             for line in order_lines:
                 quantity = line.get('Quantity', 0)
                 create_order_line_sql = f"""
@@ -352,12 +357,13 @@ class SaleOrderController(Controller):
                 sublevel_id,
                 customer_note,
                 product_id,
+                product_sku,
                 personalize,
                 element_message,
                 design_date,
                 extra_service,
                 note_fulfill,
-                fulfill_date,
+                fulfill_order_date,
                 priority,
                 packed_date,
                 pickup_date,
@@ -383,8 +389,7 @@ class SaleOrderController(Controller):
                 dispute_note,
                 crosify_approve_cancel_employee_id,
                 cancel_date,
-                cancel_reason,
-                cancel_status,
+                cancel_note,
                 update_date,
                 crosify_created_date,
                 crosify_create_by,
@@ -399,7 +404,9 @@ class SaleOrderController(Controller):
                 company_id,
                 currency_id,
                 order_partner_id,
-                variant
+                variant, 
+                create_date,
+                is_single_item
                 ) 
                 values
                 """
@@ -409,8 +416,13 @@ class SaleOrderController(Controller):
                 shipping_cost = round(line.get('ShippingCost', 0) / quantity, 2)
                 price_total = round(line.get('TotalAmount', 0) / quantity, 2)
                 tip = round(line.get('Tip', 0) / quantity, 2)
+                PaymentStatus = data.get('PaymentStatus')
+                if PaymentStatus == 1:
+                    level_code = 'L1.1'
+                else:
+                    level_code = 'L0'
                 sub_level = request.env['sale.order.line.level'].sudo().search(
-                    [('level', '=', line.get('LevelCode', '0'))], limit=1)
+                    [('level', '=', level_code)], limit=1)
                 product_id = request.env['product.product'].sudo().search([('default_code', '=', line.get('Sku', ''))],
                                                                           limit=1)
                 upload_tkn_by = request.env['hr.employee'].sudo().search(
@@ -456,6 +468,14 @@ class SaleOrderController(Controller):
                         create_order_line_sql += f"""
                                                 {product_id.id},
                                                 """
+
+                    if not product_id:
+                        create_order_line_sql += f"'{none_product_id.default_code}',"
+                    else:
+                        create_order_line_sql += f"""
+                                                '{product_id.default_code}',
+                                                """
+
                     create_order_line_sql += f"""
                     '{line.get('Personalize') if line.get('Personalize') is not None else ''}',
                     '{line.get('ElementMessage') if line.get('ElementMessage') is not None else ''}',
@@ -573,7 +593,6 @@ class SaleOrderController(Controller):
 
                     create_order_line_sql += f"""
                     '{line.get('CancelReason') if line.get('CancelReason') is not None else ''}',
-                    '{line.get('CancelStatus') if line.get('CancelStatus') is not None else ''}',
                     """
 
                     if line.get('Updatedat') is None:
@@ -584,12 +603,12 @@ class SaleOrderController(Controller):
                                                 '{line.get('Updatedat', '')}',
                                                 """
 
-                    if line.get('Createdat') is None:
+                    if data.get('Createdat') is None:
                         create_order_line_sql += "null,"
 
                     else:
                         create_order_line_sql += f"""
-                                                '{line.get('Createdat', '')}',
+                                                '{data.get('Createdat')}',
                                                 """
 
                     create_order_line_sql += f"""
@@ -608,7 +627,7 @@ class SaleOrderController(Controller):
                     '{line.get('PackagingLocationInfo')  if line.get('PackagingLocationInfo') is not None else ''}',
                     '{line.get('ShippingMethodInfo')  if line.get('ShippingMethodInfo') is not None else ''}',
                     {sale_order_id[0]},
-                    '{product_id.display_name.replace("'", "") if product_id else none_product_id.display_name.replace("'", "")}',
+                    '{line.get('ProductName')  if line.get('ProductName') is not None else ''}',
                     '{product_id.product_type if product_id else none_product_id.product_type}',
                     0,
                     1,
@@ -618,9 +637,23 @@ class SaleOrderController(Controller):
                     where name = '{data.get('Currency')}' 
                     limit 1),
                     {partner_id.id},
-                    '{line.get('Variant')  if line.get('Variant') is not None else ''}'
+                    '{line.get('Variant')  if line.get('Variant') is not None else ''}', 
+                    now(),
+                    
+                    """
+                    if quantity > 1:
+                        create_order_line_sql += """ 
+                        false
+                        """
+                    else:
+                        create_order_line_sql += """ 
+                                                true
+                                                """
+
+                    create_order_line_sql += """ 
                     )
                     """
+
                 request.env.cr.execute(create_order_line_sql)
             response = {
                 'status': 200,
@@ -799,7 +832,6 @@ class SaleOrderController(Controller):
                 crosify_approve_cancel_employee_id = {crosify_approve_cancel_employee_id.id if crosify_approve_cancel_employee_id else 'null'},
                 cancel_date = '{line.get('Canceledat') if line.get('Canceledat') is not None else 'null'}',
                 cancel_reason = '{line.get('CancelReason') if line.get('CancelReason') is not None else 'null'}',
-                cancel_status = '{line.get('CancelStatus') if line.get('CancelStatus') is not None else 'null'}',
                 """
 
                 if line.get('Updatedat') is not None:
