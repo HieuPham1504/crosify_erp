@@ -304,7 +304,7 @@
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">
                 <field name="crosify_discount_amount"/>
                 <field name="total_tax"/>
-                <field name="is_single_item"/>
+                <field name="is_combo"/>
             </xpath>
 
 
