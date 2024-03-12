@@ -101,9 +101,9 @@ class ShippingItemConfirm(models.Model):
             ws = wb.active
             for record in ws.iter_rows(min_row=2, max_row=None, min_col=None,
                                        max_col=None, values_only=True):
-                order_id_fix = record[1]
+                order_id_fix = str(record[1])
+                order_id_fix = order_id_fix.strip()
                 if order_id_fix and order_id_fix not in order_id_fixes:
-                    order_id_fix = order_id_fix.strip()
                     order_id_fixes.append(order_id_fix)
                     order = Orders.search([('order_id_fix', '=', order_id_fix), ('tkn', '!=', False)], limit=1)
                     if order:
