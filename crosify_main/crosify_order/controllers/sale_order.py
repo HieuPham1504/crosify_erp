@@ -405,7 +405,8 @@ class SaleOrderController(Controller):
                 currency_id,
                 order_partner_id,
                 variant, 
-                create_date
+                create_date,
+                is_single_item
                 ) 
                 values
                 """
@@ -637,9 +638,22 @@ class SaleOrderController(Controller):
                     limit 1),
                     {partner_id.id},
                     '{line.get('Variant')  if line.get('Variant') is not None else ''}', 
-                    now()
+                    now(),
                     )
                     """
+                    if quantity > 1:
+                        create_order_line_sql += """ 
+                        false
+                        """
+                    else:
+                        create_order_line_sql += """ 
+                                                true
+                                                """
+
+                    create_order_line_sql += """ 
+                    )
+                    """
+
                 request.env.cr.execute(create_order_line_sql)
             response = {
                 'status': 200,
