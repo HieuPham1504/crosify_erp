@@ -165,9 +165,9 @@ class SaleOrder(models.Model):
         total_item = self.order_line
         total_weight = sum(total_item.product_id.mapped('weight'))
 
-        item_hs_codes = total_item.mapped('hs_code')
+        item_hs_codes = total_item.mapped('product_id').mapped('product_tmpl_id').mapped('categ_id').mapped('hs_code')
         for hs_code in item_hs_codes:
-            first_item = total_item.filtered(lambda item: item.hs_code == hs_code)[0]
+            first_item = total_item.filtered(lambda item: item.product_id.product_tmpl_id.categ_id.hs_code == hs_code)[0]
             items |= first_item
 
         weight_param = round(60 * total_weight / 100000, 3)
@@ -273,13 +273,15 @@ class SaleOrder(models.Model):
                     'tracking_note': total_data.get('msg'),
                     'label_status': 'fail'
                 })
-                return total_data.get('msg')
+                self.env.cr.commit()
+                raise ValidationError(total_data.get('msg'))
         else:
             self.write({
                 'tracking_note': response.reason,
                 'label_status': 'fail'
             })
-            return response.reason
+            self.env.cr.commit()
+            raise ValidationError(response.reason)
         return True
 
     @api.model
