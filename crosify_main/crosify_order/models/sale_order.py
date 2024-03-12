@@ -2,7 +2,7 @@
 import json
 import requests
 import random
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 
@@ -111,12 +111,14 @@ class SaleOrder(models.Model):
     @api.onchange('payment_status')
     def onchange_order_payment_status(self):
         payment_status = self.payment_status
-        level_code = 'L1.1' if payment_status else 'L1'
+        level_code = 'L1.1' if payment_status else 'L0'
         level = self.env['sale.order.line.level'].sudo().search([('level', '=', level_code)], limit=1)
+        if not level:
+            raise ValidationError(_(f'There is no Level with Level Code = {level_code}'))
         items = self.order_line
         for item in items:
             item_sublevel = item.sublevel_id
-            if not item_sublevel or item_sublevel.level.strip() == 'L1' or item_sublevel.level.strip() == 'L1.1':
+            if not item_sublevel or item_sublevel.level.strip() == 'L1.1' or item_sublevel.level.strip() == 'L0':
                 item.sublevel_id = level.id
 
     @api.model
