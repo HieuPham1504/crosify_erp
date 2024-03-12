@@ -639,7 +639,7 @@ class SaleOrderController(Controller):
                     {partner_id.id},
                     '{line.get('Variant')  if line.get('Variant') is not None else ''}', 
                     now(),
-                    )
+                    
                     """
                     if quantity > 1:
                         create_order_line_sql += """ 
