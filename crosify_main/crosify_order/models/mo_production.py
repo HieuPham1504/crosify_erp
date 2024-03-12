@@ -64,15 +64,15 @@ class MOProduction(models.Model):
             rec.action_set_item_start_info()
             rec.state = 'production'
 
-    def action_back_to_designed_items(self):
-        designed_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L3.2')], limit=1)
-        if not designed_level:
-            raise ValidationError('There is no state with level Designed')
+    def action_back_to_fulfill_vendor_items(self):
+        fulfill_vendor_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.0')], limit=1)
+        if not fulfill_vendor_level:
+            raise ValidationError('There is no state with level Fulfill Vendor')
         for rec in self:
             for item in rec.mo_production_line_ids:
                 item.write({
-                    'sublevel_id': designed_level.id,
-                    'level_id': designed_level.parent_id.id,
+                    'sublevel_id': fulfill_vendor_level.id,
+                    'level_id': fulfill_vendor_level.parent_id.id,
                     'production_start_date': False
                 })
             rec.state = 'draft'

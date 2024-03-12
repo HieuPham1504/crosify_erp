@@ -8,8 +8,8 @@ class UpdateFulFillmentWizard(models.TransientModel):
     _name = 'update.fulfillment.wizard'
 
     update_type = fields.Selection([
-        ('default', "Update Fulfillment By System Config"),
-        ('specific_user', "Update Fulfillment For Specific User")
+        ('default', "Update Vendor Fulfillment By System Config"),
+        ('specific_user', "Update Vendor Fulfillment For Specific User")
     ], default='default', required=True)
     production_vendor_id = fields.Many2one('res.partner', string='Product Vendor')
     packaging_vendor_id = fields.Many2one('res.partner', string='Packaging Vendor')
@@ -20,9 +20,9 @@ class UpdateFulFillmentWizard(models.TransientModel):
         items = self.env['sale.order.line'].sudo().search([('id', 'in', item_ids)], order='id asc')
         employee_id = self.env.user.employee_id.id
         update_type = self.update_type
-        fulfilled_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L2.2')], limit=1)
-        if not fulfilled_level:
-            raise ValidationError('There is no status Fulfilled')
+        fulfilled_vendor_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.0')], limit=1)
+        if not fulfilled_vendor_level:
+            raise ValidationError('There is no status Fulfill Vendor')
         item_fields_mapping = {
             'production_vendor_id': 'product_vendor_id',
             'packaging_vendor_id': 'packaging_vendor_id',
@@ -40,7 +40,7 @@ class UpdateFulFillmentWizard(models.TransientModel):
                     item[field] = self[field].id
 
             item.write({
-                'fulfill_employee_id': employee_id,
-                'fulfill_date': datetime.now(),
-                'sublevel_id': fulfilled_level.id,
+                'fulfill_vendor_employee_id': employee_id,
+                'fulfill_vendor_date': datetime.now(),
+                'sublevel_id': fulfilled_vendor_level.id,
             })

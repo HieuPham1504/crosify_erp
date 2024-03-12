@@ -23,7 +23,7 @@
                         <button name="action_produce_items" string="Produce Items"
                                 type="object" class="oe_highlight" data-hotkey="w" title="Produce Items"
                                 invisible="state == 'production'"/>
-                        <button name="action_back_to_designed_items" string="Back to Designed"
+                        <button name="action_back_to_fulfill_vendor_items" string="Back to Fulfill Vendor"
                                 type="object" class="oe_highlight" data-hotkey="w" title="Back to Designed"
                                 invisible="state == 'draft'"/>
                         <field name="state"  widget="statusbar" invisible="0"/>
@@ -44,7 +44,7 @@
                         </group>
                         <notebook>
                             <page string="Items" name="items">
-                                <field name="mo_production_line_ids" force_save="1" domain="[('sublevel_id.level', '=', 'L3.2')]" readonly="state != 'draft'">
+                                <field name="mo_production_line_ids" force_save="1" domain="[('sublevel_id.level', '=', 'L4.0')]" readonly="state != 'draft'">
                                     <tree editable="bottom" create="false">
                                         <field name="production_id" readonly="1"/>
                                         <field name="product_id" readonly="1" string="SKU"/>

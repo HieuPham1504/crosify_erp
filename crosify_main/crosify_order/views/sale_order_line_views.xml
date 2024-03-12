@@ -9,7 +9,8 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='order_id']" position="attributes">
                     <attribute name="string">Order</attribute>
-                    <attribute name="filter_domain">['|', '|', ('order_id.name', 'ilike', self), ('my_admin_order_id', 'ilike',
+                    <attribute name="filter_domain">['|', '|', ('order_id.name', 'ilike', self), ('my_admin_order_id',
+                        'ilike',
                         self),
                         ('order_id_fix', 'ilike', self)]
                     </attribute>
@@ -122,17 +123,11 @@
                                 </group>
                             </group>
                             <notebook>
-                                <page id="fulfillment_tab" string="FULFILLMENT" name="fulfillment_tab">
+                                <page id="fulfillment_tab" string="FULFILLMENT ORDER" name="fulfillment_tab">
                                     <group name="fulfillment-main">
                                         <group name="fulfillment" string="FULFILLMENT">
-                                            <field name="shipping_vendor_id"
-                                                   options='{"no_open": True, "no_create": True}'/>
-                                            <field name="packaging_vendor_id"
-                                                   options='{"no_open": True, "no_create": True}'/>
-                                            <field name="production_vendor_id"
-                                                   options='{"no_open": True, "no_create": True}'/>
-                                            <field name="fulfill_date"/>
-                                            <field name="fulfill_employee_id"
+                                            <field name="fulfill_order_date"/>
+                                            <field name="fulfill_order_employee_id"
                                                    options='{"no_open": True, "no_create": True}'/>
                                         </group>
                                         <group name="tracking" string="LABEL &amp; TRACKING NUMBER">
@@ -168,6 +163,17 @@
                                 </page>
                                 <page id="design_tab" string="DESIGN &amp; PRODUCTION" name="design_tab">
                                     <group>
+                                        <group name="fulfill-vendor" string="Fulfill Vendor">
+                                            <field name="shipping_vendor_id"
+                                                   options='{"no_open": True, "no_create": True}'/>
+                                            <field name="packaging_vendor_id"
+                                                   options='{"no_open": True, "no_create": True}'/>
+                                            <field name="production_vendor_id"
+                                                   options='{"no_open": True, "no_create": True}'/>
+                                            <field name="fulfill_vendor_date"/>
+                                            <field name="fulfill_vendor_employee_id"
+                                                   options='{"no_open": True, "no_create": True}'/>
+                                        </group>
                                         <group name="design" string="DESIGN">
                                             <field name="designer_id" options='{"no_open": True, "no_create": True}'/>
                                             <field name="design_file_url"/>
@@ -273,15 +279,15 @@
             <field name="code">action = model.action_change_state_awaiting_fulfill()</field>
         </record>
 
-        <record id="action_update_fulfill" model="ir.actions.server">
-            <field name="name">Update Fulfillment</field>
+        <record id="action_update_order_fulfill" model="ir.actions.server">
+            <field name="name">Update Fulfillment Order</field>
             <field name="model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_view_types">form,list</field>
             <field name="state">code</field>
             <field name="groups_id"
                    eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
-            <field name="code">action = model.action_update_fulfill()</field>
+            <field name="code">action = model.action_update_order_fulfill()</field>
         </record>
 
         <record id="action_awating_design" model="ir.actions.server">
@@ -304,6 +310,17 @@
             <field name="groups_id"
                    eval="[(6, 0, [ref('crosify_order.group_designer_team'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_update_item_design_info()</field>
+        </record>
+
+        <record id="action_update_fulfill" model="ir.actions.server">
+            <field name="name">Update Vendor Fulfillment</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_update_vendor_fulfill()</field>
         </record>
 
         <record id="action_production_for_item" model="ir.actions.server">
