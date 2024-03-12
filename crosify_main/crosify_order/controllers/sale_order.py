@@ -394,7 +394,7 @@ class SaleOrderController(Controller):
                     order_partner_id,
                     variant, 
                     create_date,
-                    is_single_item
+                    is_combo
                     ) 
                     values
                     """
@@ -424,7 +424,7 @@ class SaleOrderController(Controller):
                         (
                         {line.get('Detailid', 0) if line.get('Detailid') is not None else 0},
                         {line.get('Orderid', 0) if line.get('Orderid') is not None else 0},
-                        '{line.get('OrderidFix', 0) if line.get('OrderidFix') is not None else line.get('Orderid')}',
+                        '{data.get('Orderid') if not data.get('Orderid') is None else ''}',
                         {line.get('ProductID') if line.get('ProductID') is not None else 0},
                         '{line.get('Metafield') if line.get('Metafield') is not None else ''}',
                         {line.get('Amount') if line.get('Amount') is not None else 0},
@@ -631,11 +631,11 @@ class SaleOrderController(Controller):
                         """
                         if quantity > 1:
                             create_order_line_sql += """ 
-                            false
+                            true
                             """
                         else:
                             create_order_line_sql += """ 
-                                                    true
+                                                    false
                                                     """
 
                         create_order_line_sql += """ 

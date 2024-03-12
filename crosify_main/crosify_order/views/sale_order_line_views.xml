@@ -114,7 +114,7 @@
                                     <field name="order_id_fix"/>
                                     <field name="order_id" readonly="1" force_save="1" string="Reference ID"/>
                                     <field name="priority"/>
-                                    <field name="is_single_item"/>
+                                    <field name="is_combo" readonnly="1" force_save="1"/>
                                 </group>
                                 <group>
                                     <field name="product_id" string="SKU" readonly="1" force_save="1"/>

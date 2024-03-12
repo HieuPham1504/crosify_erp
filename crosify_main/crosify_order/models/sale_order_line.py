@@ -154,7 +154,7 @@ class SaleOrderLine(models.Model):
     error_type_id = fields.Many2one('fulfill.error', string='Error Type')
     error_note = fields.Text(string='Error Note')
     hs_code = fields.Char(string='HS Code', related='product_template_id.categ_id.hs_code', store=True, index=1)
-    is_single_item = fields.Boolean(string='Single Item', default=True)
+    is_combo = fields.Boolean(string='Combo', default=False)
 
     #override_fields
     price_unit = fields.Float(
