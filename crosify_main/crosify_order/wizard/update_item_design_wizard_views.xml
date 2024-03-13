@@ -8,21 +8,17 @@
                     <header>
                         <button name="get_import_templates"
                                 class="btn btn-primary" type="object" string="Get Import Template"/>
+                        <button name="action_update_design_file"
+                                class="btn btn-primary" type="object" string="Update Design File"/>
                     </header>
                     <sheet>
                         <div class="o_row mw-50">
-                            <div class="o_row mw-50">
-                                <field name="item_design_file_name" invisible="1"/>
-                                <field name="item_design_file" filename="item_design_file_name"/>
-                                <button name="action_import_item_design_file" invisible="item_design_file == False"
-                                        class="btn btn-primary" type="object" string="Upload"/>
-                            </div>
-
-                            <div class="o_row mw-50">
-                                <button name="action_update_design_file"
-                                        class="btn btn-primary" type="object" string="Update Design File"/>
-                            </div>
+                            <field name="item_design_file_name" invisible="1"/>
+                            <field name="item_design_file" filename="item_design_file_name"/>
+                            <button name="action_import_item_design_file" invisible="item_design_file == False"
+                                    class="btn btn-primary" type="object" string="Upload"/>
                         </div>
+
                         <br/>
                         <notebook>
                             <page name="item-info" string="Items">
