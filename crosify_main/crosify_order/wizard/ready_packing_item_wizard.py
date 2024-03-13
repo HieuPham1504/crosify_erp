@@ -37,12 +37,13 @@ class ReadyPackingItemWizard(models.TransientModel):
         if not self.line_ids:
             raise ValidationError(_('No Data To Export PDF File'))
         try:
+            sorted_line_ids = self.line_ids.sorted(key=lambda r: (r.address_shelf_id.shelf_code, r.production_id))
             data = [{
                 'production_id': rec.production_id,
                 'product_default_code': rec.product_id.default_code,
                 'product_type': rec.product_type,
                 'shelf_name': rec.address_shelf_id.shelf_name,
-            } for rec in self.line_ids]
+            } for rec in sorted_line_ids]
             item_data = {
                 'items': data
             }
