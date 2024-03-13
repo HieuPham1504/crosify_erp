@@ -74,6 +74,7 @@ class QCCheckItemWizardLine(models.TransientModel):
     product_template_attribute_value_ids = fields.Many2many(
         related='sale_order_line_id.product_template_attribute_value_ids')
     personalize = fields.Char(string='Personalize', related='sale_order_line_id.personalize', store=True)
+    sublevel_id = fields.Many2one('sale.order.line.level', string='Level', related='sale_order_line_id.sublevel_id', store=True)
     error_type_id = fields.Many2one('fulfill.error', string='Error Type')
     note = fields.Text(string='Note')
 
