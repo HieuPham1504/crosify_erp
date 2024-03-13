@@ -3,7 +3,7 @@ from odoo.exceptions import ValidationError
 
 class ProductionTransferItem(models.Model):
     _name = 'production.transfer.item'
-    _description = 'Production Transfer'
+    _description = 'Production Transfer Item'
     _order = "is_wrong_item desc"
 
     @api.constrains('sale_order_line_id')
@@ -20,6 +20,8 @@ class ProductionTransferItem(models.Model):
     product_template_attribute_value_ids = fields.Many2many(
         related='sale_order_line_id.product_template_attribute_value_ids')
     personalize = fields.Char(string='Personalize', related='sale_order_line_id.personalize', store=True)
+    production_vendor_id = fields.Many2one('res.partner', string='Production Vendor', related='sale_order_line_id.production_vendor_id', store=True)
+    sublevel_id = fields.Many2one('sale.order.line.level', string='Level', related='sale_order_line_id.sublevel_id', store=True)
     is_wrong_item = fields.Boolean(string='Is Wrong Item', default=False, index=True)
 
     @api.onchange('production_id')
@@ -46,3 +48,23 @@ class ProductionTransferItem(models.Model):
             vals_list.remove(remove_val)
         res = super(ProductionTransferItem, self).create(vals_list)
         return res
+
+class ProductionTransferItemError(models.Model):
+    _name = 'production.transfer.item.error'
+    _description = 'Production Transfer Item Error'
+    _order = "status desc"
+
+    production_transfer_id = fields.Many2one('production.transfer', string='Production Transfer', required=True, index=True)
+    sale_order_line_id = fields.Many2one('sale.order.line', required=False, string='Item')
+    production_id = fields.Char(string='Production ID', required=True, index=True)
+    product_id = fields.Many2one('product.product', related='sale_order_line_id.product_id', store=True, index=True)
+    product_template_attribute_value_ids = fields.Many2many(
+        related='sale_order_line_id.product_template_attribute_value_ids')
+    personalize = fields.Char(string='Personalize', related='sale_order_line_id.personalize', store=True)
+    production_vendor_id = fields.Many2one('res.partner', string='Production Vendor', related='sale_order_line_id.production_vendor_id', store=True)
+    sublevel_id = fields.Many2one('sale.order.line.level', string='Level', related='sale_order_line_id.sublevel_id', store=True)
+    status = fields.Selection([
+        ('lack', 'Lack Product'),
+        ('redundant', 'Redundant Prodcut'),
+    ], string='Status')
+
