@@ -8,6 +8,7 @@
                 <form string="Update Order" class="sale_order_view_inherit_form_crosify_order">
                     <header>
                         <button name="action_update_order" string="Update Order" type="object" class="oe_highlight"/>
+                        <button name="get_import_templates" string="Get Import Template" type="object" class="oe_highlight"/>
                     </header>
                     <sheet>
                         <div class="o_row mw-50">
