@@ -451,7 +451,7 @@ class SaleOrderLine(models.Model):
             "res_id": wizard.id,
             "name": "Update Design File",
             'view_mode': 'form',
-            "target": "new",
+            "target": "current",
         }
 
     @api.depends('order_partner_id', 'order_id', 'product_id')
