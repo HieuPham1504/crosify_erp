@@ -17,6 +17,13 @@ class UpdateOrderWizard(models.TransientModel):
     item_file_name = fields.Char(string='Items')
     line_ids = fields.One2many('update.order.line.wizard', 'update_order_wizard_id', string='Update Orders')
 
+    def get_import_templates(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'name': 'Get Import Template',
+            'url': '/crosify_order/static/xls/import_order_template.xlsx',
+        }
+
     def action_import_items(self):
         Orders = self.env['sale.order'].sudo()
         Products = self.env['product.product'].sudo()

@@ -8,6 +8,8 @@
                     <header>
                         <button name="action_update_item" string="Update Item" type="object" class="oe_highlight"
                                 data-hotkey="q"/>
+                        <button name="get_import_templates"
+                                    class="btn btn-primary" type="object" string="Get Import Template"/>
                     </header>
                     <sheet>
                         <div class="o_row mw-50">

@@ -58,6 +58,13 @@ class UpdateItemWizard(models.TransientModel):
         except:
             raise ValidationError(_('Insert Invalid File'))
 
+    def get_import_templates(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'name': 'Get Import Template',
+            'url': '/crosify_order/static/xls/import_item_template.xlsx',
+        }
+
     def action_update_item(self):
         line_ids = self.line_ids
         for line in line_ids:
