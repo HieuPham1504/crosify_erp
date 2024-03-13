@@ -15,15 +15,25 @@ class QCCheckItemWizard(models.TransientModel):
 
     def action_update_qc_item(self):
         qc_pass_line_ids = self.qc_pass_line_ids
-        ItemLevels = self.env['sale.order.line.level']
+        ItemLevels = self.env['sale.order.line.level'].sudo()
+        Orders = self.env['sale.order'].sudo()
         type = self.type
         if type == 'passed':
             qc_passed_level = ItemLevels.search([('level', '=', 'L4.3')], limit=1)
+            ready_to_pack_level = ItemLevels.search([('level', '=', 'L4.6')], limit=1)
             if not qc_passed_level:
                 raise ValidationError('There is no QC Passed Level')
             for item in qc_pass_line_ids.mapped('sale_order_line_id'):
+                order_id_fix = item.order_id_fix
+                orders = Orders.search([('order_id_fix', '=', order_id_fix)])
+                if len(orders.order_line) == 1:
+                    if not ready_to_pack_level:
+                        raise ValidationError('There is no Ready To Pack Level')
+                    new_level = ready_to_pack_level.id
+                else:
+                    new_level = qc_passed_level.id
                 item.write({
-                    'sublevel_id': qc_passed_level.id
+                    'sublevel_id': new_level
                 })
             return {
                 'type': 'ir.actions.client',
