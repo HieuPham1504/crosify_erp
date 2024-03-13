@@ -13,6 +13,7 @@ class ProductionTransfer(models.Model):
     note = fields.Text(string='Note')
     production_transfer_item_ids = fields.One2many('production.transfer.item', 'production_transfer_id', string='Production Transfer')
     qc_receive_item_ids = fields.One2many('qc.receive.item', 'production_transfer_id', string='QC Receive')
+    production_transfer_item_error_ids = fields.One2many('production.transfer.item.error', 'production_transfer_id', string='Production Transfer Error')
     state = fields.Selection([
         ('draft', 'Draft'),
         ('waiting_confirm', 'Wait Confirm'),
@@ -37,6 +38,7 @@ class ProductionTransfer(models.Model):
     def qc_confirm(self):
         QCReceives = self.env['qc.receive.item'].sudo()
         TransferItems = self.env['production.transfer.item'].sudo()
+        TransferItemErrors = self.env['production.transfer.item.error'].sudo()
         package_receive_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.2')], limit=1)
         if not package_receive_level:
             raise ValidationError('There is no Package Receive Level')
@@ -46,11 +48,13 @@ class ProductionTransfer(models.Model):
             transfer_production_ids = production_transfer_item_ids.mapped('production_id')
             qc_receive_production_ids = qc_receive_item_ids.mapped('production_id')
             transfer_diff_production_ids = set(transfer_production_ids) - set(qc_receive_production_ids)
+            redundant_production_ids = set(qc_receive_production_ids) - set(transfer_production_ids)
             if len(transfer_diff_production_ids) == 0:
                 qc_diff_production_ids = set(qc_receive_production_ids) - set(transfer_production_ids)
                 if len(qc_diff_production_ids) > 0:
                     production_ids = list(qc_diff_production_ids)
                     qc_receive_ids = qc_receive_item_ids.filtered(lambda qc: qc.production_id in production_ids)
+
                     qc_receive_ids.unlink()
                 for transfer_item in production_transfer_item_ids.mapped('sale_order_line_id'):
                     transfer_item.sublevel_id = package_receive_level.id

@@ -48,6 +48,8 @@
 "access_qc_receive_item_operator","access_qc_receive_item_operator","model_qc_receive_item",crosify_order.group_sale_team_operator,1,1,1,1
 "access_qc_receive_item_admin","access_qc_receive_item_admin","model_qc_receive_item",base.group_system,1,1,1,1
 
+"access_production_transfer_item_error","access_production_transfer_item_error","model_production_transfer_item_error",,1,1,1,1
+
 "access_hs_product_config","access_hs_product_config","model_hs_product_config",,1,1,1,1
 
 "access_pickup_item","access_pickup_item","model_pickup_item",,1,1,1,1
