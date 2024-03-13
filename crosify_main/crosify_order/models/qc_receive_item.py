@@ -27,7 +27,7 @@ class QCReceiveItem(models.Model):
             duplicate_items = self.production_transfer_id.qc_receive_item_ids.filtered(
                 lambda item: item.production_id and item.production_id == production_id)
             if len(duplicate_items) > 1:
-                return
+                raise ValidationError(_('Duplicate Production ID'))
             Items = self.env['sale.order.line'].sudo()
             item_id = Items.search([('production_id', '=', production_id)], limit=1)
             if item_id.sublevel_id.level != 'L4.1':
