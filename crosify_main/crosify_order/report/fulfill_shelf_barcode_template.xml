@@ -8,17 +8,18 @@
                         <div class="col-6 p-3">
                             <div class="col overflow-hidden text-start order-name">
                                 <p style="font-size:20px">
-                                    <t t-out="item['order_id_name']"/>
+                                    <t t-out="item['shelf_name']"/>
                                 </p>
                             </div>
 
                             <div class="col overflow-hidden text-start"
                                  style="width:300px;display: flex;justify-content: flex-start;">
                                 <img class="img-fluid" style="width:300px;height:67px;padding:0; margin:0px"
-                                     t-att-src="'/report/barcode/%s/%s' % ('Code128',item['production_id'])"
+                                     t-att-src="'/report/barcode/%s/%s' % ('Code128',item['shelf_code'])"
                                      alt="Barcode"/>
                             </div>
                         </div>
+                    </div>
                 </t>
             </div>
         </t>
