@@ -66,7 +66,7 @@ class PackOnShelfLineWizard(models.TransientModel):
             duplicate_items = self.pack_on_shelf_wizard_id.line_ids.filtered(
                 lambda item: item.production_id and item.production_id == production_id)
             if len(duplicate_items) > 1:
-                return
+                raise ValidationError(_('Duplicate Production ID'))
             Items = self.env['sale.order.line'].sudo()
             item_id = Items.search([('production_id', '=', production_id)], limit=1)
             if item_id.sublevel_id.level != 'L4.3':
