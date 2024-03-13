@@ -23,6 +23,8 @@ class QCReceiveItem(models.Model):
                                            related='sale_order_line_id.production_vendor_id', store=True)
     sublevel_id = fields.Many2one('sale.order.line.level', string='Level', related='sale_order_line_id.sublevel_id',
                                   store=True)
+    address_sheft_id = fields.Many2one('fulfill.shelf', string='Address Shelf', related='sale_order_line_id.address_sheft_id',
+                                       store=True)
 
     @api.onchange('production_id')
     def onchange_production_id(self):
