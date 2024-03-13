@@ -62,6 +62,7 @@
                                         <field name="personalize" readonly="1" force_save="1"/>
                                         <field name="production_vendor_id" readonly="1" force_save="1" options='{"no_open": True, "no_create": True}'/>
                                         <field name="sublevel_id" readonly="1" force_save="1"/>
+                                        <field name="address_sheft_id" readonly="1" force_save="1"/>
                                         <field name="is_wrong_item" column_invisible="1"/>
                                     </tree>
                                 </field>
@@ -78,6 +79,7 @@
                                         <field name="personalize" readonly="1" force_save="1"/>
                                         <field name="production_vendor_id" readonly="1" force_save="1" options='{"no_open": True, "no_create": True}'/>
                                         <field name="sublevel_id" readonly="1" force_save="1"/>
+                                        <field name="address_sheft_id" readonly="1" force_save="1"/>
                                     </tree>
                                 </field>
                             </page>
@@ -93,6 +95,7 @@
                                         <field name="personalize" readonly="1" force_save="1"/>
                                         <field name="production_vendor_id" readonly="1" force_save="1"/>
                                         <field name="sublevel_id" readonly="1" force_save="1"/>
+                                        <field name="address_sheft_id" readonly="1" force_save="1"/>
                                         <field name="status" readonly="1" force_save="1"/>
                                     </tree>
                                 </field>

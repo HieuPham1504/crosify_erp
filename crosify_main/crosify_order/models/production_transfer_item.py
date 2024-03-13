@@ -22,6 +22,7 @@ class ProductionTransferItem(models.Model):
     personalize = fields.Char(string='Personalize', related='sale_order_line_id.personalize', store=True)
     production_vendor_id = fields.Many2one('res.partner', string='Production Vendor', related='sale_order_line_id.production_vendor_id', store=True)
     sublevel_id = fields.Many2one('sale.order.line.level', string='Level', related='sale_order_line_id.sublevel_id', store=True)
+    address_sheft_id = fields.Many2one('fulfill.shelf', string='Address Shelf', related='sale_order_line_id.address_sheft_id', store=True)
     is_wrong_item = fields.Boolean(string='Is Wrong Item', default=False, index=True)
 
     @api.onchange('production_id')
@@ -63,6 +64,8 @@ class ProductionTransferItemError(models.Model):
     personalize = fields.Char(string='Personalize', related='sale_order_line_id.personalize', store=True)
     production_vendor_id = fields.Many2one('res.partner', string='Production Vendor', related='sale_order_line_id.production_vendor_id', store=True)
     sublevel_id = fields.Many2one('sale.order.line.level', string='Level', related='sale_order_line_id.sublevel_id', store=True)
+    address_sheft_id = fields.Many2one('fulfill.shelf', string='Address Shelf', related='sale_order_line_id.address_sheft_id',
+                                       store=True)
     status = fields.Selection([
         ('lack', 'Lack Product'),
         ('redundant', 'Redundant Product'),

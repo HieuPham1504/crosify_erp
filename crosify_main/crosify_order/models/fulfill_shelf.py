@@ -25,21 +25,12 @@ class FulfillShelf(models.Model):
     def action_generate_shelf_barcode_server(self):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
-        if any(not item.production_id for item in items):
-            raise ValidationError('Could not generate barcode for None Production ID Item')
         return items.action_generate_shelf_barcode()
 
     def action_generate_shelf_barcode(self):
         try:
             data = []
             for rec in self:
-                order_total_items = rec.order_id.order_line
-                total_product_types = list(set(order_total_items.mapped('product_type')))
-                product_str = f'{rec.address_sheft_id.shelf_code}'
-                for product_type in total_product_types:
-                    product_type_items = order_total_items.filtered(lambda item: item.product_type == product_type)
-                    product_format = f'_{len(product_type_items)}{product_type}'
-                    product_str += product_format
                 data.append({
                     'shelf_code': rec.shelf_code,
                     'shelf_name': rec.shelf_name,
