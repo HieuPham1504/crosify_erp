@@ -44,43 +44,41 @@ class ProductionTransfer(models.Model):
             raise ValidationError('There is no Package Receive Level')
         for rec in self:
             production_transfer_item_ids = rec.production_transfer_item_ids
-            qc_receive_item_ids = rec.qc_receive_item_ids
-            transfer_production_ids = production_transfer_item_ids.mapped('production_id')
-            qc_receive_production_ids = qc_receive_item_ids.mapped('production_id')
-            transfer_diff_production_ids = set(transfer_production_ids) - set(qc_receive_production_ids)
-            redundant_production_ids = set(qc_receive_production_ids) - set(transfer_production_ids)
-            if len(transfer_diff_production_ids) == 0:
-                qc_diff_production_ids = set(qc_receive_production_ids) - set(transfer_production_ids)
-                if len(qc_diff_production_ids) > 0:
-                    production_ids = list(qc_diff_production_ids)
-                    qc_receive_ids = qc_receive_item_ids.filtered(lambda qc: qc.production_id in production_ids)
+            qc_receive_item_ids_obj = rec.qc_receive_item_ids
 
-                    qc_receive_ids.unlink()
-                for transfer_item in production_transfer_item_ids.mapped('sale_order_line_id'):
-                    transfer_item.sublevel_id = package_receive_level.id
-                    transfer_item.write({
-                        'sublevel_id': package_receive_level.id,
-                        'production_done_date': fields.Date.today(),
-                    })
-                rec.state = 'confirm'
-            else:
-                diff_transfer_productions = list(transfer_diff_production_ids)
-                transfer_item_ids = production_transfer_item_ids.filtered(lambda transfer: transfer.production_id in diff_transfer_productions)
-                not_available_productions = []
-                for transfer_item in transfer_item_ids:
-                    transfer_item.is_wrong_item = True
-                    not_available_productions.append(transfer_item.production_id)
+            for transfer_item in qc_receive_item_ids_obj.mapped('sale_order_line_id'):
+                transfer_item.write({
+                    'sublevel_id': package_receive_level.id,
+                    'production_done_date': fields.Date.today(),
+                })
 
-                not_available_productions_str = ','.join([production for production in not_available_productions])
-                return {
-                    'type': 'ir.actions.act_window',
-                    'res_model': 'raise.information.wizard',
-                    'views': [[self.env.ref('crosify_order.raise_information_wizard_form_view').id, 'form']],
-                    'context': {
-                        'default_warning': f'Not Available Transfer Item With Production ID: {not_available_productions_str}'
-                    },
-                    'target': 'new',
-                }
+            transfer_item_ids = production_transfer_item_ids.mapped('sale_order_line_id').ids
+            qc_receive_item_ids = qc_receive_item_ids_obj.mapped('sale_order_line_id').ids
+
+            lack_item_ids = set(transfer_item_ids) - set(qc_receive_item_ids)
+            redundant_item_ids = set(qc_receive_item_ids) - set(transfer_item_ids)
+
+            errors = []
+            if len(lack_item_ids) > 0:
+                for lack_item in lack_item_ids:
+                    errors.append((0, 0, {
+                        'sale_order_line_id': lack_item,
+                        'status': 'lack'
+                    }))
+            if len(redundant_item_ids) > 0:
+                for redundant_item in redundant_item_ids:
+                    errors.append((0, 0, {
+                        'sale_order_line_id': redundant_item,
+                        'status': 'redundant'
+                    }))
+
+            rec.production_transfer_item_error_ids = errors
+            production_transfer_item_ids.filtered(lambda item: item.sale_order_line_id.id in list(lack_item_ids)).unlink()
+            qc_receive_item_ids_obj.filtered(lambda item: item.sale_order_line_id.id in list(redundant_item_ids)).unlink()
+
+
+            rec.state = 'confirm'
+
 
 
 

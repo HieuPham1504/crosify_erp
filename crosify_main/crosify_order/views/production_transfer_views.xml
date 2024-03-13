@@ -55,10 +55,10 @@
                                     <tree editable="bottom" decoration-danger="is_wrong_item == True">
                                         <field name="production_id" readonly="0"/>
                                         <field name="sale_order_line_id" column_invisible="1"/>
-                                        <field name="product_id" readonly="1" string="SKU"/>
-                                        <field name="product_template_attribute_value_ids" readonly="1"
+                                        <field name="product_id" readonly="1" string="SKU" force_save="1"/>
+                                        <field name="product_template_attribute_value_ids" readonly="1" force_save="1"
                                                widget="many2many_tags"/>
-                                        <field name="personalize" readonly="1"/>
+                                        <field name="personalize" readonly="1" force_save="1"/>
                                         <field name="is_wrong_item" column_invisible="1"/>
                                     </tree>
                                 </field>
@@ -69,10 +69,26 @@
                                     <tree editable="bottom">
                                         <field name="production_id" readonly="0"/>
                                         <field name="sale_order_line_id" column_invisible="1"/>
+                                        <field name="product_id" readonly="1" string="SKU" force_save="1"/>
+                                        <field name="product_template_attribute_value_ids" readonly="1"
+                                               widget="many2many_tags" force_save="1"/>
+                                        <field name="personalize" readonly="1" force_save="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Error" name="qc_receive">
+                                <field name="production_transfer_item_error_ids" force_save="1" readonly="1">
+                                    <tree editable="bottom" decoration-danger="status == 'lack'">
+                                        <field name="production_id" readonly="1" force_save="1"/>
+                                        <field name="sale_order_line_id" column_invisible="1"/>
                                         <field name="product_id" readonly="1" string="SKU"/>
                                         <field name="product_template_attribute_value_ids" readonly="1"
-                                               widget="many2many_tags"/>
-                                        <field name="personalize" readonly="1"/>
+                                               widget="many2many_tags" force_save="1"/>
+                                        <field name="personalize" readonly="1" force_save="1"/>
+                                        <field name="production_vendor_id" readonly="1" force_save="1"/>
+                                        <field name="sublevel_id" readonly="1" force_save="1"/>
+                                        <field name="status" readonly="1" force_save="1"/>
                                     </tree>
                                 </field>
                             </page>

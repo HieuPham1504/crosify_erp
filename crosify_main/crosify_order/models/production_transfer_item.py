@@ -13,7 +13,7 @@ class ProductionTransferItem(models.Model):
             if sale_order_line_id.sublevel_id.level != 'L4.1':
                 raise ValidationError(_("Only Transfer Item With Production Level"))
 
-    production_transfer_id = fields.Many2one('production.transfer', string='Production Transfer', required=True, index=True)
+    production_transfer_id = fields.Many2one('production.transfer', string='Production Transfer', required=True, index=True, ondelete='cascade')
     sale_order_line_id = fields.Many2one('sale.order.line', required=False, string='Item')
     production_id = fields.Char(string='Production ID', required=True, index=True)
     product_id = fields.Many2one('product.product', related='sale_order_line_id.product_id', store=True, index=True)
@@ -54,9 +54,9 @@ class ProductionTransferItemError(models.Model):
     _description = 'Production Transfer Item Error'
     _order = "status desc"
 
-    production_transfer_id = fields.Many2one('production.transfer', string='Production Transfer', required=True, index=True)
+    production_transfer_id = fields.Many2one('production.transfer', string='Production Transfer', required=True, index=True, ondelete='cascade')
     sale_order_line_id = fields.Many2one('sale.order.line', required=False, string='Item')
-    production_id = fields.Char(string='Production ID', required=True, index=True)
+    production_id = fields.Char(string='Production ID', related='sale_order_line_id.production_id', store=True, index=True)
     product_id = fields.Many2one('product.product', related='sale_order_line_id.product_id', store=True, index=True)
     product_template_attribute_value_ids = fields.Many2many(
         related='sale_order_line_id.product_template_attribute_value_ids')
@@ -65,6 +65,6 @@ class ProductionTransferItemError(models.Model):
     sublevel_id = fields.Many2one('sale.order.line.level', string='Level', related='sale_order_line_id.sublevel_id', store=True)
     status = fields.Selection([
         ('lack', 'Lack Product'),
-        ('redundant', 'Redundant Prodcut'),
+        ('redundant', 'Redundant Product'),
     ], string='Status')
 
