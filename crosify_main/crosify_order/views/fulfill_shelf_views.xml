@@ -22,12 +22,12 @@
             <field name="state">code</field>
             <field name="groups_id"
                    eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
-            <field name="code">action = model.action_generate_item_barcode_server()</field>
+            <field name="code">action = model.action_generate_shelf_barcode_server()</field>
         </record>
 
         <record id="action_generate_shelf_barcode" model="ir.actions.report">
             <field name="name">Shelf Barcode Barcode</field>
-            <field name="model">sale.order.line</field>
+            <field name="model">fulfill.shelf</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">crosify_order.print_shelf_barcode_custom</field>
             <field name="report_file">crosify_order.print_shelf_barcode_custom</field>

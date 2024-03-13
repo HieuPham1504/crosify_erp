@@ -22,14 +22,14 @@ class FulfillShelf(models.Model):
                 raise ValidationError(_("This shelf code has been used for another shelf."))
 
     @api.model
-    def action_generate_item_barcode_server(self):
+    def action_generate_shelf_barcode_server(self):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
         if any(not item.production_id for item in items):
             raise ValidationError('Could not generate barcode for None Production ID Item')
-        return items.action_generate_item_barcode()
+        return items.action_generate_shelf_barcode()
 
-    def action_generate_item_barcode(self):
+    def action_generate_shelf_barcode(self):
         try:
             data = []
             for rec in self:

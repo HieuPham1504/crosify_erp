@@ -73,8 +73,8 @@ class ProductionTransfer(models.Model):
                     }))
 
             rec.production_transfer_item_error_ids = errors
-            production_transfer_item_ids.filtered(lambda item: item.sale_order_line_id.id in list(lack_item_ids)).sudo().unlink()
-            qc_receive_item_ids_obj.filtered(lambda item: item.sale_order_line_id.id in list(redundant_item_ids)).sudo().unlink()
+            # production_transfer_item_ids.filtered(lambda item: item.sale_order_line_id.id in list(lack_item_ids)).sudo().unlink()
+            # qc_receive_item_ids_obj.filtered(lambda item: item.sale_order_line_id.id in list(redundant_item_ids)).sudo().unlink()
 
 
             rec.state = 'confirm'
