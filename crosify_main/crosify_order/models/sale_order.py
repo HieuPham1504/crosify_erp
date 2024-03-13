@@ -55,7 +55,7 @@ class SaleOrder(models.Model):
     cancel_date = fields.Datetime(string='Cancel Date')
     cancel_reason = fields.Text(string='Cancel Reason')
     tkn = fields.Char(string='TKN Code')
-    tkn_url = fields.Text(string='TKN URL')
+    tkn_url = fields.Text(string='TKN URL', compute='compute_tkn_url', store=True)
     update_tkn_date = fields.Datetime(string='Update TKN Date')
     update_tkn_employee_id = fields.Many2one('hr.employee', string='Update TKN By')
     is_upload_tkn = fields.Boolean(string='Is Upload TKN')
@@ -107,6 +107,12 @@ class SaleOrder(models.Model):
     def onchange_crosify_discount_amount(self):
         total = sum(self.order_line.mapped('crosify_discount_amount'))
         self.discount = total
+
+    @api.depends('tkn')
+    def compute_tkn_url(self):
+        for rec in self:
+            url = False if not rec.tkn else f'https://tracking.kindlytoys.com/trackingcode/{rec.tkn}'
+            rec.tkn_url = url
 
     @api.depends('payment_status')
     def compute_order_payment_state(self):
