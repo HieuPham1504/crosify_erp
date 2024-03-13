@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="print_shelf_barcode_custom">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <t t-foreach="items" t-as="item">
+                    <div class="row border border-dark" style="margin-bottom:10px;height:300px" id="barcode-container">
+                        <div class="col-6 p-3">
+                            <div class="col overflow-hidden text-start order-name">
+                                <p style="font-size:20px">
+                                    <t t-out="item['order_id_name']"/>
+                                </p>
+                            </div>
+
+                            <div class="col overflow-hidden text-start"
+                                 style="width:300px;display: flex;justify-content: flex-start;">
+                                <img class="img-fluid" style="width:300px;height:67px;padding:0; margin:0px"
+                                     t-att-src="'/report/barcode/%s/%s' % ('Code128',item['production_id'])"
+                                     alt="Barcode"/>
+                            </div>
+                        </div>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>
