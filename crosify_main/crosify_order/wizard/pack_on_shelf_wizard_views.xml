@@ -7,31 +7,27 @@
             <field name="arch" type="xml">
                 <form class="sale_order_view_inherit_form_crosify_order">
                     <header>
+                        <button string="Update" name="action_checking_item_shelf" type="object"
+                                        class="btn-primary" data-hotkey="q"/>
                     </header>
                     <sheet>
-                        <group name="main">
-                            <group>
-                                <field name="address_shelf_id"
-                                       options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
-                            </group>
-                            <group>
-                                <button string="Update" name="action_checking_item_shelf" type="object"
-                                        class="btn-primary" data-hotkey="q"/>
-                            </group>
 
-                        </group>
                         <br/>
 
                         <field name="line_ids" nolabel="1">
-                            <tree string="Items" editable="bottom" decoration-danger="is_mismatch_shelf == True">
-                                <field name="production_id" readonly="0"/>
+                            <tree string="Items" editable="bottom">
+                                <field name="barcode" readonly="0"/>
                                 <field name="sale_order_line_id" column_invisible="1"/>
                                 <field name="is_mismatch_shelf" column_invisible="1"/>
-                                <field name="product_id" readonly="1" string="SKU"/>
-                                <field name="address_shelf_id" readonly="1"
-                                       options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                                <field name="product_id" readonly="1" string="SKU" force_save="1"/>
+                                <field name="pair_number" readonly="1" force_save="1"/>
+                                <field name="type" readonly="1" force_save="1"/>
+                                <field name="old_address_shelf_id" readonly="1"
+                                       options="{'no_edit': True, 'no_create': True, 'no_open': True}" force_save="1"/>
+                                <field name="new_address_shelf_id" readonly="1"
+                                       options="{'no_edit': True, 'no_create': True, 'no_open': True}" column_invisible="1" force_save="1"/>
                                 <field name="sublevel_id" readonly="1"
-                                       options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                                       options="{'no_edit': True, 'no_create': True, 'no_open': True}" force_save="1"/>
                             </tree>
                         </field>
 
