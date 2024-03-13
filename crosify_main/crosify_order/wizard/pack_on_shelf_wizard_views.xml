@@ -20,7 +20,7 @@
                                 <field name="sale_order_line_id" column_invisible="1"/>
                                 <field name="is_mismatch_shelf" column_invisible="1"/>
                                 <field name="product_id" readonly="1" string="SKU" force_save="1"/>
-                                <field name="pair_number" olumn_invisible="1" force_save="1"/>
+                                <field name="pair_number" column_invisible="1" force_save="1"/>
                                 <field name="type" readonly="1" force_save="1"/>
                                 <field name="old_address_shelf_id" readonly="1"
                                        options="{'no_edit': True, 'no_create': True, 'no_open': True}" force_save="1"/>
