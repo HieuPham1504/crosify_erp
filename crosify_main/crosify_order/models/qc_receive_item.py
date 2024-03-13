@@ -19,6 +19,10 @@ class QCReceiveItem(models.Model):
     product_template_attribute_value_ids = fields.Many2many(
         related='sale_order_line_id.product_template_attribute_value_ids')
     personalize = fields.Char(string='Personalize', related='sale_order_line_id.personalize', store=True)
+    production_vendor_id = fields.Many2one('res.partner', string='Production Vendor',
+                                           related='sale_order_line_id.production_vendor_id', store=True)
+    sublevel_id = fields.Many2one('sale.order.line.level', string='Level', related='sale_order_line_id.sublevel_id',
+                                  store=True)
 
     @api.onchange('production_id')
     def onchange_production_id(self):
