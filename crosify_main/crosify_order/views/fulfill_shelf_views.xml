@@ -13,16 +13,37 @@
                 </tree>
             </field>
         </record>
+
+        <record id="action_generate_barcode_for_shelf" model="ir.actions.server">
+            <field name="name">Generate Barcode</field>
+            <field name="model_id" ref="crosify_order.model_fulfill_shelf"/>
+            <field name="binding_model_id" ref="crosify_order.model_fulfill_shelf"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_generate_item_barcode_server()</field>
+        </record>
+
+        <record id="action_generate_shelf_barcode" model="ir.actions.report">
+            <field name="name">Shelf Barcode Barcode</field>
+            <field name="model">sale.order.line</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">crosify_order.print_shelf_barcode_custom</field>
+            <field name="report_file">crosify_order.print_shelf_barcode_custom</field>
+            <field name="binding_model_id" ref="model_fulfill_shelf"/>
+        </record>
+
         <record id="crosify_menu_fulfill_shelf_action"
-            model="ir.actions.act_window">
+                model="ir.actions.act_window">
             <field name="name">Shelf</field>
             <field name="res_model">fulfill.shelf</field>
             <field name="view_mode">tree,form</field>
         </record>
         <menuitem id="crosify_menu_fulfill_shelf" name="Shelf"
-            parent="sale.menu_sales_config"
-            action="crosify_menu_fulfill_shelf_action"
-            sequence="24" 
-            groups="base.group_system"/>
+                  parent="sale.menu_sales_config"
+                  action="crosify_menu_fulfill_shelf_action"
+                  sequence="24"
+                  groups="base.group_system"/>
     </data>
 </odoo>
