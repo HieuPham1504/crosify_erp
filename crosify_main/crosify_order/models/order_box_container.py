@@ -11,3 +11,12 @@ class OrderBoxContainer(models.Model):
 
     code = fields.Char(string='Code', required=True, index=True)
     name = fields.Char(string='Name', required=True)
+
+    @api.constrains('code')
+    def _check_code(self):
+        for record in self:
+            code = record.code
+            duplicate_codes = self.sudo().search(
+                [('id', '!=', record.id), ('code', '=', code)])
+            if duplicate_codes:
+                raise ValidationError(_("This Box Container Code already exists."))
