@@ -60,7 +60,7 @@
 
                         <br/>
                         <group name="items">
-                            <field name="item_ids" nolabel="0">
+                            <field name="item_ids" nolabel="0" readonly="state == 'done'">
                                 <tree string="Items" editable="bottom">
                                     <field name="barcode" readonly="0"/>
                                     <field name="tkn_code" readonly="0"/>
