@@ -27,6 +27,13 @@ class PackedItemWizard(models.TransientModel):
                 for error_item in item_groups:
                     error_item.is_error = True
                 error_items |= item_order_lines
+            else:
+                pair_items = item_groups.mapped('pair_number')
+                if len(set(pair_items)) > 1:
+                    for error_item in item_groups:
+                        error_item.is_error = True
+                    error_items |= item_order_lines
+
             if len(error_items) > 0:
                 return {
                     'type': 'ir.actions.act_window',
