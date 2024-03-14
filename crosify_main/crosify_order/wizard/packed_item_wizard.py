@@ -17,12 +17,13 @@ class PackedItemWizard(models.TransientModel):
         items = self.item_ids
 
         order_id_fixes = items.mapped('order_id_fix')
-
+        error_items = Items
         for order_id_fix in order_id_fixes:
             item_groups = items.filtered(lambda item: item.order_id_fix == order_id_fix)
             item_order_lines = item_groups.mapped('sale_order_line_id')
+
             total_items = Items.search([('order_id_fix', '=', order_id_fix)])
-            error_items = Items
+
             if item_order_lines != total_items:
                 for error_item in item_groups:
                     error_item.is_error = True
@@ -34,16 +35,16 @@ class PackedItemWizard(models.TransientModel):
                         error_item.is_error = True
                     error_items |= item_order_lines
 
-            if len(error_items) > 0:
-                return {
-                    'type': 'ir.actions.act_window',
-                    'res_model': 'raise.information.wizard',
-                    'views': [[self.env.ref('crosify_order.raise_information_wizard_form_view').id, 'form']],
-                    'context': {
-                        'default_warning': f'Can Not Packed Item'
-                    },
-                    'target': 'new',
-                }
+        if len(error_items) > 0:
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'raise.information.wizard',
+                'views': [[self.env.ref('crosify_order.raise_information_wizard_form_view').id, 'form']],
+                'context': {
+                    'default_warning': f'Can Not Packed Item'
+                },
+                'target': 'new',
+            }
 
         Levels = self.env['sale.order.line.level'].sudo()
         packed_level = Levels.search([('level', '=', 'L4.7')])
