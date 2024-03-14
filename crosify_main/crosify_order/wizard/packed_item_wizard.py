@@ -58,7 +58,7 @@ class PackedItemWizard(models.TransientModel):
 
 class PackedItemLineWizard(models.TransientModel):
     _name = 'packed.item.line.wizard'
-    _order = 'is_error ASC'
+    _order = 'is_error DESC'
 
     packed_item_wizard_id = fields.Many2one('packed.item.wizard')
     sale_order_line_id = fields.Many2one('sale.order.line', required=False, string='Item')
