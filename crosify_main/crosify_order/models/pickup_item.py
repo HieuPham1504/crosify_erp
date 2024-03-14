@@ -18,6 +18,18 @@ class PickupItem(models.Model):
     state = fields.Selection([
         ('draft', 'Draft'),
         ('done', 'Done')], string='State', default="draft", index=True, tracking=1)
+    order_box_container_id = fields.Many2one('order.box.container', string='Order Box')
+    order_box_container_code = fields.Char(string='Order Box Code')
+
+    @api.onchange('order_box_container_code')
+    def onchange_order_box_container_code(self):
+        OrderBoxes = self.env['order.box.container'].sudo()
+        order_box_container_code = self.order_box_container_code
+        if order_box_container_code:
+            order_box = OrderBoxes.search([('code', '=', order_box_container_code)], limit=1)
+            if not order_box:
+                raise ValidationError(_('Order Box Not Found'))
+            self.order_box_container_id = order_box.id
 
     @api.model_create_multi
     def create(self, vals_list):
