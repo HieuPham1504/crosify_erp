@@ -23,7 +23,7 @@
                                 <field name="product_template_attribute_value_ids" readonly="1" widget="many2many_tags"/>
                                 <field name="personalize" readonly="1"/>
                                 <field name="error_message" readonly="1"/>
-                                <field name="pair_number" readonly="1"/>
+                                <field name="pair_number" column_invisible="1" force_save="1"/>
                             </tree>
                         </field>
 
