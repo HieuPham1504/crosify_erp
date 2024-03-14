@@ -54,6 +54,7 @@ Key Features
         'views/hs_product_config_views.xml',
         'views/pickup_item_views.xml',
         'views/shipping_item_confirm_views.xml',
+        'views/order_box_container_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
         'wizard/update_item_design_wizard_views.xml',
