@@ -69,6 +69,14 @@ class PackedItemLineWizard(models.TransientModel):
         related='sale_order_line_id.product_template_attribute_value_ids')
     personalize = fields.Char(string='Personalize', related='sale_order_line_id.personalize', store=True)
     is_error = fields.Boolean(string='Is Error')
+    error_message = fields.Char(string='Status', compute='_compute_error_message')
+
+
+    @api.depends('is_error')
+    def _compute_error_message(self):
+        for rec in self:
+            error_message = 'Missing Item' if rec.is_error else False
+            rec.error_message = error_message
 
     @api.onchange('production_id')
     def onchange_production_id(self):
