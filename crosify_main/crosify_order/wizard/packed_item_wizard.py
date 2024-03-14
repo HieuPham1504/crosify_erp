@@ -70,6 +70,7 @@ class PackedItemLineWizard(models.TransientModel):
     personalize = fields.Char(string='Personalize', related='sale_order_line_id.personalize', store=True)
     is_error = fields.Boolean(string='Is Error')
     error_message = fields.Char(string='Status', compute='_compute_error_message')
+    pair_number = fields.Integer(string='Pair Number')
 
 
     @api.depends('is_error')
@@ -82,16 +83,34 @@ class PackedItemLineWizard(models.TransientModel):
     def onchange_production_id(self):
         production_id = self.production_id
         if production_id:
+            total_items = self.packed_item_wizard_id.item_ids
+
             duplicate_items = self.packed_item_wizard_id.item_ids.filtered(
                 lambda item: item.production_id and item.production_id == production_id)
             if len(duplicate_items) > 1:
-                return
+                raise ValidationError(_('Duplicate Production ID'))
             Items = self.env['sale.order.line'].sudo()
             item_id = Items.search([('production_id', '=', production_id)], limit=1)
             if item_id.sublevel_id.level != 'L4.6':
                 raise ValidationError(_("Only Transfer Item With Ready To Pack Level"))
             if item_id:
-                self.sale_order_line_id = item_id.id
+
+                item_order_id_fix = item_id.order_id_fix
+                actual_total_lines = total_items.filtered(lambda line: line.pair_number > 0)
+                if not actual_total_lines:
+                    pair_number = 1
+                else:
+                    nearest_line = actual_total_lines[-1]
+                    if nearest_line.order_id_fix == item_order_id_fix:
+                        pair_number = nearest_line.pair_number
+                    else:
+                        pair_number = max(actual_total_lines.mapped('pair_number')) + 1
+
+                self.write({
+                    'pair_number': pair_number,
+                    'sale_order_line_id': item_id.id,
+                })
+
 
     @api.model_create_multi
     def create(self, vals_list):
