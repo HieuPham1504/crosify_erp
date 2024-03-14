@@ -48,6 +48,8 @@
                         </div>
                         <group name="main">
                             <group>
+                                <field name="order_box_container_code" required="1"/>
+                                <field name="order_box_container_id" readonly="1" force_save="1" options='{"no_open": True, "no_create": True}'/>
                                 <field name="date"/>
                                 <field name="employee_id" options='{"no_open": True, "no_create": True}'/>
                             </group>
