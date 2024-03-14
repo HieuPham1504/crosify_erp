@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from odoo import api, fields, models, _
@@ -20,13 +19,14 @@ class PackedItemWizard(models.TransientModel):
         order_id_fixes = items.mapped('order_id_fix')
 
         for order_id_fix in order_id_fixes:
-            item_groups = items.filtered(lambda item: item.order_id_fix == order_id_fix).mapped('sale_order_line_id')
+            item_groups = items.filtered(lambda item: item.order_id_fix == order_id_fix)
+            item_order_lines = item_groups.mapped('sale_order_line_id')
             total_items = Items.search([('order_id_fix', '=', order_id_fix)])
             error_items = Items
-            if item_groups != total_items:
+            if item_order_lines != total_items:
                 for error_item in item_groups:
                     error_item.is_error = True
-                error_items |= item_groups
+                error_items |= item_order_lines
             if len(error_items) > 0:
                 return {
                     'type': 'ir.actions.act_window',
@@ -37,7 +37,6 @@ class PackedItemWizard(models.TransientModel):
                     },
                     'target': 'new',
                 }
-
 
         Levels = self.env['sale.order.line.level'].sudo()
         packed_level = Levels.search([('level', '=', 'L4.7')])
@@ -55,7 +54,6 @@ class PackedItemWizard(models.TransientModel):
                 if not pending_level:
                     raise ValidationError('There is no state with level Pending')
                 item.sublevel_id = pending_level.id
-
 
 
 class PackedItemLineWizard(models.TransientModel):
