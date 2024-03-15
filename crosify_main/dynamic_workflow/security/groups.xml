@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="workflow_category" model="ir.module.category">
+        <field name="name">Quy trình</field>
+        <field name="sequence" eval="100"/>
+    </record>
+
+    <record id="group_workflow_user" model="res.groups">
+        <field name="name">Người dùng</field>
+        <field name="category_id" ref="workflow_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_workflow_setup" model="res.groups">
+        <field name="name">Người thiết lập</field>
+        <field name="category_id" ref="workflow_category"/>
+        <field name="implied_ids" eval="[(4, ref('group_workflow_user'))]"/>
+    </record>
+
+    <record id="group_workflow_manager" model="res.groups">
+        <field name="name">Quản trị viên</field>
+        <field name="category_id" ref="workflow_category"/>
+        <field name="implied_ids" eval="[(4, ref('group_workflow_setup'))]"/>
+    </record>
+
+    <record id="wf_task_manager_rule" model="ir.rule">
+        <field name="name">Quản trị viên</field>
+        <field ref="model_dynamic_workflow_task" name="model_id"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <field name="groups" eval="[(4, ref('group_workflow_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="wf_manager_rule" model="ir.rule">
+        <field name="name">Quản trị viên</field>
+        <field ref="model_dynamic_workflow" name="model_id"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <field name="groups" eval="[(4, ref('group_workflow_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="wf_stage_manager_rule" model="ir.rule">
+        <field name="name">Quản trị viên</field>
+        <field ref="model_dynamic_workflow_stage" name="model_id"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <field name="groups" eval="[(4, ref('group_workflow_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="ir_attachment_rule" model="ir.rule">
+        <field name="name">View</field>
+        <field ref="base.model_ir_attachment" name="model_id"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="department_create_task" model="ir.rule">
+        <field name="name">Nhóm tạo nhiệm vụ</field>
+        <field ref="model_dynamic_workflow_task" name="model_id"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <field name="groups" eval="[(4, ref('group_workflow_user'))]"/>
+        <field name="domain_force">
+            [
+                '|',
+                '|',
+                    ('workflow_id.manager_ids', 'in', [user.id]),
+                    '&amp;',
+                        ('workflow_id.type_view_task', '=', 'all'),
+                        ('workflow_id.department_ids.member_ids.user_id', 'in', [user.id]),
+                    '&amp;',
+                    '&amp;',
+                        ('workflow_id.department_ids.member_ids.user_id', 'in', [user.id]),
+                        ('workflow_id.type_view_task', '=', 'only'),
+                        '|',
+                            ('create_uid', '=', user.id),
+                            ('follower_ids', 'in', [user.id])
+            ]
+        </field>
+    </record>
+
+    <record id="workflow_rule_supervisor" model="ir.rule">
+        <field name="name">Giám sát nhiệm vụ</field>
+        <field ref="model_dynamic_workflow_task" name="model_id"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="0"/>
+        <field name="groups" eval="[(4, ref('group_workflow_user'))]"/>
+        <field name="domain_force">
+            [
+                '|',
+                    '&amp;',
+                        ('workflow_id.type_view_task', '=', 'all'),
+                        '|',
+                            ('workflow_id.department_view_workflow_ids.member_ids.user_id', 'in', [user.id]),
+                            ('workflow_id.supervisor', 'in', user.id),
+                    '&amp;',
+                    '&amp;',
+                        ('workflow_id.type_view_task', '=', 'only'),
+                        '|',
+                            ('workflow_id.department_view_workflow_ids.member_ids.user_id', 'in', [user.id]),
+                            ('workflow_id.supervisor', 'in', user.id),
+                        '|',
+                            ('create_uid', '=', user.id),
+                            ('follower_ids', 'in', [user.id]),
+            ]
+        </field>
+    </record>
+
+    <record id="workflow_task_edit_rule" model="ir.rule">
+        <field name="name">Chỉnh sửa nhiệm vụ</field>
+        <field ref="model_dynamic_workflow_task" name="model_id"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_read" eval="0"/>
+        <field name="perm_unlink" eval="0"/>
+        <field name="groups" eval="[(4, ref('group_workflow_user'))]"/>
+        <field name="domain_force">
+            [
+                ('work_by_id', '=', user.id)
+            ]
+        </field>
+    </record>
+
+    <record id="rule_view_workflow" model="ir.rule">
+        <field name="name">Xem quy trình</field>
+        <field ref="model_dynamic_workflow" name="model_id"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="0"/>
+        <field name="groups" eval="[(4, ref('group_workflow_user'))]"/>
+        <field name="domain_force">
+            [
+                '|',
+                '|',
+                ('department_ids.member_ids.user_id', 'in', [user.id]),
+                ('supervisor', 'in', user.id),
+                ('department_view_workflow_ids.member_ids.user_id', 'in', [user.id])
+            ]
+        </field>
+    </record>
+
+    <record id="rule_view_workflow_stage" model="ir.rule">
+        <field name="name">Xem quy giai đoạn</field>
+        <field ref="model_dynamic_workflow_stage" name="model_id"/>
+        <field name="perm_write" eval="0"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="0"/>
+        <field name="groups" eval="[(4, ref('group_workflow_user'))]"/>
+        <field name="domain_force">
+            [
+                '|',
+                '|',
+                ('workflow_id.department_ids.member_ids.user_id', 'in', [user.id]),
+                ('workflow_id.supervisor', 'in', user.id),
+                ('workflow_id.department_view_workflow_ids.member_ids.user_id', 'in', [user.id])
+            ]
+        </field>
+    </record>
+
+    <record id="rule_edit_workflow" model="ir.rule">
+        <field name="name">Chỉnh sửa quy trình</field>
+        <field ref="model_dynamic_workflow" name="model_id"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <field name="groups" eval="[(4, ref('group_workflow_user'))]"/>
+        <field name="domain_force">
+            [
+                ('manager_ids', 'in', [user.id])
+            ]
+        </field>
+    </record>
+
+    <record id="rule_edit_workflow_stage" model="ir.rule">
+        <field name="name">Chỉnh sửa giai đoạn</field>
+        <field ref="model_dynamic_workflow_stage" name="model_id"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+        <field name="groups" eval="[(4, ref('group_workflow_user'))]"/>
+        <field name="domain_force">
+            [
+                ('workflow_id.manager_ids', 'in', [user.id])
+            ]
+        </field>
+    </record>
+
+
+
+</odoo>

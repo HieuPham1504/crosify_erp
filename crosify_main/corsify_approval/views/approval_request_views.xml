@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="approval_request_view_form_inherit" model="ir.ui.view">
+        <field name="name">approval_request_view_form_inherit</field>
+        <field name="model">approval.request</field>
+        <field name="inherit_id" ref="approvals.approval_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_title')]" position="before">
+                <div class="oe_title">
+                        <h1>
+                            <field name="request_code" readonly="1" force_save="1"/>
+                        </h1>
+                    </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="approval_request_view_list_inherit" model="ir.ui.view">
+        <field name="name">approval_request_view_list_inherit</field>
+        <field name="model">approval.request</field>
+        <field name="inherit_id" ref="approvals.approval_request_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="request_code"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

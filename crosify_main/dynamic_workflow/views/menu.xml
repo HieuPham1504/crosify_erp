@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="workflow_root" name="Quy trình" sequence="-100" web_icon="dynamic_workflow,static/description/icon.png"/>
+    <menuitem id="dynamic_workflow_menu" name="Quy trình" parent="workflow_root" action="dynamic_workflow.action_dynamic_workflow" sequence="1"/>
+    <menuitem id="dynamic_workflow_task_menu" name="Nhiệm vụ của tôi" parent="workflow_root" action="dynamic_workflow.action_view_my_task" sequence="3"/>
+</odoo>
