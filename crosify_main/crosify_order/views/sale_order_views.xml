@@ -59,6 +59,7 @@
                             <field name="order_id_fix" readonly="1"/>
                             <field name="channel_ref_id" readonly="1"/>
                             <field name="crosify_create_date" readonly="1"/>
+                            <field name="seller_id" options='{"no_open": True, "no_create": True}'/>
                         </group>
                     </group>
                     <notebook>
@@ -122,6 +123,7 @@
                                     <field name="shipping_phone_number" readonly="1"/>
                                     <field name="contact_email" readonly="1"/>
                                     <field name="shipping_vendor_id" options="{'no_create': True}" readonly="1"/>
+                                    <field name="shipping_line_id" options="{'no_create': True}" readonly="0"/>
                                 </group>
 
                                 <group name="shipping-info-other" string="LABEL &amp; TRACKING NUMBER" readonly="1">
@@ -389,6 +391,7 @@
                             <field name="shipping_phone_number"/>
                             <field name="contact_email"/>
                             <field name="shipping_vendor_id" options="{'no_create': True}"/>
+                            <field name="shipping_line_id" options="{'no_create': True}" readonly="0"/>
                         </group>
 
                         <group name="shipping-info-other" string="LABEL &amp; TRACKING NUMBER">
@@ -481,6 +484,7 @@
                 <field name="order_id_fix" required="1"/>
                 <field name="channel_ref_id"/>
                 <field name="crosify_create_date"/>
+                <field name="seller_id" options='{"no_open": True, "no_create": True}'/>
             </xpath>
 
             <xpath expr="//field[@name='note']" position="attributes">

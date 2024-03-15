@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="item_production_line_tree_view" model="ir.ui.view">
+            <field name="name">item_production_line_tree_view</field>
+            <field name="model">item.production.line</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="code" />
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="item_production_line_menu_action"
+            model="ir.actions.act_window">
+            <field name="name">Production Line</field>
+            <field name="res_model">item.production.line</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="item_production_line_menu" name="Production Line"
+            parent="sale.menu_sales_config"
+            action="item_production_line_menu_action"
+            sequence="33"
+            groups="base.group_system"/>
+
+    </data>
+</odoo>
