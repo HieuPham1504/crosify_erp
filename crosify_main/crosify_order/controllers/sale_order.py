@@ -4,6 +4,8 @@
 import json
 from odoo import http
 import requests
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from odoo.http import Controller, request, Response, route
 
 import hmac
@@ -117,6 +119,9 @@ class SaleOrderController(Controller):
 
     @route("/api/sale_orders", methods=["POST"], type="json", auth="public", cors="*")
     def action_create_sale_order(self, **kwargs):
+        now = datetime.now()
+        now_minus_7 = now - relativedelta(hours=7)
+        now_plus_7_str = now_minus_7.strftime("%Y-%m-%dT%H:%M:%S")
         data = request.get_json_data()
         # verified = self.verify_webhook(data, request.httprequest.headers['X-Signature-SHA256'])
         verified = True
@@ -134,7 +139,7 @@ class SaleOrderController(Controller):
                         insert_log_sql = f"""
                                         INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,response, type) 
                                         VALUES (
-                                        null, '{json.dumps(data)}', now(), 'fail', 'Order Name has already exists.', 'create'
+                                        null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'Order Name has already exists.', 'create'
                                         ) 
                                         """
                         request.env.cr.execute(insert_log_sql)
@@ -665,7 +670,7 @@ class SaleOrderController(Controller):
                 insert_log_sql = f"""
                                 INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type) 
                                 VALUES (
-                                {sale_order_id[0]}, '{json.dumps(data)}', now(), 'pass', 'create'
+                                {sale_order_id[0]}, '{json.dumps(data)}', '{now_plus_7_str}', 'pass', 'create'
                                 ) 
                                 """
                 request.env.cr.execute(insert_log_sql)
@@ -681,7 +686,7 @@ class SaleOrderController(Controller):
                 insert_log_sql = f"""
                 INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type) 
                 VALUES (
-                null, '{json.dumps(data)}', now(), 'fail', 'create'
+                null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'create'
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
@@ -690,6 +695,9 @@ class SaleOrderController(Controller):
 
     @route("/api/sale_orders/<int:my_admin_order_id>", methods=["POST"], type="json", auth="public", cors="*")
     def action_update_sale_order(self, my_admin_order_id, **kwargs):
+        now = datetime.now()
+        now_minus_7 = now - relativedelta(hours=7)
+        now_plus_7_str = now_minus_7.strftime("%Y-%m-%dT%H:%M:%S")
         data = request.get_json_data()
         # verified = self.verify_webhook(data, request.httprequest.headers['X-Crosify-Hmac-SHA256'])
         verified = True
@@ -708,7 +716,7 @@ class SaleOrderController(Controller):
                     insert_log_sql = f"""
                                                             INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,response,type) 
                                                             VALUES (
-                                                            null, '{json.dumps(data)}', now(), 'fail', 'Order not found', 'update'
+                                                            null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'Order not found', 'update'
                                                             ) 
                                                             """
                     request.env.cr.execute(insert_log_sql)
@@ -926,7 +934,7 @@ class SaleOrderController(Controller):
                 insert_log_sql = f"""
                                 INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json) 
                                 VALUES (
-                                {sale_order.id}, '{json.dumps(data)}', now(), 'pass', 'update', '{json.dumps(data)}'::json
+                                {sale_order.id}, '{json.dumps(data)}', '{now_plus_7_str}', 'pass', 'update', '{json.dumps(data)}'::json
                                 ) 
                                 """
                 request.env.cr.execute(insert_log_sql)
@@ -943,7 +951,7 @@ class SaleOrderController(Controller):
                 insert_log_sql = f"""
                 INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json) 
                 VALUES (
-                null, '{json.dumps(data)}', now(), ' ', 'update', '{json.dumps(data)}'::json
+                null, '{json.dumps(data)}', '{now_plus_7_str}', ' ', 'update', '{json.dumps(data)}'::json
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
