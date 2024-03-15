@@ -12,6 +12,7 @@
                     <sheet>
                         <group>
                             <field name="sale_order_id"/>
+                            <field name="type"/>
                             <field name="description"/>
                             <field name="create_date"/>
                             <field name="response"/>
@@ -30,6 +31,7 @@
                     <field name="create_date"/>
                     <field name="response"/>
                     <field name="status"/>
+                    <field name="type"/>
                 </tree>
             </field>
         </record>
