@@ -156,6 +156,7 @@ class SaleOrderLine(models.Model):
     hs_code = fields.Char(string='HS Code', related='product_template_id.categ_id.hs_code', store=True, index=1)
     is_combo = fields.Boolean(string='Combo', default=False)
     production_line_id = fields.Many2one('item.production.line', string='Production Line')
+    item_index = fields.Integer(string='Item Index', index=True)
 
     #override_fields
     price_unit = fields.Float(
