@@ -5,6 +5,9 @@ from odoo.exceptions import ValidationError
 from datetime import datetime
 import base64
 import json
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
@@ -181,11 +184,18 @@ class SaleOrderLine(models.Model):
     def write(self, vals):
         # OVERRIDE
         sublevel_id = vals.get('sublevel_id')
+        old_sublevel_id = self.sublevel_id
         if sublevel_id:
             level = self.env['sale.order.line.level'].sudo().browse(sublevel_id)
             if self.sublevel_id.level == 'L0' and level.level not in ['L1.1', 'L7.2']:
                 raise ValidationError(_('Level must be Paid Order or Cancel / Refund'))
         res = super().write(vals)
+
+        #set add_or_minus_fulfill_shelf
+        if sublevel_id:
+            new_sublevel_id = self.sublevel_id
+            self.add_or_minus_fulfill_shelf(old_sublevel_id, new_sublevel_id)
+
         return res
 
     @api.depends('price_unit', 'crosify_discount_amount', 'total_tax')
@@ -507,3 +517,61 @@ class SaleOrderLine(models.Model):
 
         except (ValueError, AttributeError):
             raise ValidationError('Cannot convert into barcode.')
+
+    @api.model
+    def action_set_address_shelf(self):
+        try:
+            item_ids = self._context.get('active_ids', [])
+            items = self.sudo().search([('id', 'in', item_ids)], order='product_type,order_id')
+            data_shelf = {}
+            for item in items:
+                if not item.address_sheft_id and item.product_type:
+                    order_id = item.order_id
+                    product_type = item.product_type
+
+                    value_current_shelf = self.handle_data_shelf(data_shelf, order_id, product_type)
+                    if value_current_shelf:
+                        fulfill_shelf_id = value_current_shelf
+                    else:
+                        key_shelf = str(order_id) + str(product_type)
+                        fulfill_shelf_id = item.search_fulfill_shelf(item.product_type)
+                        data_shelf[key_shelf] = fulfill_shelf_id
+
+                    if fulfill_shelf_id:
+                        item.write({
+                            'address_sheft_id': fulfill_shelf_id,
+                        })
+        except Exception as e:
+            _logger.exception(str(e))
+            raise UserError("Something went wrong! Please contact the administrator.")
+
+    def search_fulfill_shelf(self, product_type):
+        """
+        Search for product.type.shelf.type and fulfill.shelf and return fulfill.shelf.id match
+        """
+        product_type_shelf_type = self.env['product.type.shelf.type'].sudo().search(
+            [('product_type', '=', product_type)], limit=1)
+        if product_type_shelf_type and product_type_shelf_type.shelf_type_id:
+            shelf_type_id = product_type_shelf_type.shelf_type_id.id
+            fulfill_shelf_id = self.env['fulfill.shelf'].sudo().search([
+                ('shelf_type', '=', shelf_type_id)], limit=1)
+            if fulfill_shelf_id:
+                return fulfill_shelf_id.id
+            return False
+        return False
+
+    def handle_data_shelf(self, data_shelf, order_id, product_type):
+
+        key_shelf = str(order_id) + str(product_type)
+        if data_shelf.get(key_shelf):
+            return data_shelf.get(key_shelf)
+        else:
+            return False
+
+    def add_or_minus_fulfill_shelf(self, old_sublevel_id, new_sublevel_id):
+        if new_sublevel_id and new_sublevel_id.level == 'L4.5':
+            if self.address_sheft_id:
+                self.address_sheft_id.current_shelf += 1
+        if old_sublevel_id and old_sublevel_id.level == 'L4.5':
+            if self.address_sheft_id:
+                self.address_sheft_id.current_shelf -= 1
