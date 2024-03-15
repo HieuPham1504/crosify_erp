@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="config_set_line_level_view_tree" model="ir.ui.view">
+            <field name="name">config_set_line_level_view_tree</field>
+            <field name="model">config.set.line.level</field>
+            <field name="arch" type="xml">
+                <tree string="config_set_line_level_tree">
+                    <field name="type"/>
+                    <field name="pre_set_shelf_ids" widget="many2many_tags"/>
+                    <field name="set_shelf_ids" widget="many2many_tags"/>
+                    <field name="post_set_shelf_ids" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="config_set_line_level_view_form" model="ir.ui.view">
+            <field name="name">config_set_line_level_view_form</field>
+            <field name="model">config.set.line.level</field>
+            <field name="arch" type="xml">
+                <form string="config_set_line_level_form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="type"/>
+                                <field name="set_shelf_ids" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="pre_set_shelf_ids" widget="many2many_tags"/>
+                                <field name="post_set_shelf_ids" widget="many2many_tags"/>
+                            </group>
+
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="crosify_config_set_line_level_action" model="ir.actions.act_window">
+            <field name="name">Config set line level</field>
+            <field name="res_model">config.set.line.level</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="crosify_menu_config_set_line_level"
+                  name="Config set line level"
+                  parent="sale.menu_sale_config"
+                  action="crosify_config_set_line_level_action"
+                  sequence="22"
+                  groups="base.group_system"/>
+
+    </data>
+</odoo>
