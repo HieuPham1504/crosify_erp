@@ -6,7 +6,7 @@
     'version': '1.0',
     'website': '',
     'summary': """ Crosify web""",
-    'depends': ['base','web'],
+    'depends': ['web'],
     'data': [
     ],
     'demo': [],
