@@ -120,8 +120,7 @@ class SaleOrderController(Controller):
     @route("/api/sale_orders", methods=["POST"], type="json", auth="public", cors="*")
     def action_create_sale_order(self, **kwargs):
         now = datetime.now()
-        now_minus_7 = now - relativedelta(hours=7)
-        now_plus_7_str = now_minus_7.strftime("%Y-%m-%dT%H:%M:%S")
+        now_plus_7_str = now.strftime("%Y-%m-%dT%H:%M:%S")
         data = request.get_json_data()
         # verified = self.verify_webhook(data, request.httprequest.headers['X-Signature-SHA256'])
         verified = True
@@ -696,8 +695,7 @@ class SaleOrderController(Controller):
     @route("/api/sale_orders/<int:my_admin_order_id>", methods=["POST"], type="json", auth="public", cors="*")
     def action_update_sale_order(self, my_admin_order_id, **kwargs):
         now = datetime.now()
-        now_minus_7 = now - relativedelta(hours=7)
-        now_plus_7_str = now_minus_7.strftime("%Y-%m-%dT%H:%M:%S")
+        now_plus_7_str = now.strftime("%Y-%m-%dT%H:%M:%S")
         data = request.get_json_data()
         # verified = self.verify_webhook(data, request.httprequest.headers['X-Crosify-Hmac-SHA256'])
         verified = True
