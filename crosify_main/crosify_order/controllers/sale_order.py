@@ -713,9 +713,9 @@ class SaleOrderController(Controller):
                                                             """
                     request.env.cr.execute(insert_log_sql)
                     return response
-                state_id = request.env['res.country.state'].sudo().search([('code', '=', data.get('StateCode'))],
-                                                                          limit=1)
                 country_id = request.env['res.country'].sudo().search([('code', '=', data.get('CountryCode'))], limit=1)
+                state_id = request.env['res.country.state'].sudo().search([('code', '=', data.get('StateCode')), ('country_id', '=', country_id.id)],
+                                                                          limit=1)
                 currency_id = request.env['res.currency'].sudo().search([('name', '=', data.get('Currency'))], limit=1)
                 order_update_employee = request.env['hr.employee'].sudo().search(
                     [('work_email', '=', data.get('UpdatedBy'))], limit=1)
