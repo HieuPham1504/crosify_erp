@@ -531,13 +531,13 @@ class SaleOrderLine(models.Model):
                     order_id = item.order_id
                     product_type = item.product_type
 
-                    value_current_shelf = self.handle_data_shelf(data_shelf, order_id, product_type)
-                    if value_current_shelf:
-                        fulfill_shelf_id = value_current_shelf
-                    else:
-                        key_shelf = str(order_id) + str(product_type)
-                        fulfill_shelf_id = item.search_fulfill_shelf(item.product_type)
-                        data_shelf[key_shelf] = fulfill_shelf_id
+                    # value_current_shelf = self.handle_data_shelf(data_shelf, order_id, product_type)
+                    # if value_current_shelf:
+                    #     fulfill_shelf_id = value_current_shelf
+                    # else:
+                    key_shelf = str(order_id) + str(product_type)
+                    fulfill_shelf_id = item.search_fulfill_shelf(item.product_type)
+                    data_shelf[key_shelf] = fulfill_shelf_id
 
                     if fulfill_shelf_id:
                         item.write({
