@@ -109,7 +109,8 @@ class SaleOrderController(Controller):
     def verify_webhook(self, data, hmac_header):
         CLIENT_SECRET = request.env['ir.config_parameter'].sudo().get_param('hmac_sha256_secret', False)
         digest = hmac.new(CLIENT_SECRET.encode('utf-8'), str(data), digestmod=hashlib.sha256).digest()
-        hexdigest = hmac.new(CLIENT_SECRET.encode('utf-8'), str(data).encode('utf-8'), digestmod=hashlib.sha256).hexdigest()
+        hexdigest = hmac.new(CLIENT_SECRET.encode('utf-8'), str(data).encode('utf-8'),
+                             digestmod=hashlib.sha256).hexdigest()
         computed_hmac = base64.b64encode(digest)
 
         return hmac.compare_digest(computed_hmac, hmac_header.encode('utf-8'))
@@ -131,9 +132,9 @@ class SaleOrderController(Controller):
                             'message': 'Order Name has already exists.',
                         }
                         insert_log_sql = f"""
-                                        INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,response) 
+                                        INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,response, type) 
                                         VALUES (
-                                        null, '{json.dumps(data)}', now(), 'fail', 'Order Name has already exists.'
+                                        null, '{json.dumps(data)}', now(), 'fail', 'Order Name has already exists.', 'create'
                                         ) 
                                         """
                         request.env.cr.execute(insert_log_sql)
@@ -142,7 +143,8 @@ class SaleOrderController(Controller):
                                                                             limit=1)
                 shipping_country_id = shipping_country.id
 
-                shipping_state = request.env['res.country.state'].sudo().search([('code', '=', data.get('StateCode')), ('country_id', '=', shipping_country_id)], limit=1)
+                shipping_state = request.env['res.country.state'].sudo().search(
+                    [('code', '=', data.get('StateCode')), ('country_id', '=', shipping_country_id)], limit=1)
 
                 shipping_state_id = shipping_state.id
 
@@ -164,13 +166,21 @@ class SaleOrderController(Controller):
                     'active': True,
                 })
 
-                order_type_id = request.env['sale.order.type'].sudo().search([('order_type_name', '=', 'Normal')], limit=1)
+                order_type_id = request.env['sale.order.type'].sudo().search([('order_type_name', '=', 'Normal')],
+                                                                             limit=1)
                 payment_method = False
                 if data.get('PaymentMethod') is not None:
-                    payment_method = request.env['payment.method'].sudo().search([('code', '=ilike', data.get('PaymentMethod').strip())], limit=1)
+                    payment_method = request.env['payment.method'].sudo().search(
+                        [('code', '=ilike', data.get('PaymentMethod').strip())], limit=1)
                 utm_source = False
                 if data.get('UtmSource') is not None:
-                    utm_source = request.env['utm.source'].sudo().search([('name', '=ilike', data.get('UtmSource').strip())], limit=1)
+                    utm_source = request.env['utm.source'].sudo().search(
+                        [('name', '=ilike', data.get('UtmSource').strip())], limit=1)
+
+                seller_id = request.env['res.partner'].sudo().search(
+                    [('res_partner_code', '=', data.get('SellerCode'))], limit=1)
+                shipping_line_id = request.env['order.shipping.line'].sudo().search(
+                    [('code', '=', data.get('ShippingLine'))], limit=1)
 
                 create_order_sql = f"""
                     with currency as (
@@ -242,7 +252,9 @@ class SaleOrderController(Controller):
                     payment_method_id,
                     utm_source_id, 
                     create_date, 
-                    amount_tax
+                    amount_tax,
+                    seller_id,
+                    shipping_line_id
     --                 warehouse_id,
     --                 picking_policy
                     ) 
@@ -317,7 +329,9 @@ class SaleOrderController(Controller):
                            {payment_method.id if payment_method else 'null'},
                            {utm_source.id if utm_source else 'null'}, 
                            now(), 
-                           {data.get('TaxPrice') if not data.get('TaxPrice') is None else 0}
+                           {data.get('TaxPrice') if not data.get('TaxPrice') is None else 0},
+                           {seller_id.id if seller_id else 'null'},
+                           {shipping_line_id.id if shipping_line_id else 'null'}
                  Returning id
                 """
                 request.env.cr.execute(create_order_sql)
@@ -395,7 +409,8 @@ class SaleOrderController(Controller):
                     order_partner_id,
                     variant, 
                     create_date,
-                    is_combo
+                    is_combo,
+                    production_line_id
                     ) 
                     values
                     """
@@ -405,6 +420,10 @@ class SaleOrderController(Controller):
                     shipping_cost = round(line.get('ShippingCost', 0) / quantity, 2)
                     price_total = round(line.get('TotalAmount', 0) / quantity, 2)
                     tip = round(line.get('Tip', 0) / quantity, 2)
+
+                    production_line_id = request.env['item.production.line'].sudo().search(
+                        [('code', '=', line.get('ProductionLine'))], limit=1)
+
                     PaymentStatus = data.get('PaymentStatus')
                     if PaymentStatus == 1:
                         level_code = 'L1.1'
@@ -412,8 +431,9 @@ class SaleOrderController(Controller):
                         level_code = 'L0'
                     sub_level = request.env['sale.order.line.level'].sudo().search(
                         [('level', '=', level_code)], limit=1)
-                    product_id = request.env['product.product'].sudo().search([('default_code', '=', line.get('Sku', ''))],
-                                                                              limit=1)
+                    product_id = request.env['product.product'].sudo().search(
+                        [('default_code', '=', line.get('Sku', ''))],
+                        limit=1)
                     upload_tkn_by = request.env['hr.employee'].sudo().search(
                         [('work_email', '=', line.get('UploadTknBy', ''))], limit=1)
                     crosify_approve_cancel_employee_id = request.env['hr.employee'].sudo().search(
@@ -492,7 +512,6 @@ class SaleOrderController(Controller):
                                                     '{line.get('FulfillDate', '')}',
                                                     """
 
-
                         create_order_line_sql += f"""
                         {line.get('Priority', 'false')},
                         """
@@ -555,7 +574,6 @@ class SaleOrderController(Controller):
                                                     {upload_tkn_by.id},
                                                     """
 
-
                         create_order_line_sql += f"""
                         '{line.get('TrackingUrl') if line.get('TrackingUrl') is not None else ''}',
                         {line.get('IsUploadTKN') if line.get('IsUploadTKN') is not None else 'false'},
@@ -570,7 +588,6 @@ class SaleOrderController(Controller):
                             create_order_line_sql += f"""
                                                     {crosify_approve_cancel_employee_id.id},
                                                     """
-
 
                         if line.get('Canceledat') is None:
 
@@ -613,10 +630,10 @@ class SaleOrderController(Controller):
                                                     """
 
                         create_order_line_sql += f"""
-                        '{line.get('PackagingLocationInfo')  if line.get('PackagingLocationInfo') is not None else ''}',
-                        '{line.get('ShippingMethodInfo')  if line.get('ShippingMethodInfo') is not None else ''}',
+                        '{line.get('PackagingLocationInfo') if line.get('PackagingLocationInfo') is not None else ''}',
+                        '{line.get('ShippingMethodInfo') if line.get('ShippingMethodInfo') is not None else ''}',
                         {sale_order_id[0]},
-                        '{line.get('ProductName')  if line.get('ProductName') is not None else ''}',
+                        '{line.get('ProductName') if line.get('ProductName') is not None else ''}',
                         '{product_id.product_type if product_id else none_product_id.product_type}',
                         0,
                         1,
@@ -626,28 +643,29 @@ class SaleOrderController(Controller):
                         where name = '{data.get('Currency')}' 
                         limit 1),
                         {partner_id.id},
-                        '{line.get('Variant')  if line.get('Variant') is not None else ''}', 
+                        '{line.get('Variant') if line.get('Variant') is not None else ''}', 
                         now(),
                         
                         """
                         if quantity > 1:
                             create_order_line_sql += """ 
-                            true
+                            true,
                             """
                         else:
                             create_order_line_sql += """ 
-                                                    false
+                                                    false,
                                                     """
 
-                        create_order_line_sql += """ 
+                        create_order_line_sql += f""" 
+                        {production_line_id.id if production_line_id else 'null'}
                         )
                         """
 
                     request.env.cr.execute(create_order_line_sql)
                 insert_log_sql = f"""
-                                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status) 
+                                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type) 
                                 VALUES (
-                                {sale_order_id[0]}, '{json.dumps(data)}', now(), 'pass'
+                                {sale_order_id[0]}, '{json.dumps(data)}', now(), 'pass', 'create'
                                 ) 
                                 """
                 request.env.cr.execute(insert_log_sql)
@@ -661,9 +679,9 @@ class SaleOrderController(Controller):
                 return response
             except Exception as e:
                 insert_log_sql = f"""
-                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status) 
+                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type) 
                 VALUES (
-                null, '{json.dumps(data)}', now(), 'fail'
+                null, '{json.dumps(data)}', now(), 'fail', 'create'
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
@@ -680,24 +698,39 @@ class SaleOrderController(Controller):
         else:
             try:
 
-                sale_order = request.env['sale.order'].sudo().search([('myadmin_order_id', '=', my_admin_order_id)], limit=1)
+                sale_order = request.env['sale.order'].sudo().search([('myadmin_order_id', '=', my_admin_order_id)],
+                                                                     limit=1)
                 if not sale_order.exists():
                     response = {
                         'status': 400,
                         'message': 'Order not found',
                     }
+                    insert_log_sql = f"""
+                                                            INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,response,type) 
+                                                            VALUES (
+                                                            null, '{json.dumps(data)}', now(), 'fail', 'Order not found', 'update'
+                                                            ) 
+                                                            """
+                    request.env.cr.execute(insert_log_sql)
                     return response
-                state_id = request.env['res.country.state'].sudo().search([('code', '=', data.get('StateCode'))], limit=1)
+                state_id = request.env['res.country.state'].sudo().search([('code', '=', data.get('StateCode'))],
+                                                                          limit=1)
                 country_id = request.env['res.country'].sudo().search([('code', '=', data.get('CountryCode'))], limit=1)
                 currency_id = request.env['res.currency'].sudo().search([('name', '=', data.get('Currency'))], limit=1)
-                order_update_employee = request.env['hr.employee'].sudo().search([('work_email', '=', data.get('UpdatedBy'))], limit=1)
-                order_create_employee = request.env['hr.employee'].sudo().search([('work_email', '=', data.get('CreatedBy'))], limit=1)
+                order_update_employee = request.env['hr.employee'].sudo().search(
+                    [('work_email', '=', data.get('UpdatedBy'))], limit=1)
+                order_create_employee = request.env['hr.employee'].sudo().search(
+                    [('work_email', '=', data.get('CreatedBy'))], limit=1)
+                seller_id = request.env['res.partner'].sudo().search(
+                    [('res_partner_code', '=', data.get('SellerCode'))], limit=1)
+                shipping_line_id = request.env['order.shipping.line'].sudo().search(
+                    [('code', '=', data.get('ShippingLine'))], limit=1)
 
                 update_order_sql = f"""
                 update sale_order 
-                set name = '{data.get('Name', '')}',
-                    myadmin_order_id = '{data.get('Orderid', '')}',
-                    transaction_id = '{data.get('Transactionid', '')}',
+                set 
+                    shipping_line_id = {shipping_line_id.id if shipping_line_id else 'null'},
+                    seller_id = {seller_id.id if seller_id else 'null'},
                     channel_ref_id = '{data.get('ChannelRefID', '')}',
                     shipping_firstname = '{data.get('ShippingFirstname', '')}',
                     shipping_lastname = '{data.get('ShippingLastname', '')}',
@@ -716,6 +749,7 @@ class SaleOrderController(Controller):
                     shipping_cost = {data.get('ShippingCost') if data.get('ShippingCost') is not None else 0},
                     amount_untaxed = {data.get('Subtotal') if data.get('Subtotal') is not None else 0},
                     discount  = {data.get('Discount') if data.get('Discount') is not None else 0},
+                    amount_tax  = {data.get('TaxPrice') if data.get('Discount') is not None else 0},
                     amount_total = {data.get('TotalAmount') if data.get('TotalAmount') is not None else 0},
                     currency_id = {currency_id.id if currency_id else 'null'},
                     payment_status = '{data.get('PaymentStatus', '')}',
@@ -725,12 +759,17 @@ class SaleOrderController(Controller):
                     rating = '{data.get('rating', '')}',
                     review = '{data.get('review', '')}',
                     crosify_updated_by = {order_update_employee.id if order_update_employee else 'null'},
-                    crosify_create_by = {order_create_employee.id if order_create_employee else 'null'},
-                    tkn = '{data.get('Tkn', '')}',
-                    is_upload_tkn = {data.get('IsUploadTKN', )},
-                    tkn_url = '{data.get('TrackingUrl', '')}'
+                    crosify_create_by = {order_create_employee.id if order_create_employee else 'null'}, 
                 
                 """
+                if data.get('Paymentat') is not None:
+                    update_order_sql += f"""
+                        payment_at = '{data.get('Paymentat')}'
+                    """
+                else:
+                    update_order_sql += f"""
+                                          payment_at = null
+                                        """
 
                 if sale_order.partner_id.phone != data.get('ShippingPhonenumber'):
                     partner_sql = f"""
@@ -767,8 +806,9 @@ class SaleOrderController(Controller):
                 for line in order_lines:
                     sub_level = request.env['sale.order.line.level'].sudo().search(
                         [('level', '=', line.get('LevelCode', '0'))], limit=1)
-                    product_id = request.env['product.product'].sudo().search([('default_code', '=', line.get('Sku', ''))],
-                                                                              limit=1)
+                    product_id = request.env['product.product'].sudo().search(
+                        [('default_code', '=', line.get('Sku', ''))],
+                        limit=1)
                     upload_tkn_by = request.env['hr.employee'].sudo().search(
                         [('work_email', '=', line.get('UploadTknBy', ''))], limit=1)
                     crosify_approve_cancel_employee_id = request.env['hr.employee'].sudo().search(
@@ -778,11 +818,10 @@ class SaleOrderController(Controller):
                     update_order_line_sql = f"""
                     update sale_order_line 
                     set 
-                    my_admin_detailed_id = {detail_id},
-                    my_admin_order_id = {line.get('Orderid', 0) if line.get('Orderid', 0) is not None else 'null'},
-                    order_id_fix = '{line.get('OrderidFix') if line.get('OrderidFix') is not None else 'null'}',
+
                     myadmin_product_id = {line.get('ProductID') if line.get('ProductID') is not None else 'null'},
-                    meta_field = {line.get('meta_field') if line.get('meta_field') is not None else 'null'},
+                    meta_field = '{line.get('Metafield') if line.get('Metafield') is not None else ''}',
+                    variant = '{line.get('Variant') if line.get('Variant') is not None else ''}',
                     price_unit = {line.get('Amount') if line.get('Amount') is not None else 'null'},
                     product_uom_qty = 1,
                     price_subtotal = {round(line.get('Subtotal', 0) / quantity, 2)},
@@ -801,44 +840,49 @@ class SaleOrderController(Controller):
                         update_order_line_sql += f"""
                                             status = null,
                                             """
+                    none_product_id = request.env(su=True).ref('crosify_order.product_product_fail_data')
 
                     update_order_line_sql += f"""
-                    sublevel_id = {sub_level.id if sub_level else 'null'},
-                    level_id = {sub_level.parent_id.id if sub_level and sub_level.parent_id else 'null'},
                     customer_note = '{line.get('CustomerNote') if line.get('CustomerNote') is not None else 'null'}',
-                    product_id = {product_id.id if product_id else 'null'},
+                    product_id = {product_id.id if product_id else none_product_id.id},
                     personalize = '{line.get('Personalize') if line.get('Personalize') is not None else 'null'}',
                     element_message = '{line.get('ElementMessage') if line.get('ElementMessage') is not None else 'null'}',
-                    design_date = '{line.get('DesignDate') if line.get('DesignDate') is not None else 'null'}',
                     extra_service = '{line.get('ExtraService') if line.get('ExtraService') is not None else 'null'}',
-                    note_fulfill = '{line.get('FulfillNote') if line.get('FulfillNote') is not None else 'null'}',
-                    fulfill_date = '{line.get('FulfillDate') if line.get('FulfillDate') is not None else 'null'}',
                     priority = '{line.get('Priority') if line.get('Priority') is not None else 'null'}',
-                    packed_date = '{line.get('PackedDate') if line.get('PackedDate') is not None else 'null'}',
-                    pickup_date = '{line.get('PackedDate') if line.get('PackedDate') is not None else 'null'}',
                     deliver_status = '{line.get('PickupDate') if line.get('PickupDate') is not None else 'null'}',
-                    deliver_date = '{line.get('DeliveryUpdateDate') if line.get('DeliveryUpdateDate') is not None else 'null'}',
-                    description_item_size = '{line.get('DescriptionItemSize') if line.get('DescriptionItemSize') is not None else 'null'}',
-                    box_size = '{line.get('Boxsize') if line.get('Boxsize') is not None else 'null'}',
-                    package_size = '{line.get('Packagesize') if line.get('Packagesize') is not None else 'null'}',
-                    product_code = '{line.get('Productcode') if line.get('Productcode') is not None else 'null'}',
-                    design_serial_number = '{line.get('DesignSerialno') if line.get('DesignSerialno') is not None else 'null'}',
-                    color_set_name = '{line.get('ColorsetName') if line.get('ColorsetName') is not None else 'null'}',
-                    accessory_name = '{line.get('AccessoryName') if line.get('AccessoryName') is not None else 'null'}',
-                    color_item = '{line.get('ColorItem') if line.get('ColorItem') is not None else 'null'}',
+                    
+                    """
+
+                    if line.get('DeliveryUpdateDate') is not None:
+                        update_order_line_sql += f"""
+                        deliver_date = '{line.get('DeliveryUpdateDate')}',
+                        """
+                    else:
+                        update_order_line_sql += f"""
+                                            deliver_date = null,
+                                            """
+
+                    update_order_line_sql += f"""
                     logistic_cost = {line.get('LogisticCost') if line.get('LogisticCost') is not None else 'null'},
-                    hs_code = '{line.get('HScode') if line.get('HScode') is not None else 'null'}',
-                    tkn_code = '{line.get('TKN') if line.get('TKN') is not None else 'null'}',
-                    upload_tkn_date = '{line.get('UploadTknat') if line.get('UploadTknat') is not None else 'null'}',
-                    upload_tkn_by = {upload_tkn_by.id if upload_tkn_by else 'null'},
-                    tkn_url = '{line.get('TrackingUrl') if line.get('TrackingUrl') is not None else 'null'}',
-                    is_upload_tkn = {line.get('IsUploadTKN') if line.get('IsUploadTKN') is not None else 'null'},
                     note_change_request = '{line.get('ChangeRequestNote') if line.get('ChangeRequestNote') is not None else 'null'}',
                     dispute_status = '{line.get('DisputeStatus') if line.get('DisputeStatus') is not None else 'null'}',
                     dispute_note = '{line.get('DisputeNote') if line.get('DisputeNote') is not None else 'null'}',
                     crosify_approve_cancel_employee_id = {crosify_approve_cancel_employee_id.id if crosify_approve_cancel_employee_id else 'null'},
-                    cancel_date = '{line.get('Canceledat') if line.get('Canceledat') is not None else 'null'}',
-                    cancel_reason = '{line.get('CancelReason') if line.get('CancelReason') is not None else 'null'}',
+                    
+                    """
+
+                    if line.get('Canceledat') is not None:
+                        update_order_line_sql += f"""
+                        cancel_date = '{line.get('Canceledat')}',
+                        """
+                    else:
+                        update_order_line_sql += f"""
+                                            cancel_date = null,
+                                            """
+
+
+                    update_order_line_sql += f"""
+                    cancel_note = '{line.get('CancelReason') if line.get('CancelReason') is not None else ''}',
                     """
 
                     if line.get('Updatedat') is not None:
@@ -850,31 +894,26 @@ class SaleOrderController(Controller):
                                             update_date = null,
                                             """
 
-
-                    if line.get('Createdat') is not None:
+                    if line.get('LastupdateLevel') is not None:
                         update_order_line_sql += f"""
-                        crosify_created_date = '{line.get('Createdat')}',
+                        last_update_level_date = '{line.get('LastupdateLevel')}'
                         """
                     else:
                         update_order_line_sql += f"""
-                                            crosify_created_date = null,
+                                            last_update_level_date = null
                                             """
 
                     update_order_line_sql += f"""
-                    crosify_create_by = '{line.get('CreatedBy') if line.get('CreatedBy') is not None else 'null'}',
-                    last_update_level_date = '{line.get('LastupdateLevel') if line.get('LastupdateLevel') is not None else 'null'}',
-                    packaging_location = '{line.get('PackagingLocationInfo') if line.get('PackagingLocationInfo') is not None else 'null'}',
-                    shipping_method = '{line.get('ShippingMethodInfo') if line.get('ShippingMethodInfo') is not None else 'null'}', 
-                    name = '{product_id.display_name}' 
+ 
                     where my_admin_detailed_id = {detail_id} 
                     """
 
                     request.env.cr.execute(update_order_line_sql)
 
                 insert_log_sql = f"""
-                                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status) 
+                                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json) 
                                 VALUES (
-                                {sale_order.id}, '{json.dumps(data)}', now(), 'pass'
+                                {sale_order.id}, '{json.dumps(data)}', now(), 'pass', 'update', '{json.dumps(data)}'::json
                                 ) 
                                 """
                 request.env.cr.execute(insert_log_sql)
@@ -889,9 +928,9 @@ class SaleOrderController(Controller):
                 return response
             except Exception as e:
                 insert_log_sql = f"""
-                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status) 
+                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json) 
                 VALUES (
-                null, '{json.dumps(data)}', now(), 'fail'
+                null, '{json.dumps(data)}', now(), 'fail', 'update', '{json.dumps(data)}'::json
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
