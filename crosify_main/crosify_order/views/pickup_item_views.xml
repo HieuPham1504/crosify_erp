@@ -48,6 +48,8 @@
                         </div>
                         <group name="main">
                             <group>
+                                <field name="order_box_container_code" required="1"/>
+                                <field name="order_box_container_id" readonly="1" force_save="1" options='{"no_open": True, "no_create": True}'/>
                                 <field name="date"/>
                                 <field name="employee_id" options='{"no_open": True, "no_create": True}'/>
                             </group>
@@ -58,7 +60,7 @@
 
                         <br/>
                         <group name="items">
-                            <field name="item_ids" nolabel="0">
+                            <field name="item_ids" nolabel="0" readonly="state == 'done'">
                                 <tree string="Items" editable="bottom">
                                     <field name="barcode" readonly="0"/>
                                     <field name="tkn_code" readonly="0"/>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="order_box_container_tree_view" model="ir.ui.view">
+            <field name="name">fulfill_cancel_item_view</field>
+            <field name="model">order.box.container</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="code" />
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="order_box_container_menu_action"
+            model="ir.actions.act_window">
+            <field name="name">Order Box Container</field>
+            <field name="res_model">order.box.container</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="order_box_container_menu" name="Order Box Container"
+            parent="sale.menu_sales_config"
+            action="order_box_container_menu_action"
+            sequence="30"
+            groups="base.group_system"/>
+    </data>
+</odoo>

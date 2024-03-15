@@ -14,12 +14,16 @@
                         <br/>
 
                         <field name="item_ids" nolabel="1">
-                            <tree string="Items" editable="bottom">
+                            <tree string="Items" editable="bottom" decoration-danger="is_error == True">
                                 <field name="production_id" readonly="0"/>
                                 <field name="sale_order_line_id" column_invisible="1"/>
+                                <field name="is_error" column_invisible="1"/>
+                                <field name="order_id_fix"/>
                                 <field name="product_id" readonly="1" string="SKU"/>
                                 <field name="product_template_attribute_value_ids" readonly="1" widget="many2many_tags"/>
                                 <field name="personalize" readonly="1"/>
+                                <field name="error_message" readonly="1"/>
+                                <field name="pair_number" column_invisible="1" force_save="1"/>
                             </tree>
                         </field>
 
