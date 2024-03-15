@@ -45,6 +45,7 @@ ORDER_FIELDS_MAPPING = {
     'Tkn': 'tkn',
     'IsUploadTKN': 'is_upload_tkn',
     'TrackingUrl': 'tkn_url',
+    'ProductionLine': 'production_line_id',
 
 }
 

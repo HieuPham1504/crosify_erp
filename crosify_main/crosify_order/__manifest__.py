@@ -54,6 +54,8 @@ Key Features
         'views/hs_product_config_views.xml',
         'views/pickup_item_views.xml',
         'views/shipping_item_confirm_views.xml',
+        'views/order_shipping_line_views.xml',
+        'views/item_production_line_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
         'wizard/update_item_design_wizard_views.xml',
@@ -75,6 +77,7 @@ Key Features
             'crosify_order/static/src/css/sale_order_view_css.css',
             'crosify_order/static/src/xml/form_status_indicator.xml',
             'crosify_order/static/src/xml/list_renderer.xml',
+            'crosify_order/static/src/js/action_manager.js',
         ],
         'web.assets_frontend': [
 

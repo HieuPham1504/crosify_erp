@@ -26,6 +26,10 @@
                         <button name="action_back_to_fulfill_vendor_items" string="Back to Fulfill Vendor"
                                 type="object" class="oe_highlight" data-hotkey="w" title="Back to Designed"
                                 invisible="state == 'draft'"/>
+
+                        <button name="action_export_xlsx" string="Export File"
+                                type="object" class="oe_highlight" title="Export File"
+                                invisible="state == 'draft'"/>
                         <field name="state"  widget="statusbar" invisible="0"/>
                     </header>
                     <sheet>

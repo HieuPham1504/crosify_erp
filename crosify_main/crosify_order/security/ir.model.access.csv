@@ -60,6 +60,10 @@
 "access_shipping_item_confirm_pickup_order","access_shipping_item_confirm_pickup_order","model_shipping_item_confirm_pickup_order",,1,1,1,1
 "access_shipping_item_confirm_pickup_order_error","access_shipping_item_confirm_pickup_order_error","model_shipping_item_confirm_pickup_order_error",,1,1,1,1
 
+"access_order_shipping_line","access_order_shipping_line","model_order_shipping_line",,1,1,1,1
+"access_item_production_line","access_item_production_line","model_item_production_line",,1,1,1,1
+
+
 "access_raise_information_wizard","access_raise_information_wizard","model_raise_information_wizard",,1,1,1,1
 "access_qc_check_item_wizard_line","access_qc_check_item_wizard_line","model_qc_check_item_wizard_line",,1,1,1,1
 "access_qc_check_item_wizard","access_qc_check_item_wizard","model_qc_check_item_wizard",,1,1,1,1

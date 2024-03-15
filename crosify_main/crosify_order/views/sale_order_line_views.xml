@@ -181,6 +181,7 @@
                                             <field name="design_date"/>
                                         </group>
                                         <group name="production" string="PRODUCTION">
+                                            <field name="production_line_id" options='{"no_open": True, "no_create": True}'/>
                                             <field name="production_estimate_time"/>
                                             <field name="production_start_date"/>
                                             <field name="production_done_date"/>
