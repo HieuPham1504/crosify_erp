@@ -55,6 +55,7 @@ Key Features
         'views/pickup_item_views.xml',
         'views/shipping_item_confirm_views.xml',
         'views/order_box_container_views.xml',
+        'views/config_set_line_level.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
         'wizard/update_item_design_wizard_views.xml',
@@ -70,6 +71,7 @@ Key Features
     ],
     'demo': [],
     'installable': True,
+    "category": "Crosify/Crosify",
     'module_type': 'official',
     'assets': {
         'web.assets_backend': [

@@ -24,3 +24,4 @@ from . import res_country_state
 from . import hs_product_config
 from . import pickup_item
 from . import shipping_item_confirm
+from . import config_set_line_level

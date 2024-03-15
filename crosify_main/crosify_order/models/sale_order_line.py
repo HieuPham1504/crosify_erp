@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 from datetime import datetime
 import base64
 import json
@@ -522,7 +522,7 @@ class SaleOrderLine(models.Model):
     def action_set_address_shelf(self):
         try:
             item_ids = self._context.get('active_ids', [])
-            items = self.sudo().search([('id', 'in', item_ids)], order='product_type,order_id')
+            items = self.sudo().search([('id', 'in', item_ids)], order='product_type,order_id').filtered(lambda item: not item.address_sheft_id)
             data_shelf = {}
             for item in items:
                 if not item.address_sheft_id and item.product_type:
@@ -541,6 +541,12 @@ class SaleOrderLine(models.Model):
                         item.write({
                             'address_sheft_id': fulfill_shelf_id,
                         })
+                        fulfill_shelf_obj = self.env['fulfill.shelf'].browse(fulfill_shelf_id)
+                        fulfill_shelf_obj.write({
+                            'temp_shelf': fulfill_shelf_obj.temp_shelf + 1,
+                        })
+
+
         except Exception as e:
             _logger.exception(str(e))
             raise UserError("Something went wrong! Please contact the administrator.")
@@ -554,7 +560,7 @@ class SaleOrderLine(models.Model):
         if product_type_shelf_type and product_type_shelf_type.shelf_type_id:
             shelf_type_id = product_type_shelf_type.shelf_type_id.id
             fulfill_shelf_id = self.env['fulfill.shelf'].sudo().search([
-                ('shelf_type', '=', shelf_type_id)], limit=1)
+                ('shelf_type', '=', shelf_type_id), ('available', '=', True)], limit=1)
             if fulfill_shelf_id:
                 return fulfill_shelf_id.id
             return False
@@ -569,9 +575,34 @@ class SaleOrderLine(models.Model):
             return False
 
     def add_or_minus_fulfill_shelf(self, old_sublevel_id, new_sublevel_id):
-        if new_sublevel_id and new_sublevel_id.level == 'L4.5':
+
+        config_set_line_level_id = self.env['config.set.line.level'].sudo().search([('type', '=', 'shelf')], limit=1)
+
+        if config_set_line_level_id:
+            set_shelf_ids = config_set_line_level_id.set_shelf_ids.ids
+            pre_set_shelf_ids = config_set_line_level_id.pre_set_shelf_ids.ids
+            post_set_shelf_ids = config_set_line_level_id.post_set_shelf_ids.ids
+        else:
+            set_shelf_ids = []
+            pre_set_shelf_ids = []
+            post_set_shelf_ids = []
+
+        if new_sublevel_id and new_sublevel_id.id in set_shelf_ids:
             if self.address_sheft_id:
                 self.address_sheft_id.current_shelf += 1
-        if old_sublevel_id and old_sublevel_id.level == 'L4.5':
+
+        if (old_sublevel_id and old_sublevel_id.id in set_shelf_ids
+                and new_sublevel_id and new_sublevel_id.id in post_set_shelf_ids):
             if self.address_sheft_id:
                 self.address_sheft_id.current_shelf -= 1
+                self.address_sheft_id.temp_shelf -= 1
+
+        if (old_sublevel_id and old_sublevel_id.id in post_set_shelf_ids
+                and new_sublevel_id and new_sublevel_id.id in pre_set_shelf_ids):
+            if self.address_sheft_id:
+                self.address_sheft_id.temp_shelf += 1
+
+        if (old_sublevel_id and old_sublevel_id.id in post_set_shelf_ids
+                and new_sublevel_id and new_sublevel_id.id in set_shelf_ids):
+            if self.address_sheft_id:
+                self.address_sheft_id.temp_shelf += 1
