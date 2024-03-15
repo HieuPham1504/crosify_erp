@@ -771,30 +771,43 @@ class SaleOrderController(Controller):
                                           payment_at = null
                                         """
 
-                if sale_order.partner_id.phone != data.get('ShippingPhonenumber'):
-                    partner_sql = f"""
-                                insert into res_partner(name, complete_name,street,street2,city,state_id,zip,country_id,phone,mobile,email) 
-                                values (
-                                '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}', 
-                                '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}', 
-                                '{data.get('ShippingAddress', '')}',
-                                '{data.get('ShippingApartment', '')}',
-                                '{data.get('ShippingCity', '')}',
-                                {state_id.id},
-                                '{data.get('ShippingZipcode', '')}',
-                                {country_id.id},
-                                '{data.get('ShippingPhonenumber', '')}',
-                                '{data.get('ShippingPhonenumber', '')}',
-                                '{data.get('ContactEmail', '')}'
-                                ) 
-                                returning id
-                                """
+                # if sale_order.partner_id.phone != data.get('ShippingPhonenumber'):
+                #     partner_sql = f"""
+                #                 insert into res_partner(name, complete_name,street,street2,city,state_id,zip,country_id,phone,mobile,email)
+                #                 values (
+                #                 '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}',
+                #                 '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}',
+                #                 '{data.get('ShippingAddress', '')}',
+                #                 '{data.get('ShippingApartment', '')}',
+                #                 '{data.get('ShippingCity', '')}',
+                #                 {state_id.id},
+                #                 '{data.get('ShippingZipcode', '')}',
+                #                 {country_id.id},
+                #                 '{data.get('ShippingPhonenumber', '')}',
+                #                 '{data.get('ShippingPhonenumber', '')}',
+                #                 '{data.get('ContactEmail', '')}'
+                #                 )
+                #                 returning id
+                #                 """
 
-                    request.env.cr.execute(partner_sql)
-                    partner_id = request.env.cr.fetchone()
-                    update_order_sql += f"""
-                    , partner_id = {partner_id[0]}
-                    """
+                partner_sql = f"""
+                    update res_partner 
+                    set name = '{data.get('ShippingFirstname') if data.get('ShippingFirstname') is not None else ''} {data.get('ShippingLastname') if data.get('ShippingLastname') is not None else ''}',
+                        complete_name = '{data.get('ShippingFirstname') if data.get('ShippingFirstname') is not None else ''} {data.get('ShippingLastname') if data.get('ShippingLastname') is not None else ''}',
+                        street = '{data.get('ShippingAddress') if data.get('ShippingAddress') is not None else ''}',
+                        street2 = '{data.get('ShippingApartment') if data.get('ShippingApartment') is not None else ''}',
+                        city = '{data.get('ShippingCity') if data.get('ShippingCity') is not None else ''}',
+                        state_id = {state_id.id if state_id else 'null'},
+                        country_id = {country_id.id if country_id else 'null'},
+                        zip = '{data.get('ShippingZipcode') if data.get('ShippingZipcode') is not None else ''}',
+                        phone = '{data.get('ShippingPhonenumber') if data.get('ShippingPhonenumber') is not None else ''}',
+                        mobile = '{data.get('ShippingPhonenumber') if data.get('ShippingPhonenumber') is not None else ''}',
+                        email = '{data.get('ContactEmail') if data.get('ContactEmail') is not None else ''}'
+                        where id = {sale_order.partner_id.id}
+                """
+
+                request.env.cr.execute(partner_sql)
+
                 update_order_sql += f"""
                 where id = {sale_order.id}
                 
@@ -930,7 +943,7 @@ class SaleOrderController(Controller):
                 insert_log_sql = f"""
                 INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json) 
                 VALUES (
-                null, '{json.dumps(data)}', now(), 'fail', 'update', '{json.dumps(data)}'::json
+                null, '{json.dumps(data)}', now(), ' ', 'update', '{json.dumps(data)}'::json
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
