@@ -125,6 +125,7 @@
                                     <field name="product_type"/>
                                     <field name="production_id"/>
                                     <field name="personalize"/>
+                                    <field name="order_index"/>
                                 </group>
                             </group>
                             <notebook>
