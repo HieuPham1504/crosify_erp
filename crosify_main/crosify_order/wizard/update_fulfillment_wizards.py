@@ -23,24 +23,8 @@ class UpdateFulFillmentWizard(models.TransientModel):
         fulfilled_vendor_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.0')], limit=1)
         if not fulfilled_vendor_level:
             raise ValidationError('There is no status Fulfill Vendor')
-        item_fields_mapping = {
-            'production_vendor_id': 'product_vendor_id',
-            'packaging_vendor_id': 'packaging_vendor_id',
-            'shipping_vendor_id': 'shipping_vendor_id',
-        }
-        for item in items:
-            if update_type == 'default':
-                product_type_fulfill_data = self.env['sale.order.product.type.fulfill'].sudo().search(
-                    [('product_type_id', '=', item.product_id.product_tmpl_id.id)], limit=1)
-                if product_type_fulfill_data:
-                    for field in item_fields_mapping:
-                        item[field] = product_type_fulfill_data[item_fields_mapping[field]].id
-            else:
-                for field in item_fields_mapping:
-                    item[field] = self[field].id
 
-            item.write({
-                'fulfill_vendor_employee_id': employee_id,
-                'fulfill_vendor_date': datetime.now(),
-                'sublevel_id': fulfilled_vendor_level.id,
-            })
+        for item in items:
+            item.with_delay(
+                description=f'Action Update Fulfillment Vendor For Item With Production ID = {item.production_id}',
+                channel='root.channel_sale_order_line').action_cron_action_update_fulfill_vendor(update_type, employee_id, fulfilled_vendor_level)

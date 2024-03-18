@@ -6,6 +6,7 @@ from datetime import datetime
 import base64
 import json
 
+
 class SaleOrderLine(models.Model):
     _name = 'sale.order.line'
     _inherit = ['mail.thread', 'mail.activity.mixin', 'sale.order.line']
@@ -90,7 +91,7 @@ class SaleOrderLine(models.Model):
     fulfill_order_employee_id = fields.Many2one('hr.employee', string='Fulfill Order By', index=True)
     fulfill_order_date = fields.Datetime(string='Fulfill Order Date')
 
-    #fulfill vendor
+    # fulfill vendor
     fulfill_vendor_date = fields.Datetime(string='Fulfill Vendor Date')
     fulfill_vendor_employee_id = fields.Many2one('hr.employee', string='Fulfill Vendor By', index=True)
 
@@ -158,7 +159,7 @@ class SaleOrderLine(models.Model):
     production_line_id = fields.Many2one('item.production.line', string='Production Line')
     order_index = fields.Integer(string='Order Index', index=True)
 
-    #override_fields
+    # override_fields
     price_unit = fields.Float(
         string="Unit Price",
         compute=False,
@@ -273,21 +274,29 @@ class SaleOrderLine(models.Model):
             raise ValidationError(f'Item already has Production ID: {had_production_id_items_order_ids}')
         order_id_fixes = list(set(items.mapped('order_id_fix')))
         for order_id_fix in order_id_fixes:
-            total_items = self.sudo().search([('order_id_fix', '=', order_id_fix)])
-            none_production_id_items = total_items.filtered(lambda item: not item.production_id)
-            selected_items = items.filtered(lambda item: item.order_id_fix == order_id_fix)
-            has_production_id_items = total_items.filtered(lambda item: item.production_id).mapped('production_id')
-            if has_production_id_items:
-                max_index = max([int(rec.split('-')[1]) for rec in has_production_id_items])
-            else:
-                max_index = 0
-            for index, item in enumerate(none_production_id_items):
-                if item.id in selected_items.ids:
+            self.with_delay(description=f'Action Create Production ID For Order ID Fix = {order_id_fix}',
+                            channel="root.channel_sale_order_line").action_create_production_id_cron(order_id_fix,
+                                                                                                     items)
+
+    def action_create_production_id_cron(self, order_id_fix, items):
+        total_items = self.sudo().search([('order_id_fix', '=', order_id_fix)])
+        none_production_id_items = total_items.filtered(lambda item: not item.production_id)
+        selected_items = items.filtered(lambda item: item.order_id_fix == order_id_fix)
+        has_production_id_items = total_items.filtered(lambda item: item.production_id).mapped('production_id')
+        if has_production_id_items:
+            max_index = max([int(rec.split('-')[1]) for rec in has_production_id_items])
+        else:
+            max_index = 0
+        for index, item in enumerate(none_production_id_items):
+            if item.id in selected_items.ids:
+                if item.order_index > 0:
+                    production_id = f'{item.order_id_fix}-{item.order_index}'
+                else:
                     if len(total_items) > 1:
                         production_id = f'{item.order_id_fix}-{max_index + index + 1}'
                     else:
                         production_id = f'{item.order_id_fix}'
-                    item.production_id = production_id
+                item.production_id = production_id
 
     @api.model
     def action_update_order_fulfill(self):
@@ -300,12 +309,19 @@ class SaleOrderLine(models.Model):
         if any(item.sublevel_id.level != 'L2.1' for item in items):
             raise ValidationError('There is an Item with a different status than Awaiting Fulfillment ')
         for item in items:
-            item.write({
-                'sublevel_id': fulfilled_level.id,
-                'level_id': fulfilled_level.parent_id.id,
-                'fulfill_order_date': datetime.now(),
-                'fulfill_order_employee_id': current_employee_id.id
-            })
+            item.with_delay(
+                description=f'Action Update Fulfillment Order For Item With Production ID = {item.production_id}',
+                channel='root.channel_sale_order_line').action_cron_update_order_fulfill(
+                fulfilled_level, current_employee_id)
+
+    def action_cron_update_order_fulfill(self, fulfilled_level, current_employee_id):
+        self.write({
+            'sublevel_id': fulfilled_level.id,
+            'level_id': fulfilled_level.parent_id.id,
+            'fulfill_order_date': datetime.now(),
+            'fulfill_order_employee_id': current_employee_id.id
+        })
+
     @api.model
     def action_update_vendor_fulfill(self):
         item_ids = self._context.get('active_ids', [])
@@ -320,6 +336,29 @@ class SaleOrderLine(models.Model):
             'view_mode': 'form',
             "target": "new",
         }
+
+    def action_cron_action_update_fulfill_vendor(self, update_type, employee_id, fulfilled_vendor_level):
+        item = self
+        item_fields_mapping = {
+            'production_vendor_id': 'product_vendor_id',
+            'packaging_vendor_id': 'packaging_vendor_id',
+            'shipping_vendor_id': 'shipping_vendor_id',
+        }
+        if update_type == 'default':
+            product_type_fulfill_data = self.env['sale.order.product.type.fulfill'].sudo().search(
+                [('product_type_id', '=', item.product_id.product_tmpl_id.id)], limit=1)
+            if product_type_fulfill_data:
+                for field in item_fields_mapping:
+                    item[field] = product_type_fulfill_data[item_fields_mapping[field]].id
+        else:
+            for field in item_fields_mapping:
+                item[field] = self[field].id
+
+        item.write({
+            'fulfill_vendor_employee_id': employee_id,
+            'fulfill_vendor_date': datetime.now(),
+            'sublevel_id': fulfilled_vendor_level.id,
+        })
 
     @api.model
     def action_creating_shipment_for_item_model(self):
@@ -384,7 +423,12 @@ class SaleOrderLine(models.Model):
         if not awaiting_design_sub_level:
             raise ValidationError('There is no state with level Awaiting Design')
         for item in items:
-            item.write({
+            item.with_delay(
+                description=f'Action Update Awaiting Design Level For Item With Production ID = {item.production_id}',
+                channel='root.channel_sale_order_line').action_cron_set_awaiting_design_level(awaiting_design_sub_level)
+
+    def action_cron_set_awaiting_design_level(self, awaiting_design_sub_level):
+        self.write({
                 'sublevel_id': awaiting_design_sub_level.id,
                 'level_id': awaiting_design_sub_level.parent_id.id,
             })
@@ -435,6 +479,7 @@ class SaleOrderLine(models.Model):
             'view_mode': 'form',
             "target": "new",
         }
+
     @api.model
     def action_update_item_design_info(self):
         item_ids = self._context.get('active_ids', [])
@@ -481,7 +526,7 @@ class SaleOrderLine(models.Model):
                 total_product_types = list(set(order_total_items.mapped('product_type')))
                 product_str = f'{rec.address_sheft_id.shelf_code}'
                 for product_type in total_product_types:
-                    product_type_items =  order_total_items.filtered(lambda item: item.product_type == product_type)
+                    product_type_items = order_total_items.filtered(lambda item: item.product_type == product_type)
                     product_format = f'_{len(product_type_items)}{product_type}'
                     product_str += product_format
                 data.append({
@@ -492,11 +537,11 @@ class SaleOrderLine(models.Model):
                     'shelf_code': rec.address_sheft_id.shelf_code,
                     'product_str': product_str,
                     'size': [attribute.product_attribute_value_id.name for attribute in
-                                                             rec.product_id.product_template_attribute_value_ids if
-                                                             attribute.attribute_id.name in ['Size']],
+                             rec.product_id.product_template_attribute_value_ids if
+                             attribute.attribute_id.name in ['Size']],
                     'color': [attribute.product_attribute_value_id.name for attribute in
-                                                             rec.product_id.product_template_attribute_value_ids if
-                                                             attribute.attribute_id.name in ['Color']],
+                              rec.product_id.product_template_attribute_value_ids if
+                              attribute.attribute_id.name in ['Color']],
 
                 })
             item_data = {

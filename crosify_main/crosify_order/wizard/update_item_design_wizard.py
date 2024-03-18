@@ -36,20 +36,6 @@ class UpdateItemDesignWizard(models.TransientModel):
             "target": "current",
         }
 
-    def action_update_design_file(self):
-        current_employee = self.env.user.employee_id
-        designed_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L3.2')], limit=1)
-        if not designed_level:
-            raise ValidationError('There is no state with level Designed')
-        for rec in self.sale_order_line_ids:
-            design_file_url = rec.design_file_url
-            rec.write({
-                'design_file_url': design_file_url,
-                'design_date': fields.Datetime.now(),
-                'designer_id': current_employee.id,
-                'sublevel_id': designed_level.id,
-            })
-
     def get_import_templates(self):
         return {
             'type': 'ir.actions.act_url',
