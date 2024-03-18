@@ -414,7 +414,8 @@ class SaleOrderController(Controller):
                     variant, 
                     create_date,
                     is_combo,
-                    production_line_id
+                    production_line_id,
+                    order_index
                     ) 
                     values
                     """
@@ -661,7 +662,8 @@ class SaleOrderController(Controller):
                                                     """
 
                         create_order_line_sql += f""" 
-                        {production_line_id.id if production_line_id else 'null'}
+                        {production_line_id.id if production_line_id else 'null'},
+                        {line.get('OrderIndex') if line.get('OrderIndex') is not None else 0}
                         )
                         """
 
@@ -777,24 +779,6 @@ class SaleOrderController(Controller):
                                           payment_at = null
                                         """
 
-                # if sale_order.partner_id.phone != data.get('ShippingPhonenumber'):
-                #     partner_sql = f"""
-                #                 insert into res_partner(name, complete_name,street,street2,city,state_id,zip,country_id,phone,mobile,email)
-                #                 values (
-                #                 '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}',
-                #                 '{data.get('ShippingFirstname', '')} {data.get('ShippingLastname', '')}',
-                #                 '{data.get('ShippingAddress', '')}',
-                #                 '{data.get('ShippingApartment', '')}',
-                #                 '{data.get('ShippingCity', '')}',
-                #                 {state_id.id},
-                #                 '{data.get('ShippingZipcode', '')}',
-                #                 {country_id.id},
-                #                 '{data.get('ShippingPhonenumber', '')}',
-                #                 '{data.get('ShippingPhonenumber', '')}',
-                #                 '{data.get('ContactEmail', '')}'
-                #                 )
-                #                 returning id
-                #                 """
 
                 partner_sql = f"""
                     update res_partner 
@@ -822,6 +806,12 @@ class SaleOrderController(Controller):
                 request.env.cr.execute(update_order_sql)
 
                 order_lines = data.get('Details', [])
+
+                current_items = sale_order.order_line
+                details_ids_param = [detail.get('Detailid') for detail in order_lines if detail.get('Detailid') is not None]
+
+
+
                 for line in order_lines:
                     sub_level = request.env['sale.order.line.level'].sudo().search(
                         [('level', '=', line.get('LevelCode', '0'))], limit=1)
@@ -850,6 +840,7 @@ class SaleOrderController(Controller):
                     tips = {round(line.get('Tip', 0) / quantity, 2)},
                     price_total = {round(line.get('TotalAmount', 0) / quantity, 2)},
                     cost_amount = {line.get('CostAmount') if line.get('CostAmount', 0) is not None else 0},
+                    order_index = {line.get('OrderIndex') if line.get('OrderIndex') is not None else 0},
                     """
                     if line.get('Status') is not None:
                         update_order_line_sql += f"""

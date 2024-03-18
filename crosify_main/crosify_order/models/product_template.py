@@ -9,7 +9,7 @@ class ProductTemplate(models.Model):
     _description = 'Product Type'
 
     product_type = fields.Char(string="Product Type", compute="compute_product_type", store=True, index=True)
-    design_number = fields.Char(string='Design Number', require=True, trim=True)
+    design_number = fields.Char(string='Design Number', required=True, trim=True)
     detailed_type = fields.Selection(string="Detailed Type")
 
     # def _create_variant_ids(self):
