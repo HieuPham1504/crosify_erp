@@ -6,7 +6,9 @@ from odoo.exceptions import UserError, ValidationError
 
 class PackOnShelfWizard(models.TransientModel):
     _name = 'pack.on.shelf.wizard'
+    _rec_name = 'name'
 
+    name = fields.Char(string='Name', default='Pack On Shelf')
     line_ids = fields.One2many('pack.on.shelf.line.wizard', 'pack_on_shelf_wizard_id', string='Lines')
 
     def action_checking_item_shelf(self):

@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <record id="sale_order_sync_search_view" model="ir.ui.view">
+            <field name="name">sale_order_sync_search_view</field>
+            <field name="model">sale.order.sync</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="sale_order_id" string="Order" filter_domain="[('sale_order_id.name','ilike',self)]"/>
+
+                    <separator/>
+                    <filter name="create_request" string="Create Requests" domain="[('type', '=', 'create')]"/>
+                    <separator/>
+
+                    <separator/>
+                    <filter name="update_request" string="Update Requests" domain="[('type', '=', 'update')]"/>
+                    <separator/>
+
+                    <separator/>
+                    <filter name="pass_request" string="Pass Requests" domain="[('status', '=', 'pass')]"/>
+                    <separator/>
+
+                    <separator/>
+                    <filter name="fail_request" string="Fail Requests" domain="[('status', '=', 'fail')]"/>
+                    <separator/>
+
+                </search>
+            </field>
+        </record>
+
         <record id="sale_order_sync_form" model="ir.ui.view">
             <field name="name">sale_order_sync_form</field>
             <field name="model">sale.order.sync</field>

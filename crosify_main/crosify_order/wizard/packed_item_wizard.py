@@ -8,7 +8,7 @@ class PackedItemWizard(models.TransientModel):
     _name = 'packed.item.wizard'
     _rec_name = 'name'
 
-    name = fields.Char(string='Packed Item')
+    name = fields.Char(string='Name', default='Packed Item')
     item_ids = fields.One2many('packed.item.line.wizard', 'packed_item_wizard_id', 'Items')
 
     def action_pakced_item(self):
