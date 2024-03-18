@@ -6,12 +6,19 @@ from odoo.exceptions import UserError, ValidationError
 
 class QCCheckItemWizard(models.TransientModel):
     _name = 'qc.check.item.wizard'
+    _rec_name = 'name'
 
     qc_pass_line_ids = fields.One2many('qc.check.item.wizard.line', 'check_wizard_id')
     type = fields.Selection([
         ('passed', 'Passed'),
         ('failed', 'Failed'),
     ], string='type')
+    name = fields.Char(string='Name', compute='compute_name')
+
+    @api.depends('type')
+    def compute_name(self):
+        for rec in self:
+            rec.name = 'QC Passed' if rec.type == 'passed' else 'QC Failed'
 
     def action_update_qc_item(self):
         qc_pass_line_ids = self.qc_pass_line_ids
@@ -77,6 +84,7 @@ class QCCheckItemWizardLine(models.TransientModel):
     sublevel_id = fields.Many2one('sale.order.line.level', string='Level', related='sale_order_line_id.sublevel_id', store=True)
     error_type_id = fields.Many2one('fulfill.error', string='Error Type')
     note = fields.Text(string='Note')
+
 
     @api.onchange('production_id')
     def onchange_production_id(self):
