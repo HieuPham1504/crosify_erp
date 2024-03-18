@@ -531,13 +531,13 @@ class SaleOrderLine(models.Model):
                     order_id = item.order_id
                     product_type = item.product_type
 
-                    # value_current_shelf = self.handle_data_shelf(data_shelf, order_id, product_type)
-                    # if value_current_shelf:
-                    #     fulfill_shelf_id = value_current_shelf
-                    # else:
-                    key_shelf = str(order_id) + str(product_type)
-                    fulfill_shelf_id = item.search_fulfill_shelf(item.product_type)
-                    data_shelf[key_shelf] = fulfill_shelf_id
+                    value_current_shelf = self.handle_data_shelf(data_shelf, order_id, product_type)
+                    if value_current_shelf:
+                        fulfill_shelf_id = value_current_shelf
+                    else:
+                        key_shelf = str(order_id) + str(product_type)
+                        fulfill_shelf_id = item.search_fulfill_shelf(item.product_type)
+                        data_shelf[key_shelf] = fulfill_shelf_id
 
                     if fulfill_shelf_id:
                         item.write({
@@ -561,12 +561,26 @@ class SaleOrderLine(models.Model):
             [('product_type', '=', product_type)], limit=1)
         if product_type_shelf_type and product_type_shelf_type.shelf_type_id:
             shelf_type_id = product_type_shelf_type.shelf_type_id.id
-            fulfill_shelf_id = self.env['fulfill.shelf'].sudo().search([
-                ('shelf_type', '=', shelf_type_id), ('available', '=', True)], limit=1)
+            fulfill_shelf_ids = self.env['fulfill.shelf'].sudo().search([
+                ('shelf_type', '=', shelf_type_id), ('available', '=', True)])
+            fulfill_shelf_id = self.get_min_temp_shelf_fulfill_shelf(fulfill_shelf_ids)
+
             if fulfill_shelf_id:
                 return fulfill_shelf_id.id
             return False
         return False
+
+    def get_min_temp_shelf_fulfill_shelf(self, fulfill_shelf_ids):
+        if fulfill_shelf_ids:
+            fulfill_shelf_id = fulfill_shelf_ids[0]
+        else:
+            return False
+        for line in fulfill_shelf_ids:
+            if fulfill_shelf_id.temp_shelf > line.temp_shelf:
+                fulfill_shelf_id = line
+        return fulfill_shelf_id
+
+
 
     def handle_data_shelf(self, data_shelf, order_id, product_type):
 
