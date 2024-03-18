@@ -183,8 +183,16 @@ class SaleOrderController(Controller):
 
                 seller_id = request.env['res.partner'].sudo().search(
                     [('res_partner_code', '=', data.get('SellerCode'))], limit=1)
-                shipping_line_id = request.env['order.shipping.line'].sudo().search(
-                    [('code', '=', data.get('ShippingLine'))], limit=1)
+                if data.get('ShippingLine') is None:
+                    shipping_line_id = request.env['order.shipping.line']
+                else:
+                    shipping_line_id = request.env['order.shipping.line'].sudo().search(
+                        [('code', '=', data.get('ShippingLine'))], limit=1)
+                    if not shipping_line_id:
+                        shipping_line_id = request.env['order.shipping.line'].sudo().create({
+                            'code': data.get('ShippingLine'),
+                            'name': data.get('ShippingLine'),
+                        })
 
                 create_order_sql = f"""
                     with currency as (
@@ -450,8 +458,16 @@ class SaleOrderController(Controller):
             price_total = round(line.get('TotalAmount', 0) / quantity, 2)
             tip = round(line.get('Tip', 0) / quantity, 2)
 
-            production_line_id = request.env['item.production.line'].sudo().search(
-                [('code', '=', line.get('ProductionLine'))], limit=1)
+            if line.get('ProductionLine') is None:
+                production_line_id = request.env['item.production.line']
+            else:
+                production_line_id = request.env['item.production.line'].sudo().search(
+                    [('code', '=', line.get('ProductionLine'))], limit=1)
+                if not production_line_id:
+                    production_line_id = request.env['item.production.line'].sudo().create({
+                        'code': line.get('ProductionLine'),
+                        'name': line.get('ProductionLine'),
+                    })
 
             PaymentStatus = data.get('PaymentStatus')
             if PaymentStatus == 1:
@@ -737,8 +753,17 @@ class SaleOrderController(Controller):
                     [('work_email', '=', data.get('CreatedBy'))], limit=1)
                 seller_id = request.env['res.partner'].sudo().search(
                     [('res_partner_code', '=', data.get('SellerCode'))], limit=1)
-                shipping_line_id = request.env['order.shipping.line'].sudo().search(
-                    [('code', '=', data.get('ShippingLine'))], limit=1)
+
+                if data.get('ShippingLine') is None:
+                    shipping_line_id = request.env['order.shipping.line']
+                else:
+                    shipping_line_id = request.env['order.shipping.line'].sudo().search(
+                        [('code', '=', data.get('ShippingLine'))], limit=1)
+                    if not shipping_line_id:
+                        shipping_line_id = request.env['order.shipping.line'].sudo().create({
+                            'code': data.get('ShippingLine'),
+                            'name': data.get('ShippingLine'),
+                        })
 
                 update_order_sql = f"""
                 update sale_order 
@@ -842,6 +867,18 @@ class SaleOrderController(Controller):
                         [('work_email', '=', line.get('ApproveCancelBy', ''))], limit=1)
                     quantity = line.get('Quantity', 0)
                     detail_id = line.get('Detailid') if line.get('Detailid') is not None else 0
+
+                    if line.get('ProductionLine') is None:
+                        production_line_id = request.env['item.production.line']
+                    else:
+                        production_line_id = request.env['item.production.line'].sudo().search(
+                            [('code', '=', line.get('ProductionLine'))], limit=1)
+                        if not production_line_id:
+                            production_line_id = request.env['item.production.line'].sudo().create({
+                                'code': line.get('ProductionLine'),
+                                'name': line.get('ProductionLine'),
+                            })
+
                     update_order_line_sql = f"""
                     update sale_order_line 
                     set 
@@ -858,6 +895,7 @@ class SaleOrderController(Controller):
                     tips = {round(line.get('Tip', 0) / quantity, 2)},
                     price_total = {round(line.get('TotalAmount', 0) / quantity, 2)},
                     cost_amount = {line.get('CostAmount') if line.get('CostAmount', 0) is not None else 0},
+                    production_line_id = {production_line_id.id if production_line_id else 'null'},
                     order_index = {line.get('OrderIndex') if line.get('OrderIndex') is not None else 0},
                     """
                     if line.get('Status') is not None:
