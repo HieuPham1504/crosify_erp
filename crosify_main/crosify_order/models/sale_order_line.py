@@ -579,8 +579,11 @@ class SaleOrderLine(models.Model):
 
     @api.model
     def action_set_address_shelf(self):
+        item_ids = self._context.get('active_ids', [])
+        self.with_delay(channel='root.sale').queue_action_set_address_shelf(item_ids)
+
+    def queue_action_set_address_shelf(self, item_ids):
         try:
-            item_ids = self._context.get('active_ids', [])
             items = self.sudo().search([('id', 'in', item_ids)], order='product_type,order_id').filtered(lambda item: not item.address_sheft_id)
             data_shelf = {}
             for item in items:
