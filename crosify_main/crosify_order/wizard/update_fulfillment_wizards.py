@@ -27,4 +27,4 @@ class UpdateFulFillmentWizard(models.TransientModel):
         for item in items:
             item.with_delay(
                 description=f'Action Update Fulfillment Vendor For Item With Production ID = {item.production_id}',
-                channel='root.channel_sale_order_line').action_cron_action_update_fulfill_vendor(update_type, employee_id, fulfilled_vendor_level)
+                channel='root.channel_sale_order_line').action_cron_action_update_fulfill_vendor(self, employee_id, fulfilled_vendor_level)
