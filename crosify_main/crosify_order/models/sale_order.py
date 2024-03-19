@@ -173,7 +173,12 @@ class SaleOrder(models.Model):
 
         items = Items
         total_item = self.order_line
-        total_weight = sum(total_item.product_id.mapped('weight'))
+        weights = [item.product_id.weight for item in total_item]
+        for weight in weights:
+            if weight == 0.0:
+                index = weights.index(weight)
+                weights[index] = 50
+        total_weight = sum(weights)
 
         item_hs_codes = total_item.mapped('product_id').mapped('product_tmpl_id').mapped('categ_id').mapped('hs_code')
         for hs_code in item_hs_codes:
@@ -182,9 +187,15 @@ class SaleOrder(models.Model):
 
         weight_param = round(60 * total_weight / 100000, 3)
         product_ids = items.mapped('product_id')
-        length_param = min(product_ids.mapped('length'))
-        height_param = min(product_ids.mapped('height'))
-        width_param = min(product_ids.mapped('width'))
+        length_param_min = min(product_ids.mapped('length'))
+        length_param = length_param_min if length_param_min > 10 else 10
+
+        height_param_min = min(product_ids.mapped('height'))
+        height_param = height_param_min if height_param_min > 1 else 1
+
+
+        width_param_min = min(product_ids.mapped('width'))
+        width_param = width_param_min if width_param_min > 10 else 10
 
         for item in items:
             hs_code = item.product_id.product_tmpl_id.categ_id.hs_code
