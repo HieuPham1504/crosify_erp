@@ -287,6 +287,18 @@ class SaleOrderLine(models.Model):
             self.with_delay(description=f'Action Create Production ID For Order ID Fix = {order_id_fix}',
                             channel="root.channel_sale_order_line").action_create_production_id_cron(order_id_fix,
                                                                                                      items)
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _("Creating Production ID"),
+
+                'type': 'warning',
+                'message': _("System is creating Production ID"),
+
+                'sticky': True,
+            },
+        }
 
     def action_create_production_id_cron(self, order_id_fix, items):
         total_items = self.sudo().search([('order_id_fix', '=', order_id_fix)])
@@ -436,18 +448,7 @@ class SaleOrderLine(models.Model):
             item.with_delay(
                 description=f'Action Update Awaiting Design Level For Item With Production ID = {item.production_id}',
                 channel='root.channel_sale_order_line').action_cron_set_awaiting_design_level(awaiting_design_sub_level)
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': _("Creating Production ID"),
 
-                'type': 'warning',
-                'message': _("System is creating Production ID"),
-
-                'sticky': True,
-            },
-        }
 
     def action_cron_set_awaiting_design_level(self, awaiting_design_sub_level):
         self.write({
