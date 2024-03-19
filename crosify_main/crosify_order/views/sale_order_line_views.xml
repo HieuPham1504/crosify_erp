@@ -30,6 +30,17 @@
 
                 <xpath expr="//filter[@name='to_invoice']" position="before">
                     <separator/>
+                    <filter string="Items: Today"
+                            domain="[('crosify_created_date', '&gt;=', datetime.datetime.combine(datetime.date.today(), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S')),
+                        ('crosify_created_date', '&lt;', datetime.datetime.combine(datetime.date.today()+datetime.timedelta(days=1), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S'))]"
+                            name="my_sale_orders_filter_today"/>
+                    <separator/>
+
+                    <filter string="Items: Yesterday" name="my_sale_orders_filter_yesterday"
+                            domain="[('crosify_created_date', '&lt;',  datetime.datetime.combine(datetime.date.today(), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S') ),
+                        ('crosify_created_date', '&gt;=',  datetime.datetime.combine(datetime.date.today()-datetime.timedelta(days=1), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S') )]"/>
+                    <separator/>
+                    <separator/>
                     <filter string="Paid Order Items" name="paid_order_items"
                             domain="[('sublevel_id.level', '=', 'L1.1')]"
                             help="Paid Order Items"/>
@@ -182,7 +193,8 @@
                                             <field name="design_date"/>
                                         </group>
                                         <group name="production" string="PRODUCTION">
-                                            <field name="production_line_id" options='{"no_open": True, "no_create": True}'/>
+                                            <field name="production_line_id"
+                                                   options='{"no_open": True, "no_create": True}'/>
                                             <field name="production_estimate_time"/>
                                             <field name="production_start_date"/>
                                             <field name="production_done_date"/>
@@ -304,19 +316,19 @@
             <field name="code">action = model.action_set_awaiting_design_level()</field>
         </record>
 
-<!--        <record id="action_update_item_design_info" model="ir.actions.server">-->
-<!--            <field name="name">Design</field>-->
-<!--            <field name="model_id" ref="crosify_order.model_sale_order_line"/>-->
-<!--            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>-->
-<!--            <field name="binding_view_types">form,list</field>-->
-<!--            <field name="state">code</field>-->
-<!--            <field name="groups_id"-->
-<!--                   eval="[(6, 0, [ref('crosify_order.group_designer_team'), ref('base.group_system')])]"/>-->
-<!--            <field name="code">action = model.action_update_item_design_info()</field>-->
-<!--        </record>-->
+        <!--        <record id="action_update_item_design_info" model="ir.actions.server">-->
+        <!--            <field name="name">Design</field>-->
+        <!--            <field name="model_id" ref="crosify_order.model_sale_order_line"/>-->
+        <!--            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>-->
+        <!--            <field name="binding_view_types">form,list</field>-->
+        <!--            <field name="state">code</field>-->
+        <!--            <field name="groups_id"-->
+        <!--                   eval="[(6, 0, [ref('crosify_order.group_designer_team'), ref('base.group_system')])]"/>-->
+        <!--            <field name="code">action = model.action_update_item_design_info()</field>-->
+        <!--        </record>-->
 
         <record id="action_update_fulfill" model="ir.actions.server">
-            <field name="name">Update Vendor Fulfillment</field>
+            <field name="name">Update Fulfillment Vendor</field>
             <field name="model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
             <field name="binding_view_types">form,list</field>
