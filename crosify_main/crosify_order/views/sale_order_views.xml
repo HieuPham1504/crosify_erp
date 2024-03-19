@@ -23,7 +23,7 @@
                 <field name="myadmin_order_id"/>
                 <field name="order_id_fix"/>
                 <field name="crosify_create_date"/>
-                <field name="partner_id"/>
+                <field name="tkn"/>
                 <field name="amount_total"/>
                 <field name="payment_method_id"/>
                 <field name="payment_status"/>
