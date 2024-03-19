@@ -63,6 +63,8 @@ class PackedItemWizard(models.TransientModel):
                     raise ValidationError('There is no state with level Pending')
                 item.sublevel_id = pending_level.id
 
+        self.item_ids.unlink()
+
 
 class PackedItemLineWizard(models.TransientModel):
     _name = 'packed.item.line.wizard'
