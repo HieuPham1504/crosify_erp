@@ -43,6 +43,7 @@
                             <field name="description"/>
                             <field name="create_date"/>
                             <field name="response"/>
+                            <field name="remote_ip_address"/>
                         </group>
                     </sheet>
                 </form>
@@ -59,6 +60,7 @@
                     <field name="response"/>
                     <field name="status"/>
                     <field name="type"/>
+                    <field name="remote_ip_address"/>
                 </tree>
             </field>
         </record>

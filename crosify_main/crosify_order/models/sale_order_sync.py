@@ -16,4 +16,5 @@ class SaleOrderSync(models.Model):
     type = fields.Selection([
         ('create', 'Create'),
         ('update', 'Update')], string='Type')
+    remote_ip_address = fields.Char(string='Remote IP Address')
 
