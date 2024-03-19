@@ -122,6 +122,7 @@ class SaleOrderController(Controller):
         now = datetime.now()
         now_plus_7_str = now.strftime("%Y-%m-%dT%H:%M:%S")
         data = request.get_json_data()
+        remote_ip = request.httprequest.environ['REMOTE_ADDR']
         # verified = self.verify_webhook(data, request.httprequest.headers['X-Signature-SHA256'])
         verified = True
         if not verified:
@@ -136,9 +137,9 @@ class SaleOrderController(Controller):
                             'message': 'Order Name has already exists.',
                         }
                         insert_log_sql = f"""
-                                        INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,response, type,description_json) 
+                                        INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,response, type,description_json,remote_ip_address) 
                                         VALUES (
-                                        null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'Order Name has already exists.', 'create', '{json.dumps(data)}'::json
+                                        null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'Order Name has already exists.', 'create', '{json.dumps(data)}'::json, '{remote_ip}'
                                         ) 
                                         """
                         request.env.cr.execute(insert_log_sql)
@@ -361,9 +362,9 @@ class SaleOrderController(Controller):
                 return response
             except Exception as e:
                 insert_log_sql = f"""
-                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type,description_json) 
+                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type,description_json,remote_ip_address) 
                 VALUES (
-                null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'create', '{json.dumps(data)}'::json
+                null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'create', '{json.dumps(data)}'::json, '{remote_ip}'
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
@@ -708,10 +709,11 @@ class SaleOrderController(Controller):
                 """
 
             request.env.cr.execute(create_order_line_sql)
+        remote_ip = request.httprequest.environ['REMOTE_ADDR']
         insert_log_sql = f"""
-                        INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type,description_json) 
+                        INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type,description_json,remote_ip_address) 
                         VALUES (
-                        {sale_order_id}, '{json.dumps(data)}', '{now_plus_7_str}', 'pass', 'create', '{json.dumps(data)}'::json
+                        {sale_order_id}, '{json.dumps(data)}', '{now_plus_7_str}', 'pass', 'create', '{json.dumps(data)}'::json, '{remote_ip}'
                         ) 
                         """
         request.env.cr.execute(insert_log_sql)
@@ -721,6 +723,7 @@ class SaleOrderController(Controller):
         now = datetime.now()
         now_plus_7_str = now.strftime("%Y-%m-%dT%H:%M:%S")
         data = request.get_json_data()
+        remote_ip = request.httprequest.environ['REMOTE_ADDR']
         # verified = self.verify_webhook(data, request.httprequest.headers['X-Crosify-Hmac-SHA256'])
         verified = True
         if not verified:
@@ -736,9 +739,9 @@ class SaleOrderController(Controller):
                         'message': 'Order not found',
                     }
                     insert_log_sql = f"""
-                                                            INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,response,type,description_json) 
+                                                            INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,response,type,description_json,remote_ip_address) 
                                                             VALUES (
-                                                            null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'Order not found', 'update', '{json.dumps(data)}'::json
+                                                            null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'Order not found', 'update', '{json.dumps(data)}'::json, '{remote_ip}'
                                                             ) 
                                                             """
                     request.env.cr.execute(insert_log_sql)
@@ -977,9 +980,9 @@ class SaleOrderController(Controller):
                     request.env.cr.execute(update_order_line_sql)
 
                 insert_log_sql = f"""
-                                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json) 
+                                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json,remote_ip_address) 
                                 VALUES (
-                                {sale_order.id}, '{json.dumps(data)}', '{now_plus_7_str}', 'pass', 'update', '{json.dumps(data)}'::json
+                                {sale_order.id}, '{json.dumps(data)}', '{now_plus_7_str}', 'pass', 'update', '{json.dumps(data)}'::json,'{remote_ip}'
                                 ) 
                                 """
                 request.env.cr.execute(insert_log_sql)
@@ -994,9 +997,9 @@ class SaleOrderController(Controller):
                 return response
             except Exception as e:
                 insert_log_sql = f"""
-                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json) 
+                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json,remote_ip_address) 
                 VALUES (
-                null, '{json.dumps(data)}', '{now_plus_7_str}', ' ', 'update', '{json.dumps(data)}'::json
+                null, '{json.dumps(data)}', '{now_plus_7_str}', ' ', 'update', '{json.dumps(data)}'::json, '{remote_ip}'
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
