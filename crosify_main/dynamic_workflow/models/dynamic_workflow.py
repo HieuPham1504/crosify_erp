@@ -28,7 +28,7 @@ class DynamicWorkflow(models.Model):
     is_favorite = fields.Boolean('Favorite')
     department_view_workflow_ids = fields.Many2many('hr.department', 'department_view_workflow_rel',
                                                     string='Nhóm xem quy trình', tracking=True)
-    description = fields.Html('Mô tả quy trình', tracking=True)
+    description = fields.Html('Mô tả quy trình')
     supervisor = fields.Many2many('res.users', 'dynamic_workflow_supervisor_rel', string='Người giám sát',
                                   help='Thành viên có quyền xem & review tất cả nhiệm vụ nhưng không có quyền chỉnh sửa', tracking=True)
     type_view_task = fields.Selection(string="Hiển thị nhiệm vụ", selection=[('all', 'Tất cả nhiệm vụ'),
