@@ -536,6 +536,7 @@ class SaleOrderLine(models.Model):
             data = []
             for rec in self:
                 order_total_items = rec.order_id.order_line
+                order_total_items = self.sudo().search([('order_id_fix', '=', rec.order_id_fix)])
                 total_product_types = list(set(order_total_items.mapped('product_type')))
                 product_str = f'{rec.address_sheft_id.shelf_code}'
                 for product_type in total_product_types:
@@ -544,7 +545,7 @@ class SaleOrderLine(models.Model):
                     product_str += product_format
                 data.append({
                     'production_id': rec.production_id,
-                    'order_id_name': rec.order_id.name,
+                    'order_id_name': rec.order_id_fix,
                     'product_type': rec.product_type,
                     'personalize': rec.personalize,
                     'shelf_code': rec.address_sheft_id.shelf_code,
