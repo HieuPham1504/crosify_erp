@@ -266,17 +266,19 @@ class SaleOrder(models.Model):
         if response.status_code == 200:
             total_data = json.loads(response.text)
             if total_data.get('rs'):
+                total_orders = self.sudo().search([('order_id_fix', '=', self.order_id_fix)])
                 data = total_data.get('labels')[0]
                 current_employee = self.env.user.employee_id
                 now = fields.Datetime.now()
-                self.write({
-                    'label_file_url': data.get('linkPdf'),
-                    'tkn': data.get('trackingNumber'),
-                    'is_upload_tkn': True,
-                    'update_tkn_date': now,
-                    'update_tkn_employee_id': current_employee.id,
-                    'label_status': 'success',
-                })
+                for order in total_orders:
+                    order.write({
+                        'label_file_url': data.get('linkPdf'),
+                        'tkn': data.get('trackingNumber'),
+                        'is_upload_tkn': True,
+                        'update_tkn_date': now,
+                        'update_tkn_employee_id': current_employee.id,
+                        'label_status': 'success',
+                    })
             else:
                 self.write({
                     'tracking_note': total_data.get('msg'),
