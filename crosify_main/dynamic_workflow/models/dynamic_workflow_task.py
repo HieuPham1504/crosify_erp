@@ -70,7 +70,7 @@ class WorkflowTask(models.Model):
     stages_show_fields = fields.Many2many('dynamic.workflow.stage', compute='_compute_stages_show_fields')
     work_by_domain = fields.Many2many('res.users', related='stage_id.work_by_ids')
     work_by_id = fields.Many2one('res.users', 'Người thực hiện', tracking=True)
-    description = fields.Html('Mô tả nhiệm vụ', tracking=True)
+    description = fields.Html('Mô tả nhiệm vụ')
     follower_ids = fields.Many2many('res.users', 'follower_workflow_task_rel', string='Người theo dõi', tracking=True)
     task_process = fields.One2many('workflow.task.process', 'task_id', string='Tiến trình', tracking=True)
     job_ids = fields.One2many('workflow.task.job', 'task_id', string='Công việc', tracking=True)

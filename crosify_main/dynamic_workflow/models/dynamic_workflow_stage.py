@@ -140,7 +140,7 @@ class WorkflowStage(models.Model):
     fold = fields.Boolean('Thu gọn')
     sequence = fields.Integer('Thứ tự')
     dynamic_field_ids = fields.One2many('dynamic.workflow.fields', 'stage_id', 'Trường tùy chỉnh', tracking=True)
-    description = fields.Html(string="Mô tả", tracking=True)
+    description = fields.Html(string="Mô tả")
     manager_ids = fields.Many2many('res.users', string='Người quản trị giai đoạn', tracking=True)
     follower_ids = fields.Many2many('res.users', 'follower_workflow_stage_rel', string='Người theo dõi giai đoạn',
                                     tracking=True)
