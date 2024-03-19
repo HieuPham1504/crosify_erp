@@ -349,13 +349,15 @@ class SaleOrderLine(models.Model):
             "target": "new",
         }
 
-    def action_cron_action_update_fulfill_vendor(self, update_type, employee_id, fulfilled_vendor_level):
+    def action_cron_action_update_fulfill_vendor(self, wizard_id, employee_id, fulfilled_vendor_level):
         item = self
         item_fields_mapping = {
             'production_vendor_id': 'product_vendor_id',
             'packaging_vendor_id': 'packaging_vendor_id',
             'shipping_vendor_id': 'shipping_vendor_id',
         }
+        update_type = wizard_id.update_type
+
         if update_type == 'default':
             product_type_fulfill_data = self.env['sale.order.product.type.fulfill'].sudo().search(
                 [('product_type_id', '=', item.product_id.product_tmpl_id.id)], limit=1)
@@ -364,7 +366,7 @@ class SaleOrderLine(models.Model):
                     item[field] = product_type_fulfill_data[item_fields_mapping[field]].id
         else:
             for field in item_fields_mapping:
-                item[field] = self[field].id
+                item[field] = wizard_id[field].id
 
         item.write({
             'fulfill_vendor_employee_id': employee_id,
