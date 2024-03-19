@@ -11,6 +11,22 @@
                     ('order_id_fix', 'ilike', self)]
                 </attribute>
             </xpath>
+
+            <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                <separator/>
+                <filter string="Order Date" name="crosify_create_date" date="crosify_create_date"/>
+                <separator/>
+                <filter string="Orders: Today"
+                        domain="[('crosify_create_date', '&gt;=', datetime.datetime.combine(datetime.date.today(), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S')),
+                        ('crosify_create_date', '&lt;', datetime.datetime.combine(datetime.date.today()+datetime.timedelta(days=1), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S'))]"
+                        name="my_sale_orders_filter_today"/>
+                <separator/>
+
+                <filter string="Orders: Yesterday" name="my_sale_orders_filter_yesterday"
+                        domain="[('crosify_create_date', '&lt;',  datetime.datetime.combine(datetime.date.today(), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S') ),
+                        ('crosify_create_date', '&gt;=',  datetime.datetime.combine(datetime.date.today()-datetime.timedelta(days=1), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S') )]"/>
+                <separator/>
+            </xpath>
         </field>
     </record>
 
