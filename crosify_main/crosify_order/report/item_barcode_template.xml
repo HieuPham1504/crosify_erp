@@ -4,7 +4,8 @@
         <t t-call="web.basic_layout">
             <div class="page">
                 <t t-foreach="items_data" t-as="items">
-                    <div class="page-container row" style="width:100%;height:352px !important;margin-bottom:10px !important;position:relative">
+                    <div class="page-container row"
+                         style="width:100%;height:352px !important;margin-bottom:10px !important;position:relative">
                         <t t-foreach="items" t-as="item">
                             <div class="row border border-dark col-6 p-3"
                                  style="margin:0 !important;padding:4px !important width:50% !important;height:100% !important"
@@ -52,14 +53,19 @@
                                         </t>
                                     </div>
 
-                                    <div class="col overflow-hidden text-start" style="height:4rem;width:240px;margin-bottom;position:absolute;bottom:0px">
+                                    <div class="col overflow-hidden text-start"
+                                         style="height:4rem;width:240px;margin-bottom;position:absolute;bottom:0px">
                                         <img
                                                 style="padding: 0 !important;margin-left:-40px;object-fit: contain;width:100%;height:100%"
                                                 t-att-src="'/report/barcode/%s/%s' % ('Code128',item['production_id'])"
                                                 alt="Barcode"/>
-                                        <p style="font-size:14px;font-weight:bold">
-                                            <t t-esc="item['production_id']"/>
-                                        </p>
+
+                                        <div class="col overflow-hidden text-start">
+                                            <p style="font-size:14px;font-weight:bold">
+                                                <t t-esc="item['production_id']"/>
+                                            </p>
+                                        </div>
+
                                     </div>
 
                                 </div>
