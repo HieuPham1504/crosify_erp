@@ -4,90 +4,92 @@
         <t t-call="web.basic_layout">
             <t t-foreach="items_data" t-as="items">
                 <div class="page">
-                    <t t-foreach="items" t-as="item">
-                        <div class="row border border-dark" style="margin-bottom:10px;"
-                             id="barcode-container">
-                            <div class="col-6 p-3">
-                                <div class="col overflow-hidden text-start order-name">
-                                    <p>
-                                        <t t-out="item['order_id_name']"/>
-                                    </p>
-                                </div>
-
-                                <div class="col overflow-hidden text-start product-type">
-                                    <p>
-                                        <t t-out="item['product_type']"/>
-                                    </p>
-                                </div>
-
-                                <div class="col overflow-hidden text-start">
-                                    <t t-if="len(item['size']) > 0">
+                    <div class="page-container row" style="width:100%;height:100%">
+                        <t t-foreach="items" t-as="item">
+                            <div class="row border border-dark col-6 p-3" style="margin-bottom:10px;"
+                                 id="barcode-container">
+                                <div class="col-6 p-3">
+                                    <div class="col overflow-hidden text-start order-name">
                                         <p>
-                                            <t t-esc="item['size'][0]"/>
+                                            <t t-out="item['order_id_name']"/>
                                         </p>
-                                    </t>
-                                    <t t-else="">
-                                        <div class="col overflow-hidden text-start">
-                                            <p>
-                                            </p>
-                                        </div>
-                                        <br/>
-                                    </t>
-                                </div>
+                                    </div>
 
-                                <div class="col overflow-hidden text-start">
-                                    <t t-if="len(item['color']) > 0">
+                                    <div class="col overflow-hidden text-start product-type">
                                         <p>
-                                            <t t-esc="item['color'][0]"/>
+                                            <t t-out="item['product_type']"/>
                                         </p>
-                                    </t>
-                                    <t t-else="">
-                                        <div class="col overflow-hidden text-start">
+                                    </div>
+
+                                    <div class="col overflow-hidden text-start">
+                                        <t t-if="len(item['size']) > 0">
                                             <p>
+                                                <t t-esc="item['size'][0]"/>
                                             </p>
-                                        </div>
-                                        <br/>
-                                    </t>
-                                </div>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="col overflow-hidden text-start">
+                                                <p>
+                                                </p>
+                                            </div>
+                                            <br/>
+                                        </t>
+                                    </div>
 
-                                <div class="col overflow-hidden text-start">
-                                    <img
-                                            style="width:100%;height:100%;padding:0;margin-left:-80px !important;padding: 0 !important;object-fit: contain;"
-                                            t-att-src="'/report/barcode/%s/%s' % ('Code128',item['production_id'])"
-                                            alt="Barcode"/>
-                                </div>
-                                <div class="col overflow-hidden text-start">
-                                    <p style="font-size:20px">
-                                        <t t-esc="item['production_id']"/>
-                                    </p>
-                                </div>
+                                    <div class="col overflow-hidden text-start">
+                                        <t t-if="len(item['color']) > 0">
+                                            <p>
+                                                <t t-esc="item['color'][0]"/>
+                                            </p>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="col overflow-hidden text-start">
+                                                <p>
+                                                </p>
+                                            </div>
+                                            <br/>
+                                        </t>
+                                    </div>
 
-                            </div>
-                            <div class="col-6 p-3">
-
-                                <div class="col overflow-hidden text-start">
-                                    <t t-if="item['product_str']">
+                                    <div class="col overflow-hidden text-start">
+                                        <img
+                                                style="width:100%;height:100%;padding:0;margin-left:-80px !important;padding: 0 !important;object-fit: contain;"
+                                                t-att-src="'/report/barcode/%s/%s' % ('Code128',item['production_id'])"
+                                                alt="Barcode"/>
+                                    </div>
+                                    <div class="col overflow-hidden text-start">
                                         <p style="font-size:20px">
-                                            <t t-esc="item['product_str']"/>
+                                            <t t-esc="item['production_id']"/>
                                         </p>
-                                    </t>
-                                    <t t-else="">
-                                        <div class="col overflow-hidden text-start">
-                                            <p style="font-size:20px">
-                                            </p>
-                                        </div>
-                                        <br/>
-                                    </t>
-                                </div>
+                                    </div>
 
-                                <div class="col overflow-hidden text-start">
-                                    <p style="font-size:20px">
-                                        <t t-esc="item['personalize']"/>
-                                    </p>
+                                </div>
+                                <div class="col-6 p-3">
+
+                                    <div class="col overflow-hidden text-start">
+                                        <t t-if="item['product_str']">
+                                            <p style="font-size:20px">
+                                                <t t-esc="item['product_str']"/>
+                                            </p>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="col overflow-hidden text-start">
+                                                <p style="font-size:20px">
+                                                </p>
+                                            </div>
+                                            <br/>
+                                        </t>
+                                    </div>
+
+                                    <div class="col overflow-hidden text-start">
+                                        <p style="font-size:20px">
+                                            <t t-esc="item['personalize']"/>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </t>
+                        </t>
+                    </div>
                 </div>
             </t>
         </t>
