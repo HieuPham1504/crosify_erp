@@ -52,7 +52,7 @@
                                         </t>
                                     </div>
 
-                                    <div class="col overflow-hidden text-start" style="height:4rem;width:300px">
+                                    <div class="col overflow-hidden text-start" style="height:4rem;width:240px">
                                         <img
                                                 style="padding: 0 !important;margin-left:0px;object-fit: contain;width:100%;height:100%"
                                                 t-att-src="'/report/barcode/%s/%s' % ('Code128',item['production_id'])"
