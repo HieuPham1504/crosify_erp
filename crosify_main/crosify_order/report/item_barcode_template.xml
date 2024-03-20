@@ -52,14 +52,14 @@
                                         </t>
                                     </div>
 
-                                    <div class="col overflow-hidden text-start" style="height:4rem;width:200px">
+                                    <div class="col overflow-hidden text-start" style="height:4rem;width:300px">
                                         <img
                                                 style="padding: 0 !important;margin-left:-80px;object-fit: contain;width:100%;height:100%"
                                                 t-att-src="'/report/barcode/%s/%s' % ('Code128',item['production_id'])"
                                                 alt="Barcode"/>
                                     </div>
                                     <div class="col overflow-hidden text-start">
-                                        <p style="font-size:14px">
+                                        <p style="font-size:14px;font-weight:bold">
                                             <t t-esc="item['production_id']"/>
                                         </p>
                                     </div>
