@@ -9,21 +9,21 @@
                             <div class="row border border-dark col-6 p-3" style="margin:0 !important;"
                                  id="barcode-container">
                                 <div class="col-6 p-3" style="margin:0 !important">
-                                    <div class="col overflow-hidden text-start order-name">
-                                        <p style="font-size:20px">
+                                    <div class="overflow-hidden text-start order-name">
+                                        <p style="font-size:14px">
                                             <t t-out="item['order_id_name']"/>
                                         </p>
                                     </div>
 
-                                    <div class="col overflow-hidden text-start product-type">
-                                        <p style="font-size:20px">
+                                    <div class="overflow-hidden text-start product-type">
+                                        <p style="font-size:14px">
                                             <t t-out="item['product_type']"/>
                                         </p>
                                     </div>
 
                                     <div class="col overflow-hidden text-start">
                                         <t t-if="len(item['size']) > 0">
-                                            <p style="font-size:20px">
+                                            <p style="font-size:14px">
                                                 <t t-esc="item['size'][0]"/>
                                             </p>
                                         </t>
@@ -38,7 +38,7 @@
 
                                     <div class="col overflow-hidden text-start">
                                         <t t-if="len(item['color']) > 0">
-                                            <p style="font-size:20px">
+                                            <p style="font-size:14px">
                                                 <t t-esc="item['color'][0]"/>
                                             </p>
                                         </t>
@@ -51,14 +51,14 @@
                                         </t>
                                     </div>
 
-                                    <div class="col overflow-hidden text-start" style="height:4rem;width:300px">
+                                    <div class="col overflow-hidden text-start" style="height:4rem;width:200px">
                                         <img
                                                 style="padding: 0 !important;margin-left:-80px;object-fit: contain;width:100%;height:100%"
                                                 t-att-src="'/report/barcode/%s/%s' % ('Code128',item['production_id'])"
                                                 alt="Barcode"/>
                                     </div>
                                     <div class="col overflow-hidden text-start">
-                                        <p style="font-size:20px">
+                                        <p style="font-size:14px">
                                             <t t-esc="item['production_id']"/>
                                         </p>
                                     </div>
@@ -68,13 +68,13 @@
 
                                     <div class="col overflow-hidden text-start">
                                         <t t-if="item['product_str']">
-                                            <p style="font-size:20px">
+                                            <p style="font-size:14px">
                                                 <t t-esc="item['product_str']"/>
                                             </p>
                                         </t>
                                         <t t-else="">
                                             <div class="col overflow-hidden text-start">
-                                                <p style="font-size:20px">
+                                                <p style="font-size:14px">
                                                 </p>
                                             </div>
                                             <br/>
