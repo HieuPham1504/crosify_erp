@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template id="print_item_barcode_custom">
-        <t t-call="web.basic_layout">
-            <div class="page">
-                <t t-foreach="items_data" t-as="items">
+        <t t-foreach="items_data" t-as="items">
+            <t t-call="web.basic_layout">
+                <div class="page">
                     <div class="page-container row"
                          style="width:520px !important;height:365.6px !important;position:relative;padding:0 !important;margin:0 important">
                         <t t-foreach="items" t-as="item">
@@ -95,9 +95,10 @@
                             </div>
                         </t>
                     </div>
-                </t>
-            </div>
 
+                </div>
+
+            </t>
         </t>
     </template>
 </odoo>
