@@ -2,7 +2,7 @@
 <odoo>
     <template id="print_item_barcode_custom">
         <t t-call="web.basic_layout">
-            <div class="page">
+            <div class="page" style="width:378px;min-height:264px">
                 <t t-foreach="items_data" t-as="items">
                     <div class="page-container row" style="width:378px;min-height:264px;margin-bottom:10px !important">
                         <t t-foreach="items" t-as="item">
