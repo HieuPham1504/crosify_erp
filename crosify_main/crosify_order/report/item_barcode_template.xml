@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <template id="print_item_barcode_custom" pageSize="(378.0,264.0)">
+    <template id="print_item_barcode_custom">
         <t t-call="web.basic_layout">
             <div class="page">
                 <t t-foreach="items_data" t-as="items">
