@@ -8,7 +8,7 @@
                         <t t-foreach="items" t-as="item">
                             <div class="row border border-dark col-6 p-3" style="margin-bottom:10px;"
                                  id="barcode-container">
-                                <div class="col-6 p-3">
+                                <div class="col-6 p-3" style="margin:0 !important">
                                     <div class="col overflow-hidden text-start order-name">
                                         <p style="font-size:20px">
                                             <t t-out="item['order_id_name']"/>
