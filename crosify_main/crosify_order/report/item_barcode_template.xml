@@ -7,7 +7,7 @@
                     <div class="page-container row" style="width:100%;height:100%;margin-bottom:10px !important">
                         <t t-foreach="items" t-as="item">
                             <div class="row border border-dark col-6 p-3"
-                                 style="margin:0 !important;padding:4px !important"
+                                 style="margin:0 !important;padding:4px !important width:50% !important;height:100% !important"
                                  id="barcode-container">
                                 <div class="col-6 p-3" style="margin:0 !important;">
                                     <div class="overflow-hidden text-start order-name">
