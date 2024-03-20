@@ -84,3 +84,4 @@ access_fulfill_shelf,"access_fulfill_shelf","model_fulfill_shelf",,1,1,1,1
 "access_update_order_line_wizard","access_update_order_line_wizard","model_update_order_line_wizard",,1,1,1,1
 access_config_set_line_level,access_config_set_line_level,model_config_set_line_level,,1,1,1,1
 "access_update_designer_wizard","access_update_designer_wizard","model_update_designer_wizard",,1,1,1,1
+"access_update_design_note_wizard","access_update_design_note_wizard","model_update_design_note_wizard",,1,1,1,1

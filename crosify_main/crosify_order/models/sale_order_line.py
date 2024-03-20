@@ -104,7 +104,7 @@ class SaleOrderLine(models.Model):
     design_file_name = fields.Text(string='Design File Name')
     design_date = fields.Datetime(string='Design Date', tracking=1)
     variant = fields.Text(string='Variant')
-    design_note = fields.Text(string='Design note')
+    design_note = fields.Text(string='Design note', tracking=1)
     # tab production
     production_id = fields.Char(string='Production ID', tracking=1, index=True)
     production_vendor_code = fields.Char(string='Production Vendor Code')
@@ -488,6 +488,20 @@ class SaleOrderLine(models.Model):
                 'default_item_ids': [(6, 0, item_ids)],
             },
             "name": "Update Designer",
+            'view_mode': 'form',
+            "target": "new",
+        }
+
+    @api.model
+    def action_set_design_note(self):
+        item_ids = self._context.get('active_ids', [])
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "update.design.note.wizard",
+            "context": {
+                'default_item_ids': [(6, 0, item_ids)],
+            },
+            "name": "Update Design Note",
             'view_mode': 'form',
             "target": "new",
         }

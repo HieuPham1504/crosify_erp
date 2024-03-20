@@ -5,7 +5,7 @@ from odoo.exceptions import UserError, ValidationError
 import pytz
 
 
-class UpdateItemLevelWizard(models.TransientModel):
+class UpdateDesignerWizard(models.TransientModel):
     _name = 'update.designer.wizard'
 
     employee_id = fields.Many2one('hr.employee', required=True)

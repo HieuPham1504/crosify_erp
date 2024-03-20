@@ -75,6 +75,7 @@ Key Features
         'wizard/update_item_wizard_views.xml',
         'wizard/update_order_wizard_views.xml',
         'wizard/update_designer_wizard_views.xml',
+        'wizard/update_design_note_wizard_views.xml',
     ],
     'demo': [],
     'installable': True,

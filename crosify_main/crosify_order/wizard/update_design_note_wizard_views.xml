@@ -1,0 +1,28 @@
+<odoo>
+    <data>
+        <record id="update_design_note_wizard_form_view" model="ir.ui.view">
+            <field name="name">update_design_note_wizard_form_view</field>
+            <field name="model">update.design.note.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Update Design Note">
+                    <sheet>
+                        <group name="main">
+                            <group>
+                                <field name="note" required="1"/>
+                            </group>
+                            <group>
+
+                            </group>
+                        </group>
+                        <br/>
+                    </sheet>
+                    <footer>
+                        <button name="action_update_design_note" string="Update Design Note" type="object"
+                                class="oe_highlight" data-hotkey="q"/>
+                        <button string="Discard" special="cancel" data-hotkey="x"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
