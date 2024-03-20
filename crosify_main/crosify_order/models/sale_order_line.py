@@ -545,33 +545,42 @@ class SaleOrderLine(models.Model):
 
     def action_generate_item_barcode(self):
         try:
-            data = []
-            for rec in self:
-                order_total_items = rec.order_id.order_line
-                order_total_items = self.sudo().search([('order_id_fix', '=', rec.order_id_fix)])
-                total_product_types = list(set(order_total_items.mapped('product_type')))
-                product_str = f'{rec.address_sheft_id.shelf_code}'
-                for product_type in total_product_types:
-                    product_type_items = order_total_items.filtered(lambda item: item.product_type == product_type)
-                    product_format = f'_{len(product_type_items)}{product_type}'
-                    product_str += product_format
-                data.append({
-                    'production_id': rec.production_id,
-                    'order_id_name': rec.order_id_fix,
-                    'product_type': rec.product_type,
-                    'personalize': rec.personalize,
-                    'shelf_code': rec.address_sheft_id.shelf_code,
-                    'product_str': product_str,
-                    'size': [attribute.product_attribute_value_id.name for attribute in
-                             rec.product_id.product_template_attribute_value_ids if
-                             attribute.attribute_id.name in ['Size']],
-                    'color': [attribute.product_attribute_value_id.name for attribute in
-                              rec.product_id.product_template_attribute_value_ids if
-                              attribute.attribute_id.name in ['Color']],
+            total_items = len(self)
+            item_pairs_number = total_items//2 + total_items%2
 
-                })
+            data = []
+            for pair in range(item_pairs_number):
+                start_index = pair * 2
+                end_index = start_index + 2
+                pair_datas = []
+                for rec in self[start_index:end_index]:
+
+                    order_total_items = rec.order_id.order_line
+                    order_total_items = self.sudo().search([('order_id_fix', '=', rec.order_id_fix)])
+                    total_product_types = list(set(order_total_items.mapped('product_type')))
+                    product_str = f'{rec.address_sheft_id.shelf_code}'
+                    for product_type in total_product_types:
+                        product_type_items = order_total_items.filtered(lambda item: item.product_type == product_type)
+                        product_format = f'_{len(product_type_items)}{product_type}'
+                        product_str += product_format
+                    pair_datas.append({
+                        'production_id': rec.production_id,
+                        'order_id_name': rec.order_id_fix,
+                        'product_type': rec.product_type,
+                        'personalize': rec.personalize,
+                        'shelf_code': rec.address_sheft_id.shelf_code,
+                        'product_str': product_str,
+                        'size': [attribute.product_attribute_value_id.name for attribute in
+                                 rec.product_id.product_template_attribute_value_ids if
+                                 attribute.attribute_id.name in ['Size']],
+                        'color': [attribute.product_attribute_value_id.name for attribute in
+                                  rec.product_id.product_template_attribute_value_ids if
+                                  attribute.attribute_id.name in ['Color']],
+
+                    })
+                data.append(pair_datas)
             item_data = {
-                'items': data
+                'items_data': data
             }
             report = self.env.ref('crosify_order.action_generate_item_barcode')
             report_action = report.report_action(self, data=item_data, config=False)
