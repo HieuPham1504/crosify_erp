@@ -4,9 +4,9 @@
         <t t-call="web.basic_layout">
             <t t-foreach="items_data" t-as="items">
                 <div class="page">
-                    <div class="page-container row" style="width:100%;height:100%">
+                    <div class="page-container row" style="width:100%;height:100%;margin:10px">
                         <t t-foreach="items" t-as="item">
-                            <div class="row border border-dark col-6 p-3" style="margin:0 !important;margin-bottom:10px;"
+                            <div class="row border border-dark col-6 p-3" style="margin-left:0 !important;margin-bottom:10px;"
                                  id="barcode-container">
                                 <div class="col-6 p-3" style="margin:0 !important">
                                     <div class="col overflow-hidden text-start order-name">
@@ -51,9 +51,9 @@
                                         </t>
                                     </div>
 
-                                    <div class="col overflow-hidden text-start" style="height:4rem;width:140px">
+                                    <div class="col overflow-hidden text-start" style="height:120px;width:200px">
                                         <img
-                                                style="width:100%;height:100%;padding: 0 !important;margin-left:-40px;object-fit: contain;height:120px;width:140px"
+                                                style="padding: 0 !important;margin-left:-40px;object-fit: contain;height:120px;width:200px"
                                                 t-att-src="'/report/barcode/%s/%s' % ('Code128',item['production_id'])"
                                                 alt="Barcode"/>
                                     </div>
