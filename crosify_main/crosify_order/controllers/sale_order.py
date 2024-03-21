@@ -748,7 +748,8 @@ class SaleOrderController(Controller):
                     return response
                 else:
                     items = sale_order.order_line
-                    can_not_update_levels = request.env['sale.order.line.level'].sudo().search([('can_updated_by_api', '=', True)])
+                    can_not_update_levels = request.env['sale.order.line.level'].sudo().search(
+                        [('can_updated_by_api', '=', True)])
                     if any(item.sublevel_id.id not in can_not_update_levels.ids for item in items):
                         response = {
                             'status': 400,
@@ -1022,26 +1023,107 @@ class SaleOrderController(Controller):
 
     @route("/api/sale_orders/tracking_delivery", methods=["POST"], type="json", auth="public", cors="*")
     def action_create_sale_order(self, **kwargs):
+        Orders = request.env['sale.order']
+        Items = request.env['sale.order.line']
+        DeliverLevels = request.env['tracking.sale.order.deliver.status.config']
         now = datetime.now()
         now_plus_7_str = now.strftime("%Y-%m-%dT%H:%M:%S")
         data = request.get_json_data()
         remote_ip = request.httprequest.environ['REMOTE_ADDR']
+        reference_number = data.get('ReferenceNumber')
         try:
-            insert_log_sql = f"""
-                                            INSERT INTO tracking_sale_order_delivery_sync(sale_order_id,description,create_date,status,description_json,remote_ip_address) 
-                                            VALUES (
-                                            null, '{json.dumps(data)}', '{now_plus_7_str}', 'pass', '{json.dumps(data)}'::json,'{remote_ip}'
-                                            ) 
-                                            """
-            request.env.cr.execute(insert_log_sql)
-            response = {
-                'status': 200,
-                'message': 'Updated Tracking Order Delivery Status',
-                'data': {
-                    'order_id': None
+            order_id_fix = reference_number
+            sale_orders = Orders.sudo().search([('order_id_fix', '=', order_id_fix)])
+            if not sale_orders:
+                response = {
+                    'status': 400,
+                    'message': 'Order not found',
                 }
-            }
-            return response
+                insert_log_sql = f"""
+                INSERT INTO tracking_sale_order_delivery_sync(sale_order_id,description,create_date,status,response,description_json,remote_ip_address) 
+                VALUES (
+                null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'Order not found', '{json.dumps(data)}'::json, '{remote_ip}'
+                ) 
+                """
+                request.env.cr.execute(insert_log_sql)
+                return response
+            else:
+                prevent_levels_str = request.env['ir.config_parameter'].sudo().get_param(
+                    'prevent.update.deliver.status.level')
+                if not prevent_levels_str:
+                    level_codes = []
+                else:
+                    level_codes = [code.strip() for code in prevent_levels_str.split(',')]
+                items = sale_orders.order_line.filtered(lambda item: item.sublevel_id.level not in level_codes)
+                if items:
+                    item_ids_str = ','.join([str(item_id) for item_id in items.ids])
+
+                    tracking_number = data.get('TrackingNumber')
+                    link_pdf = data.get('LinkPdf')
+                    status = data.get('Status')
+                    status_change_time = data.get('StatusChangeTime')
+
+
+                    new_level_config = False
+                    if status is not None:
+                        new_level_config = DeliverLevels.sudo().search([('status', '=', status.lower())], limit=1)
+
+                    update_item_tracking_sql = f"""
+                    update sale_order_line
+                    set 
+                    """
+                    if status is not None:
+                        update_item_tracking_sql += f"""
+                        deliver_status = '{status}',
+                        """
+                    else:
+                        update_item_tracking_sql += f"""
+                        deliver_status = null,
+                        """
+
+                    if status_change_time is not None:
+                        update_item_tracking_sql += f"""
+                        deliver_update_date = '{status_change_time}',
+                        """
+                    else:
+                        update_item_tracking_sql += f"""
+                        deliver_update_date = null,  
+                    """
+
+                    if not new_level_config:
+                        update_item_tracking_sql += f"""
+                        sublevel_id = null
+                        """
+                    else:
+                        update_item_tracking_sql += f"""
+                        sublevel_id = {new_level_config.level_id.id}
+                        """
+                        if new_level_config.level_id.level == 'L6.1' and status_change_time is not None:
+                            update_item_tracking_sql += f"""
+                            , deliver_date = '{status_change_time}'
+                            """
+
+                    update_item_tracking_sql += f"""
+                    where id in ({item_ids_str})
+                    """
+
+                    request.env.cr.execute(update_item_tracking_sql)
+
+                insert_log_sql = f"""
+                                                INSERT INTO tracking_sale_order_delivery_sync(sale_order_id,description,create_date,status,description_json,remote_ip_address) 
+                                                VALUES (
+                                                null, '{json.dumps(data)}', '{now_plus_7_str}', 'pass', '{json.dumps(data)}'::json,'{remote_ip}'
+                                                ) 
+                                                """
+                request.env.cr.execute(insert_log_sql)
+                response = {
+                    'status': 200,
+                    'message': 'Updated Tracking Order Delivery Status',
+                    'data': {
+                        'reference_number': reference_number
+                    }
+                }
+                return response
         except Exception as e:
             insert_log_sql = f"""
                             INSERT INTO tracking_sale_order_delivery_sync(sale_order_id,description,create_date,status,description_json,remote_ip_address,response) 

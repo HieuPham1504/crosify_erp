@@ -4,6 +4,7 @@ from . import sale_order_line
 from . import order_box_container
 from . import sale_order
 from . import sale_order_line_level
+from . import tracking_sale_order_deliver_status_config
 from . import sale_order_line
 from . import sale_order_line_image_url
 from . import product_product

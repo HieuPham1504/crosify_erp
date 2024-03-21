@@ -60,6 +60,7 @@ Key Features
         'views/item_production_line_views.xml',
         'views/order_box_container_views.xml',
         'views/tracking_sale_order_delivery_sync_views.xml',
+        'views/tracking_sale_order_deliver_status_config_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
         'wizard/update_item_design_wizard_views.xml',
