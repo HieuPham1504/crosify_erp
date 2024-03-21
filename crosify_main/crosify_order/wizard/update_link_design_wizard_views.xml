@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+        <record id="update_link_design_wizard_form_view" model="ir.ui.view">
+            <field name="name">update_link_design_wizard_form_view</field>
+            <field name="model">update.link.design.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Update Link Design">
+                    <sheet>
+                        <group name="main">
+                            <group>
+                                <field name="item_design_file_name" invisible="1"/>
+                                <field name="item_design_file" filename="item_design_file_name"/>
+
+                            </group>
+                            <group>
+                                <button name="get_import_templates" string="Get Template" type="object"
+                                class="oe_highlight"/>
+                            </group>
+                        </group>
+                        <br/>
+                    </sheet>
+                    <footer>
+                        <button name="action_import_item_design_file" string="Update Link Designer" type="object"
+                                class="oe_highlight" data-hotkey="q" invisible="item_design_file == False"/>
+
+                        <button string="Discard" special="cancel" data-hotkey="x"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

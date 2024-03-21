@@ -12,3 +12,4 @@ from . import update_item_wizard
 from . import update_order_wizard
 from . import update_designer_wizard
 from . import update_design_note_wizard
+from . import update_link_design_wizard
