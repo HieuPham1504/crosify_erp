@@ -69,7 +69,7 @@
                                     </div>
 
                                 </div>
-                                <div class="col-6 p-3" style="height: 50% !important;overflow:hidden">
+                                <div class="col-6 p-3" style="height: 60% !important;overflow:hidden">
 
                                     <div class="col overflow-hidden text-start">
                                         <t t-if="item['product_str']">
