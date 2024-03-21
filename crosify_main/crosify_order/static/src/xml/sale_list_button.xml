@@ -3,7 +3,7 @@
    <t t-name="crosify_order.ListView.Buttons" t-inherit="web.ListView.Buttons">
        <xpath expr="//div[hasclass('o_list_buttons')]" position="after">
            <button type="button" class="btn btn-primary"  t-on-click="OnClickOpenImportFile">
-               Import file
+               Update Link Design
            </button>
        </xpath>
    </t>

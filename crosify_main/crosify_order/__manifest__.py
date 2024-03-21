@@ -76,6 +76,7 @@ Key Features
         'wizard/update_order_wizard_views.xml',
         'wizard/update_designer_wizard_views.xml',
         'wizard/update_design_note_wizard_views.xml',
+        'wizard/update_link_design_wizard_views.xml',
     ],
     'demo': [],
     'installable': True,
@@ -87,6 +88,8 @@ Key Features
             'crosify_order/static/src/xml/form_status_indicator.xml',
             'crosify_order/static/src/xml/list_renderer.xml',
             'crosify_order/static/src/js/action_manager.js',
+            'crosify_order/static/src/xml/sale_list_button.xml',
+            'crosify_order/static/src/js/sale_tree_extend.js',
         ],
         'web.assets_frontend': [
 

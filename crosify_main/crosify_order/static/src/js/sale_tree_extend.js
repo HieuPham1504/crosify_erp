@@ -9,8 +9,8 @@ export class SaleListController extends ListController {
    OnClickOpenImportFile() {
        this.actionService.doAction({
           type: 'ir.actions.act_window',
-          res_model: 'test.wizard',
-          name:'Import file',
+          res_model: 'update.link.design.wizard',
+          name:'Update Link Design',
           view_mode: 'form',
           view_type: 'form',
           views: [[false, 'form']],

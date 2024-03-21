@@ -87,3 +87,4 @@ access_config_set_line_level,access_config_set_line_level,model_config_set_line_
 "access_update_design_note_wizard","access_update_design_note_wizard","model_update_design_note_wizard",,1,1,1,1
 "access_hr_job_designer","access_hr_job_designer",model_hr_job,crosify_order.group_designer_team,1,0,0,0
 "access_hr_employee_designer",access_hr_employee_designer,hr.model_hr_employee,crosify_order.group_designer_team,1,0,0,0
+"access_update_link_design_wizard","access_update_link_design_wizard","model_update_link_design_wizard",,1,1,1,1
