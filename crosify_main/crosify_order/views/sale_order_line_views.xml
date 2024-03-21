@@ -389,6 +389,7 @@
             <field name="report_name">crosify_order.print_item_barcode_custom</field>
             <field name="report_file">crosify_order.print_item_barcode_custom</field>
             <field name="binding_model_id" ref="model_sale_order_line"/>
+            <field name="paperformat_id" ref="paperformat_item_barcode"/>
         </record>
 
         <record id="crosify_menu_sale_order_line_action" model="ir.actions.act_window">

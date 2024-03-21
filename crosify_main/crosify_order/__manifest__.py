@@ -30,6 +30,7 @@ Key Features
         'data/fail_product_data.xml',
         'data/ir_parameter_data.xml',
         'data/queue_job_channel_data.xml',
+        'report/report_paperformat.xml',
         'report/item_barcode_template.xml',
         'report/fulfill_shelf_barcode_template.xml',
         'report/export_ready_packing_item_pdf.xml',
