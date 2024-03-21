@@ -9,4 +9,9 @@
         <field name="key">prevent.update.deliver.status.level</field>
         <field name="value">L4.4,L7.2,L7.4</field>
     </record>
+
+    <record id="api_ip_whitelist" model="ir.config_parameter">
+        <field name="key">api.ip.whitelist</field>
+        <field name="value">171.243.58.66,222.252.16.107,127.0.0.1</field>
+    </record>
 </odoo>
