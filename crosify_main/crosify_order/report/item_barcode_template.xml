@@ -53,6 +53,27 @@
                                         </t>
                                     </div>
 
+                                    <div class="col overflow-hidden text-start">
+                                        <t t-if="len(item['other_option']) > 0">
+                                            <p style="font-size:14px">
+                                                <t t-esc="item['other_option'][0]"/>
+                                            </p>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="col overflow-hidden text-start">
+                                                <p>
+                                                </p>
+                                            </div>
+                                            <br/>
+                                        </t>
+                                    </div>
+
+                                    <div class="overflow-hidden text-start order-name">
+                                        <p style="font-size:14px">
+                                            <t t-out="item['production_vendor_code']"/>
+                                        </p>
+                                    </div>
+
                                     <div class="col overflow-hidden text-start"
                                          style="height:4rem;width:240px;margin-bottom;position:absolute;bottom:40px">
                                         <img
