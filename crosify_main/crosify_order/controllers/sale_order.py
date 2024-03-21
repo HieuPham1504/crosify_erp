@@ -362,9 +362,9 @@ class SaleOrderController(Controller):
                 return response
             except Exception as e:
                 insert_log_sql = f"""
-                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type,description_json,remote_ip_address) 
+                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type,description_json,remote_ip_address,response) 
                 VALUES (
-                null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'create', '{json.dumps(data)}'::json, '{remote_ip}'
+                null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'create', '{json.dumps(data)}'::json, '{remote_ip}', '{e}'
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
@@ -1013,9 +1013,40 @@ class SaleOrderController(Controller):
                 return response
             except Exception as e:
                 insert_log_sql = f"""
-                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json,remote_ip_address) 
+                INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json,remote_ip_address,response) 
                 VALUES (
-                null, '{json.dumps(data)}', '{now_plus_7_str}', ' ', 'update', '{json.dumps(data)}'::json, '{remote_ip}'
+                null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'update', '{json.dumps(data)}'::json, '{remote_ip}', '{e}'
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
+
+    @route("/api/sale_orders/tracking_delivery", methods=["POST"], type="json", auth="public", cors="*")
+    def action_create_sale_order(self, **kwargs):
+        now = datetime.now()
+        now_plus_7_str = now.strftime("%Y-%m-%dT%H:%M:%S")
+        data = request.get_json_data()
+        remote_ip = request.httprequest.environ['REMOTE_ADDR']
+        try:
+            insert_log_sql = f"""
+                                            INSERT INTO tracking_sale_order_delivery_sync(sale_order_id,description,create_date,status,description_json,remote_ip_address) 
+                                            VALUES (
+                                            null, '{json.dumps(data)}', '{now_plus_7_str}', 'pass', '{json.dumps(data)}'::json,'{remote_ip}'
+                                            ) 
+                                            """
+            request.env.cr.execute(insert_log_sql)
+            response = {
+                'status': 200,
+                'message': 'Updated Tracking Order Delivery Status',
+                'data': {
+                    'order_id': None
+                }
+            }
+            return response
+        except Exception as e:
+            insert_log_sql = f"""
+                            INSERT INTO tracking_sale_order_delivery_sync(sale_order_id,description,create_date,status,description_json,remote_ip_address,response) 
+                            VALUES (
+                            null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', '{json.dumps(data)}'::json, '{remote_ip}', '{e}'
+                            ) 
+                            """
+            request.env.cr.execute(insert_log_sql)

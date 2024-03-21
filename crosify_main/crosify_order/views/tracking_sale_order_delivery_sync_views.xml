@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="tracking_sale_order_delivery_sync_search_view" model="ir.ui.view">
+            <field name="name">tracking_sale_order_delivery_sync_search_view</field>
+            <field name="model">tracking.sale.order.delivery.sync</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="sale_order_id" string="Order" filter_domain="[('sale_order_id.name','ilike',self)]"/>
+
+                    <separator/>
+                    <filter name="pass_request" string="Pass Requests" domain="[('status', '=', 'pass')]"/>
+                    <separator/>
+
+                    <separator/>
+                    <filter name="fail_request" string="Fail Requests" domain="[('status', '=', 'fail')]"/>
+                    <separator/>
+
+                </search>
+            </field>
+        </record>
+
+        <record id="tracking_sale_order_delivery_sync_form" model="ir.ui.view">
+            <field name="name">tracking_sale_order_delivery_sync_form</field>
+            <field name="model">tracking.sale.order.delivery.sync</field>
+            <field name="arch" type="xml">
+                <form string="Tracking Sale Order Delivery Sync" create="false" edit="false">
+                    <header>
+                        <field name="status" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="sale_order_id"/>
+                            <field name="description"/>
+                            <field name="create_date"/>
+                            <field name="response"/>
+                            <field name="remote_ip_address"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tracking_sale_order_delivery_sync_tree" model="ir.ui.view">
+            <field name="name">tracking_sale_order_delivery_sync_tree</field>
+            <field name="model">tracking.sale.order.delivery.sync</field>
+            <field name="arch" type="xml">
+                <tree string="Tracking Sale Order Delivery Sync" decoration-danger="status == 'fail'" create="false">
+                    <field name="sale_order_id"/>
+                    <field name="create_date"/>
+                    <field name="response"/>
+                    <field name="status"/>
+                    <field name="remote_ip_address"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="tracking_sale_order_delivery_sync_menu_action" model="ir.actions.act_window">
+            <field name="name">Tracking Sale Order Delivery Sync</field>
+            <field name="res_model">tracking.sale.order.delivery.sync</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="tracking_sale_order_delivery_sync_menu"
+                  name="Tracking Sale Order Delivery Sync"
+                  action="tracking_sale_order_delivery_sync_menu_action"
+                  groups="base.group_system"
+                  sequence="76"
+                  parent="sale.menu_sale_config"
+        />
+    </data>
+</odoo>
