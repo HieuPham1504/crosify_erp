@@ -47,7 +47,7 @@ class SaleOrderLine(models.Model):
 
     image_ids = fields.Many2many('ir.attachment', string='Images')
     crosify_created_date = fields.Datetime(string='Create Date', default=fields.Datetime.now())
-    crosify_create_by = fields.Char(string='Created By')
+    crosify_create_by = fields.Char(string='MyAdmin Created By')
     product_sku = fields.Char(string='SKU', related='product_id.default_code', store=True, index=True)
     my_admin_order_id = fields.Char(string='Order ID', related='order_id.myadmin_order_id', store=True, index=True)
     my_admin_detailed_id = fields.Integer(string='My Admin Detailed ID', store=True, index=True)
@@ -580,7 +580,7 @@ class SaleOrderLine(models.Model):
     def action_generate_item_barcode(self):
         try:
             total_items = len(self)
-            item_pairs_number = total_items//2 + total_items%2
+            item_pairs_number = total_items // 2 + total_items % 2
 
             data = []
             for pair in range(item_pairs_number):
@@ -588,8 +588,6 @@ class SaleOrderLine(models.Model):
                 end_index = start_index + 2
                 pair_datas = []
                 for rec in self[start_index:end_index]:
-
-                    order_total_items = rec.order_id.order_line
                     order_total_items = self.sudo().search([('order_id_fix', '=', rec.order_id_fix)])
                     total_product_types = list(set(order_total_items.mapped('product_type')))
                     product_str = f'{rec.address_sheft_id.shelf_code}'
