@@ -13,6 +13,7 @@
 
                             </group>
                             <group>
+                                <label for="get_import_templates"/>
                                 <button name="get_import_templates" string="Get Template" type="object"
                                 class="oe_highlight"/>
                             </group>
