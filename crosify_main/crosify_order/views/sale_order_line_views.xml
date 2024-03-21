@@ -231,6 +231,7 @@
                                     </group>
                                     <group name="delivery" string="DELIVER">
                                         <field name="deliver_date"/>
+                                        <field name="deliver_update_date"/>
                                         <field name="deliver_status"/>
                                         <field name="customer_received"/>
                                     </group>

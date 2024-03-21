@@ -126,6 +126,7 @@ class SaleOrderLine(models.Model):
     packed_date = fields.Datetime(string='Packed Date')
     pickup_date = fields.Datetime(string='Pickup Date')
     deliver_date = fields.Datetime(string='Deliver Date')
+    deliver_update_date = fields.Datetime(string='Deliver Update Date')
     deliver_status = fields.Char(string='Deliver Status')
     customer_received = fields.Boolean(string='Customer Received')
     # Tab Other Info

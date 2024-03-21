@@ -64,6 +64,8 @@ access_fulfill_shelf,"access_fulfill_shelf","model_fulfill_shelf",,1,1,1,1
 "access_order_shipping_line","access_order_shipping_line","model_order_shipping_line",,1,1,1,1
 "access_item_production_line","access_item_production_line","model_item_production_line",,1,1,1,1
 
+"access_tracking_sale_order_deliver_status_config","access_tracking_sale_order_deliver_status_config","model_tracking_sale_order_deliver_status_config",,1,1,1,1
+
 
 "access_order_box_container","access_order_box_container","model_order_box_container",,1,1,1,1
 

@@ -4,4 +4,9 @@
         <field name="key">create.label.client.key</field>
         <field name="value">C1jkhuigUGUGkjh_kg3257</field>
     </record>
+
+    <record id="prevent_update_deliver_status_level" model="ir.config_parameter">
+        <field name="key">prevent.update.deliver.status.level</field>
+        <field name="value">L4.4,L7.2,L7.4</field>
+    </record>
 </odoo>
