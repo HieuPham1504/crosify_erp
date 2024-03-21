@@ -746,9 +746,26 @@ class SaleOrderController(Controller):
                                                             """
                     request.env.cr.execute(insert_log_sql)
                     return response
+                else:
+                    items = sale_order.order_line
+                    can_not_update_levels = request.env['sale.order.line.level'].sudo().search([('can_updated_by_api', '=', True)])
+                    if any(item.sublevel_id.id not in can_not_update_levels.ids for item in items):
+                        response = {
+                            'status': 400,
+                            'message': 'Can Not Update Sale Order',
+                        }
+                        insert_log_sql = f"""
+                                                                                    INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,response,type,description_json,remote_ip_address) 
+                                                                                    VALUES (
+                                                                                    null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'Order not found', 'update', '{json.dumps(data)}'::json, '{remote_ip}'
+                                                                                    ) 
+                                                                                    """
+                        request.env.cr.execute(insert_log_sql)
+                        return response
                 country_id = request.env['res.country'].sudo().search([('code', '=', data.get('CountryCode'))], limit=1)
-                state_id = request.env['res.country.state'].sudo().search([('code', '=', data.get('StateCode')), ('country_id', '=', country_id.id)],
-                                                                          limit=1)
+                state_id = request.env['res.country.state'].sudo().search(
+                    [('code', '=', data.get('StateCode')), ('country_id', '=', country_id.id)],
+                    limit=1)
                 currency_id = request.env['res.currency'].sudo().search([('name', '=', data.get('Currency'))], limit=1)
                 order_update_employee = request.env['hr.employee'].sudo().search(
                     [('work_email', '=', data.get('UpdatedBy'))], limit=1)
@@ -813,7 +830,6 @@ class SaleOrderController(Controller):
                                           payment_at = null
                                         """
 
-
                 partner_sql = f"""
                     update res_partner 
                     set name = '{data.get('ShippingFirstname') if data.get('ShippingFirstname') is not None else ''} {data.get('ShippingLastname') if data.get('ShippingLastname') is not None else ''}',
@@ -842,7 +858,8 @@ class SaleOrderController(Controller):
                 order_lines = data.get('Details', [])
 
                 current_items = sale_order.order_line
-                details_ids_param = [detail.get('Detailid') for detail in order_lines if detail.get('Detailid') is not None]
+                details_ids_param = [detail.get('Detailid') for detail in order_lines if
+                                     detail.get('Detailid') is not None]
 
                 old_lines = set(current_items.mapped('my_admin_detailed_id')) & set(details_ids_param)
                 new_lines = set(details_ids_param) - set(current_items.mapped('my_admin_detailed_id'))
@@ -948,7 +965,6 @@ class SaleOrderController(Controller):
                         update_order_line_sql += f"""
                                             cancel_date = null,
                                             """
-
 
                     update_order_line_sql += f"""
                     cancel_note = '{line.get('CancelReason') if line.get('CancelReason') is not None else ''}',

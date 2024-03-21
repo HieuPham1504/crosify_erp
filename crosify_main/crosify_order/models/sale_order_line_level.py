@@ -13,3 +13,4 @@ class SaleOrderLineLevel(models.Model):
     is_parent = fields.Boolean(string='Is Parent')
     next_level_ids = fields.Many2many('sale.order.line.level', 'sol_level_next_step_rel', 'level_id', 'next_level_id', string='Next Levels')
     active = fields.Boolean(string='Active', default=True)
+    can_updated_by_api = fields.Boolean(string='Can Update By API', default=False)

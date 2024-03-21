@@ -13,6 +13,7 @@
                     <field name="next_level_ids" widget="many2many_tags"/>
                     <field name="is_parent"/>
                     <field name="parent_id" domain="[('is_parent', '=', True)]"/>
+                    <field name="can_updated_by_api" optional="hide"/>
                 </tree>
             </field>
         </record>
