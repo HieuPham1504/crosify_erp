@@ -48,6 +48,9 @@
                     <filter string="Awaiting Design Items" name="awaiting_design_items"
                             domain="[('sublevel_id.level', '=', 'L3.1')]"
                             help="Awaiting Design Items"/>
+                    <filter string="My Design" name="my_design"
+                            domain="[('designer_id.user_id', '=', uid)]"
+                            help="My Design Items"/>
                     <separator/>
 
                     <filter string="Designed Items" name="designed_items"
@@ -194,6 +197,7 @@
                                         <group name="design" string="DESIGN">
                                             <field name="designer_id" options='{"no_open": True, "no_create": True}'/>
                                             <field name="design_file_url"/>
+                                            <field name="design_note"/>
                                             <field name="design_date"/>
                                         </group>
                                         <group name="production" string="PRODUCTION">

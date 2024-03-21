@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="hr_job_inherit_view" model="ir.ui.view">
+            <field name="name">hr_job_inherit_view</field>
+            <field name="model">hr.job</field>
+            <field name="inherit_id" ref="hr.view_hr_job_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='department_id']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <field name="code" required="1"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

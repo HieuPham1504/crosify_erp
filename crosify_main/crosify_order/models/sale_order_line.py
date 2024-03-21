@@ -104,6 +104,7 @@ class SaleOrderLine(models.Model):
     design_file_name = fields.Text(string='Design File Name')
     design_date = fields.Datetime(string='Design Date', tracking=1)
     variant = fields.Text(string='Variant')
+    design_note = fields.Text(string='Design note', tracking=1)
     # tab production
     production_id = fields.Char(string='Production ID', tracking=1, index=True)
     production_vendor_code = fields.Char(string='Production Vendor Code')
@@ -183,6 +184,11 @@ class SaleOrderLine(models.Model):
         string="Total Tax",
         compute='_compute_amount_custom',
         store=True, precompute=True)
+
+    #variant product field
+    color = fields.Char(string="Color", compute='compute_attribute_product', store=True)
+    size = fields.Char(string="Size", compute='compute_attribute_product', store=True)
+    other_option = fields.Char(string="Other option", compute='compute_attribute_product', store=True)
 
     def write(self, vals):
         # OVERRIDE
@@ -473,6 +479,34 @@ class SaleOrderLine(models.Model):
         }
 
     @api.model
+    def action_set_designer(self):
+        item_ids = self._context.get('active_ids', [])
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "update.designer.wizard",
+            "context": {
+                'default_item_ids': [(6, 0, item_ids)],
+            },
+            "name": "Update Designer",
+            'view_mode': 'form',
+            "target": "new",
+        }
+
+    @api.model
+    def action_set_design_note(self):
+        item_ids = self._context.get('active_ids', [])
+        return {
+            "type": "ir.actions.act_window",
+            "res_model": "update.design.note.wizard",
+            "context": {
+                'default_item_ids': [(6, 0, item_ids)],
+            },
+            "name": "Update Design Note",
+            'view_mode': 'form',
+            "target": "new",
+        }
+
+    @api.model
     def action_create_production_for_item(self):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
@@ -695,3 +729,26 @@ class SaleOrderLine(models.Model):
                 and new_sublevel_id and new_sublevel_id.id in set_shelf_ids):
             if self.address_sheft_id:
                 self.address_sheft_id.temp_shelf += 1
+
+    @api.depends('product_id.product_template_attribute_value_ids',
+                 'product_id.product_template_attribute_value_ids.attribute_line_id.attribute_id.code')
+    def compute_attribute_product(self):
+        for rec in self:
+            color = False
+            size = False
+            other_option = False
+
+            if rec.product_id:
+                attribute_ids = rec.product_id.product_template_attribute_value_ids
+
+                for attribute in attribute_ids:
+                    if attribute.attribute_line_id.attribute_id.code == 'color':
+                        color = attribute.name
+                    if attribute.attribute_line_id.attribute_id.code == 'size':
+                        size = attribute.name
+                    if attribute.attribute_line_id.attribute_id.code == 'other_option':
+                        other_option = attribute.name
+
+            rec.color = color
+            rec.size = size
+            rec.other_option = other_option
