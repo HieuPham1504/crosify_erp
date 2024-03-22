@@ -79,6 +79,7 @@ class SaleOrder(models.Model):
         ('not_get_label', "Not Get Label"),
         ('fail', "Fail To Get Label"),
     ], default='not_get_label', index=True)
+    original_order_id = fields.Many2one('sale.order', string='Original Order', tracking=1)
 
     #override_fields
     amount_untaxed = fields.Float(string="Untaxed Amount", store=True, compute='compute_amount_untaxed', tracking=5)

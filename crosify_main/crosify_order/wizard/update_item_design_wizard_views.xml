@@ -58,10 +58,10 @@
         </record>
 
 
-        <menuitem id="update_item_design_menu" name="Update Design"
-                  parent="sale.sale_order_menu"
-                  action="update_item_design_menu_action"
-                  groups="base.group_system,crosify_order.group_designer_team"
-                  sequence="21"/>
+<!--        <menuitem id="update_item_design_menu" name="Update Design"-->
+<!--                  parent="sale.sale_order_menu"-->
+<!--                  action="update_item_design_menu_action"-->
+<!--                  groups="base.group_system,crosify_order.group_designer_team"-->
+<!--                  sequence="21"/>-->
     </data>
 </odoo>
