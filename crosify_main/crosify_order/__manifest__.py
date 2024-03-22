@@ -64,6 +64,7 @@ Key Features
         'views/awaiting_design_views.xml',
         'views/hr_job_views.xml',
         'views/tracking_sale_order_delivery_sync_views.xml',
+        'views/field_ignore_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
         'wizard/update_item_design_wizard_views.xml',

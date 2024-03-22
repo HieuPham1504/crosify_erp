@@ -314,6 +314,11 @@ class SaleOrderLine(models.Model):
         qc_failed_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.4')], limit=1)
         if not qc_failed_level:
             raise UserError(_("Not found level! Please contact admin."))
+        items_has_level_diff_qc_fail = items.filtered(lambda item: item.sublevel_id.id != qc_failed_level.id)
+
+        if items_has_level_diff_qc_fail:
+            raise UserError(_("Items selected is not level QC Failed ."))
+
         qc_failed_items = items.filtered(lambda item: item.sublevel_id.id == qc_failed_level.id)
 
         filter_items = qc_failed_items.filtered(lambda item: not item.error_type_id
@@ -345,10 +350,18 @@ class SaleOrderLine(models.Model):
                 else:
                     new_sale_order_id = order_created.get(qc_failed_item.order_id.order_id_fix)
 
+                fulfill_error_id = qc_failed_item.error_type_id
+
+
                 value_order_line = {
                     'order_id': new_sale_order_id,
                     'sublevel_id': qc_failed_item.error_type_id.level_back_id.id
                 }
+
+                #ignore fields
+                fields_ignores = fulfill_error_id.fields_ignore_ids
+                for line in fields_ignores:
+                    value_order_line[line.name] = False
 
                 qc_failed_item_id = qc_failed_item.copy(value_order_line)
 
