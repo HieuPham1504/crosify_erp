@@ -41,7 +41,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="overflow-hidden">
+                                        <div class="overflow-hidden text-start">
                                             <t t-if="len(item['size']) > 0">
                                                 <p style="font-size:14px;padding:0 !important;margin:0 !important;">
                                                     <t t-esc="item['size'][0]"/>
@@ -56,7 +56,7 @@
                                             </t>
                                         </div>
 
-                                        <div class="overflow-hidden">
+                                        <div class="overflow-hidden text-start">
                                             <t t-if="len(item['other_option']) > 0">
                                                 <p style="font-size:14px;padding:0 !important;margin:0 !important;">
                                                     <t t-esc="item['other_option'][0]"/>
@@ -73,7 +73,7 @@
                                     </div>
 
                                     <div class="col-6" style="margin:0 !important; text-end">
-                                        <div class="overflow-hidden">
+                                        <div class="overflow-hidden text-end">
                                             <p style="font-size:14px;padding:0 !important;margin:0 !important;">
 
                                             </p>
