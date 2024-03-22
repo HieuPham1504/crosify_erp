@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="crosify_seller_code_view" model="ir.ui.view">
+            <field name="name">crosify_seller_code_view</field>
+            <field name="model">crosify.seller</field>
+            <field name="arch" type="xml">
+                <tree string="Seller" editable="bottom">
+                    <field name="id"/>
+                    <field name="code" readonly="1"/>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="crosify_seller_code_menu_action"
+            model="ir.actions.act_window">
+            <field name="name">Seller</field>
+            <field name="res_model">crosify.seller</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="crosify_seller_code_menu" name="Seller"
+            parent="sale.menu_sales_config"
+            action="crosify_seller_code_menu_action"
+            sequence="75"
+            groups="base.group_system"/>
+    </data>
+</odoo>
