@@ -102,7 +102,7 @@
                                                 <t t-esc="item['production_vendor_code']"/>
                                             </p>
                                         </div>
-                                        <div class="col-10 text-center" style="margin-left:40px !important;">
+                                        <div class="col-10 text-center" style="margin-left:80px !important;">
                                             <div class="overflow-hidden"
                                                  style="height:4rem;width:240px;">
                                                 <img
