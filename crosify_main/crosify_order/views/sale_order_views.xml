@@ -584,7 +584,7 @@
     <menuitem id="menu_sale_order_for_other"
               name="Orders"
               action="menu_sale_order_for_other_action"
-              groups="crosify_order.group_designer_team,crosify_order.group_producer_team"
+              groups="crosify_order.group_designer_team,crosify_order.group_producer_team,crosify_order.group_sale_user_team"
               parent="sale.sale_order_menu"
               sequence="20"/>
 </odoo>

@@ -402,7 +402,7 @@
         <menuitem id="crosify_menu_sale_order_line"
                   name="Items"
                   action="crosify_menu_sale_order_line_action"
-                  groups="base.group_system,crosify_order.group_sale_team_operator,crosify_order.group_designer_team"
+                  groups="base.group_system,crosify_order.group_sale_team_operator,crosify_order.group_designer_team,crosify_order.group_sale_user_team"
                   parent="sale.sale_order_menu"
                   sequence="21"/>
     </data>
