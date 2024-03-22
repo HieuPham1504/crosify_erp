@@ -5,7 +5,7 @@
             <div class="page">
                 <t t-foreach="items_data" t-as="items">
                     <div class="page-container"
-                         style="page-break-after: always;width:390px !important;height:570px !important;position:relative;padding:0 !important;margin:0 important">
+                         style="page-break-after: always;width:400px !important;height:570px !important;position:relative;padding:0 !important;margin:0 important">
                         <t t-foreach="items" t-as="item">
                             <div class="border border-dark"
                                  style="margin:0 !important;width:390px !important;height:285px !important;padding:10px !important;position:relative"
