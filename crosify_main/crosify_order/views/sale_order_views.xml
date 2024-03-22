@@ -591,8 +591,8 @@
 
     <menuitem id="sale.res_partner_menu"
               action="account.res_partner_action_customer"
-              groups="sales_team.group_sale_salesman"
+              groups="crosify_order.group_sale_team_operator,base.group_system"
               sequence="40"
-              active="False"
+              parent="sale.sale_order_menu"
     />
 </odoo>
