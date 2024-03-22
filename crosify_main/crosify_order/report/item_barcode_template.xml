@@ -8,7 +8,7 @@
                          style="page-break-after: always;width:540px !important;height:740px !important;position:relative;padding:0 !important;margin:0 important">
                         <t t-foreach="items" t-as="item">
                             <div class="border border-dark"
-                                 style="margin:0 !important;width:100% !important;height:50% !important;padding:10px !important;position:relative;margin-left: -12px !important"
+                                 style="margin:0 !important;width:100% !important;height:370px !important;padding:10px !important;position:relative;margin-left: -12px !important"
                                  id="barcode-container">
                                 <div class="overflow-hidden text-start">
                                     <p style="font-size:14px;padding:0 !important;margin:0 !important;">
