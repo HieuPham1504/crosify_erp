@@ -5,10 +5,10 @@
             <div class="page">
                 <t t-foreach="items_data" t-as="items">
                     <div class="page-container"
-                         style="page-break-after: always;width:420px !important;height:590px !important;position:relative;padding:0 !important;margin:0 important">
+                         style="page-break-after: always;width:440px !important;height:610px !important;position:relative;padding:0 !important;margin:0 important">
                         <t t-foreach="items" t-as="item">
                             <div class="border border-dark"
-                                 style="margin:0 !important;width:420px !important;height:295px !important;padding:10px !important;position:relative"
+                                 style="margin:0 !important;width:440px !important;height:305px !important;padding:10px !important;position:relative"
                                  id="barcode-container">
                                 <div class="overflow-hidden text-start">
                                     <p style="font-size:14px;padding:0 !important;margin:0 !important;">

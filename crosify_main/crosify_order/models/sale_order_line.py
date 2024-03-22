@@ -673,13 +673,13 @@ class SaleOrderLine(models.Model):
                         'shelf_code': rec.address_sheft_id.shelf_code,
                         'production_vendor_code': rec.production_vendor_id.ref if rec.production_vendor_id and rec.production_vendor_id.ref else '',
                         'product_str': product_str,
-                        'size': [attribute.product_attribute_value_id.name for attribute in
+                        'size': [attribute.product_attribute_value_id.name.strip() for attribute in
                                  rec.product_id.product_template_attribute_value_ids if
                                  attribute.attribute_id.name in ['Size']],
-                        'color': [attribute.product_attribute_value_id.name for attribute in
+                        'color': [attribute.product_attribute_value_id.name.strip() for attribute in
                                   rec.product_id.product_template_attribute_value_ids if
                                   attribute.attribute_id.name in ['Color']],
-                        'other_option': [attribute.product_attribute_value_id.name for attribute in
+                        'other_option': [attribute.product_attribute_value_id.name.strip() for attribute in
                                          rec.product_id.product_template_attribute_value_ids if
                                          attribute.attribute_id.name in ['Other Option']],
 
