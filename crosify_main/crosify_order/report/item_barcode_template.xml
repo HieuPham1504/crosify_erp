@@ -43,7 +43,7 @@
 
 
                                         <t t-if="len(item['size']) > 0">
-                                            <p class="text-start"
+                                            <p
                                                style="font-size:14px;padding:0 !important;margin:0 !important;">
                                                 <t t-esc="item['size'][0]"/>
                                             </p>
@@ -55,10 +55,10 @@
                                             </div>
                                             <br/>
                                         </t>
-                                        
+
 
                                         <t t-if="len(item['other_option']) > 0">
-                                            <p class="text-start"
+                                            <p
                                                style="font-size:14px;padding:0 !important;margin:0 !important;">
                                                 <t t-esc="item['other_option'][0]"/>
                                             </p>
