@@ -43,10 +43,10 @@
 
 
                                         <t t-if="len(item['size']) > 0">
-                                            <p
+                                            <div
                                                style="font-size:14px;padding:0 !important;margin:0 !important;">
                                                 <t t-esc="item['size'][0]"/>
-                                            </p>
+                                            </div>
                                         </t>
                                         <t t-else="">
                                             <div class="col overflow-hidden text-start">
@@ -58,10 +58,10 @@
 
 
                                         <t t-if="len(item['other_option']) > 0">
-                                            <p
+                                            <div
                                                style="font-size:14px;padding:0 !important;margin:0 !important;">
                                                 <t t-esc="item['other_option'][0]"/>
-                                            </p>
+                                            </div>
                                         </t>
                                         <t t-else="">
                                             <div class="col overflow-hidden">
