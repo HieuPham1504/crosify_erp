@@ -118,7 +118,7 @@
                                     <div class="row">
                                         <div class="col-4" style="margin:0 !important;">
                                             <div class="text-start personalize">
-                                                <p style="font-size:20px !important;padding:0 !important">
+                                                <p style="font-size:20px !important;padding:0 !important;margin:0 !important">
                                                     <t t-esc="item['product_type']"/>
                                                 </p>
                                             </div>
