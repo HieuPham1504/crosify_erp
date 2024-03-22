@@ -5,10 +5,10 @@
             <div class="page">
                 <t t-foreach="items_data" t-as="items">
                     <div class="page-container"
-                         style="page-break-after: always;width:400px !important;height:576px !important;position:relative;padding:0 !important;margin:0 important">
+                         style="page-break-after: always;width:420px !important;height:590px !important;position:relative;padding:0 !important;margin:0 important">
                         <t t-foreach="items" t-as="item">
                             <div class="border border-dark"
-                                 style="margin:0 !important;width:400px !important;height:288px !important;padding:10px !important;position:relative"
+                                 style="margin:0 !important;width:420px !important;height:295px !important;padding:10px !important;position:relative"
                                  id="barcode-container">
                                 <div class="overflow-hidden text-start">
                                     <p style="font-size:14px;padding:0 !important;margin:0 !important;">
@@ -33,7 +33,7 @@
                                                 </t>
                                                 <t t-else="">
                                                     <div class="col overflow-hidden">
-                                                        <p style=";margin:0 !important;">
+                                                        <p style="margin:0 !important;">
                                                         </p>
                                                     </div>
                                                     <br/>
@@ -41,7 +41,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="overflow-hidden text-start">
+                                        <div class="overflow-hidden text-start" style="margin:0 !important;padding:0 !important">
                                             <t t-if="len(item['size']) > 0">
                                                 <p class="text-start" style="font-size:14px;padding:0 !important;margin:0 !important;">
                                                     <t t-esc="item['size'][0]"/>
@@ -56,7 +56,7 @@
                                             </t>
                                         </div>
 
-                                        <div class="overflow-hidden text-start">
+                                        <div class="overflow-hidden text-start" style="margin:0 !important;padding:0 !important">
                                             <t t-if="len(item['other_option']) > 0">
                                                 <p class="text-start" style="font-size:14px;padding:0 !important;margin:0 !important;">
                                                     <t t-esc="item['other_option'][0]"/>
