@@ -96,7 +96,7 @@
 
                                 <div class="" style="margin:0 !important;position:absolute;bottom:0px">
                                     <div class="barcode row">
-                                        <div class="col-2" style="margin:0 !important;">
+                                        <div class="col-4" style="margin:0 !important;">
                                             <p style="font-size:20px !important;padding:0 !important;margin:0 !important">
                                                 <t t-esc="item['shipping_vendor']"/>
                                             </p>
@@ -104,7 +104,7 @@
                                                 <t t-esc="item['production_vendor_code']"/>
                                             </p>
                                         </div>
-                                        <div class="col-10 text-center" style="margin-left:140px !important;">
+                                        <div class="col-6 text-center" style="margin-left:140px !important;">
                                             <div class="overflow-hidden"
                                                  style="height:4rem;width:240px;">
                                                 <img
