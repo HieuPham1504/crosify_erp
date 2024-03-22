@@ -5,23 +5,46 @@
             <field name="name">fulfill_error</field>
             <field name="model">fulfill.error</field>
             <field name="arch" type="xml">
-                <tree string="Error type" editable="bottom">
-                    <field name="id" />
-                    <field name="error_type" />
-                    <field name="level_back_id" />
+                <tree string="Error type">
+                    <field name="id"/>
+                    <field name="error_type"/>
+                    <field name="level_back_id"/>
+                    <field name="fields_ignore_ids" widget='many2many_tags'/>
                 </tree>
             </field>
         </record>
+
+        <record id="fulfill_error_view_form" model="ir.ui.view">
+            <field name="name">fulfill_error_view_form</field>
+            <field name="model">fulfill.error</field>
+            <field name="arch" type="xml">
+                <form string="fulfill_error_form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="error_type"/>
+                                <field name="level_back_id"/>
+                            </group>
+                            <group>
+                                <field name="fields_ignore_ids"/>
+                            </group>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
         <record id="crosify_menu_fulfill_error_action"
-            model="ir.actions.act_window">
+                model="ir.actions.act_window">
             <field name="name">Error type</field>
             <field name="res_model">fulfill.error</field>
             <field name="view_mode">tree,form</field>
         </record>
         <menuitem id="crosify_menu_fulfill_error" name="Error Type"
-            parent="sale.menu_sales_config"
-            action="crosify_menu_fulfill_error_action"
-            sequence="27" 
-            groups="base.group_system"/>
+                  parent="sale.menu_sales_config"
+                  action="crosify_menu_fulfill_error_action"
+                  sequence="27"
+                  groups="base.group_system"/>
     </data>
 </odoo>
