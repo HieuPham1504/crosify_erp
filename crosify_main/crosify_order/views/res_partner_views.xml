@@ -8,6 +8,10 @@
                 <xpath expr="//h1/following-sibling::div[1]" position="before">
                     <field name="res_partner_code" string="Code" readonly="1" />
                 </xpath>
+
+                <xpath expr="//field[@name='function']" position="before">
+                    <field name="ref"/>
+                </xpath>
             </field>
         </record>
 
