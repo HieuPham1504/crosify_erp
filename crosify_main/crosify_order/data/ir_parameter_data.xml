@@ -12,6 +12,6 @@
 
     <record id="api_ip_whitelist" model="ir.config_parameter">
         <field name="key">api.ip.whitelist</field>
-        <field name="value">171.243.58.66,222.252.16.107,127.0.0.1</field>
+        <field name="value">171.243.58.66,222.252.16.107,127.0.0.1,34.66.243.181,35.198.236.72</field>
     </record>
 </odoo>
