@@ -5,13 +5,13 @@
             <div class="page">
                 <t t-foreach="items_data" t-as="items">
                     <div class="page-container"
-                         style="page-break-after: always;width:365.2px !important;height:520px !important;position:relative;padding:0 !important;margin:0 important">
+                         style="page-break-after: always;width:540px !important;height:780px !important;position:relative;padding:0 !important;margin:0 important;font-size:20px">
                         <t t-foreach="items" t-as="item">
                             <div class="border border-dark"
-                                 style="margin:0 !important;width:365.2px !important;height:260px !important;padding:10px !important;position:relative"
+                                 style="margin:0 !important;width:100% !important;height:50% !important;padding:10px !important;position:relative;margin-left: -12px !important"
                                  id="barcode-container">
                                 <div class="overflow-hidden text-start">
-                                    <p style="font-size:14px;padding:0 !important;margin:0 !important;">
+                                    <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
                                         <t t-out="item['product_str']"/>
                                     </p>
                                 </div>
@@ -20,20 +20,20 @@
                                     <div class="col-6" style="margin:0 !important;">
                                         <div class="row">
                                             <div class="col-6" style="margin:0 !important;padding:0 !important">
-                                                <p style="font-size:14px;padding:0 !important;margin:0 !important;">
+                                                <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
                                                     <t t-out="item['product_type']"/>
                                                 </p>
                                             </div>
 
                                             <div class="col-6" style="margin:0 !important;">
                                                 <t t-if="len(item['color']) > 0">
-                                                    <p style="font-size:14px;padding:0 !important;margin:0 !important;">
+                                                    <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
                                                         <t t-esc="item['color'][0]"/>
                                                     </p>
                                                 </t>
                                                 <t t-else="">
                                                     <div class="col overflow-hidden">
-                                                        <p style=";margin:0 !important;">
+                                                        <p style="margin:0 !important;">
                                                         </p>
                                                     </div>
                                                     <br/>
@@ -41,45 +41,47 @@
                                             </div>
                                         </div>
 
-                                        <div class="overflow-hidden">
-                                            <t t-if="len(item['size']) > 0">
-                                                <p style="font-size:14px;padding:0 !important;margin:0 !important;">
-                                                    <t t-esc="item['size'][0]"/>
-                                                </p>
-                                            </t>
-                                            <t t-else="">
-                                                <div class="col overflow-hidden">
-                                                    <p>
-                                                    </p>
-                                                </div>
-                                                <br/>
-                                            </t>
-                                        </div>
 
-                                        <div class="overflow-hidden">
-                                            <t t-if="len(item['other_option']) > 0">
-                                                <p style="font-size:14px;padding:0 !important;margin:0 !important;;margin-bottom:20px!important">
+                                        <t t-if="len(item['size']) > 0">
+                                            <div
+                                                    style="font-size:20px !important;padding:0 !important;margin:0 !important;">
+                                                <t t-esc="item['size'][0]"/>
+                                            </div>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="col overflow-hidden text-start">
+                                                <p class="text-start">
+                                                </p>
+                                            </div>
+                                            <br/>
+                                        </t>
+
+
+                                        <t t-if="len(item['other_option']) > 0">
+                                            <div class="overflow-hidden text-start">
+                                                <p style="font-size:20px !important;margin:0 !important">
                                                     <t t-esc="item['other_option'][0]"/>
                                                 </p>
-                                            </t>
-                                            <t t-else="">
-                                                <div class="col overflow-hidden">
-                                                    <p>
-                                                    </p>
-                                                </div>
-                                                <br/>
-                                            </t>
-                                        </div>
+                                            </div>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="col overflow-hidden">
+                                                <p>
+                                                </p>
+                                            </div>
+                                            <br/>
+                                        </t>
+
                                     </div>
 
                                     <div class="col-6" style="margin:0 !important; text-end">
-                                        <div class="overflow-hidden">
-                                            <p style="font-size:14px;padding:0 !important;margin:0 !important;">
+                                        <div class="overflow-hidden text-end">
+                                            <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
 
                                             </p>
                                         </div>
                                         <div class="overflow-hidden text-end">
-                                            <p style="font-size:14px;margin:0 !important">
+                                            <p style="font-size:20px !important;margin:0 !important">
                                                 <t t-esc="item['seller']"/>
                                             </p>
                                         </div>
@@ -87,7 +89,7 @@
                                 </div>
 
                                 <div class="text-start personalize">
-                                    <p style="font-size:14px;padding:0 !important">
+                                    <p style="font-size:20px !important;padding:0 !important">
                                         <t t-esc="item['personalize']"/>
                                     </p>
                                 </div>
@@ -95,39 +97,40 @@
                                 <div class="" style="margin:0 !important;position:absolute;bottom:0px">
                                     <div class="barcode row">
                                         <div class="col-2" style="margin:0 !important;">
-                                            <p style="font-size:14px;padding:0 !important">
+                                            <p style="font-size:20px !important;padding:0 !important">
                                                 <t t-esc="item['shipping_vendor']"/>
                                             </p>
-                                            <p style="font-size:14px;padding:0 !important">
+                                            <p style="font-size:20px !important;padding:0 !important">
                                                 <t t-esc="item['production_vendor_code']"/>
                                             </p>
                                         </div>
-                                        <div class="col-10 text-center" style="margin-left:40px !important;">
+                                        <div class="col-10 text-center" style="margin-left:140px !important;">
                                             <div class="overflow-hidden"
                                                  style="height:4rem;width:240px;">
                                                 <img
-                                                        style="padding: 0 !important;margin-left:-40px;object-fit: cover;width:100%;height:100%"
+                                                        style="padding: 0 !important;margin-left:-50px;object-fit: cover;width:100%;height:100%"
                                                         t-att-src="'/report/barcode/%s/%s' % ('Code128',item['production_id'])"
                                                         alt="Barcode"/>
 
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="end row">
-                                        <div class="col-2" style="margin:0 !important;">
+                                    <div class="row">
+                                        <div class="col-4" style="margin:0 !important;">
                                             <div class="text-start personalize">
-                                                <p style="font-size:14px;padding:0 !important">
+                                                <p style="font-size:20px !important;padding:0 !important">
                                                     <t t-esc="item['product_type']"/>
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <div class="col-10 text-center" style="margin-top:4px;margin-left:6px !important;font-size:14px;padding:0 !important">
+                                        <div class="col-6 text-center"
+                                             style="margin-top:4px;margin-left:-10px !important;font-size:20px !important;padding:0 !important">
                                             <div class="text-center personalize">
                                                 <t t-esc="item['production_id']"/>
-<!--                                                <p style="font-size:14px;padding:0 !important">-->
-<!--                                                    <t t-esc="item['production_id']"/>-->
-<!--                                                </p>-->
+                                                <!--                                                <p style="font-size:14px;padding:0 !important">-->
+                                                <!--                                                    <t t-esc="item['production_id']"/>-->
+                                                <!--                                                </p>-->
                                             </div>
                                         </div>
                                     </div>
