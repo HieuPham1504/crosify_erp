@@ -96,7 +96,7 @@
 
                                 <div class="" style="margin:0 !important;position:absolute;bottom:0px">
                                     <div class="barcode row">
-                                        <div class="col-4" style="margin:0 !important;margin-bottom: -70px !important">
+                                        <div class="col-4" style="margin:0 !important;margin-bottom: -80px !important">
                                             <p style="font-size:20px !important;padding:0 !important;margin:0 !important">
                                                 <t t-esc="item['shipping_vendor']"/>
                                             </p>
