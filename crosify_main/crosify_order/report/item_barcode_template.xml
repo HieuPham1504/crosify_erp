@@ -41,35 +41,36 @@
                                             </div>
                                         </div>
 
-                                        <div class="overflow-hidden text-start" style="margin:0 !important;padding:0 !important">
-                                            <t t-if="len(item['size']) > 0">
-                                                <p class="text-start" style="font-size:14px;padding:0 !important;margin:0 !important;margin-left: -10px !important">
-                                                    <t t-esc="item['size'][0]"/>
-                                                </p>
-                                            </t>
-                                            <t t-else="">
-                                                <div class="col overflow-hidden text-start">
-                                                    <p class="text-start">
-                                                    </p>
-                                                </div>
-                                                <br/>
-                                            </t>
-                                        </div>
 
-                                        <div class="overflow-hidden text-start" style="margin:0 !important;padding:0 !important">
-                                            <t t-if="len(item['other_option']) > 0">
-                                                <p class="text-start" style="font-size:14px;padding:0 !important;margin:0 !important;">
-                                                    <t t-esc="item['other_option'][0]"/>
+                                        <t t-if="len(item['size']) > 0">
+                                            <p class="text-start"
+                                               style="font-size:14px;padding:0 !important;margin:0 !important;">
+                                                <t t-esc="item['size'][0]"/>
+                                            </p>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="col overflow-hidden text-start">
+                                                <p class="text-start">
                                                 </p>
-                                            </t>
-                                            <t t-else="">
-                                                <div class="col overflow-hidden">
-                                                    <p>
-                                                    </p>
-                                                </div>
-                                                <br/>
-                                            </t>
-                                        </div>
+                                            </div>
+                                            <br/>
+                                        </t>
+                                        
+
+                                        <t t-if="len(item['other_option']) > 0">
+                                            <p class="text-start"
+                                               style="font-size:14px;padding:0 !important;margin:0 !important;">
+                                                <t t-esc="item['other_option'][0]"/>
+                                            </p>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="col overflow-hidden">
+                                                <p>
+                                                </p>
+                                            </div>
+                                            <br/>
+                                        </t>
+
                                     </div>
 
                                     <div class="col-6" style="margin:0 !important; text-end">
@@ -122,12 +123,13 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-6 text-center" style="margin-top:4px;margin-left:-20px !important;font-size:14px;padding:0 !important">
+                                        <div class="col-6 text-center"
+                                             style="margin-top:4px;margin-left:-20px !important;font-size:14px;padding:0 !important">
                                             <div class="text-center personalize">
                                                 <t t-esc="item['production_id']"/>
-<!--                                                <p style="font-size:14px;padding:0 !important">-->
-<!--                                                    <t t-esc="item['production_id']"/>-->
-<!--                                                </p>-->
+                                                <!--                                                <p style="font-size:14px;padding:0 !important">-->
+                                                <!--                                                    <t t-esc="item['production_id']"/>-->
+                                                <!--                                                </p>-->
                                             </div>
                                         </div>
                                     </div>
