@@ -5,10 +5,10 @@
             <div class="page">
                 <t t-foreach="items_data" t-as="items">
                     <div class="page-container"
-                         style="page-break-after: always;width:370px !important;height:580px !important;position:relative;padding:0 !important;margin:0 important">
+                         style="page-break-after: always;width:390px !important;height:570px !important;position:relative;padding:0 !important;margin:0 important">
                         <t t-foreach="items" t-as="item">
                             <div class="border border-dark"
-                                 style="margin:0 !important;width:370pxpx !important;height:290px !important;padding:10px !important;position:relative"
+                                 style="margin:0 !important;width:390px !important;height:285px !important;padding:10px !important;position:relative"
                                  id="barcode-container">
                                 <div class="overflow-hidden text-start">
                                     <p style="font-size:14px;padding:0 !important;margin:0 !important;">
@@ -122,7 +122,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-6 text-center" style="margin-top:4px;margin-left:6px !important;font-size:14px;padding:0 !important">
+                                        <div class="col-6 text-center" style="margin-top:4px;margin-left:-20px !important;font-size:14px;padding:0 !important">
                                             <div class="text-center personalize">
                                                 <t t-esc="item['production_id']"/>
 <!--                                                <p style="font-size:14px;padding:0 !important">-->
