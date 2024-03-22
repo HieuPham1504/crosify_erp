@@ -8,6 +8,7 @@
                 <tree string="Error type" editable="bottom">
                     <field name="id" />
                     <field name="error_type" />
+                    <field name="level_back_id" />
                 </tree>
             </field>
         </record>

@@ -291,6 +291,17 @@
             <field name="code">action = model.action_create_item_production_id()</field>
         </record>
 
+        <record id="action_create_order_qc_failed" model="ir.actions.server">
+            <field name="name">Create Order (QC Failed)</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_create_sale_order_qc_failed()</field>
+        </record>
+
         <record id="action_change_item_state_awaiting_fulfillment" model="ir.actions.server">
             <field name="name">Awaiting Fulfillment</field>
             <field name="model_id" ref="crosify_order.model_sale_order_line"/>

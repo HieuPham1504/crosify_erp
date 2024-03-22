@@ -7,6 +7,9 @@ class FulfillError(models.Model):
     _rec_name = 'error_type'
 
     error_type = fields.Char(string='Error Type', required=True)
+    level_back_id = fields.Many2one('sale.order.line.level',
+                                    string='Level Back',
+                                    help="Level back when create new item QC Failed")
 
     @api.constrains('error_type')
     def _check_error_type(self):

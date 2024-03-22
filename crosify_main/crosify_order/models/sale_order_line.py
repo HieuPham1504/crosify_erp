@@ -106,7 +106,7 @@ class SaleOrderLine(models.Model):
     variant = fields.Text(string='Variant')
     design_note = fields.Text(string='Design note', tracking=1)
     # tab production
-    production_id = fields.Char(string='Production ID', tracking=1, index=True)
+    production_id = fields.Char(string='Production ID', tracking=1, index=True, copy=False)
     production_vendor_code = fields.Char(string='Production Vendor Code')
     production_vendor_id = fields.Many2one('res.partner', string='Production Vendor')
     packaging_location = fields.Char(string='Packaging Location')
@@ -305,6 +305,55 @@ class SaleOrderLine(models.Model):
                 'sticky': True,
             },
         }
+
+    @api.model
+    def action_create_sale_order_qc_failed(self):
+
+        try:
+            item_ids = self._context.get('active_ids', [])
+            items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+            qc_failed_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.4')], limit=1)
+            if not qc_failed_level:
+                raise UserError(_("Not found level! Please contact admin."))
+            qc_failed_items = items.filtered(lambda item: item.sublevel_id.id == qc_failed_level.id)
+
+
+            for qc_failed_item in qc_failed_items:
+
+                if not qc_failed_item.error_type_id:
+                    raise UserError("Error Type does not exist in Item %s!" % qc_failed_item.display_name)
+
+                if not qc_failed_item.error_type_id.level_back_id:
+                    raise UserError("Level back does not exist in Error Type: %s!" % qc_failed_item.error_type_id.error_type)
+
+                add_value = {
+                    'myadmin_order_id': str(qc_failed_item.order_id.myadmin_order_id) + '-RP',
+                    'order_line': False,
+                    'original_order_id': qc_failed_item.order_id.id
+                    }
+                new_sale_order_id = qc_failed_item.order_id.copy(add_value)
+
+                value_order_line = {
+                    'order_id': new_sale_order_id.id,
+                    'sublevel_id': qc_failed_item.error_type_id.level_back_id.id
+                }
+
+                qc_failed_item_id = qc_failed_item.copy(value_order_line)
+
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _("Creating Sale Order"),
+
+                    'type': 'success',
+                    'message': _("System is creating Sale Order."),
+
+                    'sticky': True,
+                },
+            }
+        except Exception:
+            raise UserError("Something went wrong, please contact admin!")
 
     def action_create_production_id_cron(self, order_id_fix, items):
         total_items = self.sudo().search([('order_id_fix', '=', order_id_fix)])
