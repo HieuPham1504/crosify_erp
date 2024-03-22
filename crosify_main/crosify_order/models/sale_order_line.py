@@ -126,6 +126,7 @@ class SaleOrderLine(models.Model):
     packed_date = fields.Datetime(string='Packed Date')
     pickup_date = fields.Datetime(string='Pickup Date')
     deliver_date = fields.Datetime(string='Deliver Date')
+    deliver_update_date = fields.Datetime(string='Deliver Update Date')
     deliver_status = fields.Char(string='Deliver Status')
     customer_received = fields.Boolean(string='Customer Received')
     # Tab Other Info
@@ -529,12 +530,11 @@ class SaleOrderLine(models.Model):
                 description=f'Action Update Awaiting Design Level For Item With Production ID = {item.production_id}',
                 channel='root.channel_sale_order_line').action_cron_set_awaiting_design_level(awaiting_design_sub_level)
 
-
     def action_cron_set_awaiting_design_level(self, awaiting_design_sub_level):
         self.write({
-                'sublevel_id': awaiting_design_sub_level.id,
-                'level_id': awaiting_design_sub_level.parent_id.id,
-            })
+            'sublevel_id': awaiting_design_sub_level.id,
+            'level_id': awaiting_design_sub_level.parent_id.id,
+        })
 
     @api.model
     def action_update_level(self):
@@ -667,12 +667,24 @@ class SaleOrderLine(models.Model):
                         product_type_items = order_total_items.filtered(lambda item: item.product_type == product_type)
                         product_format = f'_{len(product_type_items)}{product_type}'
                         product_str += product_format
+                    shipping_vendor = rec.shipping_vendor_id.ref if rec.shipping_vendor_id and rec.shipping_vendor_id.ref else ''
+                    seller_id = rec.order_id.seller_id
+                    if seller_id:
+                        seller_code = '' if not seller_id.ref else seller_id.ref
+                        seller_name = '' if not seller_id.name else seller_id.name
+                        seller = f'{seller_code} {seller_name}'
+                    else:
+                        seller = ''
+
                     pair_datas.append({
                         'production_id': rec.production_id,
                         'order_id_name': rec.order_id_fix,
                         'product_type': rec.product_type,
-                        'personalize': rec.personalize,
+                        'shipping_vendor': shipping_vendor,
+                        'seller': seller,
+                        'personalize': rec.personalize[:80] if rec.personalize else '',
                         'shelf_code': rec.address_sheft_id.shelf_code,
+                        'production_vendor_code': rec.production_vendor_id.ref if rec.production_vendor_id and rec.production_vendor_id.ref else '',
                         'product_str': product_str,
                         'size': [attribute.product_attribute_value_id.name for attribute in
                                  rec.product_id.product_template_attribute_value_ids if
@@ -680,6 +692,9 @@ class SaleOrderLine(models.Model):
                         'color': [attribute.product_attribute_value_id.name for attribute in
                                   rec.product_id.product_template_attribute_value_ids if
                                   attribute.attribute_id.name in ['Color']],
+                        'other_option': [attribute.product_attribute_value_id.name for attribute in
+                                         rec.product_id.product_template_attribute_value_ids if
+                                         attribute.attribute_id.name in ['Other Option']],
 
                     })
                 data.append(pair_datas)

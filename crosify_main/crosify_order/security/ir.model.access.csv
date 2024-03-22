@@ -64,8 +64,13 @@ access_fulfill_shelf,"access_fulfill_shelf","model_fulfill_shelf",,1,1,1,1
 "access_order_shipping_line","access_order_shipping_line","model_order_shipping_line",,1,1,1,1
 "access_item_production_line","access_item_production_line","model_item_production_line",,1,1,1,1
 
+"access_tracking_sale_order_deliver_status_config","access_tracking_sale_order_deliver_status_config","model_tracking_sale_order_deliver_status_config",,1,1,1,1
+
 
 "access_order_box_container","access_order_box_container","model_order_box_container",,1,1,1,1
+
+"access_sale_order_for_sale_user","access_sale_order_for_sale_user","model_sale_order",crosify_order.group_sale_user_team,1,0,0,0
+"access_sale_order_line_for_sale_user","access_sale_order_line_for_sale_user","model_sale_order_line",crosify_order.group_sale_user_team,1,0,0,0
 
 
 "access_raise_information_wizard","access_raise_information_wizard","model_raise_information_wizard",,1,1,1,1
