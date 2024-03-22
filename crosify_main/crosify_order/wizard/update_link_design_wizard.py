@@ -17,7 +17,7 @@ class UpdateLinkDesignWizard(models.TransientModel):
         return {
             'type': 'ir.actions.act_url',
             'name': 'Get Import Template',
-            'url': '/crosify_order/static/xls/import_design_file_template.xlsx',
+            'url': '/crosify_order/static/xls/import_update_link_design_file_template.xlsx',
         }
 
     def action_import_item_design_file(self):
@@ -37,8 +37,8 @@ class UpdateLinkDesignWizard(models.TransientModel):
             ws = wb.active
             for record in ws.iter_rows(min_row=2, max_row=None, min_col=None,
                                        max_col=None, values_only=True):
-                production_id = record[1]
-                design_file_url = record[2]
+                production_id = record[0]
+                design_file_url = record[1]
                 if not production_id or not design_file_url:
                     continue
                 else:
