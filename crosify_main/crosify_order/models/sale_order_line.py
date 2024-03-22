@@ -319,6 +319,8 @@ class SaleOrderLine(models.Model):
             qc_failed_items = items.filtered(lambda item: item.sublevel_id.id == qc_failed_level.id)
 
 
+            order_created = {}
+    
             for qc_failed_item in qc_failed_items:
 
                 if not qc_failed_item.error_type_id:
@@ -327,15 +329,23 @@ class SaleOrderLine(models.Model):
                 if not qc_failed_item.error_type_id.level_back_id:
                     raise UserError("Level back does not exist in Error Type: %s!" % qc_failed_item.error_type_id.error_type)
 
-                add_value = {
-                    'myadmin_order_id': str(qc_failed_item.order_id.myadmin_order_id) + '-RP',
-                    'order_line': False,
-                    'original_order_id': qc_failed_item.order_id.id
-                    }
-                new_sale_order_id = qc_failed_item.order_id.copy(add_value)
+                if not order_created.get(qc_failed_item.order_id.id):
+
+                    add_value = {
+                        'myadmin_order_id': str(qc_failed_item.order_id.myadmin_order_id) + '-RP',
+                        'order_line': False,
+                        'original_order_id': qc_failed_item.order_id.id
+                        }
+                    new_sale_order_id = qc_failed_item.order_id.copy(add_value).id
+
+                    order_created.update({
+                        qc_failed_item.order_id.id: new_sale_order_id
+                    })
+                else:
+                    new_sale_order_id = order_created.get(qc_failed_item.order_id.id)
 
                 value_order_line = {
-                    'order_id': new_sale_order_id.id,
+                    'order_id': new_sale_order_id,
                     'sublevel_id': qc_failed_item.error_type_id.level_back_id.id
                 }
 
