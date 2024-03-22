@@ -309,26 +309,28 @@ class SaleOrderLine(models.Model):
     @api.model
     def action_create_sale_order_qc_failed(self):
 
+        item_ids = self._context.get('active_ids', [])
+        items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        qc_failed_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.4')], limit=1)
+        if not qc_failed_level:
+            raise UserError(_("Not found level! Please contact admin."))
+        qc_failed_items = items.filtered(lambda item: item.sublevel_id.id == qc_failed_level.id)
+
+        filter_items = qc_failed_items.filtered(lambda item: not item.error_type_id
+                                                             or not item.error_type_id.level_back_id)
+
+        for filter_item in filter_items:
+            if not filter_item.error_type_id:
+                raise UserError("Error Type does not exist in Item %s!" % filter_item.display_name)
+
+            if not filter_item.error_type_id.level_back_id:
+                raise UserError(
+                    "Level back does not exist in Error Type: %s!" % filter_item.error_type_id.error_type)
         try:
-            item_ids = self._context.get('active_ids', [])
-            items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
-            qc_failed_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.4')], limit=1)
-            if not qc_failed_level:
-                raise UserError(_("Not found level! Please contact admin."))
-            qc_failed_items = items.filtered(lambda item: item.sublevel_id.id == qc_failed_level.id)
-
-
             order_created = {}
-    
             for qc_failed_item in qc_failed_items:
 
-                if not qc_failed_item.error_type_id:
-                    raise UserError("Error Type does not exist in Item %s!" % qc_failed_item.display_name)
-
-                if not qc_failed_item.error_type_id.level_back_id:
-                    raise UserError("Level back does not exist in Error Type: %s!" % qc_failed_item.error_type_id.error_type)
-
-                if not order_created.get(qc_failed_item.order_id.id):
+                if not order_created.get(qc_failed_item.order_id.order_id_fix):
 
                     add_value = {
                         'myadmin_order_id': str(qc_failed_item.order_id.myadmin_order_id) + '-RP',
@@ -338,10 +340,10 @@ class SaleOrderLine(models.Model):
                     new_sale_order_id = qc_failed_item.order_id.copy(add_value).id
 
                     order_created.update({
-                        qc_failed_item.order_id.id: new_sale_order_id
+                        qc_failed_item.order_id.order_id_fix: new_sale_order_id
                     })
                 else:
-                    new_sale_order_id = order_created.get(qc_failed_item.order_id.id)
+                    new_sale_order_id = order_created.get(qc_failed_item.order_id.order_id_fix)
 
                 value_order_line = {
                     'order_id': new_sale_order_id,
@@ -358,8 +360,6 @@ class SaleOrderLine(models.Model):
 
                     'type': 'success',
                     'message': _("System is creating Sale Order."),
-
-                    'sticky': True,
                 },
             }
         except Exception:
