@@ -85,7 +85,7 @@ class SaleOrder(models.Model):
     amount_tax = fields.Float(string="Taxes", store=True, compute='compute_amount_tax')
     amount_total = fields.Float(string="Total", store=True, compute='_compute_amount_total', tracking=4)
     shipping_line_id = fields.Many2one('order.shipping.line', string='Shipping Line')
-    seller_id = fields.Many2one('res.partner', string='Seller Code')
+    seller_id = fields.Many2one('crosify.seller', string='Seller Code')
 
     @api.depends('order_line.price_total')
     def compute_amount_untaxed(self):

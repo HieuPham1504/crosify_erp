@@ -69,6 +69,8 @@
 
 "access_order_box_container","access_order_box_container","model_order_box_container",,1,1,1,1
 
+"access_crosify_seller","access_crosify_seller","model_crosify_seller",,1,1,1,1
+
 "access_sale_order_for_sale_user","access_sale_order_for_sale_user","model_sale_order",crosify_order.group_sale_user_team,1,0,0,0
 "access_sale_order_line_for_sale_user","access_sale_order_line_for_sale_user","model_sale_order_line",crosify_order.group_sale_user_team,1,0,0,0
 

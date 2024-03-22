@@ -554,7 +554,7 @@ class SaleOrderLine(models.Model):
                     shipping_vendor = rec.shipping_vendor_id.ref if rec.shipping_vendor_id and rec.shipping_vendor_id.ref else ''
                     seller_id = rec.order_id.seller_id
                     if seller_id:
-                        seller_code = '' if not seller_id.ref else seller_id.ref
+                        seller_code = '' if not seller_id.code else seller_id.code
                         seller_name = '' if not seller_id.name else seller_id.name
                         seller = f'{seller_code} {seller_name}'
                     else:
