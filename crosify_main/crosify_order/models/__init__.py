@@ -1,5 +1,6 @@
 from . import order_shipping_line
 from . import item_production_line
+from . import crosify_seller
 from . import sale_order_line
 from . import order_box_container
 from . import sale_order
@@ -30,6 +31,7 @@ from . import pickup_item
 from . import shipping_item_confirm
 from . import config_set_line_level
 from . import product_attribute
+from . import product_attribute_value
 from . import hr_job
 from . import tracking_sale_order_delivery_sync
 from . import res_partner_type

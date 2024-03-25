@@ -457,12 +457,20 @@ class SaleOrderController(Controller):
             ) 
             values
             """
-            price_subtotal = round(line.get('Subtotal', 0) / quantity, 2)
-            discount = round(line.get('Discount', 0) / quantity, 2)
-            total_tax = round(line.get('Totaltax', 0) / quantity, 2)
-            shipping_cost = round(line.get('ShippingCost', 0) / quantity, 2)
-            price_total = round(line.get('TotalAmount', 0) / quantity, 2)
-            tip = round(line.get('Tip', 0) / quantity, 2)
+            total_discount = line.get('Discount') if line.get('Discount') is not None else 0
+            total_subtotal = line.get('Subtotal') if line.get('Subtotal') is not None else 0
+            total_tax = line.get('Totaltax') if line.get('Totaltax') is not None else 0
+            total_shipping_cost = line.get('ShippingCost') if line.get('ShippingCost') is not None else 0
+            total_amount = line.get('TotalAmount') if line.get('TotalAmount') is not None else 0
+            total_tip = line.get('Tip') if line.get('Tip') is not None else 0
+
+
+            price_subtotal = round(total_subtotal / quantity, 2)
+            discount = round(total_discount / quantity, 2)
+            total_tax = round(total_tax / quantity, 2)
+            shipping_cost = round(total_shipping_cost / quantity, 2)
+            price_total = round(total_amount / quantity, 2)
+            tip = round(total_tip / quantity, 2)
 
             if line.get('ProductionLine') is None:
                 production_line_id = request.env['item.production.line']

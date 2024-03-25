@@ -21,6 +21,7 @@
         <menuitem id="hs_product_config_name" name="HS Product Config"
                   parent="sale.prod_config_main"
                   action="hs_product_config_name_action"
+                  groups="crosify_order.group_sale_team_operator,base.group_system"
                   sequence="15"/>
     </data>
 </odoo>

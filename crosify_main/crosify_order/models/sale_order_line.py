@@ -381,7 +381,8 @@ class SaleOrderLine(models.Model):
         selected_items = items.filtered(lambda item: item.order_id_fix == order_id_fix)
         has_production_id_items = total_items.filtered(lambda item: item.production_id).mapped('production_id')
         if has_production_id_items:
-            max_index = max([int(rec.split('-')[1]) for rec in has_production_id_items])
+            list_index = [int(rec.split('-')[1]) for rec in has_production_id_items if len(rec.split('-')) > 1]
+            max_index = max(list_index) if len(list_index) > 0 else 0
         else:
             max_index = 0
         for index, item in enumerate(none_production_id_items):
@@ -666,7 +667,7 @@ class SaleOrderLine(models.Model):
                     shipping_vendor = rec.shipping_vendor_id.ref if rec.shipping_vendor_id and rec.shipping_vendor_id.ref else ''
                     seller_id = rec.order_id.seller_id
                     if seller_id:
-                        seller_code = '' if not seller_id.ref else seller_id.ref
+                        seller_code = '' if not seller_id.code else seller_id.code
                         seller_name = '' if not seller_id.name else seller_id.name
                         seller = f'{seller_code} {seller_name}'
                     else:
