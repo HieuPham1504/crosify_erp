@@ -28,7 +28,7 @@
                                             <div class="col-9" style="margin:0 !important;">
                                                 <t t-if="len(item['color']) > 0">
                                                     <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
-                                                        <t t-esc="item['color'][0]"/>
+                                                        <t t-esc="item['color']"/>
                                                     </p>
                                                 </t>
                                                 <t t-else="">
@@ -43,14 +43,11 @@
 
 
                                         <div style="overflow-hidden text-start">
-                                            <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
+                                            <p style="font-size:20px !important;padding:0 !important;margin-left:10px !important;">
                                                 <t t-out="item['size']"/>
                                             </p>
-                                        </div>
 
-
-                                        <div class="overflow-hidden text-start">
-                                            <p style="font-size:20px !important;margin:0 !important;padding:0 !important">
+                                            <p style="font-size:20px !important;margin-left:10px !important;padding:0 !important">
                                                 <t t-esc="item['other_option']"/>
                                             </p>
                                         </div>
@@ -70,6 +67,12 @@
                                             </p>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="text-start personalize">
+                                    <p style="font-size:20px !important;padding:0 !important">
+                                        <t t-esc="item['personalize']"/>
+                                    </p>
                                 </div>
 
                                 <div class="text-start personalize">
