@@ -22,7 +22,7 @@ class PackedItemWizard(models.TransientModel):
             item_groups = items.filtered(lambda item: item.order_id_fix == order_id_fix)
             item_order_lines = item_groups.mapped('sale_order_line_id')
 
-            total_items = Items.search([('order_id_fix', '=', order_id_fix)])
+            total_items = Items.search([('order_id_fix', '=', order_id_fix), ('is_create_so_rp', '=', False)])
 
             if item_order_lines != total_items:
                 for error_item in item_groups:
