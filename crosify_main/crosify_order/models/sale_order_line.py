@@ -381,7 +381,8 @@ class SaleOrderLine(models.Model):
         selected_items = items.filtered(lambda item: item.order_id_fix == order_id_fix)
         has_production_id_items = total_items.filtered(lambda item: item.production_id).mapped('production_id')
         if has_production_id_items:
-            max_index = max([int(rec.split('-')[1]) for rec in has_production_id_items])
+            list_index = [int(rec.split('-')[1]) for rec in has_production_id_items if len(rec.split('-')) > 1]
+            max_index = max(list_index) if len(list_index) > 0 else 0
         else:
             max_index = 0
         for index, item in enumerate(none_production_id_items):
