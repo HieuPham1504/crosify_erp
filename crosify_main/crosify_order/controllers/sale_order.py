@@ -366,15 +366,21 @@ class SaleOrderController(Controller):
                 }
                 return response
             except Exception as e:
+                e_str = e.args[0].replace("'", "") if e.args else ''
                 insert_log_sql = f"""
                 INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type,description_json,remote_ip_address,response) 
                 VALUES (
-                null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'create', '{json.dumps(data)}'::json, '{remote_ip}', '{e}'
+                null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'create', '{json.dumps(data)}'::json, '{remote_ip}', '{e_str}'
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
+                request.env.cr.execute(f"delete from sale_order where order_id_fix = '{data.get('Orderid')}'")
+                response = {
+                    'status': 400,
+                    'message': f'{e.__class__.__name__}: {e_str}',
+                }
 
-            # return Response("Success", status=200)
+                return response
 
     def action_insert_item(self, sale_order_id, partner_id, data, order_lines):
         now = datetime.now()
@@ -457,12 +463,20 @@ class SaleOrderController(Controller):
             ) 
             values
             """
-            price_subtotal = round(line.get('Subtotal', 0) / quantity, 2)
-            discount = round(line.get('Discount', 0) / quantity, 2)
-            total_tax = round(line.get('Totaltax', 0) / quantity, 2)
-            shipping_cost = round(line.get('ShippingCost', 0) / quantity, 2)
-            price_total = round(line.get('TotalAmount', 0) / quantity, 2)
-            tip = round(line.get('Tip', 0) / quantity, 2)
+            total_discount = line.get('Discount') if line.get('Discount') is not None else 0
+            total_subtotal = line.get('Subtotal') if line.get('Subtotal') is not None else 0
+            total_tax = line.get('Totaltax') if line.get('Totaltax') is not None else 0
+            total_shipping_cost = line.get('ShippingCost') if line.get('ShippingCost') is not None else 0
+            total_amount = line.get('TotalAmount') if line.get('TotalAmount') is not None else 0
+            total_tip = line.get('Tip') if line.get('Tip') is not None else 0
+
+
+            price_subtotal = round(total_subtotal / quantity, 2)
+            discount = round(total_discount / quantity, 2)
+            total_tax = round(total_tax / quantity, 2)
+            shipping_cost = round(total_shipping_cost / quantity, 2)
+            price_total = round(total_amount / quantity, 2)
+            tip = round(total_tip / quantity, 2)
 
             if line.get('ProductionLine') is None:
                 production_line_id = request.env['item.production.line']
@@ -1021,6 +1035,7 @@ class SaleOrderController(Controller):
                 }
                 return response
             except Exception as e:
+                e_str = e.args[0].replace("'", "") if e.args else ''
                 insert_log_sql = f"""
                 INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json,remote_ip_address,response) 
                 VALUES (
@@ -1028,6 +1043,11 @@ class SaleOrderController(Controller):
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
+                response = {
+                    'status': 400,
+                    'message': f'{e.__class__.__name__}: {e_str}',
+                }
+                return response
 
     @route("/api/sale_orders/tracking_delivery", methods=["POST"], type="json", auth="public", cors="*")
     def action_create_tracking_sale_order(self, **kwargs):
@@ -1140,6 +1160,7 @@ class SaleOrderController(Controller):
                     }
                     return response
             except Exception as e:
+                e_str = e.args[0].replace("'", "") if e.args else ''
                 insert_log_sql = f"""
                                 INSERT INTO tracking_sale_order_delivery_sync(sale_order_id,description,create_date,status,description_json,remote_ip_address,response) 
                                 VALUES (
@@ -1147,3 +1168,8 @@ class SaleOrderController(Controller):
                                 ) 
                                 """
                 request.env.cr.execute(insert_log_sql)
+                response = {
+                    'status': 400,
+                    'message': f'{e.__class__.__name__}: {e_str}',
+                }
+                return response

@@ -587,6 +587,26 @@
                eval="[(6, 0, [ref('base.group_system'),ref('sales_team.group_sale_salesman'),ref('crosify_order.group_sale_user_team')])]"/>
     </record>
 
+    <record id="sale.sales_team_config" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system')])]"/>
+    </record>
+
+    <record id="sale.next_id_16" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system')])]"/>
+    </record>
+
+    <record id="sale.sale_menu_config_activity_type" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system')])]"/>
+    </record>
+
+    <record id="sale.sale_menu_config_activity_plan" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system')])]"/>
+    </record>
+
     <menuitem id="menu_sale_order_for_other"
               name="Orders"
               action="menu_sale_order_for_other_action"
