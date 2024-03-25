@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="customer_partner_type" model="res.partner.type">
+            <field name="name">Customer</field>
+            <field name="prefix_code">CRS</field>
+            <field name="padding">6</field>
+        </record>
+    </data>
+</odoo>
