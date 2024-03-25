@@ -42,36 +42,19 @@
                                         </div>
 
 
-                                        <t t-if="len(item['size']) > 0">
-                                            <div style="overflow-hidden text-start">
-                                                <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
-                                                    <t t-out="item['size'][0]"/>
-                                                </p>
-                                            </div>
-                                        </t>
-                                        <t t-else="">
-                                            <div style="overflow-hidden text-start">
-                                                <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
-
-                                                </p>
-                                            </div>
-                                        </t>
+                                        <div style="overflow-hidden text-start">
+                                            <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
+                                                <t t-out="item['size']"/>
+                                            </p>
+                                        </div>
 
 
-                                        <t t-if="len(item['other_option']) > 0">
-                                            <div class="overflow-hidden text-start">
-                                                <p style="font-size:20px !important;margin:0 !important;padding:0 !important">
-                                                    <t t-esc="item['other_option'][0]"/>
-                                                </p>
-                                            </div>
-                                        </t>
-                                        <t t-else="">
-                                            <div class="col overflow-hidden">
-                                                <p style="font-size:20px !important;margin:0 !important;padding:0 !important">
-                                                </p>
-                                            </div>
-                                            <br/>
-                                        </t>
+                                        <div class="overflow-hidden text-start">
+                                            <p style="font-size:20px !important;margin:0 !important;padding:0 !important">
+                                                <t t-esc="item['other_option']"/>
+                                            </p>
+                                        </div>
+
 
                                     </div>
 
