@@ -273,13 +273,13 @@
             </field>
         </record>
 
-        <record id="job_function_sale_order_line_action_creating_shipment_for_item" model="queue.job.function">
-            <field name="model_id" ref="sale.model_sale_order_line"/>
-            <field name="method">creating_shipment_for_item</field>
-            <field name="channel_id" ref="queue_job.channel_root"/>
-            <field name="related_action" eval='{"func_name": "action_creating_shipment_for_item"}'/>
-            <field name="retry_pattern" eval="{1: 60, 2: 180, 3: 10, 5: 300}"/>
-        </record>
+        <!--        <record id="job_function_sale_order_line_action_creating_shipment_for_item" model="queue.job.function">-->
+        <!--            <field name="model_id" ref="sale.model_sale_order_line"/>-->
+        <!--            <field name="method">creating_shipment_for_item</field>-->
+        <!--            <field name="channel_id" ref="queue_job.channel_root"/>-->
+        <!--            <field name="related_action" eval='{"func_name": "action_creating_shipment_for_item"}'/>-->
+        <!--            <field name="retry_pattern" eval="{1: 60, 2: 180, 3: 10, 5: 300}"/>-->
+        <!--        </record>-->
 
         <record id="action_create_item_production_id" model="ir.actions.server">
             <field name="name">Create Production ID</field>
@@ -389,6 +389,17 @@
             <field name="groups_id"
                    eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
             <field name="code">action = model.action_action_cancel_item()</field>
+        </record>
+
+        <record id="action_creating_shipment_item" model="ir.actions.server">
+            <field name="name">Creating Shipment</field>
+            <field name="model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_model_id" ref="crosify_order.model_sale_order_line"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_creating_shipment_for_item_model()</field>
         </record>
 
         <record id="action_generate_barcode_for_item" model="ir.actions.server">

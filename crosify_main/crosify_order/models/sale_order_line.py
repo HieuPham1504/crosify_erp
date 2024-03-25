@@ -464,13 +464,21 @@ class SaleOrderLine(models.Model):
     def action_creating_shipment_for_item_model(self):
         item_ids = self._context.get('active_ids', [])
         items = self.sudo().search([('id', 'in', item_ids)], order='id asc')
+        fulfill_vedor_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.0')], limit=1)
+        if not fulfill_vedor_level:
+            raise ValidationError(_('There is no Fulfill Vendor Level'))
+        not_available_items = items.filtered(lambda item: item.sublevel_id.sequence < fulfill_vedor_level.sequence)
+        if not_available_items:
+            not_available_orders_name = list(set(not_available_items.mapped('order_id').mapped('order_id_fix')))
+            not_available_orders_name_str = ','.join([name for name in not_available_orders_name])
+            raise ValidationError(_(f'Not Available Items With Order ID FIX: {not_available_orders_name_str}'))
         items.action_creating_shipment_for_item()
 
     def action_creating_shipment_for_item(self):
         orders = self.mapped('order_id')
         for order in orders:
             data = order.get_label_json_data()
-            self.with_delay(description=data).action_updated_shipping_items(order)
+            order.with_delay(description=data).action_creating_shipment_for_order()
 
     def action_updated_shipping_items(self, order):
         items = self
