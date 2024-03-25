@@ -475,10 +475,13 @@ class SaleOrderLine(models.Model):
         items.action_creating_shipment_for_item()
 
     def action_creating_shipment_for_item(self):
-        orders = self.mapped('order_id')
-        for order in orders:
-            data = order.get_label_json_data()
-            order.with_delay(description=data).action_creating_shipment_for_order()
+        Orders = self.env['sale.order'].sudo()
+        order_id_fixes = list(set(self.mapped('order_id_fix')))
+        for order_id_fix in order_id_fixes:
+            order = Orders.search([('order_id_fix', '=', order_id_fix), ('is_upload_tkn', '=', False)], limit=1)
+            if order:
+                data = order.get_label_json_data()
+                order.with_delay(description=data).action_creating_shipment_for_order()
 
     def action_updated_shipping_items(self, order):
         items = self
