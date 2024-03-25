@@ -5,7 +5,10 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     res_partner_code = fields.Char(string='Code')
-    partner_type_id = fields.Many2one(comodel_name='res.partner.type', copy=False)
+    partner_type_id = fields.Many2one(comodel_name='res.partner.type',
+                                      copy=False,
+                                      string='Contact Type',
+                                      default=lambda self: self.env.ref('crosify_order.customer_partner_type'))
 
     @api.model
     def create(self, vals):
@@ -17,8 +20,6 @@ class ResPartner(models.Model):
 
             if code:
                 vals['res_partner_code'] = self.env['ir.sequence'].next_by_code(code)
-            else:
-                vals['res_partner_code'] = self.env['ir.sequence'].next_by_code('res.partner.code')
 
         return super(ResPartner, self).create(vals)
     
