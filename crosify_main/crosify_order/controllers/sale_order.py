@@ -174,7 +174,7 @@ class SaleOrderController(Controller):
                     'mobile': data.get('ShippingPhonenumber') if data.get('ShippingPhonenumber') is not None else '',
                     'email': data.get('ContactEmail') if data.get('ContactEmail') is not None else '',
                     'active': True,
-                    'partner_type_id': self.env.ref('crosify_order.customer_partner_type').id,
+                    'partner_type_id': request.env.ref('crosify_order.customer_partner_type').id,
                 })
 
                 order_type_id = request.env['sale.order.type'].sudo().search([('order_type_name', '=', 'Normal')],
