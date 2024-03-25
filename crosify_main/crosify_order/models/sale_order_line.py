@@ -834,3 +834,26 @@ class SaleOrderLine(models.Model):
             rec.color = color
             rec.size = size
             rec.other_option = other_option
+
+    @api.model
+    def get_views(self, views, options=None):
+        res = super().get_views(views, options)
+        awaiting_design_tree = res['views']['list']['arch']
+        if 'awaiting_design_tree' in awaiting_design_tree:
+            res['views']['list']['arch'] = """
+                <tree string="awaiting_design_tree" create="0" export_xlsx="0" js_class="button_in_tree">
+                        <field name="production_id"/>
+                        <field name="order_id_fix"/>
+                        <field name="my_admin_order_id"/>
+                        <field name="product_sku"/>
+                        <field name="product_type"/>
+                        <field name="color"/>
+                        <field name="size"/>
+                        <field name="other_option"/>
+                        <field name="personalize"/>
+                        <field name="designer_id"/>
+                        <field name="design_note"/>
+                        <field name="sublevel_id"/>
+                    </tree>
+            """
+        return res

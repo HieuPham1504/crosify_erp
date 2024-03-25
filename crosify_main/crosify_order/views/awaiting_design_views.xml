@@ -5,8 +5,10 @@
         <record id="awaiting_design_view_tree" model="ir.ui.view">
             <field name="name">awaiting_design_view_tree</field>
             <field name="model">sale.order.line</field>
+            <field name="model">sale.order.line</field>
+            <field name="priority">999</field>
             <field name="arch" type="xml">
-                <tree string="awaiting_design_tree" create="0" export_xlsx="0" js_class="button_in_tree">
+                <tree string="awaiting_design_tree" js_class="button_in_tree">
                     <field name="production_id"/>
                     <field name="order_id_fix"/>
                     <field name="my_admin_order_id"/>
