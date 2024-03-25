@@ -23,6 +23,6 @@
             parent="sale.menu_sales_config"
             action="crosify_seller_code_menu_action"
             sequence="75"
-            groups="base.group_system"/>
+            groups="base.group_system,crosify_order.group_sale_team_operator"/>
     </data>
 </odoo>
