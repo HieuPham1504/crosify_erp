@@ -366,15 +366,21 @@ class SaleOrderController(Controller):
                 }
                 return response
             except Exception as e:
+                e_str = e.args[0].replace("'", "") if e.args else ''
                 insert_log_sql = f"""
                 INSERT INTO sale_order_sync(sale_order_id,description,create_date,status, type,description_json,remote_ip_address,response) 
                 VALUES (
-                null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'create', '{json.dumps(data)}'::json, '{remote_ip}', '{e}'
+                null, '{json.dumps(data)}', '{now_plus_7_str}', 'fail', 'create', '{json.dumps(data)}'::json, '{remote_ip}', '{e_str}'
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
+                request.env.cr.execute(f"delete from sale_order where order_id_fix = '{data.get('Orderid')}'")
+                response = {
+                    'status': 400,
+                    'message': f'{e.__class__.__name__}: {e_str}',
+                }
 
-            # return Response("Success", status=200)
+                return response
 
     def action_insert_item(self, sale_order_id, partner_id, data, order_lines):
         now = datetime.now()
@@ -1029,6 +1035,7 @@ class SaleOrderController(Controller):
                 }
                 return response
             except Exception as e:
+                e_str = e.args[0].replace("'", "") if e.args else ''
                 insert_log_sql = f"""
                 INSERT INTO sale_order_sync(sale_order_id,description,create_date,status,type,description_json,remote_ip_address,response) 
                 VALUES (
@@ -1036,6 +1043,11 @@ class SaleOrderController(Controller):
                 ) 
                 """
                 request.env.cr.execute(insert_log_sql)
+                response = {
+                    'status': 400,
+                    'message': f'{e.__class__.__name__}: {e_str}',
+                }
+                return response
 
     @route("/api/sale_orders/tracking_delivery", methods=["POST"], type="json", auth="public", cors="*")
     def action_create_tracking_sale_order(self, **kwargs):
@@ -1148,6 +1160,7 @@ class SaleOrderController(Controller):
                     }
                     return response
             except Exception as e:
+                e_str = e.args[0].replace("'", "") if e.args else ''
                 insert_log_sql = f"""
                                 INSERT INTO tracking_sale_order_delivery_sync(sale_order_id,description,create_date,status,description_json,remote_ip_address,response) 
                                 VALUES (
@@ -1155,3 +1168,8 @@ class SaleOrderController(Controller):
                                 ) 
                                 """
                 request.env.cr.execute(insert_log_sql)
+                response = {
+                    'status': 400,
+                    'message': f'{e.__class__.__name__}: {e_str}',
+                }
+                return response
