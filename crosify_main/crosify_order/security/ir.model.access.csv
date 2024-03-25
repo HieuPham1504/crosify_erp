@@ -74,6 +74,13 @@ access_fulfill_shelf,"access_fulfill_shelf","model_fulfill_shelf",,1,1,1,1
 "access_sale_order_for_sale_user","access_sale_order_for_sale_user","model_sale_order",crosify_order.group_sale_user_team,1,0,0,0
 "access_sale_order_line_for_sale_user","access_sale_order_line_for_sale_user","model_sale_order_line",crosify_order.group_sale_user_team,1,0,0,0
 
+"access_product_category_for_sale_user","access_product_category_for_sale_user","model_product_category",crosify_order.group_sale_user_team,1,1,1,1
+"access_product_template_for_sale_user","access_product_template_for_sale_user","model_product_template",crosify_order.group_sale_user_team,1,1,1,1
+"access_account_account_tag_for_sale_user","access_account_account_tag_for_sale_user","account.model_account_account_tag",crosify_order.group_sale_user_team,1,0,0,0
+"access_product_template_attribute_line_for_sale_user","access_product_template_attribute_line_for_sale_user","product.model_product_template_attribute_line",crosify_order.group_sale_user_team,1,1,1,1
+"access_product_template_attribute_value_for_sale_user","access_product_template_attribute_value_for_sale_user","product.model_product_template_attribute_value",crosify_order.group_sale_user_team,1,1,1,1
+"access_product_product_for_sale_user","access_product_product_for_sale_user","model_product_product",crosify_order.group_sale_user_team,1,1,1,1
+
 
 "access_raise_information_wizard","access_raise_information_wizard","model_raise_information_wizard",,1,1,1,1
 "access_qc_check_item_wizard_line","access_qc_check_item_wizard_line","model_qc_check_item_wizard_line",,1,1,1,1
