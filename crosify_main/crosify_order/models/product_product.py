@@ -32,24 +32,24 @@ class ProductProduct(models.Model):
                                                   string='Production Price')
     employee_id = fields.Many2one('hr.employee', string='Employee', default=lambda self: self.env.user.employee_id.id, tracking=True)
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        res_ids = super(ProductProduct, self).create(vals_list)
-        for res_id in res_ids:
-            res_id.with_delay(
-                    description=f'Sync product_id = {res_id.default_code}',
-                    channel='root.product').sync_sku_myadmin()
-        return res_ids
-
-    def write(self, vals):
-        res = super().write(vals)
-        for rec in self:
-            if vals.get('product_template_attribute_value_ids'):
-                rec.with_delay(
-                    description=f'Sync product_id = {rec.default_code}',
-                    channel='root.product').sync_sku_myadmin()
-
-        return res
+    # @api.model_create_multi
+    # def create(self, vals_list):
+    #     res_ids = super(ProductProduct, self).create(vals_list)
+    #     for res_id in res_ids:
+    #         res_id.with_delay(
+    #                 description=f'Sync product_id = {res_id.default_code}',
+    #                 channel='root.product').sync_sku_myadmin()
+    #     return res_ids
+    #
+    # def write(self, vals):
+    #     res = super().write(vals)
+    #     for rec in self:
+    #         if vals.get('product_template_attribute_value_ids'):
+    #             rec.with_delay(
+    #                 description=f'Sync product_id = {rec.default_code}',
+    #                 channel='root.product').sync_sku_myadmin()
+    #
+    #     return res
 
 
     @api.depends("product_tmpl_id.write_date")
