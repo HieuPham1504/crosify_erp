@@ -43,30 +43,31 @@
 
 
                                         <t t-if="len(item['size']) > 0">
-                                            <div
-                                                    style="font-size:20px !important;padding:0 !important;margin:0 !important;">
-                                                <t t-esc="item['size'][0]"/>
+                                            <div style="overflow-hidden text-start">
+                                                <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
+                                                    <t t-out="item['size'][0]"/>
+                                                </p>
                                             </div>
                                         </t>
                                         <t t-else="">
-                                            <div class="col overflow-hidden text-start">
-                                                <p class="text-start">
+                                            <div style="overflow-hidden text-start">
+                                                <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
+
                                                 </p>
                                             </div>
-                                            <br/>
                                         </t>
 
 
                                         <t t-if="len(item['other_option']) > 0">
                                             <div class="overflow-hidden text-start">
-                                                <p style="font-size:20px !important;margin:0 !important">
+                                                <p style="font-size:20px !important;margin:0 !important;padding:0 !important">
                                                     <t t-esc="item['other_option'][0]"/>
                                                 </p>
                                             </div>
                                         </t>
                                         <t t-else="">
                                             <div class="col overflow-hidden">
-                                                <p>
+                                                <p style="font-size:20px !important;margin:0 !important;padding:0 !important">
                                                 </p>
                                             </div>
                                             <br/>
