@@ -5,11 +5,21 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     res_partner_code = fields.Char(string='Code')
+    partner_type_id = fields.Many2one(comodel_name='res.partner.type', copy=False)
 
     @api.model
     def create(self, vals):
         if not vals.get('res_partner_code'):
-            vals['res_partner_code'] = self.env['ir.sequence'].next_by_code('res.partner.code')
+            if vals.get('partner_type_id'):
+                code = self.get_code_ir_sequence(vals.get('partner_type_id'))
+            else:
+                code = False
+
+            if code:
+                vals['res_partner_code'] = self.env['ir.sequence'].next_by_code(code)
+            else:
+                vals['res_partner_code'] = self.env['ir.sequence'].next_by_code('res.partner.code')
+
         return super(ResPartner, self).create(vals)
     
     @api.depends('name', 'res_partner_code')
@@ -52,4 +62,19 @@ class ResPartner(models.Model):
     def action_generate_code_for_partner(self):
         for rec in self:
             if not rec.res_partner_code:
-                rec.res_partner_code = self.env['ir.sequence'].next_by_code('res.partner.code')
+                if rec.partner_type_id:
+                    code = self.get_code_ir_sequence(rec.partner_type_id.id)
+                else:
+                    code = False
+
+                if code:
+                    rec.res_partner_code = self.env['ir.sequence'].next_by_code(code)
+                else:
+                    rec.res_partner_code = self.env['ir.sequence'].next_by_code('res.partner.code')
+
+    def get_code_ir_sequence(self, partner_type_id):
+        partner_type_obj = self.env['res.partner.type'].sudo().browse(int(partner_type_id)).exists()
+        code = False
+        if partner_type_obj:
+            code = partner_type_obj.code
+        return code

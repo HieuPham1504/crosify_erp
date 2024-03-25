@@ -68,6 +68,7 @@ Key Features
         'views/tracking_sale_order_delivery_sync_views.xml',
         'views/field_ignore_views.xml',
         'views/tracking_sale_order_deliver_status_config_views.xml',
+        'views/res_partner_type_views.xml',
         'views/crosify_seller_views.xml',
         'wizard/product_product_select_product_template_wizard_views.xml',
         'wizard/update_fulfillment_wizard_views.xml',
