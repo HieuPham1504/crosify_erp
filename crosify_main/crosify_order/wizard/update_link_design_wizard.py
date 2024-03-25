@@ -42,7 +42,6 @@ class UpdateLinkDesignWizard(models.TransientModel):
                 if not production_id or not design_file_url:
                     continue
                 else:
-                    production_id = production_id.strip()
                     if production_id and production_id not in production_ids:
                         production_ids.append(production_id)
                         item = total_lines.filtered(lambda item: item.production_id == production_id)
