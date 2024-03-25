@@ -668,7 +668,7 @@ class SaleOrderLine(models.Model):
                 end_index = start_index + 2
                 pair_datas = []
                 for rec in self[start_index:end_index]:
-                    order_total_items = self.sudo().search([('order_id_fix', '=', rec.order_id_fix)])
+                    order_total_items = self.sudo().search([('order_id_fix', '=', rec.order_id_fix), ('is_create_so_rp', '=', False)])
                     total_product_types = list(set(order_total_items.mapped('product_type')))
                     product_str = f'{rec.address_sheft_id.shelf_code}'
                     for product_type in total_product_types:
