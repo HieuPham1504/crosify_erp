@@ -17,15 +17,15 @@
                                 </div>
 
                                 <div class="row overflow-hidden" style="margin:0 !important;padding:0 !important">
-                                    <div class="col-6" style="margin:0 !important;">
+                                    <div class="col-8" style="margin:0 !important;">
                                         <div class="row">
-                                            <div class="col-6" style="margin:0 !important;padding:0 !important">
+                                            <div class="col-3" style="margin:0 !important;padding:0 !important">
                                                 <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
                                                     <t t-out="item['product_type']"/>
                                                 </p>
                                             </div>
 
-                                            <div class="col-6" style="margin:0 !important;">
+                                            <div class="col-9" style="margin:0 !important;">
                                                 <t t-if="len(item['color']) > 0">
                                                     <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
                                                         <t t-esc="item['color'][0]"/>
@@ -74,7 +74,7 @@
 
                                     </div>
 
-                                    <div class="col-6" style="margin:0 !important; text-end">
+                                    <div class="col-4" style="margin:0 !important; text-end">
                                         <div class="overflow-hidden text-end">
                                             <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
 
