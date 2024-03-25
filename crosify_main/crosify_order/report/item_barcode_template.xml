@@ -42,7 +42,7 @@
                                         </div>
 
 
-                                        <div style="overflow-hidden text-start">
+                                        <div class="overflow-hidden text-start">
                                             <p style="font-size:20px !important;padding:0 !important;margin-left:10px !important;">
                                                 <t t-out="item['size']"/>
                                             </p>
@@ -67,12 +67,6 @@
                                             </p>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="text-start personalize">
-                                    <p style="font-size:20px !important;padding:0 !important">
-                                        <t t-esc="item['personalize']"/>
-                                    </p>
                                 </div>
 
                                 <div class="text-start personalize">
