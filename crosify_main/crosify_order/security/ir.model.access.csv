@@ -107,3 +107,4 @@ access_config_set_line_level,access_config_set_line_level,model_config_set_line_
 "access_hr_employee_designer",access_hr_employee_designer,hr.model_hr_employee,crosify_order.group_designer_team,1,0,0,0
 "access_update_link_design_wizard","access_update_link_design_wizard","model_update_link_design_wizard",,1,1,1,1
 "access_fields_ignore","access_fields_ignore","model_fields_ignore",,1,1,1,1
+"access_res_partner_type","access_res_partner_type","model_res_partner_type",,1,1,1,1

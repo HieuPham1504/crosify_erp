@@ -34,3 +34,4 @@ from . import product_attribute
 from . import product_attribute_value
 from . import hr_job
 from . import tracking_sale_order_delivery_sync
+from . import res_partner_type

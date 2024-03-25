@@ -10,6 +10,7 @@
                 </xpath>
 
                 <xpath expr="//field[@name='function']" position="before">
+                    <field name="partner_type_id" required="True"/>
                     <field name="ref"/>
                 </xpath>
             </field>
