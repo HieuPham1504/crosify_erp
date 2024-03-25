@@ -681,6 +681,16 @@ class SaleOrderLine(models.Model):
                     else:
                         seller = ''
 
+                    size = [attribute.product_attribute_value_id.name for attribute in
+                                 rec.product_id.product_template_attribute_value_ids if
+                                 attribute.attribute_id.name in ['Size']]
+                    color = [attribute.product_attribute_value_id.name for attribute in
+                                  rec.product_id.product_template_attribute_value_ids if
+                                  attribute.attribute_id.name in ['Color']]
+                    other_option = [attribute.product_attribute_value_id.name for attribute in
+                                         rec.product_id.product_template_attribute_value_ids if
+                                         attribute.attribute_id.name in ['Other Option']]
+
                     pair_datas.append({
                         'production_id': rec.production_id,
                         'order_id_name': rec.order_id_fix,
@@ -691,15 +701,9 @@ class SaleOrderLine(models.Model):
                         'shelf_code': rec.address_sheft_id.shelf_code,
                         'production_vendor_code': rec.production_vendor_id.ref if rec.production_vendor_id and rec.production_vendor_id.ref else '',
                         'product_str': product_str,
-                        'size': [attribute.product_attribute_value_id.name for attribute in
-                                 rec.product_id.product_template_attribute_value_ids if
-                                 attribute.attribute_id.name in ['Size']],
-                        'color': [attribute.product_attribute_value_id.name for attribute in
-                                  rec.product_id.product_template_attribute_value_ids if
-                                  attribute.attribute_id.name in ['Color']],
-                        'other_option': [attribute.product_attribute_value_id.name for attribute in
-                                         rec.product_id.product_template_attribute_value_ids if
-                                         attribute.attribute_id.name in ['Other Option']],
+                        'size': size[0] if len(size) > 0 else '',
+                        'color': color[0] if len(color) > 0 else '',
+                        'other_option': other_option[0] if len(other_option) > 0 else '',
 
                     })
                 data.append(pair_datas)
