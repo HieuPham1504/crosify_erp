@@ -51,6 +51,7 @@
             <field name="res_model">sale.order.line</field>
             <field name="view_mode">tree,form</field>
             <field name="domain">[('sublevel_id.level', '=', 'L3.1')]</field>
+            <field name="context">{'is_show_button_update_link_design': 1}</field>
             <field name="view_ids" eval="[(5, 0, 0),
             (0, 0, {'view_mode': 'tree', 'view_id': ref('crosify_order.awaiting_design_view_tree')})]"/>
         </record>

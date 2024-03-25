@@ -32,3 +32,4 @@ from . import config_set_line_level
 from . import product_attribute
 from . import hr_job
 from . import tracking_sale_order_delivery_sync
+from . import res_partner_type
