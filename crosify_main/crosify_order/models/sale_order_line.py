@@ -163,6 +163,8 @@ class SaleOrderLine(models.Model):
     is_combo = fields.Boolean(string='Combo', default=False)
     production_line_id = fields.Many2one('item.production.line', string='Production Line')
     order_index = fields.Integer(string='Order Index', index=True)
+    number_rp = fields.Integer('Number RP', default=0)
+    is_create_so_rp = fields.Boolean('Is create SO Rp', default=False, copy=False)
 
     # override_fields
     price_unit = fields.Float(
@@ -322,7 +324,9 @@ class SaleOrderLine(models.Model):
         qc_failed_items = items.filtered(lambda item: item.sublevel_id.id == qc_failed_level.id)
 
         filter_items = qc_failed_items.filtered(lambda item: not item.error_type_id
-                                                             or not item.error_type_id.level_back_id)
+                                                             or not item.error_type_id.level_back_id
+                                                             or item.is_create_so_rp
+                                                )
 
         for filter_item in filter_items:
             if not filter_item.error_type_id:
@@ -331,14 +335,22 @@ class SaleOrderLine(models.Model):
             if not filter_item.error_type_id.level_back_id:
                 raise UserError(
                     "Level back does not exist in Error Type: %s!" % filter_item.error_type_id.error_type)
+
+            if filter_item.is_create_so_rp:
+                raise UserError("You cannot create an order that has already created (Order QC Failed).")
         try:
             order_created = {}
             for qc_failed_item in qc_failed_items:
 
+                qc_failed_item.is_create_so_rp = True
+
                 if not order_created.get(qc_failed_item.order_id.order_id_fix):
 
+                    post_order_id = self.handle_name_myadmin_order_id(qc_failed_item.order_id.myadmin_order_id,
+                                                                      qc_failed_item.number_rp)
+
                     add_value = {
-                        'myadmin_order_id': str(qc_failed_item.order_id.myadmin_order_id) + '-RP',
+                        'myadmin_order_id': post_order_id,
                         'order_line': False,
                         'original_order_id': qc_failed_item.order_id.id
                         }
@@ -353,7 +365,8 @@ class SaleOrderLine(models.Model):
 
                 value_order_line = {
                     'order_id': new_sale_order_id,
-                    'sublevel_id': qc_failed_item.error_type_id.level_back_id.id
+                    'sublevel_id': qc_failed_item.error_type_id.level_back_id.id,
+                    'number_rp': qc_failed_item.number_rp + 1
                 }
                 # ignore fields
                 fields_ignores = fulfill_error_id.fields_ignore_ids
@@ -372,8 +385,28 @@ class SaleOrderLine(models.Model):
                     'message': _("System is creating Sale Order."),
                 },
             }
-        except Exception:
+        except Exception as e:
+            _logger.exception(str(e))
             raise UserError("Something went wrong, please contact admin!")
+
+    def handle_name_myadmin_order_id(self, myadmin_order_id, number_rp):
+
+        if number_rp:
+            # Tìm vị trí của chuỗi "Rp"
+            rp_index = myadmin_order_id.find("RP")
+            # Kiểm tra xem chuỗi "Rp" có tồn tại trong chuỗi không
+            if rp_index != -1:
+                # Nếu tồn tại, cắt chuỗi từ đầu đến vị trí "Rp"
+                result_str = myadmin_order_id[:rp_index + len("RP")]
+            else:
+                result_str = ''
+
+            return result_str + '-' + str(number_rp)
+
+        else:
+            return myadmin_order_id + '-RP'
+
+
 
     def action_create_production_id_cron(self, order_id_fix, items):
         total_items = self.sudo().search([('order_id_fix', '=', order_id_fix)])
@@ -768,8 +801,6 @@ class SaleOrderLine(models.Model):
             if fulfill_shelf_id.temp_shelf > line.temp_shelf:
                 fulfill_shelf_id = line
         return fulfill_shelf_id
-
-
 
     def handle_data_shelf(self, data_shelf, order_id, product_type):
 
