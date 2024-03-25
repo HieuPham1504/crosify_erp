@@ -200,12 +200,12 @@ class SaleOrderController(Controller):
                             'code': data.get('ShippingLine'),
                             'name': data.get('ShippingLine'),
                         })
-
+                currency = data.get('Currency').upper() if data.get('Currency') is not None else ''
                 create_order_sql = f"""
                     with currency as (
                         select id 
                         from res_currency 
-                        where name = '{data.get('Currency')}' 
+                        where name = '{currency}' 
                         limit 1
                     ), 
     
@@ -695,6 +695,7 @@ class SaleOrderController(Controller):
                                             '{line.get('LastupdateLevel', '')}',
                                             """
 
+                currency = data.get('Currency').upper() if data.get('Currency') is not None else ''
                 create_order_line_sql += f"""
                 '{line.get('PackagingLocationInfo') if line.get('PackagingLocationInfo') is not None else ''}',
                 '{line.get('ShippingMethodInfo') if line.get('ShippingMethodInfo') is not None else ''}',
@@ -706,7 +707,7 @@ class SaleOrderController(Controller):
                 {request.env(su=True).company.id}, 
                 (select id 
                 from res_currency 
-                where name = '{data.get('Currency')}' 
+                where name = '{currency}' 
                 limit 1),
                 {partner_id.id},
                 '{line.get('Variant') if line.get('Variant') is not None else ''}', 
