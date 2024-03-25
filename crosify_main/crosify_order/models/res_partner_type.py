@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 
 
 class PartnerType(models.Model):
@@ -22,6 +22,15 @@ class PartnerType(models.Model):
             partner_type_id.sequence_id = sequence_id
 
         return partner_type_ids
+
+    def unlink(self):
+        customer_partner_id = self.env.ref('crosify_order.customer_partner_type').id
+        for rec in self:
+            if customer_partner_id == rec.id:
+                raise UserError("Can't delete this record %s!" % rec.name)
+            rec.sequence_id.unlink()
+        return super(PartnerType, self).unlink()
+
 
     def create_ir_sequence(self):
         vals = {
