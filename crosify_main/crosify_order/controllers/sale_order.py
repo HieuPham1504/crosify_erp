@@ -187,8 +187,8 @@ class SaleOrderController(Controller):
                     utm_source = request.env['utm.source'].sudo().search(
                         [('name', '=ilike', data.get('UtmSource').strip())], limit=1)
 
-                seller_id = request.env['res.partner'].sudo().search(
-                    [('res_partner_code', '=', data.get('SellerCode'))], limit=1)
+                seller_id = request.env['crosify.seller'].sudo().search(
+                    [('code', '=', data.get('SellerCode'))], limit=1)
                 if data.get('ShippingLine') is None:
                     shipping_line_id = request.env['order.shipping.line']
                 else:
@@ -794,8 +794,8 @@ class SaleOrderController(Controller):
                     [('work_email', '=', data.get('UpdatedBy'))], limit=1)
                 order_create_employee = request.env['hr.employee'].sudo().search(
                     [('work_email', '=', data.get('CreatedBy'))], limit=1)
-                seller_id = request.env['res.partner'].sudo().search(
-                    [('res_partner_code', '=', data.get('SellerCode'))], limit=1)
+                seller_id = request.env['crosify.seller'].sudo().search(
+                    [('code', '=', data.get('SellerCode'))], limit=1)
 
                 if data.get('ShippingLine') is None:
                     shipping_line_id = request.env['order.shipping.line']
