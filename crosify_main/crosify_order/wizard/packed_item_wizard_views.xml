@@ -5,7 +5,7 @@
             <field name="name">packed_item_wizard_form_view</field>
             <field name="model">packed.item.wizard</field>
             <field name="arch" type="xml">
-                <form class="sale_order_view_inherit_form_crosify_order">
+                <form class="sale_order_view_inherit_form_crosify_order" create="0" edit="0">
                     <header>
                         <button string="Update" name="action_pakced_item" type="object"
                                 class="btn-primary"/>

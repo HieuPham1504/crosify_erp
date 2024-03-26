@@ -5,13 +5,13 @@
             <field name="name">pack_on_shelf_wizard_form_view</field>
             <field name="model">pack.on.shelf.wizard</field>
             <field name="arch" type="xml">
-                <form class="sale_order_view_inherit_form_crosify_order">
+                <form class="sale_order_view_inherit_form_crosify_order" create="0" edit="0">
                     <header>
                         <button string="Update" name="action_checking_item_shelf" type="object"
                                         class="btn-primary" data-hotkey="q"/>
                     </header>
                     <sheet>
-
+                        <field name="name" invisible="1"/>
                         <br/>
 
                         <field name="line_ids" nolabel="1">
@@ -37,7 +37,7 @@
         </record>
 
         <record id="pack_on_shelf_wizard_menu_action" model="ir.actions.act_window">
-            <field name="name">QC Failed</field>
+            <field name="name">Pack On Shelf</field>
             <field name="res_model">pack.on.shelf.wizard</field>
             <field name="view_mode">form</field>
             <field name="target">current</field>
