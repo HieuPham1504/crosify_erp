@@ -5,7 +5,6 @@ from odoo.exceptions import ValidationError
 class CrosifySeller(models.Model):
     _name = 'crosify.seller'
     _description = 'Seller'
-    _rec_name = 'code'
 
     @api.constrains('code')
     def _check_code(self):
@@ -26,3 +25,13 @@ class CrosifySeller(models.Model):
             if not val.code:
                 val.code = self.env['ir.sequence'].sudo().next_by_code('seller.code')
         return results
+
+    @api.depends('name', 'code')
+    @api.depends_context('code', 'name')
+    def _compute_display_name(self):
+
+        def get_display_name(name, code):
+            return f'[{code}] {name}'
+
+        for rec in self.sudo():
+                rec.display_name = get_display_name(rec.name, rec.code)
