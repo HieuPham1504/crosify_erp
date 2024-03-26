@@ -57,8 +57,8 @@ class PickupItem(models.Model):
         if any(item.state == 'fail' for item in total_items):
             failed_items = total_items.filtered(lambda item: item.state == 'fail')
             pair_number_faileds = list(set(failed_items.mapped('pair_number')))
-            total_items_fails = total_items.filtered(lambda item: item.pair_number in pair_number_faileds)
-            total_fails = total_items_fails
+            total_items_fails = total_items.filtered(lambda item: item.pair_number in pair_number_faileds and item.sale_order_line_id)
+            total_fails = total_items_fails[-1]
             for line in total_fails:
                 line.write({
                     'is_fail_item': True,
@@ -93,7 +93,6 @@ class PickupItem(models.Model):
 
 class PickupItemLine(models.Model):
     _name = 'pickup.item.line'
-    _order = 'is_fail_item desc'
 
     pickup_item_id = fields.Many2one('pickup.item')
     barcode = fields.Char(string='Barcode')
@@ -121,7 +120,7 @@ class PickupItemLine(models.Model):
                 barcode = barcode[8:]
             total_lines = self.pickup_item_id.item_ids
             none_id_line = total_lines.filtered(lambda line: line.id.ref is None)
-            total_line_length = len(total_lines) - 1 if not none_id_line else len(total_lines) + 1
+            total_line_length = len(total_lines) - 1 if len(none_id_line) > 0 else len(total_lines) + 1
             pair_number = (total_line_length // 2) + (total_line_length % 2)
             orders = Orders.search([('tkn', '=', barcode)])
             nearest_line = False
