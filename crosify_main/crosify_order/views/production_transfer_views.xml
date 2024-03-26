@@ -59,7 +59,6 @@
                                         <field name="product_template_attribute_value_ids" readonly="1" force_save="1"
                                                widget="many2many_tags"/>
                                         <field name="personalize" readonly="1" force_save="1"/>
-                                        <field name="personalize" readonly="1" force_save="1"/>
                                         <field name="production_vendor_id" readonly="1" force_save="1" options='{"no_open": True, "no_create": True}'/>
                                         <field name="sublevel_id" readonly="1" force_save="1"/>
                                         <field name="address_sheft_id" readonly="1" force_save="1"/>

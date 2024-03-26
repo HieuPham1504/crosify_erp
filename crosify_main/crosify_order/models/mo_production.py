@@ -36,6 +36,18 @@ class MOProduction(models.Model):
                     raise ValidationError(
                         _(f"This Item {item.display_name} already exists in Productions {','.join(code for code in duplicate_item.mapped('code'))}"))
 
+    def unlink(self):
+        current_user = self.env.user
+        operator_user = current_user.has_group('crosify_order.group_sale_team_operator')
+        system_user = current_user.has_group('base.group_system')
+        if operator_user or system_user:
+            if any([rec.state != 'draft' for rec in self]):
+                raise ValidationError(_('Can Not Delete Record'))
+        else:
+            raise ValidationError(_('Can Not Delete Record'))
+        res = super().unlink()
+        return res
+
     def action_export_xlsx(self):
         data = {
             'id': self.id,
@@ -77,6 +89,7 @@ class MOProduction(models.Model):
             'Per',
             'Design Link',
             'Domain',
+            'Production Vendor',
         ]
 
         header_row = 0
@@ -99,6 +112,7 @@ class MOProduction(models.Model):
             personalize = line.personalize if line.personalize else ''
             design_file_url = line.design_file_url if line.design_file_url else ''
             domain = line.order_id.domain if line.order_id.domain else ''
+            production_vendor = line.production_vendor_id.name if line.production_vendor_id else ''
 
             worksheet.write(line_row, 0, production_line, cell_format)
             worksheet.write(line_row, 1, fulfill_note, cell_format)
@@ -110,6 +124,7 @@ class MOProduction(models.Model):
             worksheet.write(line_row, 7, personalize, cell_format)
             worksheet.write(line_row, 8, design_file_url, cell_format)
             worksheet.write(line_row, 9, domain, cell_format)
+            worksheet.write(line_row, 10, production_vendor, cell_format)
             line_row += 1
 
         workbook.close()
