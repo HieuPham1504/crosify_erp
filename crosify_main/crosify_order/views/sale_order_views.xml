@@ -624,7 +624,7 @@
               parent="sale.sale_order_menu"
               sequence="20"/>
 
-    <menuitem id="sale.res_partner_menu"
+    <menuitem id="sale.res_partner_menu" name="Contacts"
               action="account.res_partner_action_customer"
               groups="crosify_order.group_sale_team_operator,base.group_system"
               sequence="40"
