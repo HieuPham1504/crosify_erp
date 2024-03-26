@@ -766,8 +766,8 @@ class SaleOrderLine(models.Model):
         order_size = ''
         if not is_not_all_TN_product_items:
             item_length = len(total_items)
-            default_width = 11
-            default_length = 11
+            default_width = 11.0
+            default_length = 11.0
             basic_height_size = 1.5
 
             floor_number = item_length // 6
