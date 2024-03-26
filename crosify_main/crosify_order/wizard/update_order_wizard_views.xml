@@ -5,7 +5,7 @@
             <field name="name">update_order_wizard_form_view</field>
             <field name="model">update.order.wizard</field>
             <field name="arch" type="xml">
-                <form string="Update Order" class="sale_order_view_inherit_form_crosify_order">
+                <form string="Update Order" class="sale_order_view_inherit_form_crosify_order" create="0" edit="0">
                     <header>
                         <button name="action_update_order" string="Update Order" type="object" class="oe_highlight"/>
                         <button name="get_import_templates" string="Get Import Template" type="object" class="oe_highlight"/>
@@ -13,6 +13,7 @@
                     <sheet>
                         <div class="o_row mw-50">
                             <field name="item_file_name" invisible="1"/>
+                            <field name="name" invisible="1"/>
                             <field name="item_file" filename="item_file_name"/>
                             <button name="action_import_items" invisible="item_file == False"
                                     class="btn btn-primary" type="object" string="Upload"/>

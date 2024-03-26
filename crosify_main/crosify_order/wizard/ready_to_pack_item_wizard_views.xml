@@ -5,7 +5,7 @@
             <field name="name">ready_to_pack_wizard_form_view</field>
             <field name="model">ready.packing.item.wizard</field>
             <field name="arch" type="xml">
-                <form class="sale_order_view_inherit_form_crosify_order">
+                <form class="sale_order_view_inherit_form_crosify_order" create="0" edit="0">
                     <header>
                         <button string="Ready To Pack" name="action_ready_to_pack_item" type="object"
                                 class="btn-primary"/>
@@ -15,6 +15,7 @@
                     </header>
                     <sheet>
                         <br/>
+                        <field name="name" invisible="1"/>
 
                         <field name="line_ids" nolabel="1" readonly="1" force_save="1">
                             <tree>
