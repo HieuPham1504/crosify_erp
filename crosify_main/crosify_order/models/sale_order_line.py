@@ -194,6 +194,7 @@ class SaleOrderLine(models.Model):
     other_option = fields.Char(string="Other option", compute='compute_attribute_product', store=True)
 
     qc_passed_date = fields.Datetime(string='QC Passed Date', tracking=1)
+    seller_id = fields.Many2one('crosify.seller', related='order_id.seller_id', string='Seller', store=True, index=1)
 
     def write(self, vals):
         # OVERRIDE

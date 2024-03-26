@@ -102,6 +102,7 @@
                         <field name="sublevel_id"/>
                         <field name="price_subtotal" column_invisible="1"/>
                         <field name="write_date" string="Last Update" optional="hide"/>
+                        <field name="seller_id" optional="hide" options='{"no_open": True, "no_create": True}'/>
                     </tree>
                 </xpath>
             </field>
@@ -140,6 +141,7 @@
                                     <field name="production_id"/>
                                     <field name="personalize"/>
                                     <field name="order_index"/>
+                                    <field name="seller_id" options='{"no_open": True, "no_create": True}'/>
                                 </group>
                             </group>
                             <notebook>

@@ -24,7 +24,7 @@ class ReadyPackingItemWizard(models.TransientModel):
         for order_id_fix in order_id_fixes:
             same_orders = orders.filtered(lambda order: order.order_id_fix == order_id_fix)
             pack_on_shelf_item_orders = pack_on_shelf_items.filtered(lambda item: item.order_id_fix == order_id_fix)
-            order_total_items = same_orders.order_line
+            order_total_items = same_orders.order_line.filtered(lambda item: not item.is_create_so_rp)
             if pack_on_shelf_item_orders == order_total_items:
                 for item in pack_on_shelf_item_orders:
                     item.sublevel_id = ready_to_pack_level.id
