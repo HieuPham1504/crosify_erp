@@ -120,7 +120,8 @@ class PickupItemLine(models.Model):
             if len(barcode) >= 30:
                 barcode = barcode[8:]
             total_lines = self.pickup_item_id.item_ids
-            total_line_length = len(total_lines) -1
+            none_id_line = total_lines.filtered(lambda line: line.id.ref is None)
+            total_line_length = len(total_lines) - 1 if not none_id_line else len(total_lines) + 1
             pair_number = (total_line_length // 2) + (total_line_length % 2)
             orders = Orders.search([('tkn', '=', barcode)])
             nearest_line = False
