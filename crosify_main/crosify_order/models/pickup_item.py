@@ -56,14 +56,19 @@ class PickupItem(models.Model):
         total_items = self.item_ids
         if any(item.state == 'fail' for item in total_items):
             failed_items = total_items.filtered(lambda item: item.state == 'fail')
-            pair_number_faileds = list(set(failed_items.mapped('pair_number')))
-            total_items_fails = total_items.filtered(lambda item: item.pair_number in pair_number_faileds and item.sale_order_line_id)
-            total_fails = total_items_fails[-1]
-            for line in total_fails:
-                line.write({
-                    'is_fail_item': True,
-                    'state': 'fail'
-                })
+            for failed_item in failed_items:
+                pair_number_faileds = list(set(failed_item.mapped('pair_number')))
+                if failed_item.type == 'order':
+                    total_items_fails = total_items.filtered(lambda item: item.pair_number in pair_number_faileds and item.type == 'item')
+                else:
+                    total_items_fails = total_items.filtered(
+                        lambda item: item.pair_number in pair_number_faileds and item.type == 'order')
+                total_fails = total_items_fails[-1]
+                for line in total_fails:
+                    line.write({
+                        'is_fail_item': True,
+                        'state': 'fail'
+                    })
 
             return {
                 'type': 'ir.actions.act_window',
