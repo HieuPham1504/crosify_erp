@@ -10,6 +10,7 @@
                     <field name="date"/>
                     <field name="employee_id"/>
                     <field name="note"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
