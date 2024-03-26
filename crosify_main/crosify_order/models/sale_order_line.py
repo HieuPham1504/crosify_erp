@@ -188,7 +188,7 @@ class SaleOrderLine(models.Model):
         compute='_compute_amount_custom',
         store=True, precompute=True)
 
-    #variant product field
+    # variant product field
     color = fields.Char(string="Color", compute='compute_attribute_product', store=True)
     size = fields.Char(string="Size", compute='compute_attribute_product', store=True)
     other_option = fields.Char(string="Other option", compute='compute_attribute_product', store=True)
@@ -206,7 +206,7 @@ class SaleOrderLine(models.Model):
                 raise ValidationError(_('Level must be Paid Order or Cancel / Refund'))
         res = super().write(vals)
 
-        #set add_or_minus_fulfill_shelf
+        # set add_or_minus_fulfill_shelf
         if sublevel_id:
             new_sublevel_id = self.sublevel_id
             self.add_or_minus_fulfill_shelf(old_sublevel_id, new_sublevel_id)
@@ -356,7 +356,7 @@ class SaleOrderLine(models.Model):
                         'myadmin_order_id': post_order_id,
                         'order_line': False,
                         'original_order_id': qc_failed_item.order_id.id
-                        }
+                    }
                     new_sale_order_id = qc_failed_item.order_id.copy(add_value).id
 
                     order_created.update({
@@ -408,8 +408,6 @@ class SaleOrderLine(models.Model):
 
         else:
             return myadmin_order_id + '-RP'
-
-
 
     def action_create_production_id_cron(self, order_id_fix, items):
         total_items = self.sudo().search([('order_id_fix', '=', order_id_fix)])
@@ -704,7 +702,8 @@ class SaleOrderLine(models.Model):
                 end_index = start_index + 2
                 pair_datas = []
                 for rec in self[start_index:end_index]:
-                    order_total_items = self.sudo().search([('order_id_fix', '=', rec.order_id_fix), ('is_create_so_rp', '=', False)])
+                    order_total_items = self.sudo().search(
+                        [('order_id_fix', '=', rec.order_id_fix), ('is_create_so_rp', '=', False)])
                     box_size = order_total_items.get_order_box_size()
                     total_product_types = list(set(order_total_items.mapped('product_type')))
                     product_str = f'{rec.address_sheft_id.shelf_code}'
@@ -722,14 +721,14 @@ class SaleOrderLine(models.Model):
                         seller = ''
 
                     size = [attribute.product_attribute_value_id.name for attribute in
-                                 rec.product_id.product_template_attribute_value_ids if
-                                 attribute.attribute_id.name in ['Size']]
+                            rec.product_id.product_template_attribute_value_ids if
+                            attribute.attribute_id.name in ['Size']]
                     color = [attribute.product_attribute_value_id.name for attribute in
-                                  rec.product_id.product_template_attribute_value_ids if
-                                  attribute.attribute_id.name in ['Color']]
+                             rec.product_id.product_template_attribute_value_ids if
+                             attribute.attribute_id.name in ['Color']]
                     other_option = [attribute.product_attribute_value_id.name for attribute in
-                                         rec.product_id.product_template_attribute_value_ids if
-                                         attribute.attribute_id.name in ['Other Option']]
+                                    rec.product_id.product_template_attribute_value_ids if
+                                    attribute.attribute_id.name in ['Other Option']]
 
                     pair_datas.append({
                         'production_id': rec.production_id,
@@ -773,10 +772,9 @@ class SaleOrderLine(models.Model):
             floor_number = item_length // 6
             height_number = floor_number if item_length % 6 == 0 else floor_number + 1
 
-            total_width = height_number * default_width
-            total_length = height_number * default_length
-            total_height = height_number * basic_height_size
-
+            total_width = self.action_beauty_float_number(height_number * default_width)
+            total_length = self.action_beauty_float_number(height_number * default_length)
+            total_height = self.action_beauty_float_number(height_number * basic_height_size)
 
             order_size = f'{total_length}x{total_width}x{total_height}'
         else:
@@ -788,8 +786,23 @@ class SaleOrderLine(models.Model):
             max_length = 1 if max(lengths) < 1 else max(lengths)
             max_height = 1 if sum(heights) < 1 else sum(heights)
 
-            order_size = f'{max_with}x{max_length}x{max_height}'
+            order_size = f'{self.action_beauty_float_number(max_with)}x{self.action_beauty_float_number(max_length)}x{self.action_beauty_float_number(max_height)}'
         return order_size
+
+    def action_beauty_float_number(self, number):
+        if not number:
+            return 0
+        number_string = str(number)
+        if '.' in number_string:
+            number_split = number_string.split('.')
+            first_number = number_split[0]
+            last_number = number_split[-1]
+            if last_number == '0':
+                return first_number
+            else:
+                return number_string
+        else:
+            return number_string
 
     @api.model
     def action_set_address_shelf(self):
@@ -798,7 +811,8 @@ class SaleOrderLine(models.Model):
 
     def queue_action_set_address_shelf(self, item_ids):
         try:
-            items = self.sudo().search([('id', 'in', item_ids)], order='product_type,order_id').filtered(lambda item: not item.address_sheft_id)
+            items = self.sudo().search([('id', 'in', item_ids)], order='product_type,order_id').filtered(
+                lambda item: not item.address_sheft_id)
             data_shelf = {}
             for item in items:
                 if not item.address_sheft_id and item.product_type:
