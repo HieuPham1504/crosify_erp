@@ -21,6 +21,7 @@ class QCCheckItemWizard(models.TransientModel):
             rec.name = 'QC Passed' if rec.type == 'passed' else 'QC Failed'
 
     def action_update_qc_item(self):
+        now = datetime.now()
         qc_pass_line_ids = self.qc_pass_line_ids
         ItemLevels = self.env['sale.order.line.level'].sudo()
         Orders = self.env['sale.order'].sudo()
@@ -40,7 +41,8 @@ class QCCheckItemWizard(models.TransientModel):
                 else:
                     new_level = qc_passed_level.id
                 item.write({
-                    'sublevel_id': new_level
+                    'sublevel_id': new_level,
+                    'qc_passed_date': now,
                 })
             return {
                 'type': 'ir.actions.client',

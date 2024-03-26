@@ -98,6 +98,7 @@
                         <field name="item_size" optional="show"/>
                         <field name="personalize" optional="show"/>
                         <field name="accessory_name" optional="hide"/>
+                        <field name="design_date" optional="hide"/>
                         <field name="sublevel_id"/>
                         <field name="price_subtotal" column_invisible="1"/>
                         <field name="write_date" string="Last Update" optional="hide"/>
@@ -257,6 +258,15 @@
                                             <field name="error_type_id" options='{"no_open": True, "no_create": True}'
                                                    readonly="1" force_save="1"/>
                                             <field name="error_note" readonly="1" force_save="1"/>
+                                        </group>
+                                    </group>
+
+                                    <group>
+                                        <group name="qc_passed" string="QC PASSED">
+                                            <field name="qc_passed_date" readonly="1" force_save="1"/>
+                                        </group>
+
+                                        <group>
                                         </group>
                                     </group>
                                 </page>
