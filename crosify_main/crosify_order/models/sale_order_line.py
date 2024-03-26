@@ -770,7 +770,8 @@ class SaleOrderLine(models.Model):
             default_length = 11
             basic_height_size = 1.5
 
-            height_number = item_length // 6 + item_length % 2
+            floor_number = item_length // 6
+            height_number = floor_number if item_length % 6 == 0 else floor_number + 1
 
             total_width = height_number * default_width
             total_length = height_number * default_length
