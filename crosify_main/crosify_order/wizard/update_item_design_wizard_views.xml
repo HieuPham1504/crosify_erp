@@ -1,0 +1,67 @@
+<odoo>
+    <data>
+        <record id="update_item_design_wizard_form_view" model="ir.ui.view">
+            <field name="name">update_item_design_wizard_form_view</field>
+            <field name="model">update.item.design.wizard</field>
+            <field name="arch" type="xml">
+                <form class="sale_order_view_inherit_form_crosify_order">
+                    <header>
+                        <button name="get_import_templates"
+                                class="btn btn-primary" type="object" string="Get Import Template"/>
+                        <button name="action_update_design_file"
+                                class="btn btn-primary" type="object" string="Update Design File"/>
+                    </header>
+                    <sheet>
+                        <div class="o_row mw-50">
+                            <field name="item_design_file_name" invisible="1"/>
+                            <field name="item_design_file" filename="item_design_file_name"/>
+                            <button name="action_import_item_design_file" invisible="item_design_file == False"
+                                    class="btn btn-primary" type="object" string="Upload"/>
+                        </div>
+
+                        <br/>
+                        <notebook>
+                            <page name="item-info" string="Items">
+                                <field name="item_ids" can_create="false" nolabel="1"
+                                       domain="[('sublevel_id.level', '=', 'L3.1')]"
+                                       options="{'no_quick_create': True, 'no_create_edit' : True}">
+                                    <tree string="Items" editable="top" create="0" delete="1">
+                                        <field name="sale_order_line_id" readonly="1" force_save="1"/>
+                                        <field name="production_id" readonly="1" force_save="1"/>
+                                        <field name="product_type" readonly="1" force_save="1"/>
+                                        <field name="sublevel_id" readonly="1" force_save="1"/>
+                                        <field name="design_file_url" readonly="0" width="280px" force_save="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                    <footer>
+                        <button string="Update Design" name="action_update_design_file" type="object"
+                                class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="x"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="update_item_design_menu_action" model="ir.actions.server">
+            <field name="name">Update Design</field>
+            <field name="model_id" ref="crosify_order.model_update_item_design_wizard"/>
+            <field name="binding_model_id" ref="crosify_order.model_update_item_design_wizard"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_designer_team'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_update_item_design_info()</field>
+        </record>
+
+
+<!--        <menuitem id="update_item_design_menu" name="Update Design"-->
+<!--                  parent="sale.sale_order_menu"-->
+<!--                  action="update_item_design_menu_action"-->
+<!--                  groups="base.group_system,crosify_order.group_designer_team"-->
+<!--                  sequence="21"/>-->
+    </data>
+</odoo>

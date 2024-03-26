@@ -1,0 +1,25 @@
+<odoo>
+    <data>
+        <record id="update_item_level_wizard_form_view" model="ir.ui.view">
+            <field name="name">update_item_level_wizard_form_view</field>
+            <field name="model">update.item.level.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Update Items Level">
+                    <sheet>
+                        <group name="main">
+                            <group>
+                                <field name="level_id" required="1" options='{"no_open": True, "no_create": True}' domain="[('is_parent', '=', False)]"/>
+                            </group>
+                            <group></group>
+                        </group>
+                        <br/>
+                    </sheet>
+                    <footer>
+                        <button name="action_update_item_level" string="Update Level" type="object" class="oe_highlight" data-hotkey="q"/>
+                        <button string="Discard" special="cancel" data-hotkey="x"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

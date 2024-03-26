@@ -10,18 +10,66 @@
                     <field name="shelf_code" required="1"/>
                     <field name="shelf_name" required="1"/>
                     <field name="shelf_type" required="1"/>
+                    <field name="max_shelf" required="1" optional="hide"/>
+                    <field name="temp_shelf" optional="hide" readonly="1"/>
+                    <field name="current_shelf" optional="hide"/>
+                    <field name="available" optional="hide"/>
                 </tree>
             </field>
         </record>
+
+        <record id="action_compute_current_shelf" model="ir.actions.server">
+            <field name="name">Compute Current Sheft</field>
+            <field name="model_id" ref="crosify_order.model_fulfill_shelf"/>
+            <field name="binding_model_id" ref="crosify_order.model_fulfill_shelf"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_compute_current_shelf()</field>
+        </record>
+
+        <record id="action_compute_temp_shelf" model="ir.actions.server">
+            <field name="name">Compute temp Sheft</field>
+            <field name="model_id" ref="crosify_order.model_fulfill_shelf"/>
+            <field name="binding_model_id" ref="crosify_order.model_fulfill_shelf"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_compute_temp_shelf()</field>
+        </record>
+
+        <record id="action_generate_barcode_for_shelf" model="ir.actions.server">
+            <field name="name">Generate Barcode</field>
+            <field name="model_id" ref="crosify_order.model_fulfill_shelf"/>
+            <field name="binding_model_id" ref="crosify_order.model_fulfill_shelf"/>
+            <field name="binding_view_types">form,list</field>
+            <field name="state">code</field>
+            <field name="groups_id"
+                   eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+            <field name="code">action = model.action_generate_shelf_barcode_server()</field>
+        </record>
+
+        <record id="action_generate_shelf_barcode" model="ir.actions.report">
+            <field name="name">Shelf Barcode Barcode</field>
+            <field name="model">fulfill.shelf</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">crosify_order.print_shelf_barcode_custom</field>
+            <field name="report_file">crosify_order.print_shelf_barcode_custom</field>
+            <field name="binding_model_id" ref="model_fulfill_shelf"/>
+        </record>
+
         <record id="crosify_menu_fulfill_shelf_action"
-            model="ir.actions.act_window">
+                model="ir.actions.act_window">
             <field name="name">Shelf</field>
             <field name="res_model">fulfill.shelf</field>
             <field name="view_mode">tree,form</field>
         </record>
         <menuitem id="crosify_menu_fulfill_shelf" name="Shelf"
-            parent="sale.menu_sales_config"
-            action="crosify_menu_fulfill_shelf_action"
-            sequence="24" />
+                  parent="sale.menu_sales_config"
+                  action="crosify_menu_fulfill_shelf_action"
+                  sequence="24"
+                  groups="base.group_system"/>
     </data>
 </odoo>

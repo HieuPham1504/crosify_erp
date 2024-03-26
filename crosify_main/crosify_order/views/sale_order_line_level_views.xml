@@ -7,11 +7,13 @@
             <field name="model">sale.order.line.level</field>
             <field name="arch" type="xml">
                 <tree string="Level" editable="bottom">
+                    <field name="sequence" widget="handle"/>
                     <field name="level"/>
                     <field name="name"/>
                     <field name="next_level_ids" widget="many2many_tags"/>
                     <field name="is_parent"/>
                     <field name="parent_id" domain="[('is_parent', '=', True)]"/>
+                    <field name="can_updated_by_api" optional="hide"/>
                 </tree>
             </field>
         </record>
@@ -25,6 +27,7 @@
         <menuitem id="crosify_menu_sale_order_line_level"
                   name="Item Level"
                   parent="sale.menu_sale_config" action="crosify_menu_sale_order_line_level_action"
+                  groups="base.group_system"
                   sequence="21"/>
     </data>
 </odoo>

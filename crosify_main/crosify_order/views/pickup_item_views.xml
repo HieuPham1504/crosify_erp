@@ -1,0 +1,101 @@
+<odoo>
+    <data>
+
+        <record id="pickup_item_search_view" model="ir.ui.view">
+            <field name="name">pickup_item_search_view</field>
+            <field name="model">pickup.item</field>
+            <field name="arch" type="xml">
+                <search>
+                    <separator/>
+                    <filter name="draft_pickup" string="Draft Pickup" domain="[('state', '=', 'draft')]"/>
+                    <separator/>
+                    <filter name="done_pickup" string="Done Pickup" domain="[('state', '=', 'done')]"/>
+                    <separator/>
+                </search>
+            </field>
+        </record>
+
+        <record id="pickup_item_tree_view" model="ir.ui.view">
+            <field name="name">pickup_item_tree_view</field>
+            <field name="model">pickup.item</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="code"/>
+                    <field name="date"/>
+                    <field name="employee_id"/>
+                    <field name="state"/>
+                    <field name="note"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="pickup_item_form_view" model="ir.ui.view">
+            <field name="name">pickup_item_form_view</field>
+            <field name="model">pickup.item</field>
+            <field name="arch" type="xml">
+                <form class="sale_order_view_inherit_form_crosify_order">
+                    <header>
+                        <button string="Update" name="action_pickup_items" type="object"
+                                class="btn-primary"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="code"/>
+                            <h1>
+                                <field name="code" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+                        <group name="main">
+                            <group>
+                                <field name="order_box_container_code" required="1"/>
+                                <field name="order_box_container_id" readonly="1" force_save="1" options='{"no_open": True, "no_create": True}'/>
+                                <field name="date"/>
+                                <field name="employee_id" options='{"no_open": True, "no_create": True}'/>
+                            </group>
+                            <group></group>
+                        </group>
+                        <label for="note"/>
+                        <field name="note"/>
+
+                        <br/>
+                        <group name="items">
+                            <field name="item_ids" nolabel="0" readonly="state == 'done'">
+                                <tree string="Items" editable="bottom" decoration-danger="state == 'fail'">
+                                    <field name="barcode" readonly="0"/>
+                                    <field name="tkn_code" readonly="0"/>
+                                    <field name="sale_order_line_id" column_invisible="1" force_save="1"/>
+                                    <field name="pair_number" column_invisible="1" force_save="1"/>
+                                    <field name="is_checked" column_invisible="1" force_save="1"/>
+                                    <field name="type" column_invisible="1" force_save="1"/>
+                                    <field name="order_ids" column_invisible="1" force_save="1"/>
+                                    <field name="state" readonly="1" force_save="1"/>
+                                </tree>
+                            </field>
+                        </group>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="pickup_item_menu_action" model="ir.actions.act_window">
+            <field name="name">Pickup Item</field>
+            <field name="res_model">pickup.item</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="pickup_item_menu"
+                  name="Pickup Item"
+                  action="pickup_item_menu_action"
+                  groups="base.group_system,crosify_order.group_sale_team_operator"
+                  parent="sale.sale_order_menu"
+                  sequence="35"/>
+    </data>
+</odoo>

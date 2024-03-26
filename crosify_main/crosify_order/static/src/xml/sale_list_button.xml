@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+   <t t-name="crosify_order.ListView.Buttons" t-inherit="web.ListView.Buttons">
+       <xpath expr="//div[hasclass('o_list_buttons')]" position="after">
+           <button type="button"
+                   t-if="props.context.is_show_button_update_link_design"
+                   class="btn btn-primary"
+                   t-on-click="OnClickOpenImportFile">
+               Update Link Design
+           </button>
+       </xpath>
+   </t>
+</templates>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="production_transfer_tree_view" model="ir.ui.view">
+            <field name="name">production_transfer_tree_view</field>
+            <field name="model">production.transfer</field>
+            <field name="arch" type="xml">
+                <tree string="Production Transfer">
+                    <field name="code"/>
+                    <field name="date"/>
+                    <field name="employee_id"/>
+                    <field name="note"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="production_transfer_form_view" model="ir.ui.view">
+            <field name="name">production_transfer_form_view</field>
+            <field name="model">production.transfer</field>
+            <field name="arch" type="xml">
+                <form string="Production Transfer" class="sale_order_view_inherit_form_crosify_order">
+                    <header>
+                        <button name="transfer_items" string="Transfer Items"
+                                type="object" class="oe_highlight" title="Transfer Items"
+                                invisible="state != 'draft'" groups="base.group_system,crosify_order.group_producer_team"/>
+                        <button name="back_to_draft" string="Back to Draft"
+                                type="object" class="oe_highlight" title="Back to Draft"
+                                invisible="state != 'waiting_confirm'" groups="base.group_system,crosify_order.group_producer_team"/>
+                        <button name="qc_confirm" string="Confirm"
+                                type="object" class="oe_highlight" data-hotkey="w" title="Confirm"
+                                invisible="state != 'waiting_confirm'" groups="base.group_system,crosify_order.group_sale_team_operator"/>
+                        <field name="state" widget="statusbar" invisible="0"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="code" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group name="main-description">
+                            <group>
+                                <field name="date" readonly="state != 'draft'"/>
+                                <field name="employee_id" readonly="state != 'draft'" options='{"no_open": True, "no_create": True}'/>
+                            </group>
+                            <group></group>
+                        </group>
+                        <group>
+                            <field name="note" readonly="state != 'draft'"/>
+                        </group>
+                        <notebook>
+                            <page string="Production Transfer" name="production_transfer">
+                                <field name="production_transfer_item_ids" force_save="1" readonly="state != 'draft'">
+                                    <tree editable="bottom" decoration-danger="is_wrong_item == True">
+                                        <field name="production_id" readonly="0"/>
+                                        <field name="sale_order_line_id" column_invisible="1"/>
+                                        <field name="product_id" readonly="1" string="SKU" force_save="1"/>
+                                        <field name="product_template_attribute_value_ids" readonly="1" force_save="1"
+                                               widget="many2many_tags"/>
+                                        <field name="personalize" readonly="1" force_save="1"/>
+                                        <field name="production_vendor_id" readonly="1" force_save="1" options='{"no_open": True, "no_create": True}'/>
+                                        <field name="sublevel_id" readonly="1" force_save="1"/>
+                                        <field name="address_sheft_id" readonly="1" force_save="1"/>
+                                        <field name="is_wrong_item" column_invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="QC Receive" name="qc_receive">
+                                <field name="qc_receive_item_ids" force_save="1" readonly="state != 'waiting_confirm'">
+                                    <tree editable="bottom">
+                                        <field name="production_id" readonly="0"/>
+                                        <field name="sale_order_line_id" column_invisible="1"/>
+                                        <field name="product_id" readonly="1" string="SKU" force_save="1"/>
+                                        <field name="product_template_attribute_value_ids" readonly="1"
+                                               widget="many2many_tags" force_save="1"/>
+                                        <field name="personalize" readonly="1" force_save="1"/>
+                                        <field name="production_vendor_id" readonly="1" force_save="1" options='{"no_open": True, "no_create": True}'/>
+                                        <field name="sublevel_id" readonly="1" force_save="1"/>
+                                        <field name="address_sheft_id" readonly="1" force_save="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Error" name="qc_receive">
+                                <field name="production_transfer_item_error_ids" force_save="1" readonly="1">
+                                    <tree editable="bottom" decoration-danger="status == 'lack'">
+                                        <field name="production_id" readonly="1" force_save="1"/>
+                                        <field name="sale_order_line_id" column_invisible="1"/>
+                                        <field name="product_id" readonly="1" string="SKU"/>
+                                        <field name="product_template_attribute_value_ids" readonly="1"
+                                               widget="many2many_tags" force_save="1"/>
+                                        <field name="personalize" readonly="1" force_save="1"/>
+                                        <field name="production_vendor_id" readonly="1" force_save="1"/>
+                                        <field name="sublevel_id" readonly="1" force_save="1"/>
+                                        <field name="address_sheft_id" readonly="1" force_save="1"/>
+                                        <field name="status" readonly="1" force_save="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="production_transfer_menu_action" model="ir.actions.act_window">
+            <field name="name">Production Transfer</field>
+            <field name="res_model">production.transfer</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem id="production_transfer_menu" name="Production Transfer"
+                  parent="sale.sale_order_menu"
+                  action="production_transfer_menu_action"
+                  groups="base.group_system,crosify_order.group_sale_team_operator,crosify_order.group_producer_team"
+                  sequence="24"/>
+    </data>
+</odoo>

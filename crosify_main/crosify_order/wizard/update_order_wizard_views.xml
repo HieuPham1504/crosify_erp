@@ -1,0 +1,64 @@
+<odoo>
+    <data>
+
+        <record id="update_order_wizard_form_view" model="ir.ui.view">
+            <field name="name">update_order_wizard_form_view</field>
+            <field name="model">update.order.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Update Order" class="sale_order_view_inherit_form_crosify_order" create="0" edit="0">
+                    <header>
+                        <button name="action_update_order" string="Update Order" type="object" class="oe_highlight"/>
+                        <button name="get_import_templates" string="Get Import Template" type="object" class="oe_highlight"/>
+                    </header>
+                    <sheet>
+                        <div class="o_row mw-50">
+                            <field name="item_file_name" invisible="1"/>
+                            <field name="name" invisible="1"/>
+                            <field name="item_file" filename="item_file_name"/>
+                            <button name="action_import_items" invisible="item_file == False"
+                                    class="btn btn-primary" type="object" string="Upload"/>
+                        </div>
+                        <br/>
+                        <notebook>
+                            <page name="item-info" string="Item Info">
+                                <field name="line_ids" nolabel="1" readonly="1" force_save="1">
+                                    <tree>
+                                        <field name="order_id_fix"/>
+                                        <field name="order_id" column_invisible="1"/>
+                                        <field name="first_name"/>
+                                        <field name="last_name"/>
+                                        <field name="street"/>
+                                        <field name="street2"/>
+                                        <field name="city"/>
+                                        <field name="state_id" options='{"no_open": True, "no_create": True}'/>
+                                        <field name="country_id" options='{"no_open": True, "no_create": True}'/>
+                                        <field name="zip"/>
+                                        <field name="zip"/>
+                                        <field name="phone"/>
+                                        <field name="email"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <footer>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="update_order_wizard_menu_action" model="ir.actions.act_window">
+            <field name="name">Update Order</field>
+            <field name="res_model">update.order.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="update_order_wizard_menu"
+                  name="Update Order"
+                  action="update_order_wizard_menu_action"
+                  groups="base.group_system,crosify_order.group_sale_team_operator"
+                  parent="sale.sale_order_menu"
+                  sequence="40"/>
+    </data>
+</odoo>

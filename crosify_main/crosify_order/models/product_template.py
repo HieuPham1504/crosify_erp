@@ -9,7 +9,7 @@ class ProductTemplate(models.Model):
     _description = 'Product Type'
 
     product_type = fields.Char(string="Product Type", compute="compute_product_type", store=True, index=True)
-    design_number = fields.Char(string='Design Number', require=True, trim=True)
+    design_number = fields.Char(string='Design Number', required=True, trim=True)
     detailed_type = fields.Selection(string="Detailed Type")
 
     # def _create_variant_ids(self):
@@ -130,11 +130,11 @@ class ProductTemplate(models.Model):
     def _check_product_type(self):
         for record in self:
             product_type = record.product_type
-
-            duplicate_code = self.sudo().search(
-                [('id', '!=', record.id), ('product_type', '=', product_type)])
-            if duplicate_code:
-                raise ValidationError(_("This Product Type already exists."))
+            if product_type:
+                duplicate_code = self.sudo().search(
+                    [('id', '!=', record.id), ('product_type', '=', product_type)])
+                if duplicate_code:
+                    raise ValidationError(_("This Product Type already exists."))
 
     @api.depends('design_number', 'categ_id')
     def compute_product_type(self):

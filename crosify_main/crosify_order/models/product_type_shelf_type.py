@@ -7,6 +7,7 @@ class ProductTypeShelfType(models.Model):
 
     product_tmp_id = fields.Many2one('product.template', string='Product Type', required=True)
     shelf_type_id = fields.Many2one('fulfill.shelf.type', string='Shelf Type', required=True)
+    product_type = fields.Char(related='product_tmp_id.product_type')
 
     @api.constrains('product_tmp_id')
     def _check_product_type(self):

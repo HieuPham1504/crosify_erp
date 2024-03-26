@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="fulfill_cancel_item_view" model="ir.ui.view">
+            <field name="name">fulfill_cancel_item_view</field>
+            <field name="model">fulfill.cancel.item</field>
+            <field name="arch" type="xml">
+                <tree string="Cancel Item" editable="bottom">
+                    <field name="id" />
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+        <record id="crosify_menu_fulfill_cancel_item_action"
+            model="ir.actions.act_window">
+            <field name="name">Cancel Item</field>
+            <field name="res_model">fulfill.cancel.item</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="crosify_menu_fulfill_cancel_item" name="Cancel Item"
+            parent="sale.menu_sales_config"
+            action="crosify_menu_fulfill_cancel_item_action" 
+            sequence="28"
+            groups="base.group_system"/>
+    </data>
+</odoo>

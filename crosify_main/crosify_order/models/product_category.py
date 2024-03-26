@@ -28,6 +28,7 @@ class ProductCategory(models.Model):
     name_lower = fields.Char(compute='compute_name_lower', trim=True, store=True)
     product_category_code = fields.Char(string='Product Category Code', required=True, trim=True)
     product_category_code_lower = fields.Char(compute='compute_product_code_lower', trim=True, store=True)
+    hs_code = fields.Char(string='HS Code', index=True)
 
     # def name_get(self, cr, uid, ids, context=None):
     #     result = []

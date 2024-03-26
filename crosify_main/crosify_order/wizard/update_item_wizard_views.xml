@@ -1,0 +1,56 @@
+<odoo>
+    <data>
+        <record id="update_item_wizard_form_view" model="ir.ui.view">
+            <field name="name">update_item_wizard_form_view</field>
+            <field name="model">update.item.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Update Items" class="sale_order_view_inherit_form_crosify_order" create="0" edit="0">
+                    <header>
+                        <button name="action_update_item" string="Update Item" type="object" class="oe_highlight"
+                                data-hotkey="q"/>
+                        <button name="get_import_templates"
+                                    class="btn btn-primary" type="object" string="Get Import Template"/>
+                    </header>
+                    <sheet>
+                        <div class="o_row mw-50">
+                            <field name="name" invisible="1"/>
+                            <field name="item_file_name" invisible="1"/>
+                            <field name="item_file" filename="item_file_name"/>
+                            <button name="action_import_items" invisible="item_file == False"
+                                    class="btn btn-primary" type="object" string="Upload"/>
+                        </div>
+                        <br/>
+                        <notebook>
+                            <page name="item-info" string="Item Info">
+                                <field name="line_ids" nolabel="1" readonly="1" force_save="1">
+                                    <tree>
+                                        <field name="production_id"/>
+                                        <field name="sale_order_line_id" column_invisible="1"/>
+                                        <field name="product_id"/>
+                                        <field name="personalize"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <footer>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="update_item_wizard_menu_action" model="ir.actions.act_window">
+            <field name="name">Update Item</field>
+            <field name="res_model">update.item.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="update_item_wizard_menu"
+                  name="Update Item"
+                  action="update_item_wizard_menu_action"
+                  groups="base.group_system,crosify_order.group_sale_team_operator"
+                  parent="sale.sale_order_menu"
+                  sequence="40"/>
+    </data>
+</odoo>

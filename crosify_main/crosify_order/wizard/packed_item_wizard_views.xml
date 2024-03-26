@@ -1,0 +1,50 @@
+<odoo>
+    <data>
+
+        <record id="packed_item_wizard_form_view" model="ir.ui.view">
+            <field name="name">packed_item_wizard_form_view</field>
+            <field name="model">packed.item.wizard</field>
+            <field name="arch" type="xml">
+                <form class="sale_order_view_inherit_form_crosify_order" create="0" edit="0">
+                    <header>
+                        <button string="Update" name="action_pakced_item" type="object"
+                                class="btn-primary"/>
+                    </header>
+                    <sheet>
+                        <br/>
+                        <field name="name" invisible="1"/>
+
+                        <field name="item_ids" nolabel="1">
+                            <tree string="Items" editable="bottom" decoration-danger="is_error == True">
+                                <field name="production_id" readonly="0"/>
+                                <field name="sale_order_line_id" column_invisible="1"/>
+                                <field name="is_error" column_invisible="1"/>
+                                <field name="order_id_fix"/>
+                                <field name="product_id" readonly="1" string="SKU"/>
+                                <field name="product_template_attribute_value_ids" readonly="1" widget="many2many_tags"/>
+                                <field name="personalize" readonly="1"/>
+                                <field name="error_message" readonly="1"/>
+                                <field name="pair_number" column_invisible="1" force_save="1"/>
+                            </tree>
+                        </field>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="packed_item_wizard_menu_action" model="ir.actions.act_window">
+            <field name="name">Packed Item</field>
+            <field name="res_model">packed.item.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="packed_item_wizard_menu"
+                  name="Packed Item"
+                  action="packed_item_wizard_menu_action"
+                  groups="base.group_system,crosify_order.group_sale_team_operator"
+                  parent="sale.sale_order_menu"
+                  sequence="30"/>
+    </data>
+</odoo>

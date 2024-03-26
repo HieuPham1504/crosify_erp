@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="tracking_sale_order_deliver_status_config_tree_view" model="ir.ui.view">
+            <field name="name">tracking_sale_order_deliver_status_config_tree_view</field>
+            <field name="model">tracking.sale.order.deliver.status.config</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="status" />
+                    <field name="level_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="tracking_sale_order_deliver_status_config_menu_action"
+            model="ir.actions.act_window">
+            <field name="name">Production Line</field>
+            <field name="res_model">tracking.sale.order.deliver.status.config</field>
+            <field name="view_mode">tree</field>
+        </record>
+
+        <menuitem id="tracking_sale_order_deliver_status_config_menu" name="Tracking Sale Order Deliver Status Config"
+            parent="sale.menu_sales_config"
+            action="tracking_sale_order_deliver_status_config_menu_action"
+            sequence="34"
+            groups="base.group_system"/>
+
+    </data>
+</odoo>

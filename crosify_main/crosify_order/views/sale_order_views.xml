@@ -1,21 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="sale_order_search_view_inherit" model="ir.ui.view">
+        <field name="name">sale_order_search_view_inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="filter_domain">['|', '|', ('name', 'ilike', self), ('myadmin_order_id', 'ilike', self),
+                    ('order_id_fix', 'ilike', self)]
+                </attribute>
+            </xpath>
+
+            <xpath expr="//filter[@name='my_sale_orders_filter']" position="after">
+                <separator/>
+                <filter string="Order Date" name="crosify_create_date" date="crosify_create_date"/>
+                <separator/>
+                <filter string="Orders: Today"
+                        domain="[('crosify_create_date', '&gt;=', datetime.datetime.combine(datetime.date.today(), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S')),
+                        ('crosify_create_date', '&lt;', datetime.datetime.combine(datetime.date.today()+datetime.timedelta(days=1), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S'))]"
+                        name="my_sale_orders_filter_today"/>
+                <separator/>
+
+                <filter string="Orders: Yesterday" name="my_sale_orders_filter_yesterday"
+                        domain="[('crosify_create_date', '&lt;',  datetime.datetime.combine(datetime.date.today(), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S') ),
+                        ('crosify_create_date', '&gt;=',  datetime.datetime.combine(datetime.date.today()-datetime.timedelta(days=1), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S') )]"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+
     <record id="sale_order_tree_view_crosify" model="ir.ui.view">
         <field name="name">sale_order_tree_view_crosify</field>
         <field name="model">sale.order</field>
         <field name="priority">1</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree duplicate="False">
                 <field name="myadmin_order_id"/>
                 <field name="order_id_fix"/>
                 <field name="crosify_create_date"/>
-                <field name="partner_id"/>
+                <field name="tkn"/>
                 <field name="amount_total"/>
+                <field name="payment_method_id"/>
                 <field name="payment_status"/>
+                <field name="order_type_id" optional="hide"/>
             </tree>
         </field>
     </record>
+
+    <record id="sale_order_form_view_crosify" model="ir.ui.view">
+        <field name="name">sale_order_tree_view_crosify</field>
+        <field name="model">sale.order</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <form class="sale_order_view_inherit_form_crosify_order">
+                <header>
+                    <field name="order_payment_state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group name="sale_header">
+                        <group name="partner_details">
+                            <field name="partner_id" widget="res_partner_many2one"
+                                   context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}"
+                                   readonly="1"/>
+                        </group>
+                        <group name="order_details">
+                            <field name="order_type_id" readonly="1"/>
+                            <field name="myadmin_order_id" readonly="1"/>
+                            <field name="order_id_fix" readonly="1"/>
+                            <field name="channel_ref_id" readonly="1"/>
+                            <field name="crosify_create_date" readonly="1"/>
+                            <field name="seller_id" options='{"no_open": True, "no_create": True}'/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Lines" name="order_lines">
+                            <field name="order_line" widget="section_and_note_one2many" mode="tree"
+                                   readonly="1">
+                                <tree string="Sales Order Lines" limit="200">
+                                    <field name="production_id" readonly="1" string="SKU"/>
+                                    <field name="personalize" readonly="1"/>
+                                    <field name="production_id" readonly="1"/>
+                                    <field name="price_unit" readonly="1"/>
+                                    <field name="crosify_discount_amount"/>
+                                    <field name="total_tax" readonly="1"/>
+                                    <field name="price_total" readonly="1"/>
+                                    <field name="sublevel_id" readonly="1"/>
+                                    <field name="name" optional="hide" readonly="1"/>
+                                    <field name="meta_field" optional="hide" readonly="1"/>
+                                    <field name="variant" optional="hide" readonly="1"/>
+                                    <field name="my_admin_order_id" optional="hide" readonly="1"/>
+                                    <field name="order_id_fix" optional="hide" readonly="1"/>
+                                    <field name="product_type" optional="hide" readonly="1"/>
+                                    <field name="color_set_name" optional="hide" readonly="1"/>
+                                    <field name="item_size" optional="hide" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Shipping" name="shipping_information">
+                            <group name="shipping-info">
+                                <group name="shipping-info-customer" string="SHIPPING INFO">
+                                    <span class="o_form_label o_td_label" name="address_name">
+                                        Shipping Name
+                                    </span>
+                                    <div class="o_address_format" readonly="1">
+                                        <field name="shipping_firstname" placeholder="First Name"
+                                               class="o_address_city" readonly="1"/>
+                                        <field name="shipping_lastname" placeholder="Last Name" class="o_address_city"
+                                               readonly="1"/>
+                                    </div>
+                                    <span class="o_form_label o_td_label" name="address_name">
+                                        Address
+                                    </span>
+                                    <div class="o_address_format" readonly="1">
+                                        <field name="shipping_address" placeholder="Street 1" class="o_address_street"
+                                               readonly="1"/>
+                                        <field name="shipping_apartment" placeholder="Street 2"
+                                               class="o_address_street" readonly="1"/>
+                                        <field name="shipping_city" placeholder="City" class="o_address_city"
+                                               readonly="1"/>
+                                        <field name="shipping_state_id" class="o_address_state" placeholder="State"
+                                               options="{'no_open': True, 'no_quick_create': True}" readonly="1"/>
+                                        <field name="shipping_zipcode" placeholder="Zipcode" class="o_address_zip"
+                                               readonly="1"/>
+                                        <div name="partner_address_country" class="d-flex justify-content-between">
+                                            <field name="shipping_country_id" placeholder="Country"
+                                                   class="o_address_country"
+                                                   options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"
+                                                   readonly="1"/>
+                                        </div>
+                                    </div>
+                                    <field name="shipping_phone_number" readonly="1"/>
+                                    <field name="contact_email" readonly="1"/>
+                                    <field name="shipping_vendor_id" options="{'no_create': True}" readonly="1"/>
+                                    <field name="shipping_line_id" options="{'no_create': True}" readonly="0"/>
+                                </group>
+
+                                <group name="shipping-info-other" string="LABEL &amp; TRACKING NUMBER" readonly="1">
+                                    <field name="label_file_url" widget="url" readonly="1" force_save="1"/>
+                                    <field name="tkn" readonly="1" force_save="1"/>
+                                    <field name="tkn_url" widget="url" readonly="1" force_save="1"/>
+                                    <field name="update_tkn_date" readonly="1"/>
+                                    <field name="update_tkn_employee_id" options="{'no_create': True}" readonly="1"/>
+                                    <field name="is_upload_tkn" readonly="1"/>
+                                    <field name="tracking_note" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Other Info" name="other_information">
+                            <group name="other-info">
+                                <group name="payment-info" string="PAYMENT INFO">
+                                    <field name="payment_status" readonly="1"/>
+                                    <field name="transaction_id" readonly="1"/>
+                                    <field name="discount_code" readonly="1"/>
+                                    <field name="payment_method_id" readonly="1"/>
+                                    <field name="currency_id" readonly="1"/>
+                                    <field name="payment_at" readonly="1"/>
+                                    <field name="payment_note" readonly="1"/>
+                                </group>
+                                <group name="other" string="OTHER INFO">
+                                    <field name="utm_source_id" readonly="1"/>
+                                    <field name="domain" readonly="1"/>
+                                    <field name="extra_info" readonly="1"/>
+                                    <field name="review" readonly="1"/>
+                                    <field name="rating" readonly="1"/>
+                                    <field name="base_cost" readonly="1"/>
+                                </group>
+                            </group>
+                            <group name="cancel" string="CANCEL">
+                                <group>
+                                    <field name="cancel_date"/>
+                                    <field name="cancel_reason"/>
+                                </group>
+                                <group></group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
 
     <record id="sale_management_sale_order_form_quote_inherit" model="ir.ui.view">
         <field name="name">sale_management_sale_order_form_quote_inherit</field>
@@ -33,7 +209,7 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale_product_configurator.sale_order_view_form"/>
         <field name="arch" type="xml">
-             <xpath expr="//tree/field[@name='product_id']" position="attributes">
+            <xpath expr="//tree/field[@name='product_id']" position="attributes">
                 <attribute name="column_invisible">1</attribute>
             </xpath>
         </field>
@@ -54,20 +230,148 @@
                 </control>
             </xpath>
 
+            <xpath expr="//button[@name='payment_action_capture']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='payment_action_void']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@id='send_proforma_primary']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@id='send_proforma']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@id='send_by_email']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_confirm']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+
+            <xpath expr="//button[@name='action_unlock']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='%(sale.action_view_sale_advance_payment_inv)d']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_preview_sale_order']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_draft']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//button[@name='action_lock']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="partner_id" widget="res_partner_many2one"
+                       context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}"
+                       placeholder="Type to find a customer..."/>
+            </xpath>
+
+
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="order_payment_state" widget="statusbar"/>
+            </xpath>
+
             <xpath expr="//field[@name='order_line']//tree//field[@name='product_template_id']" position="attributes">
                 <attribute name="column_invisible">1</attribute>
             </xpath>
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='price_total']" position="attributes">
-                <attribute name="string">Price Total</attribute>
+                <attribute name="column_invisible">1</attribute>
             </xpath>
 
-            <xpath expr="//field[@name='order_line']//tree//field[@name='price_subtotal']" position="attributes">
-                <attribute name="string">Price Subtotal</attribute>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_total']" position="after">
+                <field name="price_total" string="Total"/>
+                <field name="level_id" column_invisible="1"/>
+                <field name="sublevel_id" domain="[('parent_id', '=', level_id), ('is_parent', '=', False)]"/>
             </xpath>
+
 
             <xpath expr="//field[@name='order_line']//tree//field[@name='product_template_id']" position="before">
                 <field name="product_id" string="SKU"/>
+                <field name="personalize"/>
+                <field name="production_id"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">
+                <field name="crosify_discount_amount"/>
+                <field name="total_tax"/>
+                <field name="is_combo"/>
+            </xpath>
+
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='product_uom_qty']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='product_uom']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_subtotal']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='tax_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='qty_delivered']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='qty_invoiced']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='price_total']" position="after">
+                <field name="name" optional="hide"/>
+                <field name="meta_field" optional="hide"/>
+                <field name="variant" optional="hide"/>
+                <field name="my_admin_order_id" optional="hide"/>
+                <field name="order_id_fix" optional="hide"/>
+                <field name="product_type" optional="hide"/>
+                <field name="color_set_name" optional="hide"/>
+                <field name="item_size" optional="hide"/>
+                <field name="personalize" optional="hide"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='tax_id']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//tree//field[@name='customer_lead']" position="attributes">
+                <attribute name="column_invisible">1</attribute>
             </xpath>
 
             <xpath expr="//page[@name='order_lines']" position="attributes">
@@ -101,17 +405,21 @@
                                 </div>
                             </div>
                             <field name="shipping_phone_number"/>
-                            <field name="shipping_cost"/>
+                            <field name="contact_email"/>
                             <field name="shipping_vendor_id" options="{'no_create': True}"/>
+                            <field name="shipping_line_id" options="{'no_create': True}" readonly="0"/>
                         </group>
 
                         <group name="shipping-info-other" string="LABEL &amp; TRACKING NUMBER">
-                            <field name="label_file_store_name" invisible="1"/>
-                            <field name="label_file_attachment" filename="label_file_store_name"/>
-                            <field name="tkn"/>
-                            <field name="tkn_url"/>
+                            <field name="label_file_url" widget="url" readonly="1" force_save="1"/>
+                            <field name="tkn" readonly="1" force_save="1"/>
+                            <field name="tkn_url" widget="url" readonly="1" force_save="1"/>
                             <field name="update_tkn_date"/>
                             <field name="update_tkn_employee_id" options="{'no_create': True}"/>
+                            <field name="is_upload_tkn"/>
+                            <field name="label_status" readonly="1" force_save="1"/>
+                            <field name="tracking_note" invisible="label_status == 'success'" readonly="1"
+                                   force_save="1"/>
                         </group>
                     </group>
                 </page>
@@ -140,6 +448,7 @@
             <xpath expr="//page[@name='other_information']" position="inside">
                 <group name="other-info">
                     <group name="payment-info" string="PAYMENT INFO">
+                        <field name="payment_status"/>
                         <field name="transaction_id"/>
                         <field name="discount_code"/>
                         <field name="payment_method_id"/>
@@ -148,7 +457,6 @@
                         <field name="payment_note"/>
                     </group>
                     <group name="other" string="OTHER INFO">
-                        <field name="contact_email"/>
                         <field name="utm_source_id"/>
                         <field name="domain"/>
                         <field name="extra_info"/>
@@ -187,18 +495,55 @@
             </xpath>
 
             <xpath expr="//field[@name='validity_date']" position="after">
+                <field name="order_type_id" options='{"no_open": True, "no_create": True}'/>
                 <field name="myadmin_order_id"/>
-                <field name="order_id_fix"/>
+                <field name="order_id_fix" required="1"/>
+                <field name="original_order_id" invisible="not original_order_id"/>
                 <field name="channel_ref_id"/>
                 <field name="crosify_create_date"/>
-                <field name="payment_status"/>
+                <field name="seller_id" options='{"no_open": True, "no_create": True}'/>
             </xpath>
 
             <xpath expr="//field[@name='note']" position="attributes">
                 <attribute name="placeholder">Customer Note</attribute>
             </xpath>
 
+            <xpath expr="//field[@name='tax_totals']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='tax_totals']" position="after">
+                <field name="amount_untaxed"/>
+                <field name="amount_tax"/>
+                <field name="discount"/>
+                <field name="tip"/>
+                <field name="shipping_cost"/>
+                <field name="amount_total" style="font-weight:bold;font-size:20px"/>
+            </xpath>
+
         </field>
+    </record>
+
+    <record id="action_creating_shipment_order" model="ir.actions.server">
+        <field name="name">Creating Shipment</field>
+        <field name="model_id" ref="crosify_order.model_sale_order"/>
+        <field name="binding_model_id" ref="crosify_order.model_sale_order"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="groups_id"
+               eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+        <field name="code">action = model.action_creating_shipment_for_order_model()</field>
+    </record>
+
+    <record id="action_merge_order" model="ir.actions.server">
+        <field name="name">Merge Order</field>
+        <field name="model_id" ref="crosify_order.model_sale_order"/>
+        <field name="binding_model_id" ref="crosify_order.model_sale_order"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="groups_id"
+               eval="[(6, 0, [ref('crosify_order.group_sale_team_operator'), ref('base.group_system')])]"/>
+        <field name="code">action = model.action_merge_order()</field>
     </record>
 
     <record id="crosify_menu_sale_order_tree_view_action" model="ir.actions.act_window">
@@ -207,8 +552,21 @@
         <field name="view_id" ref="sale_order_tree_view_crosify"/>
     </record>
 
+    <record id="menu_sale_order_for_other_action" model="ir.actions.act_window">
+        <field name="name">Sale Orders</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_id" ref="sale_order_tree_view_crosify"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('sale_order_tree_view_crosify')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('sale_order_form_view_crosify')})]"/>
+    </record>
+
     <record id="sale.action_orders" model="ir.actions.act_window">
         <field name="domain">[]</field>
+    </record>
+
+    <record id="account.res_partner_action_customer" model="ir.actions.act_window">
+        <field name="name">Contacts</field>
     </record>
 
     <record id="sale.menu_sale_quotations" model="ir.ui.menu">
@@ -221,8 +579,59 @@
 
     <record id="sale.menu_sale_order" model="ir.ui.menu">
         <field name="action" ref="crosify_menu_sale_order_tree_view_action"/>
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system'), ref('crosify_order.group_sale_team_operator')])]"/>
     </record>
     <record id="sale.menu_sale_quotations" model="ir.ui.menu">
         <field name="action" ref="crosify_menu_sale_order_tree_view_action"/>
     </record>
+
+    <record id="sale.product_menu_catalog" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system'),ref('sales_team.group_sale_salesman'),ref('crosify_order.group_sale_user_team')])]"/>
+    </record>
+
+    <record id="sale.sales_team_config" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system')])]"/>
+    </record>
+
+    <record id="sale.next_id_16" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system')])]"/>
+    </record>
+
+    <record id="sale.sale_menu_config_activity_type" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system')])]"/>
+    </record>
+
+    <record id="sale.sale_menu_config_activity_plan" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system')])]"/>
+    </record>
+
+    <record id="delivery.sale_menu_action_delivery_carrier_form" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system')])]"/>
+    </record>
+
+    <record id="sale.menu_tag_config" model="ir.ui.menu">
+        <field name="groups_id"
+               eval="[(6, 0, [ref('base.group_system')])]"/>
+    </record>
+
+    <menuitem id="menu_sale_order_for_other"
+              name="Orders"
+              action="menu_sale_order_for_other_action"
+              groups="crosify_order.group_designer_team,crosify_order.group_producer_team,crosify_order.group_sale_user_team"
+              parent="sale.sale_order_menu"
+              sequence="20"/>
+
+    <menuitem id="sale.res_partner_menu" name="Contacts"
+              action="account.res_partner_action_customer"
+              groups="crosify_order.group_sale_team_operator,base.group_system"
+              sequence="40"
+              parent="sale.sale_order_menu"
+    />
 </odoo>

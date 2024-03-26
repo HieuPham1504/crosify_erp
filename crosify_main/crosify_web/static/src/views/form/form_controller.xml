@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crosify_web.FormView" t-inherit="web.FormView" t-inherit-mode="extension">
+        <xpath expr="//t[@t-if='canCreate']" position="replace">
+
+        </xpath>
+        <xpath expr="//t[@t-if='canCreate']" position="attributes">
+            <attribute name="t-if">canCreate and !model.root.isNew</attribute>
+        </xpath>
+
+    </t>
+
+</templates>
