@@ -12,6 +12,7 @@
                     </header>
                     <sheet>
                         <br/>
+                        <field name="name" invisible="1"/>
 
                         <field name="item_ids" nolabel="1">
                             <tree string="Items" editable="bottom" decoration-danger="is_error == True">
