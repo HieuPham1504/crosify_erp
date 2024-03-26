@@ -705,6 +705,7 @@ class SaleOrderLine(models.Model):
                 pair_datas = []
                 for rec in self[start_index:end_index]:
                     order_total_items = self.sudo().search([('order_id_fix', '=', rec.order_id_fix), ('is_create_so_rp', '=', False)])
+                    box_size = order_total_items.get_order_box_size()
                     total_product_types = list(set(order_total_items.mapped('product_type')))
                     product_str = f'{rec.address_sheft_id.shelf_code}'
                     for product_type in total_product_types:
@@ -732,6 +733,7 @@ class SaleOrderLine(models.Model):
 
                     pair_datas.append({
                         'production_id': rec.production_id,
+                        'box_size': box_size,
                         'order_id_name': rec.order_id_fix,
                         'product_type': rec.product_type,
                         'shipping_vendor': shipping_vendor,
@@ -756,6 +758,37 @@ class SaleOrderLine(models.Model):
 
         except (ValueError, AttributeError):
             raise ValidationError('Cannot convert into barcode.')
+
+    def get_order_box_size(self):
+        total_items = self
+        skus = total_items.product_id
+        is_not_all_TN_product_items = any([item.product_type[:2] != 'TN' for item in total_items if item.product_type])
+        order_size = ''
+        if not is_not_all_TN_product_items:
+            item_length = len(total_items)
+            default_width = 11
+            default_length = 11
+            basic_height_size = 1.5
+
+            height_number = item_length // 6 + item_length % 6
+
+            total_width = height_number * default_width
+            total_length = height_number * default_length
+            total_height = height_number * basic_height_size
+
+
+            order_size = f'{total_length}x{total_width}x{total_height}'
+        else:
+            widths = skus.mapped('width')
+            lengths = skus.mapped('length')
+            heights = skus.mapped('height')
+
+            max_with = 1 if max(widths) < 1 else max(widths)
+            max_length = 1 if max(lengths) < 1 else max(lengths)
+            max_height = 1 if sum(heights) < 1 else sum(heights)
+
+            order_size = f'{max_with}x{max_length}x{max_height}'
+        return order_size
 
     @api.model
     def action_set_address_shelf(self):

@@ -65,8 +65,8 @@
 
                                     <div class="col-4" style="margin:0 !important; text-end">
                                         <div class="overflow-hidden text-end">
-                                            <p style="font-size:20px !important;padding:0 !important;margin:0 !important;">
-
+                                            <p style="font-size:20px !important;margin:0 !important">
+                                                <t t-esc="item['box_size']"/>
                                             </p>
                                         </div>
                                         <div class="overflow-hidden text-end">
