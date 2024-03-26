@@ -27,8 +27,22 @@ class ProductionTransfer(models.Model):
                 val.code = self.env['ir.sequence'].sudo().next_by_code('production.transfer') or _('New')
         return results
 
+    def unlink(self):
+        current_user = self.env.user
+        operator_user = current_user.has_group('crosify_order.group_sale_team_operator')
+        system_user = current_user.has_group('base.group_system')
+        if operator_user or system_user:
+            if any([rec.state != 'draft' for rec in self]):
+                raise ValidationError(_('Can Not Delete Record'))
+        else:
+            raise ValidationError(_('Can Not Delete Record'))
+        res = super().unlink()
+        return res
+
     def transfer_items(self):
         for rec in self:
+            if not rec.production_transfer_item_ids:
+                raise ValidationError(_('Can Not Transfer None Transferred Item'))
             rec.state = 'waiting_confirm'
 
     def back_to_draft(self):
@@ -36,13 +50,12 @@ class ProductionTransfer(models.Model):
             rec.state = 'draft'
 
     def qc_confirm(self):
-        QCReceives = self.env['qc.receive.item'].sudo()
-        TransferItems = self.env['production.transfer.item'].sudo()
-        TransferItemErrors = self.env['production.transfer.item.error'].sudo()
         package_receive_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L4.2')], limit=1)
         if not package_receive_level:
             raise ValidationError('There is no Package Receive Level')
         for rec in self:
+            if not rec.qc_receive_item_ids:
+                raise ValidationError(_('Can Not Confirm None Received Item'))
             production_transfer_item_ids = rec.production_transfer_item_ids
             qc_receive_item_ids_obj = rec.qc_receive_item_ids
 
