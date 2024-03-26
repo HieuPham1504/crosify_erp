@@ -193,6 +193,8 @@ class SaleOrderLine(models.Model):
     size = fields.Char(string="Size", compute='compute_attribute_product', store=True)
     other_option = fields.Char(string="Other option", compute='compute_attribute_product', store=True)
 
+    qc_passed_date = fields.Datetime(string='QC Passed Date', tracking=1)
+
     def write(self, vals):
         # OVERRIDE
         sublevel_id = vals.get('sublevel_id')

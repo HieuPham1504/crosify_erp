@@ -259,6 +259,15 @@
                                             <field name="error_note" readonly="1" force_save="1"/>
                                         </group>
                                     </group>
+
+                                    <group>
+                                        <group name="qc_passed" string="QC PASSED">
+                                            <field name="qc_passed_date" readonly="1" force_save="1"/>
+                                        </group>
+
+                                        <group>
+                                        </group>
+                                    </group>
                                 </page>
                             </notebook>
                         </sheet>
