@@ -80,7 +80,6 @@ class SaleOrderLine(models.Model):
     channel_ref_id = fields.Char(string='Reference ID')
     # Fulfillment
     operator_id = fields.Many2one('hr.employee', string='Operator')
-    produce_vendor_id = fields.Many2one('res.partner', string='Produce Vendor')
     hs_code = fields.Char(string='HS Code')
     tkn_code = fields.Char(string='TKN Code')
     tkn_url = fields.Char(string='TKN URL')
@@ -165,6 +164,7 @@ class SaleOrderLine(models.Model):
     order_index = fields.Integer(string='Order Index', index=True)
     number_rp = fields.Integer('Number RP', default=0)
     is_create_so_rp = fields.Boolean('Is create SO Rp', default=False, copy=False)
+    product_id = fields.Many2one(string='SKU', tracking=1)
 
     # override_fields
     price_unit = fields.Float(
