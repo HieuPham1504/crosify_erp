@@ -98,6 +98,7 @@
                         <field name="item_size" optional="show"/>
                         <field name="personalize" optional="show"/>
                         <field name="accessory_name" optional="hide"/>
+                        <field name="design_date" optional="hide"/>
                         <field name="sublevel_id"/>
                         <field name="price_subtotal" column_invisible="1"/>
                         <field name="write_date" string="Last Update" optional="hide"/>
