@@ -36,7 +36,7 @@
                 <form class="sale_order_view_inherit_form_crosify_order">
                     <header>
                         <button string="Confirm Item" name="action_confirm_item" type="object"
-                                class="btn-primary"/>
+                                class="btn-primary" invisible="state != 'draft'"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
                     </header>
                     <sheet>
@@ -48,27 +48,27 @@
                         </div>
                         <group name="main">
                             <group>
-                                <field name="date"/>
-                                <field name="employee_id" options='{"no_open": True, "no_create": True}'/>
-                                <field name="relate_pickup_ids" widget="many2many_tags"
+                                <field name="date" readonly="state !='draft'"/>
+                                <field name="employee_id" readonly="state !='draft'" options='{"no_open": True, "no_create": True}'/>
+                                <field name="relate_pickup_ids" widget="many2many_tags" readonly="state !='draft'" force_save="1"
                                        options='{"no_open": True, "no_create": True}' domain="[('state', '=', 'done')]"/>
                             </group>
                             <group></group>
                         </group>
                         <label for="note"/>
-                        <field name="note"/>
+                        <field name="note" readonly="state !='draft'"/>
                         <br/>
                         <!--                        <label for="label_file_url"/>-->
                         <div class="o_row mw-50">
                             <field name="delivered_item_file_name" invisible="1"/>
-                            <field name="delivered_item_file" filename="delivered_item_file_name"/>
-                            <button name="action_import_items" invisible="delivered_item_file == False"
+                            <field name="delivered_item_file" filename="delivered_item_file_name" readonly="state !='draft'" force_save="1"/>
+                            <button name="action_import_items" invisible="delivered_item_file == False or state != 'draft'"
                                     class="btn btn-primary" type="object" string="Upload"/>
                         </div>
                         <br/>
                         <notebook>
                             <page name="pickup-info" string="Pickup Info">
-                                <field name="pickup_order_line_ids" nolabel="1" readonly="0">
+                                <field name="pickup_order_line_ids" nolabel="1" readonly="state != 'draft'">
                                     <tree decoration-danger="is_error == True">
                                         <field name="pickup_id"/>
                                         <field name="pickup_date"/>
@@ -79,7 +79,7 @@
                                 </field>
                             </page>
                             <page name="confirm-items" string="Confirm Items">
-                                <field name="item_ids" nolabel="0">
+                                <field name="item_ids" nolabel="0" readonly="state != 'draft'" force_save="1">
                                     <tree string="Items" editable="bottom">
                                         <field name="order_id_fix" readonly="0"/>
                                         <field name="tkn_code" readonly="0"/>

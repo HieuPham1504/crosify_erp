@@ -13,7 +13,7 @@ class ShippingItemConfirm(models.Model):
     _rec_name = 'code'
 
     code = fields.Char(string='Code', index=True)
-    date = fields.Date(string='Date', default=fields.Date.today, required=True)
+    date = fields.Date(string='Date', default=fields.Date.today, required=True, tracking=1)
     employee_id = fields.Many2one('hr.employee', string='Employee', default=lambda self: self.env.user.employee_id.id,
                                   required=True, index=True, tracking=1)
     note = fields.Text(string='Note')
@@ -66,6 +66,18 @@ class ShippingItemConfirm(models.Model):
                 code = f'CONFIRM_{date}{month}{year}_{sequence}'
                 val.code = code
         return results
+
+    def unlink(self):
+        current_user = self.env.user
+        operator_user = current_user.has_group('crosify_order.group_sale_team_operator')
+        system_user = current_user.has_group('base.group_system')
+        if operator_user or system_user:
+            if any([rec.state != 'draft' for rec in self]):
+                raise ValidationError(_('Can Not Delete Record'))
+        else:
+            raise ValidationError(_('Can Not Delete Record'))
+        res = super().unlink()
+        return res
 
     @api.onchange('relate_pickup_ids')
     def onchange_pickup_order_line_ids(self):
