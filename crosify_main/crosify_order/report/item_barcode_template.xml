@@ -94,8 +94,8 @@
                                             </p>
                                         </div>
                                         <div class="col-8 text-center" style="margin-left:100px !important;">
-                                            <div class="overflow-hidden"
-                                                 style="height:4rem;">
+                                            <div class=""
+                                                 style="height:4rem; width:100% !important">
                                                 <img
                                                         style="padding: 0 !important;margin-left:-40px;object-fit: cover;width:100%;height:100%"
                                                         t-att-src="'/report/barcode/%s/%s' % ('Code128',item['production_id'])"
