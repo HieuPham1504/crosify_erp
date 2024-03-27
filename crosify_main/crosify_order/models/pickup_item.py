@@ -149,10 +149,10 @@ class PickupItemLine(models.Model):
                 state = False
                 if nearest_line:
                     tkn = nearest_line.tkn_code
-                    if tkn != order_tkn:
-                        state = 'fail'
-                    else:
+                    if tkn == order_tkn and nearest_line.type == 'item':
                         state = 'pass'
+                    else:
+                        state = 'fail'
                 data = {
                     'order_ids': [(6, 0, orders.ids)],
                     'tkn_code': order_tkn,
@@ -170,10 +170,10 @@ class PickupItemLine(models.Model):
                     state = False
                     if nearest_line:
                         tkn = nearest_line.tkn_code
-                        if tkn != item.tkn_code:
-                            state = 'fail'
-                        else:
+                        if tkn == item.tkn_code and tkn.type == 'order':
                             state = 'pass'
+                        else:
+                            state = 'fail'
                     data = {
                         'tkn_code': item.tkn_code,
                         'type': 'item',
