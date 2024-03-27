@@ -48,6 +48,18 @@ class PickupItem(models.Model):
                 val.code = code
         return results
 
+    def unlink(self):
+        current_user = self.env.user
+        operator_user = current_user.has_group('crosify_order.group_sale_team_operator')
+        system_user = current_user.has_group('base.group_system')
+        if operator_user or system_user:
+            if any([rec.state != 'draft' for rec in self]):
+                raise ValidationError(_('Can Not Delete Record'))
+        else:
+            raise ValidationError(_('Can Not Delete Record'))
+        res = super().unlink()
+        return res
+
     def action_pickup_items(self):
         now = fields.Datetime.now()
         pickup_level = self.env['sale.order.line.level'].sudo().search([('level', '=', 'L5.1')], limit=1)
