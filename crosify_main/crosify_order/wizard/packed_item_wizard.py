@@ -16,7 +16,7 @@ class PackedItemWizard(models.TransientModel):
         now = datetime.now()
         items = self.item_ids
 
-        order_id_fixes = items.mapped('order_id_fix')
+        order_id_fixes = list(set(items.mapped('order_id_fix')))
         error_items = Items
         for order_id_fix in order_id_fixes:
             item_groups = items.filtered(lambda item: item.order_id_fix == order_id_fix)
