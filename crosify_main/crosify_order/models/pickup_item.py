@@ -72,11 +72,11 @@ class PickupItem(models.Model):
                 pair_number_faileds = list(set(failed_item.mapped('pair_number')))
                 if failed_item.type == 'order':
                     total_items_fails = total_items.filtered(
-                        lambda item: item.pair_number in pair_number_faileds and item.type == 'order' and item.id != failed_item)
+                        lambda item: item.pair_number in pair_number_faileds and item.type == 'order' and item.id != failed_item.id)
                     if not total_items_fails:
                         total_items_fails = total_items.filtered(lambda item: item.pair_number in pair_number_faileds and item.type == 'item')
                 else:
-                    total_items_fails = total_items.filtered(lambda item: item.pair_number in pair_number_faileds and item.type == 'item' and item.id != failed_item)
+                    total_items_fails = total_items.filtered(lambda item: item.pair_number in pair_number_faileds and item.type == 'item' and item.id != failed_item.id)
                     if not total_items_fails:
                         total_items_fails = total_items.filtered(
                             lambda item: item.pair_number in pair_number_faileds and item.type == 'order')
