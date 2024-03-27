@@ -5,12 +5,12 @@ class QCReceiveItem(models.Model):
     _name = 'qc.receive.item'
     _description = 'QC Receive Item'
 
-    @api.constrains('sale_order_line_id')
-    def _check_sale_order_line_id(self):
-        for record in self:
-            sale_order_line_id = record.sale_order_line_id
-            if sale_order_line_id.sublevel_id.level != 'L4.1':
-                raise ValidationError(_("Only Transfer Item With Production Level"))
+    # @api.constrains('sale_order_line_id')
+    # def _check_sale_order_line_id(self):
+    #     for record in self:
+    #         sale_order_line_id = record.sale_order_line_id
+    #         if sale_order_line_id.sublevel_id.level != 'L4.1':
+    #             raise ValidationError(_("Only Transfer Item With Production Level"))
 
     production_transfer_id = fields.Many2one('production.transfer', string='Production Transfer', required=True, index=True, ondelete='cascade')
     sale_order_line_id = fields.Many2one('sale.order.line', required=True, string='Item')
