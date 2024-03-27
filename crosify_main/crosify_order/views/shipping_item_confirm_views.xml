@@ -23,7 +23,6 @@
                     <field name="code"/>
                     <field name="date"/>
                     <field name="employee_id"/>
-                    <field name="relate_pickup_ids" widget="many2many_tags"/>
                     <field name="state"/>
                 </tree>
             </field>
@@ -50,8 +49,6 @@
                             <group>
                                 <field name="date" readonly="state !='draft'"/>
                                 <field name="employee_id" readonly="state !='draft'" options='{"no_open": True, "no_create": True}'/>
-                                <field name="relate_pickup_ids" widget="many2many_tags" readonly="state !='draft'" force_save="1"
-                                       options='{"no_open": True, "no_create": True}' domain="[('state', '=', 'done')]"/>
                             </group>
                             <group></group>
                         </group>
@@ -67,29 +64,9 @@
                         </div>
                         <br/>
                         <notebook>
-                            <page name="pickup-info" string="Pickup Info">
-                                <field name="pickup_order_line_ids" nolabel="1" readonly="state != 'draft'">
-                                    <tree decoration-danger="is_error == True">
-                                        <field name="pickup_id"/>
-                                        <field name="pickup_date"/>
-                                        <field name="order_id_fix"/>
-                                        <field name="tkn_code"/>
-                                        <field name="is_error" column_invisible="1" force_save="1"/>
-                                    </tree>
-                                </field>
-                            </page>
                             <page name="confirm-items" string="Confirm Items">
                                 <field name="item_ids" nolabel="0" readonly="state != 'draft'" force_save="1">
                                     <tree string="Items" editable="bottom">
-                                        <field name="order_id_fix" readonly="0"/>
-                                        <field name="tkn_code" readonly="0"/>
-                                    </tree>
-                                </field>
-                            </page>
-
-                            <page name="error-items" string="Error">
-                                <field name="pickup_order_error_ids" nolabel="0" readonly="1" force_save="1">
-                                    <tree string="Items">
                                         <field name="order_id_fix" readonly="0"/>
                                         <field name="tkn_code" readonly="0"/>
                                     </tree>
