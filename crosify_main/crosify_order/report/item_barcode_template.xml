@@ -114,7 +114,7 @@
                                         </div>
 
                                         <div class="col-6 text-center"
-                                             style="margin-top:2px;margin-left:0 !important;font-size:20px !important;padding:0 !important">
+                                             style="margin-top:2px;margin-left:-30px !important;font-size:20px !important;padding:0 !important">
                                             <div class="text-center personalize">
                                                 <t t-esc="item['production_id']"/>
                                                 <!--                                                <p style="font-size:14px;padding:0 !important">-->
