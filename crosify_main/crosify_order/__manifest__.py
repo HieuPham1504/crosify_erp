@@ -37,6 +37,7 @@ Key Features
         'report/item_barcode_template.xml',
         'report/fulfill_shelf_barcode_template.xml',
         'report/export_ready_packing_item_pdf.xml',
+        'report/sale_order_line_report_views.xml',
         'data/ir_sequence_partner_code.xml',
         'views/sale_order_views.xml',
         'views/sale_order_line_views.xml',
