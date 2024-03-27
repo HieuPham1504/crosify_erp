@@ -20,6 +20,18 @@ class PickupItem(models.Model):
         ('done', 'Done')], string='State', default="draft", index=True, tracking=1)
     order_box_container_id = fields.Many2one('order.box.container', string='Order Box')
     order_box_container_code = fields.Char(string='Order Box Code')
+    order_quantity = fields.Integer(string='Order Quantity', compute='compute_order_quantity', store=True)
+
+
+    @api.depends('item_ids')
+    def compute_order_quantity(self):
+        for rec in self:
+            total_orders = rec.item_ids.filtered(lambda line: line.type == 'order')
+            if any([order.state == 'fail' for order in total_orders]):
+                quantity = 0
+            else:
+                quantity = len(total_orders)
+            rec.order_quantity = quantity
 
     @api.onchange('order_box_container_code')
     def onchange_order_box_container_code(self):
