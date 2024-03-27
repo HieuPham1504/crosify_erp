@@ -48,6 +48,17 @@ class ProductionTransferItem(models.Model):
         for remove_val in remove_vals:
             vals_list.remove(remove_val)
         res = super(ProductionTransferItem, self).create(vals_list)
+        transfer_ids = res.production_transfer_id
+        remove_items = self
+        for transfer in transfer_ids:
+            total_transfer_items = transfer.production_transfer_item_ids
+            production_ids = list(set(total_transfer_items.mapped('production_id')))
+            for production in production_ids:
+                lines = total_transfer_items.filtered(lambda line: line.production_id == production)
+                if len(lines) > 1:
+                    remove_items |= lines[1:]
+        remove_items.unlink()
+
         return res
 
 class ProductionTransferItemError(models.Model):

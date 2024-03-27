@@ -47,4 +47,14 @@ class QCReceiveItem(models.Model):
             if not val.get('sale_order_line_id'):
                 vals_list.remove(val)
         res = super(QCReceiveItem, self).create(vals_list)
+        transfer_ids = res.production_transfer_id
+        remove_items = self
+        for transfer in transfer_ids:
+            total_received_items = transfer.qc_receive_item_ids
+            production_ids = list(set(total_received_items.mapped('production_id')))
+            for production in production_ids:
+                lines = total_received_items.filtered(lambda line: line.production_id == production)
+                if len(lines) > 1:
+                    remove_items |= lines[1:]
+        remove_items.unlink()
         return res
