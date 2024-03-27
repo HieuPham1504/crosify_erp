@@ -170,7 +170,7 @@ class PickupItemLine(models.Model):
                     state = False
                     if nearest_line:
                         tkn = nearest_line.tkn_code
-                        if tkn == item.tkn_code and tkn.type == 'order':
+                        if tkn == item.tkn_code and nearest_line.type == 'order':
                             state = 'pass'
                         else:
                             state = 'fail'
