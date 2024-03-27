@@ -22,7 +22,7 @@ class ProductProduct(models.Model):
                 raise ValidationError(_("This SKU already exists."))
 
     default_code = fields.Char(string='SKU')
-    product_tmpl_product_type = fields.Char(string='Product Type', related='product_tmpl_id.product_type', store=True,
+    product_tmpl_product_type = fields.Char(string='SKU Type', related='product_tmpl_id.product_type', store=True,
                                             index=True)
     weight = fields.Float(string='Weight (Gram)')
     length = fields.Float(string='Length (cm)')
