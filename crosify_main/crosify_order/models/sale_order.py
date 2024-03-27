@@ -158,7 +158,7 @@ class SaleOrder(models.Model):
             rec.generate_order_label_file()
             order_id_fix = rec.order_id_fix
             merged_orders = self.sudo().search([('order_id_fix', '=', order_id_fix)])
-            can_update_tkn_items = merged_orders.order_line.filtered(lambda item: not item.is_upload_tkn)
+            can_update_tkn_items = merged_orders.order_line
             can_update_tkn_items.action_creating_shipment_for_item_order()
 
     def get_label_json_data(self):
