@@ -18,6 +18,24 @@ class ProductionTransfer(models.Model):
         ('draft', 'Draft'),
         ('waiting_confirm', 'Wait Confirm'),
         ('confirm', 'Confirm')], string='State', default='draft', index=True, tracking=1)
+    amount_transfer = fields.Integer(string='Amount Transfer', compute='compute_transfer_item_count', store=True)
+    amount_received = fields.Integer(string='Amount Received', compute='compute_received_item_count', store=True)
+    is_error = fields.Boolean(string='Error', compute='compute_is_error', store=True)
+
+    @api.depends('production_transfer_item_ids')
+    def compute_transfer_item_count(self):
+        for rec in self:
+            rec.amount_transfer = len(rec.production_transfer_item_ids)
+
+    @api.depends('qc_receive_item_ids')
+    def compute_received_item_count(self):
+        for rec in self:
+            rec.amount_received = len(rec.qc_receive_item_ids)
+
+    @api.depends('production_transfer_item_error_ids')
+    def compute_is_error(self):
+        for rec in self:
+            rec.is_error = True if len(rec.production_transfer_item_error_ids) > 0 else False
 
     @api.model_create_multi
     def create(self, vals_list):
