@@ -158,8 +158,39 @@ class SaleOrder(models.Model):
             rec.generate_order_label_file()
             order_id_fix = rec.order_id_fix
             merged_orders = self.sudo().search([('order_id_fix', '=', order_id_fix)])
-            can_update_tkn_items = merged_orders.order_line.filtered(lambda item: not item.is_upload_tkn)
+            can_update_tkn_items = merged_orders.order_line
             can_update_tkn_items.action_creating_shipment_for_item_order()
+
+    def get_order_size_data(self):
+        Items = self.env['sale.order.line'].sudo()
+        items = Items
+        order_items = Items.search([('order_id_fix', 'in', self.mapped('order_id_fix'))])
+        total_item = order_items.filtered(lambda line: not line.is_create_so_rp)
+        weights = [item.product_id.weight for item in total_item]
+        for weight in weights:
+            if weight == 0.0:
+                index = weights.index(weight)
+                weights[index] = 50
+        total_weight = sum(weights)
+
+        item_hs_codes = total_item.mapped('product_id').mapped('product_tmpl_id').mapped('categ_id').mapped(
+            'hs_code')
+        for hs_code in item_hs_codes:
+            first_item = total_item.filtered(lambda item: item.product_id.product_tmpl_id.categ_id.hs_code == hs_code)[
+                0]
+            items |= first_item
+        weight_param = round(60 * total_weight / 100000, 3)
+        product_ids = items.mapped('product_id')
+        length_param_min = min(product_ids.mapped('length'))
+        length_param = length_param_min if length_param_min > 10 else 10
+
+        height_param_min = min(product_ids.mapped('height'))
+        height_param = height_param_min if height_param_min > 1 else 1
+
+        width_param_min = min(product_ids.mapped('width'))
+        width_param = width_param_min if width_param_min > 10 else 10
+
+        return items, weight_param, width_param, length_param, height_param
 
     def get_label_json_data(self):
         parcel_datas = []
@@ -172,31 +203,7 @@ class SaleOrder(models.Model):
         if len(customer_name_split) == 1:
             customer_name = f"{customer_name} {customer_name}"
 
-        items = Items
-        total_item = self.order_line
-        weights = [item.product_id.weight for item in total_item]
-        for weight in weights:
-            if weight == 0.0:
-                index = weights.index(weight)
-                weights[index] = 50
-        total_weight = sum(weights)
-
-        item_hs_codes = total_item.mapped('product_id').mapped('product_tmpl_id').mapped('categ_id').mapped('hs_code')
-        for hs_code in item_hs_codes:
-            first_item = total_item.filtered(lambda item: item.product_id.product_tmpl_id.categ_id.hs_code == hs_code)[0]
-            items |= first_item
-
-        weight_param = round(60 * total_weight / 100000, 3)
-        product_ids = items.mapped('product_id')
-        length_param_min = min(product_ids.mapped('length'))
-        length_param = length_param_min if length_param_min > 10 else 10
-
-        height_param_min = min(product_ids.mapped('height'))
-        height_param = height_param_min if height_param_min > 1 else 1
-
-
-        width_param_min = min(product_ids.mapped('width'))
-        width_param = width_param_min if width_param_min > 10 else 10
+        items, weight_param, width_param, length_param, height_param = self.get_order_size_data()
 
         for item in items:
             hs_code = item.product_id.product_tmpl_id.categ_id.hs_code
@@ -268,6 +275,16 @@ class SaleOrder(models.Model):
             service_type = 3
         else:
             service_type = customer.state_id.service_type
+
+        if service_type != 1:
+            checking_width = 15
+            checking_length = 10
+            checking_height = 1
+            checking_weight = 0.17
+            items, weight_param, width_param, length_param, height_param = self.get_order_size_data()
+            if weight_param < checking_weight or length_param < checking_length or width_param < checking_width or height_param < checking_height:
+                service_type = 1
+
         url = f"https://myadmin.crosify.com/api/labels/{service_type}"
         json_data = self.get_label_json_data()
 

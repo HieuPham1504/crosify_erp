@@ -103,6 +103,7 @@
                         <field name="price_subtotal" column_invisible="1"/>
                         <field name="write_date" string="Last Update" optional="hide"/>
                         <field name="seller_id" optional="hide" options='{"no_open": True, "no_create": True}'/>
+                        <field name="sale_ok" optional="hide"/>
                     </tree>
                 </xpath>
             </field>
@@ -134,6 +135,7 @@
                                     <field name="order_id" readonly="1" force_save="1" string="Reference ID"/>
                                     <field name="priority"/>
                                     <field name="is_combo" readonnly="1" force_save="1"/>
+                                    <field name="sale_ok"/>
                                 </group>
                                 <group>
                                     <field name="product_id" string="SKU" readonly="1" force_save="1"/>

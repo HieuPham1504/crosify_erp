@@ -11,6 +11,9 @@
                     <field name="date"/>
                     <field name="employee_id"/>
                     <field name="note"/>
+                    <field name="amount_transfer"/>
+                    <field name="amount_received"/>
+                    <field name="is_error"/>
                     <field name="state"/>
                 </tree>
             </field>
@@ -24,13 +27,16 @@
                     <header>
                         <button name="transfer_items" string="Transfer Items"
                                 type="object" class="oe_highlight" title="Transfer Items"
-                                invisible="state != 'draft'" groups="base.group_system,crosify_order.group_producer_team"/>
+                                invisible="state != 'draft'"
+                                groups="base.group_system,crosify_order.group_producer_team"/>
                         <button name="back_to_draft" string="Back to Draft"
                                 type="object" class="oe_highlight" title="Back to Draft"
-                                invisible="state != 'waiting_confirm'" groups="base.group_system,crosify_order.group_producer_team"/>
+                                invisible="state != 'waiting_confirm'"
+                                groups="base.group_system,crosify_order.group_producer_team"/>
                         <button name="qc_confirm" string="Confirm"
                                 type="object" class="oe_highlight" data-hotkey="w" title="Confirm"
-                                invisible="state != 'waiting_confirm'" groups="base.group_system,crosify_order.group_sale_team_operator"/>
+                                invisible="state != 'waiting_confirm'"
+                                groups="base.group_system,crosify_order.group_sale_team_operator"/>
                         <field name="state" widget="statusbar" invisible="0"/>
                     </header>
                     <sheet>
@@ -42,9 +48,14 @@
                         <group name="main-description">
                             <group>
                                 <field name="date" readonly="state != 'draft'"/>
-                                <field name="employee_id" readonly="state != 'draft'" options='{"no_open": True, "no_create": True}'/>
+                                <field name="employee_id" readonly="state != 'draft'"
+                                       options='{"no_open": True, "no_create": True}'/>
                             </group>
-                            <group></group>
+                            <group name="counting-line">
+                                <field name="amount_transfer"/>
+                                <field name="amount_received"/>
+                                <field name="is_error"/>
+                            </group>
                         </group>
                         <group>
                             <field name="note" readonly="state != 'draft'"/>
@@ -59,7 +70,8 @@
                                         <field name="product_template_attribute_value_ids" readonly="1" force_save="1"
                                                widget="many2many_tags"/>
                                         <field name="personalize" readonly="1" force_save="1"/>
-                                        <field name="production_vendor_id" readonly="1" force_save="1" options='{"no_open": True, "no_create": True}'/>
+                                        <field name="production_vendor_id" readonly="1" force_save="1"
+                                               options='{"no_open": True, "no_create": True}'/>
                                         <field name="sublevel_id" readonly="1" force_save="1"/>
                                         <field name="address_sheft_id" readonly="1" force_save="1"/>
                                         <field name="is_wrong_item" column_invisible="1"/>
@@ -76,7 +88,8 @@
                                         <field name="product_template_attribute_value_ids" readonly="1"
                                                widget="many2many_tags" force_save="1"/>
                                         <field name="personalize" readonly="1" force_save="1"/>
-                                        <field name="production_vendor_id" readonly="1" force_save="1" options='{"no_open": True, "no_create": True}'/>
+                                        <field name="production_vendor_id" readonly="1" force_save="1"
+                                               options='{"no_open": True, "no_create": True}'/>
                                         <field name="sublevel_id" readonly="1" force_save="1"/>
                                         <field name="address_sheft_id" readonly="1" force_save="1"/>
                                     </tree>

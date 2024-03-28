@@ -20,6 +20,18 @@ class PickupItem(models.Model):
         ('done', 'Done')], string='State', default="draft", index=True, tracking=1)
     order_box_container_id = fields.Many2one('order.box.container', string='Order Box')
     order_box_container_code = fields.Char(string='Order Box Code')
+    order_quantity = fields.Integer(string='Order Quantity', compute='compute_order_quantity', store=True)
+
+
+    @api.depends('item_ids')
+    def compute_order_quantity(self):
+        for rec in self:
+            total_orders = rec.item_ids.filtered(lambda line: line.type == 'order')
+            if any([order.state == 'fail' for order in total_orders]):
+                quantity = 0
+            else:
+                quantity = len(total_orders)
+            rec.order_quantity = quantity
 
     @api.onchange('order_box_container_code')
     def onchange_order_box_container_code(self):
@@ -71,10 +83,15 @@ class PickupItem(models.Model):
             for failed_item in failed_items:
                 pair_number_faileds = list(set(failed_item.mapped('pair_number')))
                 if failed_item.type == 'order':
-                    total_items_fails = total_items.filtered(lambda item: item.pair_number in pair_number_faileds and item.type == 'item')
-                else:
                     total_items_fails = total_items.filtered(
-                        lambda item: item.pair_number in pair_number_faileds and item.type == 'order')
+                        lambda item: item.pair_number in pair_number_faileds and item.type == 'order' and item.id != failed_item.id)
+                    if not total_items_fails:
+                        total_items_fails = total_items.filtered(lambda item: item.pair_number in pair_number_faileds and item.type == 'item')
+                else:
+                    total_items_fails = total_items.filtered(lambda item: item.pair_number in pair_number_faileds and item.type == 'item' and item.id != failed_item.id)
+                    if not total_items_fails:
+                        total_items_fails = total_items.filtered(
+                            lambda item: item.pair_number in pair_number_faileds and item.type == 'order')
                 total_fails = total_items_fails[-1]
                 for line in total_fails:
                     line.write({
@@ -138,7 +155,10 @@ class PickupItemLine(models.Model):
             total_lines = self.pickup_item_id.item_ids
             none_id_line = total_lines.filtered(lambda line: line.id.ref is None)
             total_line_length = len(total_lines) - 1 if len(none_id_line) > 0 else len(total_lines) + 1
-            pair_number = (total_line_length // 2) + (total_line_length % 2)
+            if not self.pair_number:
+                pair_number = (total_line_length // 2) + (total_line_length % 2)
+            else:
+                pair_number = self.pair_number
             orders = Orders.search([('tkn', '=', barcode)])
             nearest_line = False
             if total_line_length > 1:
@@ -149,10 +169,10 @@ class PickupItemLine(models.Model):
                 state = False
                 if nearest_line:
                     tkn = nearest_line.tkn_code
-                    if tkn != order_tkn:
-                        state = 'fail'
-                    else:
+                    if tkn == order_tkn and nearest_line.type == 'item':
                         state = 'pass'
+                    else:
+                        state = 'fail'
                 data = {
                     'order_ids': [(6, 0, orders.ids)],
                     'tkn_code': order_tkn,
@@ -170,10 +190,10 @@ class PickupItemLine(models.Model):
                     state = False
                     if nearest_line:
                         tkn = nearest_line.tkn_code
-                        if tkn != item.tkn_code:
-                            state = 'fail'
-                        else:
+                        if tkn == item.tkn_code and nearest_line.type == 'order':
                             state = 'pass'
+                        else:
+                            state = 'fail'
                     data = {
                         'tkn_code': item.tkn_code,
                         'type': 'item',

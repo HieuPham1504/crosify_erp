@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_line_product_pivot" model="ir.ui.view">
+            <field name="name">sale.order.line.report.pivot</field>
+            <field name="model">sale.order.line.report</field>
+            <field name="arch" type="xml">
+                <pivot string="Items Analysis" sample="1">
+                    <field name="seller_id" type="col"/>
+                    <field name="crosify_created_date"/>
+                    <field name="default_code" type="row"/>
+                    <field name="product_tmpl_product_type"/>
+                    <field name="domain"/>
+                    <field name="payment_status"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_order_line_product_graph" model="ir.ui.view">
+            <field name="name">sale.order.line.report.graph</field>
+            <field name="model">sale.order.line.report</field>
+            <field name="arch" type="xml">
+                <graph string="Items Analysis" type="line" sample="1">
+                    <field name="crosify_created_date"/>
+                    <field name="default_code" type="row"/>
+                    <!--                    <field name="product_id" type="measure"/>-->
+                </graph>
+            </field>
+        </record>
+
+        <record id="sale_order_line_report_view_tree" model="ir.ui.view">
+            <field name="name">sale_order_line_report_view_tree</field>
+            <field name="model">sale.order.line.report</field>
+            <field name="arch" type="xml">
+                <tree string="sale_order_line_report_tree">
+                    <field name="id"/>
+                    <field name="crosify_created_date"/>
+                    <field name="product_id"/>
+                    <field name="default_code"/>
+                    <field name="seller_id"/>
+                    <field name="production_vendor_id"/>
+                    <field name="packaging_vendor_id"/>
+                    <field name="shipping_vendor_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_order_line_product_search" model="ir.ui.view">
+            <field name="name">view_order_line_product_search</field>
+            <field name="model">sale.order.line.report</field>
+            <field name="arch" type="xml">
+                <search string="Items Analysis">
+                    <field name="crosify_created_date"/>
+                    <filter name="filter_date" date="crosify_created_date" default_period="this_month"/>
+                    <separator/>
+                    <filter string="Orders: Today"
+                            domain="[('crosify_created_date', '&gt;=', datetime.datetime.combine(datetime.date.today(), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S')),
+                        ('crosify_created_date', '&lt;', datetime.datetime.combine(datetime.date.today()+datetime.timedelta(days=1), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S'))]"
+                            name="my_sale_orders_filter_today"/>
+
+                    <filter string="Orders: Yesterday" name="my_sale_orders_filter_yesterday"
+                            domain="[('crosify_created_date', '&lt;',  datetime.datetime.combine(datetime.date.today(), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S') ),
+                        ('crosify_created_date', '&gt;=',  datetime.datetime.combine(datetime.date.today()-datetime.timedelta(days=1), datetime.time(0,0,0)).to_utc().strftime('%Y-%m-%d %H:%M:%S') )]"/>
+                    <separator/>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_order_line_report_all" model="ir.actions.act_window">
+            <field name="name">Items Analysis</field>
+            <field name="res_model">sale.order.line.report</field>
+            <field name="view_mode">graph,pivot</field>
+            <field name="view_id"></field>  <!-- force empty -->
+            <field name="search_view_id" ref="view_order_line_product_search"/>
+            <field name="help">This report performs analysis on your quotations and sales orders line.
+            </field>
+        </record>
+
+        <menuitem id="menu_reporting_sales_order_line"
+                  name="Items"
+                  action="action_order_line_report_all"
+                  parent="sale.menu_sale_report"
+                  sequence="10"/>
+
+    </data>
+</odoo>

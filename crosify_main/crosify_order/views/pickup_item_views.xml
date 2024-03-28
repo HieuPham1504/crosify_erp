@@ -23,8 +23,10 @@
                     <field name="code"/>
                     <field name="date"/>
                     <field name="employee_id"/>
-                    <field name="state"/>
+                    <field name="order_box_container_id" options='{"no_open": True, "no_create": True}'/>
+                    <field name="order_quantity"/>
                     <field name="note"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
@@ -52,11 +54,13 @@
                                 <field name="order_box_container_id" readonly="1" force_save="1" options='{"no_open": True, "no_create": True}'/>
                                 <field name="date"/>
                                 <field name="employee_id" options='{"no_open": True, "no_create": True}'/>
+                                <field name="order_quantity" invisible="order_quantity == 0"/>
                             </group>
                             <group></group>
                         </group>
                         <label for="note"/>
                         <field name="note"/>
+
 
                         <br/>
                         <group name="items">

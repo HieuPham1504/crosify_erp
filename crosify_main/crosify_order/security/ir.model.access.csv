@@ -58,8 +58,6 @@ access_fulfill_shelf,"access_fulfill_shelf","model_fulfill_shelf",,1,1,1,1
 
 "access_shipping_item_confirm","access_shipping_item_confirm","model_shipping_item_confirm",,1,1,1,1
 "access_shipping_item_confirm_line","access_shipping_item_confirm_line","model_shipping_item_confirm_line",,1,1,1,1
-"access_shipping_item_confirm_pickup_order","access_shipping_item_confirm_pickup_order","model_shipping_item_confirm_pickup_order",,1,1,1,1
-"access_shipping_item_confirm_pickup_order_error","access_shipping_item_confirm_pickup_order_error","model_shipping_item_confirm_pickup_order_error",,1,1,1,1
 
 "access_order_shipping_line","access_order_shipping_line","model_order_shipping_line",,1,1,1,1
 "access_item_production_line","access_item_production_line","model_item_production_line",,1,1,1,1
@@ -108,3 +106,4 @@ access_config_set_line_level,access_config_set_line_level,model_config_set_line_
 "access_update_link_design_wizard","access_update_link_design_wizard","model_update_link_design_wizard",,1,1,1,1
 "access_fields_ignore","access_fields_ignore","model_fields_ignore",,1,1,1,1
 "access_res_partner_type","access_res_partner_type","model_res_partner_type",,1,1,1,1
+access_sale_order_line_report_salesman,sale.order.line.report,model_sale_order_line_report,sales_team.group_sale_salesman,1,0,0,0

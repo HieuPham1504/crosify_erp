@@ -10,6 +10,11 @@
                     <attribute name="invisible">1</attribute>
                 </xpath>
 
+                <xpath expr="//field[@name='default_code']" position="attributes">
+                    <attribute name="widget">CopyClipboardChar</attribute>
+                    <attribute name="width">200px</attribute>
+                </xpath>
+
                 <xpath expr="//field[@name='product_template_variant_value_ids']" position="before">
                     <field name="product_template_attribute_value_ids" widget="many2many_tags"/>
                 </xpath>
@@ -98,6 +103,22 @@
                 <xpath expr="//page[@name='inventory']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
+            </field>
+        </record>
+
+        <record id="product.product_search_form_view" model="ir.ui.view">
+            <field name="name">product.product.search</field>
+            <field name="model">product.product</field>
+            <field name="mode">primary</field>
+            <field name="inherit_id" ref="product.product_template_search_view"/>
+            <field name="arch" type="xml">
+<!--                <field name="name" position="replace">-->
+<!--                    <field name="name" string="Product" filter_domain="['|', '|', ('default_code', 'ilike', self), ('name', 'ilike', self), ('barcode', 'ilike', self)]"/>-->
+<!--                </field>-->
+                <field name="attribute_line_ids" position="replace">
+                    <field name="product_template_attribute_value_ids" groups="product.group_product_variant"/>
+                    <field name="product_tmpl_id" string="Product Template"/>
+                </field>
             </field>
         </record>
 

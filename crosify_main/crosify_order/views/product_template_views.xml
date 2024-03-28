@@ -169,7 +169,13 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='name']" position="before">
                     <field name="design_number" string="Product"
-                        filter_domain="['|', '|', ('name', 'ilike', self), ('product_type', 'ilike', self), ('design_number', 'ilike', self)]" />
+                        filter_domain="['|', '|', '|', '|',('name', 'ilike', self),
+                        ('product_type', 'ilike', self),
+                        ('design_number', 'ilike', self),
+                        ('default_code', 'ilike', self),
+                        ('barcode', 'ilike', self)
+
+                        ]" />
                 </xpath>
                 <field name="name" position="attributes">
                     <attribute name="string">Name</attribute>
