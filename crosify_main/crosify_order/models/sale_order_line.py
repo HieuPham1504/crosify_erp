@@ -195,7 +195,7 @@ class SaleOrderLine(models.Model):
 
     qc_passed_date = fields.Datetime(string='QC Passed Date', tracking=1)
     seller_id = fields.Many2one('crosify.seller', related='order_id.seller_id', string='Seller', store=True, index=1)
-    sale_ok = fields.Boolean(string='Can Be Sale', related='product_id.sale_ok', store=True, index=1)
+    sale_ok = fields.Boolean(string='Can Be Sold', related='product_id.sale_ok', store=True, index=1)
 
     def write(self, vals):
         # OVERRIDE
